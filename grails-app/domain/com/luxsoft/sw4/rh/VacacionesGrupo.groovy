@@ -1,5 +1,7 @@
 package com.luxsoft.sw4.rh
 
+import org.grails.databinding.BindingFormat
+
 class VacacionesGrupo {
 	
 	@BindingFormat("dd/MM/yyyy")
