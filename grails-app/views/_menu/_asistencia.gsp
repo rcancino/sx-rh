@@ -1,5 +1,6 @@
 <g:set var="asistenciaControllers" 
     value="${['vacaciones']}" />
+    
 <li class="${asistenciaControllers.contains(webRequest.controllerName)?'active':''}">
     <a href="#">
     	<i class="fa fa-check"></i> 
@@ -8,6 +9,14 @@
     </a>
     <ul class="nav nav-second-level collapse">
         
+        <li class="${webRequest.controllerName=='asistencia'?'active':''}">
+            <g:link controller="asistencia">
+                <span class="nav-label">Asistencias</span> 
+                <span class="fa fa-angle-right pull-right"></span>
+            </g:link>
+            <span class="fa fa-angle-right pull-right"></span>
+        </li>
+
         <li class="${webRequest.controllerName=='vacaciones'?'active':''}">
             <g:link controller="vacaciones">
                 <span class="nav-label">Vacaciones</span> 

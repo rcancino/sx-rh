@@ -3,32 +3,28 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<meta name="layout" content="operaciones2"/>
+	<%-- <meta name="layout" content="operaciones2"/> --%>
 	<title>Asistencias</title>
 </head>
 <body>
-	<content tag="header">
-		
-		<a href="" data-toggle="modal" data-target="#cambioDeEjercicioForm">
-			<h3>Control de asistencia (${session.ejercicio})</h3>
-		</a>
-		
-		
-	</content>
-	<content tag="consultas">
-		<nav:menu scope="app/operaciones/asistencia" class="nav nav-tabs nav-stacked" path=""/>
-	</content>
-	
-	<content tag="gridTitle">
-		<a href="" data-toggle="modal" data-target="#calendarioDeAsistenciaForm">
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+    	<h2>Control de asistencia (${session.ejercicio})</h2>
+    	<a href="" data-toggle="modal" data-target="#calendarioDeAsistenciaForm">
 			Lista de asistencia ${tipo} ${calendarioDet?.folio} (${calendarioDet?.asistencia})
 		</a>
-	
-	</content>
-	
-	<content tag="toolbarPanel">
-		
-		<div class="row button-panel">
+        <g:if test="${flash.message}">
+            <small><span class="label label-warning ">${flash.message}</span></small>
+        </g:if> 
+        <g:if test="${flash.error}">
+            <small><span class="label label-danger ">${flash.error}</span></small>
+        </g:if> 
+    </div>
+</div>
+
+<div class="row wrapper wrapper-content white-bg animated fadeInRight">
+	<div class="row button-panel">
 
 			<div class="col-md-4 ">
 				<input id="searchField" class="form-control" type="text" placeholder="Empleado" autofocus="autofocus">
@@ -39,12 +35,12 @@
 				<div class="btn-group ">
 
 					<g:link action="index" 
-						class="btn  ${tipo=='SEMANA'?'btn-primary':'btn-default'}" 
+						class="btn btn-outline ${tipo=='SEMANA'?'btn-primary':'btn-default'}" 
 						params="[tipo:'SEMANA']"> Semana
 					</g:link>
 					
 					<g:link action="index" 
-						class="btn  ${tipo=='QUINCENA'?'btn-primary':'btn-default'}" 
+						class="btn  btn-outline ${tipo=='QUINCENA'?'btn-primary':'btn-default'}" 
 						params="[tipo:'QUINCENA']"> Quincena
 					</g:link>
 					
@@ -52,7 +48,7 @@
 				
 				<div class="btn-group">
 					<button type="button" name="reportes"
-						class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+						class="btn btn-outline btn-default dropdown-toggle" data-toggle="dropdown"
 						role="menu">
 						Operaciones <span class="caret"></span>
 					</button>
@@ -88,7 +84,7 @@
 			
 				<div class="btn-group">
 					<button type="button" name="reportes"
-						class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+						class="btn btn-outline btn-default dropdown-toggle" data-toggle="dropdown"
 						role="menu">
 						Reportes <span class="caret"></span>
 					</button>
@@ -157,14 +153,9 @@
 				</div>
 			</div>
 			
-		</div>
-  		
-  		<g:render template="calendarioPeriodoDialog" model="[periodos:periodos]"/>
-  		<g:render template="/_common/cambioDeEjercicioDialog"/>
-  		
-	</content><!-- end .gridTask -->
-	
-	<content tag="panelBody">
+	</div>
+  	
+  	<div class="row">
 		<ul class="nav nav-tabs" role="tablist">
 		  <li class="${tipo=='SEMANA'?'active':''}">
 		  	<a href="#andrade" role="tab" data-toggle="tab">Andrade</a>
@@ -203,6 +194,35 @@
 	  		</div>
 		</div>
 		<g:render template="/_common/selectorDeAsistencia"/>
-	</content>
+	</div>
+
+  	<g:render template="calendarioPeriodoDialog" model="[periodos:periodos]"/>
+  	<g:render template="/_common/cambioDeEjercicioDialog"/>
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		$('.grid').dataTable({
+                    responsive: true,
+                    aLengthMenu: [[20, 40, 60, 100, -1], [20, 40,60, 100, "Todos"]],
+                    "language": {
+                        "url": "${assetPath(src: 'datatables/dataTables.spanish.txt')}"
+                    },
+                    "dom": 'T<"clear">lfrtip',
+                    "tableTools": {
+                        "sSwfPath": "${assetPath(src: 'plugins/dataTables/swf/copy_csv_xls_pdf.swf')}"
+                    },
+                    "order": []
+                });
+                $("#filtro").on('keyup',function(e){
+                    var term=$(this).val();
+                    $('#grid').DataTable().search(
+                        $(this).val()
+                            
+                    ).draw();
+                });
+	});
+</script>	
+	
 </body>
 </html>

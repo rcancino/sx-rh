@@ -6,7 +6,7 @@
 </head>
 <body>
 	<content tag="header">
-		<h3>Catálogo de ubicaciones (Sucursales)</h3>
+		Catálogo de ubicaciones (Sucursales)
 		
 	</content>
 	<content tag="grid">

@@ -1,5 +1,5 @@
 <%@ page import="com.luxsoft.sw4.rh.Asistencia" %>
-%{-- <r:require module="datatables"/> --}%
+
 <div class="btn-group">
 				<button type="button" name="reportes"
 					class="btn btn-default dropdown-toggle" data-toggle="dropdown"
@@ -24,7 +24,7 @@
 					</li>
 				</ul>
 			</div>
-<table id="" class="table table-striped table-bordered table-condensed asistenciaTable">
+<table id="" class="grid table table-striped table-bordered table-condensed asistenciaTable">
 	<thead>
 		<tr>
 			<th>Orden</th>
@@ -77,6 +77,3 @@
 		</g:each>
 	</tbody>
 </table>
-<r:script>
-	
-</r:script>
