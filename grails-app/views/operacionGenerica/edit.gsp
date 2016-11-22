@@ -55,9 +55,7 @@
 		  	</div>
 		</g:form>
 		
-		<r:script>
-			
-		</r:script>
+		
 
 	</content>
 	

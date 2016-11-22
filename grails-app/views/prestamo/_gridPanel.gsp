@@ -1,6 +1,6 @@
 
 
-<table class="table table-striped table-bordered table-condensed">
+<table class="grid table table-striped table-bordered table-condensed">
 	<thead>
 		<tr>
 			<g:sortableColumn property="id" title="Folio"/>
@@ -13,7 +13,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		<g:each in="${partidasList?.sort{it.empleado.nombre}}" var="row">
+		<g:each in="${partidasList}" var="row">
 			<tr>
 				<td>
 					<g:link action="edit" id="${row.id}">
@@ -36,6 +36,4 @@
 		</g:each>
 	</tbody>
 </table>
-<div class="pagination">
-	<g:paginate total="${prestamoInstanceCount ?: 0}" />
-</div>
+

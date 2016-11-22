@@ -11,17 +11,15 @@ class PrestamoController {
 
     def index(Integer max) { 
 		params.max = Math.min(max ?: 500, 1000)
-		params.sort='empleado.apellidoPaterno'
-		params.order='asc'
-
-		def mapList=Prestamo.list(params).groupBy([{it.empleado.salario.periodicidad}])
-		[mapList:mapList
-		,prestamoInstanceCount:Prestamo.count()]
+		params.sort='lastUpdated'
+		params.order='desc'
+		def list = Prestamo.where {}.list(params)
+		def mapList=list.groupBy([{it.empleado.salario.periodicidad}])
+		[mapList:mapList]
     }
 
     def create(){
-		
-    	[prestamoInstance:new Prestamo()]
+    	[prestamoInstance:new Prestamo(alta: new Date(), fechaDeAutorizacion: new Date())]
     }
 	
 	@Transactional

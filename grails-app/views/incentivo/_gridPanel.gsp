@@ -1,5 +1,5 @@
 
-<table  class="table table-striped table-bordered table-condensed incentivoGrid ">
+<table  id="grid" class="table table-striped table-bordered table-condensed incentivoGrid ">
 	<thead>
 		<tr>
 			<th>Folio</th>
