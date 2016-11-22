@@ -1,6 +1,7 @@
 <g:set var="asistenciaControllers" 
     value="${['asistencia','vacaciones','asistenciaImss']}" />
     
+
 <li class="${asistenciaControllers.contains(webRequest.controllerName)?'active':''}">
     <a href="#">
     	<i class="fa fa-check"></i> 
