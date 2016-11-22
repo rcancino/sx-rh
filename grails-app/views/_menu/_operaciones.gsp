@@ -19,7 +19,7 @@
         <li class="${webRequest.controllerName=='operacionGenerica'?'active':''}">
             <g:link controller="operacionGenerica">
                 <span class="nav-label">Genéricas</span> 
-                <span class="fa fa-angle-right pull-right"></span>
+                <spzxan class="fa fa-angle-right pull-right"></span>
             </g:link>
             <span class="fa fa-angle-right pull-right"></span>
         </li>

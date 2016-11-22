@@ -1,4 +1,6 @@
 <table class="table table-bordered table-condensed table-hover">
+
+
 	<thead>
 		<tr>
 			<g:sortableColumn property="No" title="Clave"/>

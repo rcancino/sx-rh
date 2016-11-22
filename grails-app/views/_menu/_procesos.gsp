@@ -8,8 +8,8 @@
     </a>
     <ul class="nav nav-second-level collapse">
         
-        <li class="${webRequest.controllerName=='procesos'?'active':''}">
-            <g:link controller="procesos">
+        <li class="${webRequest.controllerName=='procesos' && webRequest.actionName=='empleados' ?'active':''}">
+            <g:link controller="procesos" action="empleados">
                 <span class="nav-label">Empleados</span> 
                 <span class="fa fa-angle-right pull-right"></span>
             </g:link>
