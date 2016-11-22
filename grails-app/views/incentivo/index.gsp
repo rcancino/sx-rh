@@ -3,9 +3,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<meta name="layout" content="operaciones2"/>
 	<title>Incentivos</title>
-	<r:require modules="datatables,forms"/> 
 </head>
 <body>
 	<content tag="header">

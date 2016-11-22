@@ -28,10 +28,17 @@
   text-transform: uppercase;
 }
 
-.toolbar-panel{
+.toolbar{
     /*margin-bottom: 10px;*/
+    //margin-left: 1px;
+    //padding-left: 1px;
     padding-bottom: 5px;
     padding-top: 5px;
     /*padding-left: 2px;*/
 
+}
+
+.form-panel {
+	margin-top: 5px;
+	margin-bottom: 5px;
 }

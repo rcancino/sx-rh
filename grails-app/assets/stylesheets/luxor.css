@@ -24,6 +24,15 @@ body{
     margin-bottom: 8px;
 }
 
+.toolbar {
+    /*margin-bottom: 10px;*/
+    margin-top: 10px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    /*padding-left: 2px;*/
+
+}
+
 .toolbar-panel{
     
     /*margin-bottom: 10px;*/

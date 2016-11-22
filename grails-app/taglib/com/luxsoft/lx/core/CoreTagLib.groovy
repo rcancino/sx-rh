@@ -87,6 +87,7 @@ class CoreTagLib {
         out << render(template:"/common/components/errorsHeader" ,model:[it:bean])
         
     }
+    
 
     def dateCell={attrs ->
         def date=attrs.date
@@ -184,31 +185,82 @@ class CoreTagLib {
         out << "</td>"
     }
 
-    def iboxBackButton={ attrs ->
-        def action=attrs.action?:'index'
-        StringBuilder sb = new StringBuilder()
-        sb << """
-            <a href="${g.createLink(action:action)}"><i class='fa fa-step-backward'></i></a>
-        """
-        out<<sb.toString()
+    // def iboxBackButton={ attrs ->
+    //     def action=attrs.action?:'index'
+    //     StringBuilder sb = new StringBuilder()
+    //     sb << """
+    //         <a href="${g.createLink(action:action)}"><i class='fa fa-step-backward'></i></a>
+    //     """
+    //     out<<sb.toString()
+    // }
+
+    // def iboxTitle={ attrs ->
+    //     def title=attrs.title?:''
+    //     StringBuilder sb = new StringBuilder()
+    //     sb << """
+    //         <div class="ibox-title">
+    //             <h5>${title}</h5>
+    //             <div class="ibox-tools">
+    //                 <a class="collapse-link">
+    //                     <i class="fa fa-chevron-up"></i>
+    //                 </a>
+    //                 <a class="close-link">
+    //                     <i class="fa fa-times"></i>
+    //                 </a>
+    //             </div>
+    //         </div>
+    //     """
+    //     out<<sb.toString()
+    // }
+
+    def header = { attrs, body ->
+        out << "<div class='row wrapper border-bottom white-bg page-heading' >"
+        out << body()
+        out << "</div>"
+
     }
 
-    def iboxTitle={ attrs ->
-        def title=attrs.title?:''
-        StringBuilder sb = new StringBuilder()
-        sb << """
-            <div class="ibox-title">
-                <h5>${title}</h5>
-                <div class="ibox-tools">
-                    <a class="collapse-link">
-                        <i class="fa fa-chevron-up"></i>
-                    </a>
-                    <a class="close-link">
-                        <i class="fa fa-times"></i>
-                    </a>
-                </div>
-            </div>
-        """
-        out<<sb.toString()
+    def warningLabel = {
+        if(flash.message) {
+            out << " <small><span class='label label-warning' >${flash.message}</span></small> "
+        }
+        //out << "<g:if test=${flash.message}><small><span class='label label-warning' >${flash.message}</span></small></g:if> "
+    }
+
+    def ibox = { attrs, body ->
+        out << "<div class='ibox float-e-margins'>"
+        out << body()
+        out << "</div>"
+    }
+
+    def iboxContent = { attrs, body ->
+        out << "<div class='ibox-content'>"
+        out << body()
+        out << "</div>"
+    }
+
+    /**
+     * Titulo para el Ibox
+     * 
+     * @attrs title  Título para el ibox
+     */
+    def iboxTitle = { attrs, body ->
+        out << "<div class='ibox-title'>"
+        out << "<h5>${attrs.title}</h5>"
+        out << body()
+        out << "</div>"
+    }
+
+    def iboxTools = {attrs, body ->
+        out << "<div class='ibox-tools'>"
+        out << "<a class='collapse-link'><i class='fa fa-chevron-up'></i></a>"
+        out << body()
+        out << "</div>" 
+    }
+
+    def iboxFooter = { attrs, body ->
+        out << "<div class='ibox-footer'>"
+        out << body()
+        out << "</div>"
     }
 }
