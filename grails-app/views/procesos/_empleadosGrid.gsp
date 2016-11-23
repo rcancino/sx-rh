@@ -1,4 +1,4 @@
-<table class="table table-bordered table-condensed table-hover">
+<table class="grid table table-bordered table-condensed table-hover">
 
 
 	<thead>
@@ -33,6 +33,3 @@
 		</g:each>
 	</tbody>
 </table>
-<div class="pagination">
-	<g:paginate total="${empleadoInstanceCount ?: 0}" />
-</div>
