@@ -1,25 +1,35 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<meta name="layout" content="operacionesForm"/>
+	<meta name="layout" content="createForm"/>
+	<g:set var="entity" value="${fonacotInstance}" scope="request" />
+	<g:set var="editable" value="${false}" scope="request" />
+	<g:set var="imprimible" value="${false}" scope="request" />
 	<title>Alta de prestamo FONACOT</title>
 </head>
 <body>
 
-	<content tag="header">
-		<h3>Alta de prestamo FONACOT</h3>
-	</content>
+<content tag="header">
+	Alta de prestamo FONACOT
+</content>
+
+<content tag="formTitle">Crédito FONACOT</content>
+
+<content tag="formFields">
+	<f:with bean="${fonacotInstance }">
+		<f:field property="empleado" />
+		<f:field property="numeroDeCredito" widget-class="form-control"/>
+		<f:field property="numeroDeFonacot" widget-class="form-control"/>
+		<f:field property="importe" widget="money"/>
+		<f:field property="retencionMensual" widget="money"/>
+		
+	</f:with>
+</content>
+
 	
-	<content tag="operaciones">
-		<ul class="nav nav-pills nav-stacked">
-  			<li><g:link action="index">
-  					<span class="glyphicon glyphicon-arrow-left"></span> Prestamos
-  			    </g:link>
-  			</li>
-		</ul>
-	</content>
 	
-	<content tag="formTitle">Prestamo nuevo</content>
+	
+	
 	
 	<content tag="form">
 		
@@ -31,15 +41,7 @@
 		
 		<g:form class="form-horizontal" action="save">
 			
-			<f:with bean="${fonacotInstance }">
-				
-				<f:field property="empleado" input-class="form-control"/>
-				<f:field property="numeroDeCredito" input-class="form-control"/>
-				<f:field property="numeroDeFonacot" input-class="form-control"/>
-				<f:field property="importe" input-class="form-control" input-type="text"/>
-				<f:field property="retencionMensual" input-class="form-control" input-type="text"/>
-				
-			</f:with>
+			
 			<div class="form-group">
 		    	<div class="col-sm-offset-9 col-sm-2">
 		      		<button type="submit" class="btn btn-default">

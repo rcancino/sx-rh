@@ -1,49 +1,81 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<meta name="layout" content="operacionesForm"/>
 	<title>Abono otra deduccion</title>
-</head>
+	<asset:javascript src="forms/forms.js"/>
+</head>	
 <body>
+<lx:header>
+	<h2>
+		Otra deduccion: ${otraDeduccionInstance.id} <small>(${otraDeduccionInstance.empleado})</small>
+	</h2>
+</lx:header>
 
-	<content tag="header">
-		<h3>Abono para otra deduccion: ${otraDeduccionInstance.id} a nombre de: ${otraDeduccionInstance.empleado}</h3>
-	</content>
+<div class="row wrapper wrapper-content animated fadeInRight">
+	<div class="col-md-8 col-md-offset-2">
+		<lx:ibox>
+			<lx:iboxTitle title="Propiedades"/>
+			<g:form name="createForm" action="salvarAbono" class="form-horizontal" method="POST" >  
+			    <g:hiddenField name="otraDeduccionId" value="${otraDeduccionInstance.id}"/>
+			    <lx:iboxContent>
+				    <f:with bean="${otraDeduccionAbonoInstance}">
+				    	<f:field property="fecha" />
+				    	<f:field property="importe" widget="money"/>
+				    	<f:field property="comentario" widget-class="form-control"/>
+				    </f:with>
+			    </lx:iboxContent>
+			    <lx:iboxFooter>
+			    	<div class="btn-group">
+		    			<lx:backButton action="edit" id="${otraDeduccionInstance.id}"/>
+		    		    <button id="saveBtn" class="btn btn-primary ">
+		    		        <i class="fa fa-floppy-o"></i> Salvar
+		    		    </button>
+			    	</div>
+			    	
+			    </lx:iboxFooter>
+			</g:form>
+		</lx:ibox>
+	</div>
 	
-	<content tag="operaciones">
-		<ul class="nav nav-pills nav-stacked">
-  			<li><g:link action="edit" id="${otraDeduccionInstance.id}">
-  					<span class="glyphicon glyphicon-arrow-left"></span> Regresar
-  			    </g:link>
-  			</li>
-		</ul>
-	</content>
+</div>
+
+<script type="text/javascript">
+    $(function(){
+        $('.date').bootstrapDP({
+            format: 'dd/mm/yyyy',
+            keyboardNavigation: false,
+            forceParse: false,
+            autoclose: true,
+            todayHighlight: true
+        });
+
+        $('.chosen-select').chosen();
+
+        $(".numeric").autoNumeric('init',{vMin:'0'},{vMax:'9999'});
+        $(".money").autoNumeric('init',{wEmpty:'zero',mRound:'B',aSign: '$'});
+        $(".tc").autoNumeric('init',{vMin:'0.0000'});
+        $(".porcentaje").autoNumeric('init',{altDec: '%', vMax: '99.99'});
+
+        $('form[name=createForm]').submit(function(e){
+            console.log("Desablidatndo submit button....");
+
+            var button=$("#saveBtn");
+            button.attr('disabled','disabled')
+            .html('Procesando...');
+
+            $(".money,.porcentaje,.numeric,.tc",this).each(function(index,element){
+              var val=$(element).val();
+              var name=$(this).attr('name');
+              var newVal=$(this).autoNumeric('get');
+              $(this).val(newVal);
+            });
+            //e.preventDefault(); 
+            return true;
+        });
+
+    });
+</script>  
 	
-	<content tag="formTitle">Registro de abono</content>
-	
-	<content tag="form">
-		
-		<g:hasErrors bean="${otraDeduccionAbonoInstance}">
-            <div class="alert alert-danger">
-                <g:renderErrors bean="${otraDeduccionAbonoInstance}" as="list" />
-            </div>
-        </g:hasErrors>
-		
-		<g:form action="salvarAbono"  class="form-horizontal" >
-			<div class="modal-body">
-			<g:hiddenField name="otraDeduccionId" value="${otraDeduccionInstance.id}"/>
-			<f:with bean="${otraDeduccionAbonoInstance}">
-				<f:field property="fecha" input-class="form-control"/>
-				<f:field property="importe" input-class="form-control" input-type="text"/>
-				<f:field property="comentario" input-class="form-control"/>
-			</f:with>
-			</div>
-			<div class="modal-footer">
-				<g:submitButton class="btn btn-primary" name="update" value="Salvar"/>
-			</div>
-		</g:form>
-		
-	</content>
 	
 </body>
 </html>

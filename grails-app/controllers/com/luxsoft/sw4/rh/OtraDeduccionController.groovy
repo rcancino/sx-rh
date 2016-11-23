@@ -44,7 +44,7 @@ class OtraDeduccionController {
 	}
 
 	def agregarAbono(OtraDeduccion otraDeduccionInstance){
-		[otraDeduccionInstance:otraDeduccionInstance,otraDeduccionAbonoInstance:new OtraDeduccionAbono()]
+		[otraDeduccionInstance:otraDeduccionInstance,otraDeduccionAbonoInstance:new OtraDeduccionAbono(fecha:new Date())]
 		
 	}
 	

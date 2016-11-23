@@ -6,8 +6,6 @@
 			<th>Folio</th>
 			<th>Ejercicio</th>
 			<th>Bimestre</th>
-<%--			<th>F.Inicial</th>--%>
-<%--			<th>F.Final</th>--%>
 			<th>Saldo anterior</th>
 			<th>Importe bimestral</th>
 			<th>Días</th>
@@ -19,16 +17,12 @@
 		<g:each in="${infonavitInstance.partidas.sort{!it.id}}" var="row">
 			<tr>
 				<td><g:formatNumber number="${row.id}" format="####"/></td>
-				<td>${fieldValue(bean:row,field:"ejercicio")}</td>
+				<td><g:formatNumber number="${row.ejercicio}" format="####"/></td>
 				<td>${fieldValue(bean:row,field:"bimestre")}</td>
-<%--				<td><g:formatDate date="${row.fechaInicial}" format="dd/MM/yyyy"/></td>--%>
-<%--				<td><g:formatDate date="${row.fechaFinal}" format="dd/MM/yyyy"/></td>--%>
-				
 				<td><g:formatNumber number="${row.saldo}" format="####"/></td>
-				
-				<td><g:formatNumber number="${row.importeBimestral}" format="####.####"/></td>
+				<td><g:formatNumber number="${row.importeBimestral}" type="currency"/></td>
 				<td><g:formatNumber number="${row.diasDelBimestre}" format="####"/></td>
-				<td><g:formatNumber number="${row.cuotaDiaria}" format="####.####"/></td>
+				<td><g:formatNumber number="${row.cuotaDiaria}" type="currency"/></td>
 				<td><g:formatNumber number="${row.acumulado}" format="####.####"/></td>
 			</tr>
 		</g:each>

@@ -1,5 +1,5 @@
 <g:set var="asistenciaControllers" 
-    value="${['asistencia','vacaciones','asistenciaImss']}" />
+    value="${['asistencia','vacaciones','asistenciaImss','tiempoExtra']}" />
     
 
 <li class="${asistenciaControllers.contains(webRequest.controllerName)?'active':''}">
@@ -28,6 +28,14 @@
         <li class="${webRequest.controllerName=='asistenciaImss'?'active':''}">
             <g:link controller="asistenciaImss">
                 <span class="nav-label">Asistenaic IMSS</span> 
+                <span class="fa fa-angle-right pull-right"></span>
+            </g:link>
+            <span class="fa fa-angle-right pull-right"></span>
+        </li>
+
+        <li class="${webRequest.controllerName=='tiempoExtra'?'active':''}">
+            <g:link controller="tiempoExtra">
+                <span class="nav-label">Tiempo extra</span> 
                 <span class="fa fa-angle-right pull-right"></span>
             </g:link>
             <span class="fa fa-angle-right pull-right"></span>
