@@ -6,9 +6,15 @@
         </g:link>
         
     </li>
+    <li>
+        <a data-target="#empleadoSearchDialog" data-toggle="modal">
+            <i class="fa fa-user"></i> 
+        </a>
+    </li>
     <li class="dropdown">
+        
         <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
-            <i class="fa fa-envelope"></i>  <span class="label label-warning">16</span>
+            <i class="fa fa-envelope"></i>  <span class="label label-warning"></span>
         </a>
         
         <ul class="dropdown-menu dropdown-messages">
@@ -18,7 +24,7 @@
                         <asset:image alt="image" class="img-circle" src="demos/a7.jpg"/>
                     </a>
                     <div class="media-body">
-                        <small class="pull-right">46h </small>
+                        <small class="pull-right"> </small>
                         <strong>Usuario 1</strong> Mensaje de prueba  <br>
                         <small class="text-muted">Hace 5 dias  a las  7:58 pm - (10/07/2015)</small>
                     </div>

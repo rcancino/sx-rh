@@ -41,14 +41,19 @@
             </g:else>
          </div>
          <div class="btn-group">
-             <button type="button" name="operaciones"
-                     class="btn btn-success btn-outline dropdown-toggle" data-toggle="dropdown"
-                     role="menu">
-                     Operaciones <span class="caret"></span>
-             </button>
-             <ul class="dropdown-menu">
-                 <g:pageProperty name="page.operaciones"/>
-             </ul>
+            <g:if test="${g.pageProperty(name:'page.operacionesPanel')}">
+                <g:pageProperty name="page.operacionesPanel"/>
+            </g:if>
+            <g:else>
+                <button type="button" name="operaciones"
+                        class="btn btn-success btn-outline dropdown-toggle" data-toggle="dropdown"
+                        role="menu">
+                        Operaciones <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <g:pageProperty name="page.operaciones"/>
+                </ul>
+            </g:else>
          </div>
          <div class="btn-group">
              <button type="button" name="reportes"

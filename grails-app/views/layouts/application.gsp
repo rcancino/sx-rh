@@ -46,6 +46,6 @@
 			</div>
 			<g:render template="/_menu/core/right-sidebar"/>
 		</div>
-	
+		<g:render template="/empleado/empleadoSearch"/>
 	</body>
 </html>

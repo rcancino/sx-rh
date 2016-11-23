@@ -264,4 +264,8 @@ class CoreTagLib {
         out << body()
         out << "</div>"
     }
+
+    def searchEmpleado = {
+        out << "<a class='btn btn-default btn-outline' data-target='#empleadoSearchDialog' data-toggle='modal'><i class='fa fa-search'></i> Buscar</a>"
+    }
 }

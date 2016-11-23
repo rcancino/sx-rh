@@ -1,13 +1,16 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Empleado {{Nóminas}}</title>
+	<title>Empleado ${empleadoInstance.id}</title>
 	<meta name="layout" content="application"/>
 </head>
 <body>	
-	<div class="row wrapper border-bottom white-bg page-heading">
+	<div class="row wrapper border-bottom white-bg page-heading ">
 	    <div class="col-lg-10">
 	        <h2> ${empleadoInstance.nombre}</h2>
+	        <g:if test="${empleadoInstance.status == 'BAJA'}">
+	        	<div class="alert alert-danger"> BAJA: ${empleadoInstance.baja.fecha.text()}</div>
+	        </g:if>
 	        <ol class="breadcrumb">
         	    <li><g:link action="generales" id="${empleadoInstance.id}"><strong>Generales</strong></g:link></li>
         	    <li><g:link action="datosPersonales" id="${empleadoInstance.id}">Datos personales</g:link></li>
@@ -48,13 +51,13 @@
 							
 								<fieldset ${!edit?'disabled':''}>
 									<f:with bean="empleadoInstance">
-										<f:field property="apellidoPaterno" input-class="form-control" label="Apellido P."/>	
-										<f:field property="apellidoMaterno" input-class="form-control" label="Apellido M."/>	
-										<f:field property="nombres" input-class="form-control" />	
-										<f:field property="fechaDeNacimiento" input-class="form-control" label="F.Nacimiento"/>	
-										<f:field property="sexo" input-class="form-control" />	
-										<f:field property="activo" input-class="form-control" />
-										<f:field property="controlDeAsistencia" input-class="form-control" />
+										<f:field property="apellidoPaterno" widget-class="form-control" label="Apellido P."/>	
+										<f:field property="apellidoMaterno" widget-class="form-control" label="Apellido M."/>	
+										<f:field property="nombres" widget-class="form-control" />	
+										<f:field property="fechaDeNacimiento" widget-class="form-control" label="F.Nacimiento"/>	
+										<f:field property="sexo" widget-class="form-control" />	
+										<f:field property="activo" widget-class="form-control" />
+										<f:field property="controlDeAsistencia" widget-class="form-control" />
 									</f:with>
 								</fieldset>
 							
@@ -65,11 +68,11 @@
 								<fieldset ${!edit?'disabled=""':''}>
 									<f:with bean="empleadoInstance">
 											
-										<f:field property="curp" input-class="form-control" input-autocomplete="off"/>	
-										<f:field property="rfc" input-class="form-control" input-autocomplete="off"/>	
-										<f:field property="clave" input-class="form-control" input-autocomplete="off"/>	
-										<f:field property="status" input-class="form-control" />
-										<f:field property="alta" input-class="form-control" />
+										<f:field property="curp" widget-class="form-control" widget-autocomplete="off"/>	
+										<f:field property="rfc" widget-class="form-control" widget-autocomplete="off"/>	
+										<f:field property="clave" widget-class="form-control" widget-autocomplete="off"/>	
+										<f:field property="status" widget-class="form-control" />
+										<f:field property="alta" widget-class="form-control" />
 											
 									</f:with>
 								</fieldset>
@@ -79,13 +82,13 @@
 								<fieldset disabled>
 									
 									<f:with bean="${empleadoInstance}">
-										<f:field property="baja.fecha"  input-class="form-control" label="Fecha B.">
+										<f:field property="baja.fecha"  widget-class="form-control" label="Fecha B.">
 											<g:field type="text" name="baja.fecha" id="bajaFecha" class="form-control" 
 												value="${g.formatDate(date:empleadoInstance?.baja?.fecha,format:'dd/MM/yyyy') }"/>
 										</f:field>	
-										<f:field property="baja.motivo" input-class="form-control" />
-										<f:field property="baja.causa" input-class="form-control" />
-										<f:field property="baja.comentario" input-class="form-control" label="Comentario"/>	
+										<f:field property="baja.motivo" widget-class="form-control" />
+										<f:field property="baja.causa" widget-class="form-control" />
+										<f:field property="baja.comentario" widget-class="form-control" label="Comentario"/>	
 									</f:with>
 
 								</fieldset>
@@ -107,9 +110,7 @@
 				</div>
 				<div class="ibox-footer">
 					
-					<button class="btn btn-default btn-outline" data-toggle="modal" data-target="#searchForm">
-						<span class="glyphicon glyphicon-search"></span> Buscar
-					</button>
+					<lx:searchEmpleado/>
 					<g:if test="${!edit}">
 						<g:link class="btn btn-default btn-outline" action="generales" id="${empleadoInstance.id}" params="[edit:'true']">Modificar</g:link>
 						<g:link class="btn btn-default btn-outline" action="create" > Nuevo</g:link>
