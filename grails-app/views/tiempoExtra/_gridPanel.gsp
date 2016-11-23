@@ -1,6 +1,6 @@
 
 
-<table id="tiempoExtraGrid" class="table table-striped table-bordered table-condensed">
+<table id="tiempoExtraGrid" class=" grid table table-striped table-bordered table-condensed">
 	<thead>
 		<tr>
 			<th>Folio</th>

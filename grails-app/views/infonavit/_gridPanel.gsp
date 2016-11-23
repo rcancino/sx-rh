@@ -1,6 +1,6 @@
 
 
-<table id="infonavitGrid" class="table table-striped table-bordered table-condensed">
+<table  class=" grid table table-striped table-bordered table-condensed">
 	<thead>
 		<tr>
 			<g:sortableColumn property="id" title="Folio"/>

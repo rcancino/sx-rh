@@ -32,8 +32,13 @@
              </div>
          </g:else>
          <div class="btn-group">
-             <lx:refreshButton/>
-             <lx:createButton/>
+            <g:if test="${g.pageProperty(name:'page.buttonsBar')}">
+                <g:pageProperty name="page.buttonsBar"/>
+            </g:if>
+            <g:else>
+                <lx:refreshButton/>
+                <lx:createButton/>
+            </g:else>
          </div>
          <div class="btn-group">
              <button type="button" name="operaciones"

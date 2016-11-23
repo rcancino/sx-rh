@@ -46,22 +46,7 @@
 						 		widget-disabled="${!vacacionesInstance.diasPagados}"/>
 
 							<f:field  property="calendarioDet" widget-class="form-control"/>
-							%{-- <div class="form-group"><label for="calendarioField" class="col-sm-2 control-label">Calendario</label>
-								<div class="col-sm-10">
-									<g:select id="calendarioField" 
-										class="form-control"  
-										name="calendarioDet.id" 
-										value="${vacacionesInstance?.calendarioDet?.id}"
-										from="${periodos}" 
-										optionKey="id" 
-										optionValue="${{it.calendario.tipo+' '+it.folio+' ( '+it.inicio.format('yyyy-MMM-dd')+' al '+it.fin.format('yyyy-MMM-dd')+ ' )'}}"
-										disabled="${vacacionesInstance.diasPagados<=0}?'':'disabled'"
-										noSelection="['':'Seleccione un calendario']"
-										autocomplete="off"
-								/>
-							</div> 
-						</div>
-						--}%
+							
 						<f:field input-id="cierreAnualField" 
 							property="cierreAnual" 
 							input-class="form-control" label="Cierre anual"

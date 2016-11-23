@@ -1,14 +1,51 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<meta name="layout" content="operacionesForm"/>
-	<title>FONACOT ${fonacotInstance.id}</title>
+	<meta name="layout" content="showForm"/>
+	<g:set var="entity" value="${fonacotInstance}" scope="request" />
+	<g:set var="editable" value="${true}" scope="request" />
+	<g:set var="imprimible" value="${false}" scope="request" />
 </head>
 <body>
 
-	<content tag="header">
-		<h3>Prestamo FONACOT ${fonacotInstance.empleado}</h3>
-	</content>
+<content tag="header">
+	Prestamo FONACOT ${fonacotInstance.empleado}
+</content>
+
+<content tag="formTitle">FONACOT ${fonacotInstance.empleado}</content>
+
+<content tag="form">
+	<f:with bean="${fonacotInstance }">
+		<f:display property="numeroDeCredito" wrapper="bootstrap3"/>
+		<f:display property="numeroDeFonacot" wrapper="bootstrap3"/>
+		<f:display property="importe" wrapper="bootstrap3"/>
+		<f:display property="retencionMensual" wrapper="bootstrap3"/>
+		<f:display property="retencionDiaria" wrapper="bootstrap3"/>
+		<f:display property="totalAbonos" wrapper="bootstrap3"/>
+		<f:display property="saldo" wrapper="bootstrap3"/>
+		<f:display property="activo" wrapper="bootstrap3"/>
+	</f:with>
+	<legend> Abonos </legend>
+	%{-- <g:render template="abonosGrid"/> --}%
+</content>
+
+<content tag="footer">
+	<div class="btn-group">
+		<lx:backButton/>
+		<lx:createButton/>
+		<lx:editButton id="${fonacotInstance.id}"/>
+		<a class="btn btn-danger btn-outline" 
+                                            data-toggle="modal" data-target="#deleteDialog"><i class="fa fa-trash"></i> Eliminar</a> 
+		<g:jasperReport
+  			jasper="EstadoDeCuentaFonacot"
+  			format="PDF"
+  			name="Estado de Cuenta">
+  			<g:hiddenField name="ID" value="${fonacotInstance.id}"/>
+		</g:jasperReport>
+
+	</div>
+	<g:render template="/common/deleteDialog" bean="${fonacotInstance}"/>
+</content>
 	
 	<content tag="operaciones">
 		<ul class="nav nav-stacked">
@@ -36,40 +73,9 @@
 		</ul>
 	</content>
 	
-	<content tag="formTitle">FONACOT ${fonacotInstance.empleado}</content>
 	
-	<content tag="form">
-		
-		<g:hasErrors bean="${fonacotInstance}">
-            <div class="alert alert-danger">
-                <g:renderErrors bean="${fonacotInstance}" as="list" />
-            </div>
-        </g:hasErrors>
-		
-		<g:form class="form-horizontal" >
-			<g:hiddenField name="id" value="${fonacotInstance.id}"/>
-			<g:hiddenField name="version" value="${fonacotInstance.version}"/>
-			<fieldset disabled>
-				<f:with bean="${fonacotInstance }">
-					<f:field property="numeroDeCredito" input-class="form-control"/>
-					<f:field property="numeroDeFonacot" input-class="form-control"/>
-					<f:field property="importe" input-class="form-control" input-type="text"/>
-					<f:field property="retencionMensual" input-class="form-control" />
-					<f:field property="retencionDiaria" input-class="form-control" />
-					<f:field property="totalAbonos" input-class="form-control" input-type="text"/>
-					<f:field property="saldo" input-class="form-control" input-type="text"/>
-					<f:field property="activo" input-class="form-control" input-type="text"/>
-				</f:with>
-			</fieldset>
-			
-		</g:form>
-		<fieldset>
-			<legend> Abonos </legend>
-			<g:render template="abonosGrid"/>
-		</fieldset>
-		
-
-	</content>
+	
+	
 	
 </body>
 </html>

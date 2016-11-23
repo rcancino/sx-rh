@@ -253,8 +253,9 @@ class CoreTagLib {
 
     def iboxTools = {attrs, body ->
         out << "<div class='ibox-tools'>"
-        out << "<a class='collapse-link'><i class='fa fa-chevron-up'></i></a>"
         out << body()
+        out << "<a class='collapse-link'><i class='fa fa-chevron-up'></i></a>"
+        
         out << "</div>" 
     }
 

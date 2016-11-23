@@ -11,8 +11,6 @@
         <div class="row wrapper border-bottom white-bg page-heading">
             <div class="col-lg-10">
                 <h2>${pageProperty(name:'page.header')?:"Edición de  ${entityName}"} </h2>
-                
-                %{-- <g:pageProperty name="page.subHeader"/> --}%
                 <ol class="breadcrumb">
                     <li><g:link action="index">${entityName}(s)</g:link></li>
                     <li><g:link action="show" id="${entity.id}">Consulta</g:link></li>
@@ -35,10 +33,9 @@
                         <div class="ibox-title">
                             <h5>${pageProperty(name:'page.formTitle')?:'Propiedades'} </h5>
                         </div>
-                        <div class="ibox-content">
-
+                        <div class="ibox-content">  
                             <lx:errorsHeader bean="${entity}"/>
-                            <g:form name="updateForm" action="update" class="form-horizontal" method="PUT">  
+                            <g:form name="updateForm" action="${action?:'update'}" class="form-horizontal" method="PUT">  
                                 <g:hiddenField name="id" value="${entity.id}"/>
                                 <g:hiddenField name="version" value="${entity.version}"/>
                                 <g:pageProperty name="page.formFields"/>
@@ -51,6 +48,9 @@
                                     </div>
                                 </div>
                             </g:form>
+                        </div>
+                        <div class="ibox-footer">
+                            <g:pageProperty name="page.footer"/>
                         </div>
                     </div>
                 </div>
