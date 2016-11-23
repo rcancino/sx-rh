@@ -13,8 +13,8 @@
 				<fieldset>
 						<legend> Parámetros</legend>
 						<f:with bean="${new ReporteDeEmpleadosCommand()}">
-							<f:field property="fpago"   input-class="form-control"/>
-							<f:field property="periodicidad"  input-class="form-control"/>
+							<f:field property="fpago"   widget-class="form-control"/>
+							<f:field property="periodicidad"  widget-class="form-control"/>
 						</f:with>
 				</fieldset>
 				<div class="form-group">

@@ -13,8 +13,8 @@
 				<fieldset>
 						<legend> Parmetros</legend>
 						<f:with bean="${new EjercicioMesReportCommand()}">
-							<f:field property="ejercicio"   input-class="form-control"/>
-							<f:field property="mes"  input-class="form-control"/>
+							<f:field property="ejercicio"   widget-class="form-control"/>
+							<f:field property="mes"  widget-class="form-control"/>
 						</f:with>
 				</fieldset>
 				<div class="form-group">

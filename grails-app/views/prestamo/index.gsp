@@ -9,6 +9,10 @@
 		<h2>Prestamos a empleados</h2>
 	</content>
 
+	<content tag="operacionesPanel">
+		
+	</content>
+
 	<content tag="reportes">
 		<li>
 			<g:jasperReport

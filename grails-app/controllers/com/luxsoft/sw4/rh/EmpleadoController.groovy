@@ -23,14 +23,32 @@ class EmpleadoController {
 		//params.max = Math.min(max ?: 50, 100)
 		params.sort=params.sort?:'apellidoPaterno'
 		params.order='asc'
-		def tipo=params.tipo?:'QUINCENAL'
+		def tipo=params.tipo?:'SEMANAL'
+
 		def query=Empleado.where{
-			activo==true && salario.periodicidad==tipo
+			activo == true && salario.periodicidad==tipo 
 		}
+		query = query.where {status == 'ALTA'}
+		if(params.status){
+			query = query.where {status == params.status}
+		} 
+
 		def list=query.list(params)
 		[empleadoInstanceList:list,
 			empleadoInstanceCount:query.count(),
 			tipo:tipo]
+	}
+
+	def bajas() {
+		
+		params.sort=params.sort?:'apellidoPaterno'
+		params.order='asc'
+
+		def query=Empleado.where{
+			status == 'BAJA'
+		}
+		def list=query.list(params)
+		[empleadoInstanceList:list]
 	}
 	
 	def show(Empleado empleadoInstance){
@@ -233,6 +251,14 @@ class EmpleadoController {
 			,fileName:repParams.reportName)
 	}
 
+	def empleadoSearch(EmpleadoSearchCommand command) {
+		if(command==null){
+			notFound()
+			return
+		}
+		forward action: 'show', id:command.empleado.id
+	}
+
 }
 
 @Validateable
@@ -261,4 +287,9 @@ class EjercicioMesReportCommand{
 		mes inList:['1','2','3','4','5','6','7','8','9','10','11','12']
 		
 	}
+}
+
+@Validateable
+class EmpleadoSearchCommand {
+	Empleado empleado
 }

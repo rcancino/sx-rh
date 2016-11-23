@@ -19,6 +19,9 @@
         	    <li><g:link controller='pensionAlimenticia' action='edit' id="${empleadoInstance.id}">Pensión</g:link></li>
         	    <li><g:link controller='expediente' action='edit' id="${empleadoInstance.id}">Expediente</g:link></li>
 	        </ol>
+	        <g:if test="${empleadoInstance.status == 'BAJA'}">
+	        	<div class="alert alert-danger"> BAJA ${empleadoInstance.baja.fecha.text()}</div>
+	        </g:if>
 	        <g:if test="${flash.message}">
 	            <small><span class="label label-warning ">${flash.message}</span></small>
 	        </g:if> 

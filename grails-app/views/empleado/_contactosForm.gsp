@@ -9,7 +9,8 @@
 				<f:field property="contacto.parentesco" widget-class="form-control" />
 				<f:field property="contacto.telefono1" widget-class="form-control" />
 				<f:field property="contacto.telefono2" widget-class="form-control" />
-				<f:field property="contacto.direccion" widget-class="form-control" />
+				%{-- <f:field property="contacto.direccion"  /> --}%
+				<g:render template="/common/direccion" bean="${empleadoInstance.contacto}"/>
 			</f:with>
 		</fieldset>
 	</div>

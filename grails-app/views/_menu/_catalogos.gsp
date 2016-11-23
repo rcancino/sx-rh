@@ -1,5 +1,6 @@
 <g:set var="catalogosControllers" 
-    value="${['departamento']}" />
+    value="${['empleado','departamento']}" />
+<g:set var="controller" value="${webRequest.controllerName}"/>
 <li class="${catalogosControllers.contains(webRequest.controllerName)?'active':''}">
     <a href="#">
     	<i class="fa fa-table"></i> 
@@ -25,7 +26,7 @@
             	<g:link controller="ubicacion" action="index">Ubicaciones</g:link>
             	<span class="fa fa-angle-right pull-right"></span>
             </li>
-            <li>
+            <li class="${controller == 'empleado' ? 'active': ''}">
             	<g:link controller="empleado" action="index">Empleados</g:link>
             	<span class="fa fa-angle-right pull-right"></span>
             </li>
