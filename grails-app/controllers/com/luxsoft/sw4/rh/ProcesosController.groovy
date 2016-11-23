@@ -16,7 +16,7 @@ class ProcesosController {
     def index() { }
 	
 	def empleados(Long max){
-		params.max = Math.min(max ?: 20, 100)
+		
 		params.sort=params.sort?:'perfil.ubicacion'
 		params.order='asc'
 		
@@ -24,7 +24,7 @@ class ProcesosController {
 		def total=Empleado.where{status=='ALTA'}.count()
 		
 		//[empleadoInstanceList:Empleado.list(params),empleadoInstanceCount:Empleado.count()]
-		[empleadoInstanceList:res,empleadoInstanceCount:total]
+		[empleadoInstanceList:res]
 	}
 	
 	

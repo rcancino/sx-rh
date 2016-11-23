@@ -9,8 +9,8 @@
 			
 				<div class="modal-body">
 					<f:with bean="${new com.luxsoft.sw4.rh.CalculoBimestralCommand()}">
-						<f:field property="ejercicio" input-class="form-control" />
-						<f:field property="bimestre" input-class="form-control" value="${session.bimestre }"/>
+						<f:field property="ejercicio" widget-class="form-control" value="${session.ejercicio }" />
+						<f:field property="bimestre" widget-class="form-control" value="${session.bimestre }"/>
 					</f:with>
 				</div>
 				

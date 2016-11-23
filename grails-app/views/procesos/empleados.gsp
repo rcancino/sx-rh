@@ -9,21 +9,14 @@
 </head>
 <body>
 	<content tag="header">
-		<h3>Empleados activos</h3>
+		<h2>Empleados activos</h2>
 	</content>
 
-
-	<div class="row toolbar">
+         <content tag="buttonsBar">
+             <lx:refreshButton action="empleados"/>
+          
+         </content>
         
-         
-         <div class="btn-group">
-             <lx:refreshButton action=""/>
-             <lx:createButton/>
-         </div>
-        
-     </div>
-
-	
 	<content tag="gridPanel" >
 		<g:render template="empleadosGrid"/>
 	</content>
