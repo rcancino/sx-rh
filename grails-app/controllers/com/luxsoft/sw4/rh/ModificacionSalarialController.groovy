@@ -40,7 +40,7 @@ class ModificacionSalarialController {
 		
 	}
     def index(Long max){
-    	params.max = Math.min(max ?: 15, 100)
+    	
 		params.sort=params.sort?:'lastUpdated'
 		params.order='desc'
 		def list=ModificacionSalarial.findAllByBimestre(session.bimestre,params)

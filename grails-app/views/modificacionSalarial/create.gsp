@@ -1,26 +1,20 @@
 <html>
 <head>
 	<meta charset="UTF-8">
+	<meta name="layout" content="createForm"/>
 	<title>Alta de modificación</title>
+	<g:set var="entity" value="${modificacionInstance}" scope="request" />
+	<g:set var="entityName" value="Modificacion Salarial" scope="request" />
+	<g:set var="editable" value="${true}" scope="request" />
+	<g:set var="imprimible" value="${false}" scope="request" />
 </head>
 <body>
-	<div class="container">
-
-		<div class="row">
-			<div class="col-md-3">
-				<div class="list-group">
-					<a href=" link_1" class="list-group-item active">Operaciones</a>
-					<g:link action="index" class="list-group-item">
-						<span class="glyphicon glyphicon-list"></span> Catálogo
-					</g:link>
-					
-				</div>
-			</div>
-			<div class="col-md-9">
-				<g:render template="createForm"/>
-			</div>
-		</div>
-	</div>
+		<content tag="formTitle">
+			
+		</content>
+		<content tag="formFields">
+			<g:render template="createForm"/>
+		</content>
 	
 </body>
 </html>

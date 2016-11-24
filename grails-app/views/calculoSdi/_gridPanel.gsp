@@ -1,4 +1,4 @@
-<table id="sdiGrid" class="table  table-bordered table-condensed table-hover">
+<table id="sdiGrid" class="grid table  table-bordered table-condensed table-hover">
 	<thead>
 		<tr>
 			<th>Empleado</th>
