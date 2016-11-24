@@ -51,7 +51,7 @@
 		</div>
 
 		<div class="col-md-6">
-			<g:render template="partidasPanel"/>
+			<g:render template="partidasPanel" model="[editable:true]"/>
 		</div>
 	</div>
 

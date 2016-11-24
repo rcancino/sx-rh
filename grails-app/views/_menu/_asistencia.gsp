@@ -1,6 +1,7 @@
 <g:set var="asistenciaControllers" 
-    value="${['asistencia','vacaciones','asistenciaImss','tiempoExtra']}" />
-    
+    value="${['asistencia','vacaciones','vacacionesGrupo','asistenciaImss','tiempoExtra']}" />
+
+<g:set var="vacacionesCtrl" value="${ (webRequest.controllerName == 'vacaciones') || (webRequest.controllerName == 'vacacionesGrupo') }"/>
 
 <li class="${asistenciaControllers.contains(webRequest.controllerName)?'active':''}">
     <a href="#">
@@ -18,7 +19,7 @@
             <span class="fa fa-angle-right pull-right"></span>
         </li>
 
-        <li class="${webRequest.controllerName=='vacaciones'?'active':''}">
+        <li class="${vacacionesCtrl ? 'active':''}">
             <g:link controller="vacaciones">
                 <span class="nav-label">Vacaciones</span> 
                 <span class="fa fa-angle-right pull-right"></span>
@@ -33,7 +34,7 @@
             <span class="fa fa-angle-right pull-right"></span>
         </li>
 
-        <li class="${webRequest.controllerName=='tiempoExtra'?'active':''}">
+        <li >
             <g:link controller="tiempoExtra">
                 <span class="nav-label">Tiempo extra</span> 
                 <span class="fa fa-angle-right pull-right"></span>

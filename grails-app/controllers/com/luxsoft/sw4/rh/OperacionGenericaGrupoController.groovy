@@ -126,6 +126,23 @@ class OperacionGenericaGrupoController {
         dataToRender.operacionId=operacion.id        
         render dataToRender as JSON
     }
+
+    @Transactional
+    def eleiminarPartida(OperacionGenericaGrupo grupo){
+        OperacionGenerica v = OperacionGenerica.get(params.operacionId)
+        if(v == null){
+            notFound()
+            redirect action:'edit', model:[vacacionesGrupoInstance:grupo]
+            return
+        }
+
+        log.info('Eliminando opercion del grupo ' + grupo)
+        def res = grupo.removeFromPartidas(v)
+        v.delete flush:true
+        log.info('Eliminado:  ' + res )
+        grupo = grupo.save failOnError:true, flush:true
+        redirect action:'edit', id:grupo.id
+    }
     
 
     protected void notFound() {

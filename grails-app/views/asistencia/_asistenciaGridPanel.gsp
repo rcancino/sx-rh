@@ -1,29 +1,3 @@
-
-
-%{-- <div class="btn-group">
-	<button type="button" name="reportes"
-		class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-		role="menu">
-		Reportes <span class="caret"></span>
-	</button>
-	<ul class="dropdown-menu">
-		<li>
-			
-			<g:jasperReport jasper="AsistenciaRH"
-					format="PDF" name="Asistencia RH">
-				<g:hiddenField name="CALENDARIO_ID" 
-						value="${calendarioDet.id}" />
-				<g:if test="${partidasList!=null}">
-					<g:hiddenField name="UBICACION_ID" 
-						value="${partidasList[0].empleado?.perfil?.ubicacion?.id}" />
-				</g:if>
-				
-			</g:jasperReport>
-			
-			
-		</li>
-	</ul>
-</div> --}%
 <table id="" class="grid table table-striped table-bordered table-condensed asistenciaTable">
 	<thead>
 		<tr>

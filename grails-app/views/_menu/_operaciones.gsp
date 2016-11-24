@@ -1,5 +1,8 @@
 <g:set var="operacionesControllers" 
-    value="${['nomina','operacionGenerica','incentivo','prestamo','infonavit','fonacot','otraDeduccion','registroDeComisiones']}" />
+    value="${['nomina','operacionGenerica','operacionGenericaGrupo','incentivo','prestamo','infonavit','fonacot','otraDeduccion','registroDeComisiones']}" />
+
+<g:set var="genericasOp" 
+    value="${ (webRequest.controllerName == 'operacionGenerica') || (webRequest.controllerName == 'operacionGenericaGrupo')  }"/>
 <li class="${operacionesControllers.contains(webRequest.controllerName)?'active':''}">
     <a href="#">
     	<i class="fa fa-tasks"></i> 
@@ -15,8 +18,7 @@
             </g:link>
             <span class="fa fa-angle-right pull-right"></span>
         </li>
-
-        <li class="${webRequest.controllerName=='operacionGenerica'?'active':''}">
+        <li class="${genericasOp ? 'active':''}">
             <g:link controller="operacionGenerica">
                 <span class="nav-label">Genéricas</span> 
                 <spzxan class="fa fa-angle-right pull-right"></span>

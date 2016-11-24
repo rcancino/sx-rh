@@ -35,7 +35,7 @@
 	</lx:header>
 
 	<div class="row wrapper white-bg animated fadeInRight">
-	Turno:  ${asistenciaInstance?.empleado?.perfil?.turno.id} 
+	
 		<div class="">
 			<div class="col-md-12">
 				<div class="toolbar">
