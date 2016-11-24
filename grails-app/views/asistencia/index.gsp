@@ -26,7 +26,7 @@
 <div class="row wrapper wrapper-content white-bg animated fadeInRight">
 	<div class="row button-panel">
 
-			<div class="col-md-4 ">
+			<div class="col-md-4 toolbar">
 				<input id="searchField" class="form-control" type="text" placeholder="Empleado" autofocus="autofocus">
 			</div>
 
@@ -146,7 +146,24 @@
 							
 						</li>
 						<li>
-							<button class="btn btn-default" data-toggle="modal" data-target="#calendarioForm"> Mensual X Empleado</button>
+							
+							<g:jasperReport jasper="AsistenciaRH"
+									format="PDF" name="Asistencia RH">
+								<g:hiddenField name="CALENDARIO_ID" 
+										value="${calendarioDet.id}" />
+								<g:if test="${partidasList!=null}">
+									<g:hiddenField name="UBICACION_ID" 
+										value="${partidasList[0].empleado?.perfil?.ubicacion?.id}" />
+								</g:if>
+								
+							</g:jasperReport>
+							
+							
+						</li>
+						<li>
+							<a class="" 
+								data-toggle="modal" 
+								data-target="#calendarioForm"> Mensual X Empleado</a>
 						</li>
 						
 					</ul>
@@ -156,43 +173,46 @@
 	</div>
   	
   	<div class="row">
-		<ul class="nav nav-tabs" role="tablist">
-		  <li class="${tipo=='SEMANA'?'active':''}">
-		  	<a href="#andrade" role="tab" data-toggle="tab">Andrade</a>
-		  </li>
-		  <li><a href="#bolivar" role="tab" data-toggle="tab">Bolivar</a></li>
-		  <li><a href="#calle4" role="tab" data-toggle="tab">Calle 4</a></li>
-		  <li><a href="#cf5febrero" role="tab" data-toggle="tab">5 de Febrero</a></li>
-		  <li><a href="#tacuba" role="tab" data-toggle="tab">Tacuba</a></li>
-		  <li class="${tipo=='QUINCENA'?'active':''}">
-		  	<a href="#oficinas" role="tab" data-toggle="tab">Oficinas</a>
-		  </li>
-		  <li><a href="#ventas" role="tab" data-toggle="tab">Ventas</a></li>
-		</ul>
+  		<div class="col-md-12">
+  				<ul class="nav nav-tabs" role="tablist">
+  				  <li class="${tipo=='SEMANA'?'active':''}">
+  				  	<a href="#andrade" role="tab" data-toggle="tab">Andrade</a>
+  				  </li>
+  				  <li><a href="#bolivar" role="tab" data-toggle="tab">Bolivar</a></li>
+  				  <li><a href="#calle4" role="tab" data-toggle="tab">Calle 4</a></li>
+  				  <li><a href="#cf5febrero" role="tab" data-toggle="tab">5 de Febrero</a></li>
+  				  <li><a href="#tacuba" role="tab" data-toggle="tab">Tacuba</a></li>
+  				  <li class="${tipo=='QUINCENA'?'active':''}">
+  				  	<a href="#oficinas" role="tab" data-toggle="tab">Oficinas</a>
+  				  </li>
+  				  <li><a href="#ventas" role="tab" data-toggle="tab">Ventas</a></li>
+  				</ul>
 
-		<div class="tab-content">
-	  		<div class="tab-pane ${tipo=='SEMANA'?'active':''}" id="andrade">
-				<g:render template="asistenciaGridPanel" model="['partidasList':partidasMap.ANDRADE]"/>
-	  		</div>
-	  		<div class="tab-pane" id="bolivar">
-	  			<g:render template="asistenciaGridPanel" model="['partidasList':partidasMap['BOLIVAR']]"/>
-	  		</div>
-	  		<div class="tab-pane" id="calle4">
-	  			<g:render template="asistenciaGridPanel" model="['partidasList':partidasMap['CALLE4']]"/>
-	  		</div>
-	  		<div class="tab-pane" id="cf5febrero">
-	  			<g:render template="asistenciaGridPanel" model="['partidasList':partidasMap['CF5FEBRERO']]"/>
-	  		</div>
-	  		<div class="tab-pane" id="tacuba">
-	  			<g:render template="asistenciaGridPanel" model="['partidasList':partidasMap['TACUBA']]"/>
-	  		</div>
-	  		<div class="tab-pane ${tipo=='QUINCENA'?'active':''}" id="oficinas">
-	  			<g:render template="asistenciaGridPanel" model="['partidasList':partidasMap['OFICINAS']]"/>
-	  		</div>
-	  		<div class="tab-pane" id="ventas">
-	  			<g:render template="asistenciaGridPanel" model="['partidasList':partidasMap['VENTAS']]"/>
-	  		</div>
-		</div>
+  				<div class="tab-content">
+  			  		<div class="tab-pane ${tipo=='SEMANA'?'active':''}" id="andrade">
+  						<g:render template="asistenciaGridPanel" model="['partidasList':partidasMap.ANDRADE]"/>
+  			  		</div>
+  			  		<div class="tab-pane" id="bolivar">
+  			  			<g:render template="asistenciaGridPanel" model="['partidasList':partidasMap['BOLIVAR']]"/>
+  			  		</div>
+  			  		<div class="tab-pane" id="calle4">
+  			  			<g:render template="asistenciaGridPanel" model="['partidasList':partidasMap['CALLE4']]"/>
+  			  		</div>
+  			  		<div class="tab-pane" id="cf5febrero">
+  			  			<g:render template="asistenciaGridPanel" model="['partidasList':partidasMap['CF5FEBRERO']]"/>
+  			  		</div>
+  			  		<div class="tab-pane" id="tacuba">
+  			  			<g:render template="asistenciaGridPanel" model="['partidasList':partidasMap['TACUBA']]"/>
+  			  		</div>
+  			  		<div class="tab-pane ${tipo=='QUINCENA'?'active':''}" id="oficinas">
+  			  			<g:render template="asistenciaGridPanel" model="['partidasList':partidasMap['OFICINAS']]"/>
+  			  		</div>
+  			  		<div class="tab-pane" id="ventas">
+  			  			<g:render template="asistenciaGridPanel" model="['partidasList':partidasMap['VENTAS']]"/>
+  			  		</div>
+  				</div>
+  		</div>
+		
 		<g:render template="/_common/selectorDeAsistencia"/>
 	</div>
 
@@ -203,24 +223,24 @@
 <script type="text/javascript">
 	$(function(){
 		$('.grid').dataTable({
-                    responsive: true,
-                    aLengthMenu: [[20, 40, 60, 100, -1], [20, 40,60, 100, "Todos"]],
-                    "language": {
-                        "url": "${assetPath(src: 'datatables/dataTables.spanish.txt')}"
-                    },
-                    "dom": 'T<"clear">lfrtip',
-                    "tableTools": {
-                        "sSwfPath": "${assetPath(src: 'plugins/dataTables/swf/copy_csv_xls_pdf.swf')}"
-                    },
-                    "order": []
-                });
-                $("#filtro").on('keyup',function(e){
-                    var term=$(this).val();
-                    $('#grid').DataTable().search(
-                        $(this).val()
-                            
-                    ).draw();
-                });
+            responsive: true,
+            aLengthMenu: [[20, 40, 60, 100, -1], [20, 40,60, 100, "Todos"]],
+            "language": {
+                "url": "${assetPath(src: 'datatables/dataTables.spanish.txt')}"
+            },
+            "dom": 't<"clear">lfrip',
+            "tableTools": {
+                "sSwfPath": "${assetPath(src: 'plugins/dataTables/swf/copy_csv_xls_pdf.swf')}"
+            },
+            "order": []
+        });
+        var tables = $('.grid'); //.DataTable();
+        $("#searchField").on('keyup',function(e){
+            var term=$(this).val();
+            $.each(tables, function(p,v) {
+                $(this).DataTable().search(term).draw();
+            });
+        });
 	});
 </script>	
 	
