@@ -1,6 +1,6 @@
 
 
-<table id="grid" class="table table-striped table-bordered table-condensed">
+<table id="grid" class=" grid table table-striped table-bordered table-condensed">
 	<thead>
 		<tr>
 			<g:sortableColumn property="id" title="Folio"/>
@@ -42,24 +42,4 @@
 		</g:each>
 	</tbody>
 </table>
-	<r:script>
-			$(function(){
-				var table=$("#grid").dataTable({
-			        "paging":   false,
-			        "ordering": false,
-			        "info":     false,
-			         "dom":'t'
-    				});
-    				$("#nombreField").keyup(function(){
-      					table.DataTable().column(1).search( $(this).val() ).draw();
-					});
-    				$("#ubicacionField").keyup(function(){
-      					table.DataTable().column(2).search( $(this).val() ).draw();
-					});
-					
-					$("#periodicidadField").keyup(function(){
-      					table.DataTable().column(3).search( $(this).val() ).draw();
-					});
-					
-			});
-	</r:script>
+	

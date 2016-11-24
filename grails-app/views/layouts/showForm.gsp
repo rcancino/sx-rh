@@ -32,25 +32,29 @@
                                 <lx:errorsHeader bean="${entity}"/>
                                 <g:pageProperty name="page.form"/>
                             </div>
-                            <div class="ibox-footer">
-                                <g:if test="${g.pageProperty(name:'page.footer')}">
-                                    <g:pageProperty name="page.footer"/>
-                                </g:if>
-                                <g:else>
-                                    <div class="btn-group">
-                                        <lx:backButton/>
-                                        <lx:createButton/>
-                                        <g:if test="${editable}">
-                                            <lx:editButton id="${entity?.id}"/>
-                                        </g:if>
-                                        <g:if test="${printable}">
-                                            <lx:printButton id="${entity?.id}"/>
-                                        </g:if>
-                                    </div>
-                                </g:else>
-                                
-                            </div>
                         </form>
+                        <div class="ibox-footer">
+                            <g:if test="${g.pageProperty(name:'page.footer')}">
+                                <g:pageProperty name="page.footer"/>
+                            </g:if>
+                            <g:else>
+                                <div class="btn-group">
+                                    <lx:backButton/>
+                                    <lx:createButton/>
+                                    <g:if test="${editable}">
+                                        <lx:editButton id="${entity?.id}"/>
+                                    </g:if>
+                                    <g:if test="${printable}">
+                                        <lx:printButton id="${entity?.id}"/>
+                                    </g:if>
+                                     <g:if test="${delete}">
+                                        <lx:deleteButton bean="${entity}"/>
+                                    </g:if>
+                                    
+                                </div>
+                            </g:else>
+                        </div>
+                        
                         
                     </div>
                 </div>

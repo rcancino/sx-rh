@@ -8,13 +8,12 @@ class Turno {
 	String descripcion
 	
 	LocalTime inicioDeDia
-	
 	LocalTime horaLimiteDeTrabajo
-	boolean horaLimiteSiguienteDia
 	LocalTime inicioDeTiempoExtra
 
 	List dias
-	
+
+	boolean horaLimiteSiguienteDia
 
 	Date dateCreated
 	Date lastUpdated
@@ -30,8 +29,11 @@ class Turno {
 
     static mapping = {
     	dias cascade: "all-delete-orphan"
-    	//inicioDeDia type: PersistentLocalTime
+    	inicioDeDia type: PersistentLocalTime
+    	horaLimiteDeTrabajo type: PersistentLocalTime
+    	inicioDeTiempoExtra type: PersistentLocalTime
     }
+    
 	
 	Map toDiasMap() {
 		return dias.collectEntries{item->

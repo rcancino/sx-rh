@@ -1,5 +1,5 @@
-<%@ page import="com.luxsoft.sw4.rh.Checado" %>
-<table class="table table-striped table-bordered table-condensed">
+
+<table class="grid table table-striped table-bordered table-condensed">
 	<thead>
 		<tr>
 			<g:sortableColumn property="id" title="Folio"/>
@@ -26,6 +26,3 @@
 		</g:each>
 	</tbody>
 </table>
-<div class="pagination">
-	<g:paginate total="${checadoTotalCount ?: 0}" />
-</div>
