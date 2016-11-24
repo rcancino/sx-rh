@@ -1,4 +1,3 @@
-<%@page expressionCodec="none"%>
 <g:form action="show" class="form-horizontal numeric-form" >
 <div class="modal fade" id="cambiarEmpleadoDialog" tabindex="-1" >
 	<div class="modal-dialog">
@@ -33,7 +32,8 @@
 </div> <!-- .modal  -->
 
 </g:form>
-<r:script>
+
+<script type="text/javascript">
 	$(function(){
 		$("#empleadoField").autocomplete({
 			source:'<g:createLink action="getEmpleadosDeAsistencia" id="${asistenciaInstance.calendarioDet.id }"/>',
@@ -44,4 +44,4 @@
 			}
 		});
 	});
-</r:script>
+</script>

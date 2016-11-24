@@ -29,17 +29,16 @@
 </div>	
 	<div class="form-group">
 		<div class="col-md-offset-2 col-sm-4">
-			<g:link class="btn btn-default" action="show" controller="asistencia" id="${ asistenciaDetInstance.asistencia.id}">Cancelar</g:link>
-			<button type="submit" class="btn btn-default">
+			<g:link class="btn btn-default btn-outline" action="show" controller="asistencia" id="${ asistenciaDetInstance.asistencia.id}">Cancelar</g:link>
+			<button type="submit" class="btn btn-default btn-outline">
 				<span class="glyphicon glyphicon-floppy-save"></span> Actualizar
 			</button>
 		</div>
 	</div>
 
 </g:form>
-
-<r:script>
+<script type="text/javascript">
 	$(document).ready(function(){
   		$('.time').mask('00:00:00');
 	});
-</r:script>
+</script>
