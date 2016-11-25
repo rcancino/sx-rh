@@ -10,29 +10,38 @@ class ConceptoDeNominaController {
 
 	static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index() { }
+    def index() { 
+        redirect action:'percepciones'
+        respond conceptosList
+    }
 
     def percepciones(Integer max){
-    	params.max = Math.min(max ?: 15, 100)
+    	params.max = Math.min(max ?: 150, 500)
+        params.sort = 'lastUpdated'
+        params.order = 'desc'
 		String tipo=params.tipo?:'PERCEPCION'
-    	def conceptosList=ConceptoDeNomina.findAllByTipo(tipo)
-    	[conceptosList:conceptosList]
+    	def conceptosList=ConceptoDeNomina.findAllByTipo(tipo,params)
+        render view:'index', model:[conceptosList:conceptosList]
     }
 
     
 
     def deducciones(Integer max){
-		params.max = Math.min(max ?: 15, 100)
+		params.max = Math.min(max ?: 150, 500)
+        params.sort = 'lastUpdated'
+        params.order = 'desc'
 		def conceptosList=ConceptoDeNomina.findAllByTipo('DEDUCCION')
-		[conceptosList:conceptosList]
+        render view:'index', model:[conceptosList:conceptosList]
 	}
 
     def create(){
-    	//println 'Alta de concepto'+params
     	def conceptoInstance=new ConceptoDeNomina(params)
     	[conceptoInstance:conceptoInstance]
     }
 
+    def show(ConceptoDeNomina conceptoInstance){
+        respond conceptoInstance
+    }
     
     @Transactional
     def save(ConceptoDeNomina conceptoInstance){
@@ -48,13 +57,14 @@ class ConceptoDeNominaController {
     	}
     	conceptoInstance.save flush:true
     	flash.message = message(code: 'default.created.message', args: [message(code: 'conceptoInstance.label', default: 'ConceptoDeNomina'), conceptoInstance.clave])
-		
-        redirect action:conceptoInstance.tipo=='PERCEPCION'?'percepciones':'deducciones'
+		respond conceptoInstance
+        //redirect action:conceptoInstance.tipo=='PERCEPCION'?'percepciones':'deducciones'
 
     }
 
     def edit(ConceptoDeNomina conceptoInstance){
-    	render view:'create',model:[conceptoInstance:conceptoInstance,tipoDeForma:'edit',action:'update',method:'PUT']
+    	//render view:'create',model:[conceptoInstance:conceptoInstance,tipoDeForma:'edit',action:'update',method:'PUT']
+        respond conceptoInstance
     }
 
     @Transactional
@@ -69,8 +79,8 @@ class ConceptoDeNominaController {
     	}
     	conceptoInstance.save flush:true
     	flash.message = message(code: 'default.updated.message', args: [message(code: 'ConceptoDeNomina.label', default: 'ConceptoDeNomina'), conceptoInstance.clave])
-		
-        redirect action:conceptoInstance.tipo=='PERCEPCION'?'percepciones':'deducciones'
+		respond view: 'show', conceptoInstance
+        //redirect action:conceptoInstance.tipo=='PERCEPCION'?'percepciones':'deducciones'
 
     }
 

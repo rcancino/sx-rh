@@ -1,4 +1,4 @@
-<table class="table table-striped table-bordered table-condensed">
+<table id="grid" class="grid table table-striped table-bordered table-condensed">
 	<thead>
 		<tr>
 			<g:sortableColumn property="id" title="Id"/>
@@ -19,6 +19,3 @@
 		</g:each>
 	</tbody>
 </table>
-<div class="pagination">
-	<g:paginate total="${puestoInstanceCount ?: 0}" />
-</div>

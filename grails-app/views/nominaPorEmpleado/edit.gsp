@@ -6,28 +6,26 @@
 	<title>Nomina de empleado</title>
 </head>
 <body>
-	<div class="row wrapper border-bottom white-bg page-heading">
-	    <div class="col-lg-10">
-	    	<h3>Nómina de : ${nominaPorEmpleadoInstance?.empleado}
+
+	<lx:header>
+		<h3>Nómina de : ${nominaPorEmpleadoInstance?.empleado}
 	    		<small>${nominaPorEmpleadoInstance?.ubicacion}  (${nominaPorEmpleadoInstance?.nomina?.periodo})  Días:${nominaPorEmpleadoInstance?.nomina?.diasPagados}</small>
-	    		<g:if test="${nominaPorEmpleadoInstance.cfdi}">
-	    			<p><small>UUID: ${nominaPorEmpleadoInstance.cfdi.uuid}  
-	    			 Timbrado: ${nominaPorEmpleadoInstance.cfdi.timbrado}  </small>
-	    		</g:if>
-	    	</h3>
-	        <g:if test="${flash.message}">
-	            <small><span class="label label-warning ">${flash.message}</span></small>
-	        </g:if>
-	        <g:if test="${ajuste}">
-	        	<g:render template="ajusteMensual"/>
-	        </g:if> 
-	    </div>
-	</div>
+	    </h3>
+		<g:if test="${nominaPorEmpleadoInstance.cfdi}">
+			<p><small>UUID: ${nominaPorEmpleadoInstance.cfdi.uuid}  
+			 Timbrado: ${nominaPorEmpleadoInstance.cfdi.timbrado}  </small>
+		</g:if>
+	    
+	    <lx:warningLabel/>
+	    <g:if test="${ajuste}">
+	        <g:render template="ajusteMensual"/>
+	    </g:if> 
+	</lx:header>
 	
 	
 	<div class=" row wrapper wrapper-content  white-bg animated fadeInRight">
 
-		<div class="col-md-3"> <!-- Task Panel -->
+		<div class="col-md-3"> 
 			
 			<div class="panel panel-default panel-primary">
 				<div class="panel-heading">Operaciones</div>
@@ -61,22 +59,6 @@
 					</a>
 					
 					<g:if test="${!nominaPorEmpleadoInstance.cfdi}">
-					
-					<g:link  action="agregarConcepto" params="[tipo:'PERCEPCION']"
-						id="${nominaPorEmpleadoInstance.id}" 
-						class="list-group-item" 
-						data-toggle="modal"
-						data-target="#percepcionModal">
-						<span class="glyphicon glyphicon-plus"></span> Agregar Percepción
-					</g:link>
-					
-					<g:link  action="agregarConcepto" params="[tipo:'DEDUCCION']"
-						id="${nominaPorEmpleadoInstance.id}" 
-						class="list-group-item" 
-						data-toggle="modal"
-						data-target="#deduccionModal">
-						<span class="glyphicon glyphicon-plus"></span> Agregar Deducción
-					</g:link>
 					
 					
 					
@@ -180,11 +162,7 @@
 						</a:>
 						</g:if>
 						
-						<%--<g:link class="list-group-item" action="todo">
-							<span class="glyphicon glyphicon-envelope"></span> Enviar mail 
-						</g:link>
-										
-					--%></div>
+						</div>
 			    </div>
 			  </div>
 			  
@@ -197,10 +175,39 @@
 		<div class="col-md-9">
 			<div class="panel panel-default">
 				<div class="panel-heading">Asistencia ${ nominaPorEmpleadoInstance?.asistencia?.periodo}</div>
-				<div class="panel-body">
-					<g:render template="form"/>
-				</div>
 				
+				<table class="table">
+					<tbody>
+						<tr>
+							<td>Salario Diario</td>
+							<td>
+								<lx:moneyFormat number="${nominaPorEmpleadoInstance?.salarioDiarioBase}"/>
+							</td>
+							<td>Percepciones</td>
+							<td>
+								<lx:moneyFormat number="${nominaPorEmpleadoInstance?.percepciones}"/>
+							</td>
+						</tr>
+						<tr>
+							<td>SDI</td>
+							<td><lx:moneyFormat number="${nominaPorEmpleadoInstance?.salarioDiarioIntegrado}"/></td>
+							<td>Deducciones</td>
+							<td><lx:moneyFormat number="${nominaPorEmpleadoInstance?.deducciones}"/></td>
+						</tr>
+						<tr>
+							<td>Subsidio</td>
+							<td><lx:moneyFormat number="${nominaPorEmpleadoInstance?.subsidioEmpleoAplicado}"/></td>
+							<td>Total</td>
+							<td><lx:moneyFormat number="${nominaPorEmpleadoInstance?.total}"/></td>
+						</tr>
+						<tr>
+							<td>Antigüedad</td>
+							<td><g:formatNumber number="${nominaPorEmpleadoInstance?.antiguedadEnSemanas}" format="###" /></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
 				
 			</div>
 			<div class="row">
@@ -225,63 +232,11 @@
 
 	</div>
 
-	<!-- Modal para el alta de percepciones -->
-	<div class="modal fade" id="percepcionModal" tabindex="-1" >
-		<div class="modal-dialog">
-			<div class="modal-content">
-				%{-- <div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="myModalLabel">Percepción</h4>
-				</div>
-				<div class="modal-body"><p>Forma para el mantenimiento</p></div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-        			<button type="button" class="btn btn-primary">Salvar</button>
-				</div> --}%
-			</div> <!-- moda-content -->
-		</div> <!-- modal-dialog -->
-	</div> <!-- .modal  -->
 	
-	<div class="modal fade" id="deduccionModal" tabindex="-1" >
-		<div class="modal-dialog">
-			<div class="modal-content">
-				
-			</div> <!-- moda-content -->
-		</div> <!-- modal-dialog -->
-	</div> <!-- .modal  -->
 	
 	<g:render template="cambiarNominaDialog"/>
 	
-	<script type="text/javascript">
-		$(function(){
-			var get_data_for_popover=function(){
-				var element=$(this);
-				var url=$(this).attr('data-url');
-				if($(this).attr('data-popover-visible')==="true"){
-					
-					element.popover('hide');
-					element.attr('data-popover-visible',"false");
-					return;
-				}
-				$.ajax({
-					type:'GET',
-					url:url,
-					dataType:'html',
-					success:function(data){
-						element.attr('data-content',data);
-						element.attr('data-popover-visible',"true");
-						element.popover('show');
-					}
-				});
-			}
-			$('[data-popover=true]').popover({"trigger":"manual","html":"true"});
-			$('[data-popover=true]').click(get_data_for_popover);
-		});
-		$(function(){
-			
-			
-		});
-	</script>
+	
 	
 
 </body>

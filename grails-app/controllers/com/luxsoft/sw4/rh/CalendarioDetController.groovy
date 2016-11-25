@@ -28,6 +28,34 @@ class CalendarioDetController {
 		//println 'Buscando por: '+term
 		//println list.size()
 		list=list.collect{ calDet->
+			def nombre="$calDet.calendario.tipo $calDet.folio  $calDet.calendario.ejercicio (${calDet.inicio.text()} - ${calDet.fin.text()})"
+			[id:calDet.id
+				,label:nombre
+				,value:nombre
+			]
+		}
+		def res=list as JSON
+		
+		render res
+	}
+
+	def getCalendariosDisponibles() {
+
+		def term=params.term.trim()+'%'
+
+		def year = session.ejercicio
+
+		def nominaSemana = Nomina.where {periodicidad == 'SEMANAL' }.list([sort:'id',order:'desc', max:1])
+		def semana = nominaSemana.calendarioDet
+		
+		def nominaQuincena = Nomina.where {periodicidad == 'QUINCENAL'}.find([sort: 'id', order: 'desc', max:1])
+		def quincena = session.calendarioQuincena
+
+		def list = CalendarioDet.where{ calendario.ejercicio == year && calendario.tipo == 'SEMANA' && id > semana.id}.list()
+		def l2 = CalendarioDet.where{ calendario.ejercicio == year && calendario.tipo == 'QUINCENA' && id > quincena.id}.list()
+		list.addAll(l2)
+		
+		list=list.collect{ calDet->
 			def nombre="$calDet.calendario.tipo $calDet.folio  $calDet.calendario.ejercicio"
 			[id:calDet.id
 				,label:nombre

@@ -29,11 +29,11 @@
 				<g:if test="${!nominaPorEmpleadoInstance.cfdi}">
 				<td>
 					<a  
-						data-popover="true" 
-						data-placement="right" 
-						data-title="Formula"
-						data-url="${g.createLink(action:'informacionDeConcepto',id:it.id)}"
+						data-container="body"
 						data-toggle="popover"
+						data-placement="right" 
+						data-title="Resumen"
+						data-url="${g.createLink(action:'informacionDeConcepto',id:it.id)}"
 						>
   						 <span class="glyphicon glyphicon-info-sign"></span>
 					</a>
@@ -71,6 +71,40 @@
 	</tfoot>
 </table>
 
-
+<script type="text/javascript">
+	$(function(){
+		var get_data_for_popover=function(){
+			var element=$(this);
+			var url=$(this).attr('data-url');
+			console.log('URL: ' + url);
+			return "DEMO DATA"
+			/*
+			if($(this).attr('data-popover-visible')==="true"){
+				
+				element.popover('hide');
+				element.attr('data-popover-visible',"false");
+				return;
+			}
+			$.ajax({
+				type:'GET',
+				url:url,
+				dataType:'html',
+				success:function(data){
+					element.attr('data-content',data);
+					element.attr('data-popover-visible',"true");
+					element.popover('show');
+				}
+			});
+			*/
+		}
+		
+		$('[data-toggle="popover"]').popover({content:get_data_for_popover});
+		$('[data-toggle="popover"]').click(get_data_for_popover);
+		
+		//$('[data-popover=true]').popover({"trigger":"manual","html":"true"});
+		
+	});
+	
+</script>
 
 
