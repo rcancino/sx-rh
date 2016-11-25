@@ -24,9 +24,7 @@ import com.luxsoft.sw4.rh.tablas.TarifaIsr
 class ExportadorController {
 
 	def jasperService
-    def index() { }
-
-
+    
     def nominaBanamex(){
     	
     }
