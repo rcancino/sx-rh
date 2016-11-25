@@ -5,6 +5,24 @@
 	<r:require modules="datatables"/> 
 </head>
 <body>
+
+	<div class="row wrapper border-bottom white-bg page-heading">
+	    <div class="col-lg-10">
+	       <lx:header>
+				<h2>Modulo para el calculo del PTU</h2>
+			</lx:header>
+	        <lx:warningLabel/>
+	        <g:if test="${flash.error}">
+	            <small><span class="label label-danger ">${flash.error}</span></small>
+	        </g:if> 
+	    </div>
+	</div>
+	<div class=" row wrapper wrapper-content  white-bg animated fadeInRight">
+
+	</div>
+
+	
+
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-12">

@@ -1,6 +1,7 @@
 <table id="sdiGrid" class="grid table  table-bordered table-condensed table-hover">
 	<thead>
 		<tr>
+			<th>Id</th>
 			<th>Empleado</th>
 			<th>Ubicacion</th>
 			<th>Per</th>
@@ -32,6 +33,7 @@
 	<tbody>
 		<g:each in="${calculoSdiInstanceList}" var="row">
 			<tr>
+				<td>${row.id}</td>
 				<td style="max-width:300px;font-size:12px">${row.empleado}</td>
 				<td>${row.empleado.perfil.ubicacion.clave}</td>
 				<td>${row.empleado.salario.periodicidad.substring(0, 1)}</td>

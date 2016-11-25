@@ -1,13 +1,27 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<meta name="layout" content="operacionesForm"/>
+	<meta name="layout" content="createForm"/>
 	<title>Alta de aguinaldo</title>
+	<g:set var="entity" value="${aguinaldoInstance}" scope="request" />
+	<g:set var="entityName" value="Calculo de Aguinaldo" scope="request" />
+	<g:set var="editable" value="${true}" scope="request" />
+	<g:set var="imprimible" value="${false}" scope="request" />
 </head>
 <body>
 
 	<content tag="header">
-		<h3>Alta de aguinaldo</h3>
+		Alta de aguinaldo
+	</content>
+
+	<content tag="formTitle">
+		Empleado
+	</content>
+	<content tag="formFields">
+		<f:with bean="${aguinaldoInstance }">
+				<f:field property="ejercicio" widget-class="form-control"/>
+				<f:field property="empleado" widget-class="form-control"/>
+			</f:with>
 	</content>
 	
 	<content tag="operaciones">
@@ -23,7 +37,6 @@
 		</ul>
 	</content>
 	
-	<content tag="formTitle">Empleado</content>
 	
 	<content tag="form">
 		
