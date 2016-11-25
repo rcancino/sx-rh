@@ -24,7 +24,13 @@ import com.luxsoft.sw4.rh.tablas.TarifaIsr
 class ExportadorController {
 
 	def jasperService
-    
+
+    static defaultAction = "nominaBanamex"
+
+    def index(){
+    	redirect action: 'nominaBanamex'
+    }
+
     def nominaBanamex(){
     	
     }
