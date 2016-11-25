@@ -24,8 +24,8 @@ environments {
             //url = "jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"
             pooled = true
             dbCreate="update"
-            //url = 'jdbc:mysql://10.10.1.228/paperx2?autoReconnect=true'
-            url = 'jdbc:mysql://localhost/sx_rh?autoReconnect=true'
+            url = 'jdbc:mysql://10.10.1.229/sx_rh?autoReconnect=true'
+            //url = 'jdbc:mysql://localhost/sx_rh?autoReconnect=true'
             driverClassName = "com.mysql.jdbc.Driver"
             dialect = org.hiatasbernate.dialect.MySQL5InnoDBDialect
             username = "root"

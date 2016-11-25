@@ -1,5 +1,5 @@
 <%@page expressionCodec="none" %>
-<table class="table table-striped table-bordered table-condensed">
+<table class="table  table-bordered table-condensed">
 	<thead>
 		<tr>
 			<th>Clave</th>
@@ -8,7 +8,7 @@
 			<th>Excento</th>
 			<g:if test="${!nominaPorEmpleadoInstance.cfdi}">
 			<th></th>
-			<th></th>
+			%{-- <th></th> --}%
 			<th></th>
 			</g:if>
 		</tr>
@@ -38,12 +38,12 @@
   						 <span class="glyphicon glyphicon-info-sign"></span>
 					</a>
 				</td>
-				<td class="text-center">
+				%{-- <td class="text-center">
 					<g:link class="disabled" action="modificarConcepto" id="${it.id}" data-toggle="tooltip"  title="Modificar concepto">
 						<span class="glyphicon glyphicon-pencil"></span>
 					</g:link>
 					
-				</td>
+				</td> --}%
 				<td class="text-center">
 					<g:link action="eliminarConcepto" id="${it.id}" data-toggle="tooltip"  title="Eliminar concepto"
 						onclick="return confirm('Eliminar concepto?')">
@@ -64,7 +64,7 @@
 				number="${param=='PERCEPCION'?nominaPorEmpleadoInstance?.percepcionesExcentas:nominaPorEmpleadoInstance?.deduccionesExcentas}" format="#,###.##"/></th>
 			<g:if test="${!nominaPorEmpleadoInstance.cfdi}">
 			<th></th>
-			<th></th>
+			%{-- <th></th> --}%
 			<th></th>
 			</g:if>
 		</tr>
@@ -98,7 +98,7 @@
 			*/
 		}
 		
-		$('[data-toggle="popover"]').popover({content:get_data_for_popover});
+		$('[data-toggle="popover"]').popover({container:'body', content:get_data_for_popover});
 		$('[data-toggle="popover"]').click(get_data_for_popover);
 		
 		//$('[data-popover=true]').popover({"trigger":"manual","html":"true"});

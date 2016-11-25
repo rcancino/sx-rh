@@ -1,7 +1,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <meta name="layout" content="showForm"/>
+  <meta name="layout" content="editForm"/>
   <title>Alta de comisiones</title>
   <g:set var="entity" value="${registroDeComisionesInstance}" scope="request" />
   <g:set var="editable" value="${true}" scope="request" />
@@ -13,12 +13,12 @@
   Solicitud de vacaciones
 </content>
 
-<content tag="form">
+<content tag="formFields">
   <f:with bean="registroDeComisionesInstance">
     <f:display property="empleado" />
-    <f:display property="calendarioDet" />
-    <f:display property="importe" widget="money"/>
-    <f:display property="comentario" widget-class="form-control"/>
+    <f:field property="calendarioDet" />
+    <f:field property="importe" widget="money"/>
+    <f:field property="comentario" widget-class="form-control"/>
   </f:with>
 </content>
   

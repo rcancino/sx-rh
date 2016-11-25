@@ -25,10 +25,10 @@ class ExportadorController {
 
 	def jasperService
 
-    static defaultAction = "nominaBanamex"
+    //static defaultAction = "nominaBanamex"
 
     def index(){
-    	redirect action: 'nominaBanamex'
+    	
     }
 
     def nominaBanamex(){

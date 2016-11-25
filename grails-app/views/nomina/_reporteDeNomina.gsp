@@ -13,10 +13,10 @@
 					<fieldset>
 						<legend> Parámetros</legend>
 						<f:with bean="${new ReporteDeNominaCommand(ejercicio:session.ejercicio,periodicidad:periodicidad)}">
-							<f:field property="ejercicio" input-class="form-control"/>
-							<f:field property="tipo" input-class="form-control"/>
-							<f:field property="periodicidad" input-class="form-control"/>
-							<f:field property="folio" input-class="form-control" input-type="text"/>
+							<f:field property="ejercicio" widget-class="form-control"/>
+							<f:field property="tipo" widget-class="form-control"/>
+							<f:field property="periodicidad" widget-class="form-control"/>
+							<f:field property="folio" widget-class="form-control" widget-type="text"/>
 						</f:with>
 					</fieldset>
 					<div class="form-group">

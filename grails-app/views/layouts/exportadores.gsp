@@ -16,7 +16,8 @@
 		<lx:ibox>
 			<lx:iboxTitle title="Layouts"></lx:iboxTitle>
 			<lx:iboxContent>
-				<nav:secondary/>
+				<nav:menu class="nav nav-pills nav-stacked" scope="app/exportadores" />
+				
 				%{-- <nav:menu class="" path="app/exportadores" scope="app/exportadores" /> --}%
 				%{-- <nav:menu id="nav" custom="true" path="app/exportadores" scope="app/exportadores">
 				    <li class="">

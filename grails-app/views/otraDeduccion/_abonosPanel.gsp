@@ -1,9 +1,7 @@
 <lx:ibox>
 	<lx:iboxTitle title="Abonos">
 		<lx:iboxTools>
-			<g:link action="agregarAbono" id="${otraDeduccionInstance.id}">
-				<i class="fa fa-plus"></i> Agregar Abono
-			</g:link>
+			
 		</lx:iboxTools>
 	</lx:iboxTitle>
 	<lx:iboxContent>
@@ -42,6 +40,11 @@
 			</tbody>
 		</table>
 	</lx:iboxContent>
+	<lx:iboxFooter>
+		<g:link class="btn btn-primary btn-outline btn-sm" action="agregarAbono" id="${otraDeduccionInstance.id}">
+				<i class="fa fa-plus"></i> Agregar Abono
+		</g:link>
+	</lx:iboxFooter>
 </lx:ibox>
 
 

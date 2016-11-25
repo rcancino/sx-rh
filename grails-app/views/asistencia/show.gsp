@@ -15,7 +15,7 @@
 		</h2>
 		<div class="col-md-4">
 			<li><strong> ${asistenciaInstance.tipo} ${asistenciaInstance?.calendarioDet?.folio}</strong></li>
-			<li>${asistenciaInstance.empleado.perfil.turno.descripcion}</li>
+			%{-- <li>${asistenciaInstance.empleado.perfil.turno.descripcion}</li> --}%
 
 		</div>
 		<div class="col-md-4">

@@ -8,6 +8,7 @@
 
 <content tag="header">
 	<h2>Módulo de administración de otras deducciones (${session.ejercicio})</h2>
+	<lx:warningLabel/>
 </content>
 
 <content tag="reportes">
