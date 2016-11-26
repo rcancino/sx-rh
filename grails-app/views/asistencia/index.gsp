@@ -3,7 +3,6 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<%-- <meta name="layout" content="operaciones2"/> --%>
 	<title>Asistencias</title>
 </head>
 <body>

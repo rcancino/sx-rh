@@ -1,5 +1,8 @@
 <g:set var="operacionesControllers" 
-    value="${['nomina','operacionGenerica','incentivo','prestamo','infonavit','fonacot','otraDeduccion','registroDeComisiones']}" />
+    value="${['nomina','operacionGenerica','operacionGenericaGrupo','incentivo','prestamo','infonavit','fonacot','otraDeduccion','registroDeComisiones','controlDeVacaciones']}" />
+
+<g:set var="genericasOp" 
+    value="${ (webRequest.controllerName == 'operacionGenerica') || (webRequest.controllerName == 'operacionGenericaGrupo')  }"/>
 <li class="${operacionesControllers.contains(webRequest.controllerName)?'active':''}">
     <a href="#">
     	<i class="fa fa-tasks"></i> 
@@ -15,8 +18,7 @@
             </g:link>
             <span class="fa fa-angle-right pull-right"></span>
         </li>
-
-        <li class="${webRequest.controllerName=='operacionGenerica'?'active':''}">
+        <li class="${genericasOp ? 'active':''}">
             <g:link controller="operacionGenerica">
                 <span class="nav-label">Genéricas</span> 
                 <spzxan class="fa fa-angle-right pull-right"></span>
@@ -24,7 +26,7 @@
             <span class="fa fa-angle-right pull-right"></span>
         </li>
 
-        <li class="${webRequest.controllerName=='reciboDeNomina'?'active':''}">
+        %{-- <li class="${webRequest.controllerName=='reciboDeNomina'?'active':''}">
             <g:link controller="reciboDeNomina">
                 <span class="nav-label">Recibos (Quincena)</span> 
                 <span class="fa fa-angle-right pull-right"></span>
@@ -38,7 +40,7 @@
                 <span class="fa fa-angle-right pull-right"></span>
             </g:link>
             <span class="fa fa-angle-right pull-right"></span>
-        </li>
+        </li> --}%
 
         <li class="${webRequest.controllerName=='incentivo'?'active':''}">
             <g:link controller="incentivo" action="semanal">
@@ -67,6 +69,14 @@
         <li class="${webRequest.controllerName=='fonacot'?'active':''}">
             <g:link controller="fonacot" >
                 <span class="nav-label">Fonacot</span> 
+                <span class="fa fa-angle-right pull-right"></span>
+            </g:link>
+            <span class="fa fa-angle-right pull-right"></span>
+        </li>
+
+        <li class="${webRequest.controllerName=='controlDeVacaciones'?'active':''}">
+            <g:link controller="controlDeVacaciones" >
+                <span class="nav-label">Control de vacaciones</span> 
                 <span class="fa fa-angle-right pull-right"></span>
             </g:link>
             <span class="fa fa-angle-right pull-right"></span>

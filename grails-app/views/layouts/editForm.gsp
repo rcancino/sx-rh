@@ -12,9 +12,8 @@
             <div class="col-lg-10">
                 <h2>${pageProperty(name:'page.header')?:"Edición de  ${entityName}"} </h2>
                 <ol class="breadcrumb">
-                    <li><g:link action="index">${entityName}(s)</g:link></li>
-                    <li><g:link action="show" id="${entity.id}">Consulta</g:link></li>
-                    <li class="active"><strong>Edición</strong></li>
+                    %{-- <li><g:link action="show" id="${entity.id}">Consulta</g:link></li>
+                    <li class="active"><strong>Edición</strong></li> --}%
                 </ol>
                 
                 <g:if test="${flash.message}">
@@ -49,9 +48,12 @@
                                 </div>
                             </g:form>
                         </div>
-                        <div class="ibox-footer">
-                            <g:pageProperty name="page.footer"/>
-                        </div>
+                        <g:if test="${pageProperty(name:'page.footer')}">
+                            <div class="ibox-footer">
+                                <g:pageProperty name="page.footer"/>
+                            </div>
+                        </g:if>
+                        
                     </div>
                 </div>
             </div>

@@ -1,8 +1,7 @@
-<table id="vacacionesGrid" class="table table-striped table-bordered table-condensed asistenciaTable">
+<table id="vacacionesGrid" class=" grid table table-striped table-bordered table-condensed asistenciaTable">
 	<thead>
 		<tr>
-<%--			<th>Folio</th>--%>
-
+			<th>Folio</th>
 			<th>Empleado</th>
 			<th>Ubicación</th>
 			<th>Excento </th>
@@ -21,11 +20,7 @@
 		
 		<g:each in="${partidasList}" var="row">
 			<tr>
-<%--				<td>--%>
-<%--					<g:link action="show" id="${row.id}" >--%>
-<%--						${row.id}--%>
-<%--					</g:link>--%>
-<%--				</td>--%>
+				<lx:idTableRow id="${row.id}"/>
 				<td>
 					<g:link action="show" id="${row.id}" >
 						${fieldValue(bean:row,field:"empleado.nombre")}

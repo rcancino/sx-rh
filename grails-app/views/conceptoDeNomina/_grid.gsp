@@ -1,4 +1,4 @@
-<table class="table table-striped table-bordered table-condensed">
+<table id="grid" class="grid table table-striped table-bordered table-condensed">
 	<thead>
 		<tr>
 			<g:sortableColumn property="id" title="Id"/>
@@ -11,7 +11,7 @@
 	<tbody>
 		<g:each in="${conceptosList}" var="row">
 			<tr>
-				<td><g:link action="edit" id="${row.id}">
+				<td><g:link action="show" id="${row.id}">
 						<g:formatNumber number="${row.id}" format="######"/>
 					</g:link>
 				</td>

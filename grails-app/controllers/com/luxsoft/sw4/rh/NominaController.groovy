@@ -37,16 +37,7 @@ class NominaController {
 		def periodos=CalendarioDet
 			.findAll('from CalendarioDet d where d.calendario.tipo=? and d.calendario.ejercicio=?',[tipo,ejercicio])
 		
-		/*
-			def aguinaldos=CalendarioDet
-			.findAll("from CalendarioDet d where d.calendario.comentario='AGUINALDO' and d.calendario.ejercicio=?"
-				,[ejercicio])
-			if(aguinaldos){
-				periodos.addAll(aguinaldos)
-			}
-			//println 'Aguinaldo: '+aguinaldo
-		*/
-		//
+		
 		
 		def query=Nomina.where{periodicidad==params.periodicidad && ejercicio==session.ejercicio}
 		[nominaInstanceList:query.list(params)
@@ -60,6 +51,10 @@ class NominaController {
 		Map partidasMap=nominaInstance.partidas.groupBy([{it.ubicacion.clave}])
 		[nominaInstance:nominaInstance,partidasMap:partidasMap]
 		        
+    }
+
+    def create(){
+    	//respond new Nomina()
     }	
 	
 

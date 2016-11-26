@@ -12,7 +12,7 @@
 			
 <%--			<g:form action="reporteDeComparativoSua" class="form-horizontal">--%>
 				<g:jasperReport
-					format="PDF" name="Comparativo SUA"
+					format="PDF" name=""
          						 jasper="ComparativoSua"
          						 buttonPosition="bottom"
          						 

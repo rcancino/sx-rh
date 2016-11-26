@@ -42,15 +42,15 @@
 			         "dom":'t'
     				});
     				
-    				$("#ubicacionField").keyup(function(){
-      					table.DataTable().column(2).search( $(this).val() ).draw();
-					});
-					$("#nombreField").keyup(function(){
-      					table.DataTable().column(1).search( $(this).val() ).draw();
-					});
-					$("#periodicidadField").keyup(function(){
-      					table.DataTable().column(3).search( $(this).val() ).draw();
-					});
+				$("#ubicacionField").keyup(function(){
+  					table.DataTable().column(2).search( $(this).val() ).draw();
+				});
+				$("#nombreField").keyup(function(){
+  					table.DataTable().column(1).search( $(this).val() ).draw();
+				});
+				$("#periodicidadField").keyup(function(){
+  					table.DataTable().column(3).search( $(this).val() ).draw();
+				});
 					
 			});
 		</script>

@@ -8,6 +8,7 @@
 <body>
 <content tag="header">
 	<h2>Registro de comisiones</h2>
+	<lx:warningLabel/>
 </content>
 
 <content tag="reportes">

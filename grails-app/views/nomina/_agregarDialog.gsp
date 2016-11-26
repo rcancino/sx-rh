@@ -2,7 +2,7 @@
 <%@ page import="com.luxsoft.sw4.rh.CalendarioDet" %>
 <div class="modal fade" id="agregarNominaForm" tabindex="-1">
 	<div class="modal-dialog">
-		<div class="modal-content">
+		<div id="modalContent" class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"
 					aria-hidden="true">&times;</button>
@@ -14,7 +14,7 @@
 					<div class="form-group">
     					<label for="tipoField" class="col-sm-3">Tipo</label>
     					<div class="col-sm-9">
-    						<g:select id="tipoField" class="form-control"  
+    						<g:select id="tipoField" class="form-control "  
 								name="tipo" 
 								from="${['GENERAL','ESPECIAL','AGUINALDO','PTU']}" 
 								/>
@@ -23,13 +23,22 @@
   					<div class="form-group">
   						<label for="comentarioField" class="col-sm-3">Calendario</label>
     					<div class="col-sm-9">
-    						<g:select id="periodoField" class="form-control"  
+    						%{-- <g:select id="periodoField" class="form-control chosen-select"  
 								name="calendarioDet" 
 								from="${periodos}"
 								value="${periodicidad} - ${calendarioActual} " 
 								optionKey="id" 
 								
-							/>
+							/> --}%
+							<g:hiddenField id="calendarioFieldId" name="calendarioDet"  />
+							<input 
+								id="calendarioDetField" 
+								type="text" 
+								name="calendarioField"  
+								class="form-control " 
+								value="" 
+								placeholder="Seleccione un calendario">
+							</input>
     					</div>
   					</div>
   					
@@ -59,3 +68,16 @@
 	</div>
 	<!-- modal-di -->
 </div>
+
+<script type="text/javascript">
+	$(function(){
+		$("#calendarioDetField").autocomplete({
+			source:'<g:createLink controller="calendarioDet" action="getCalendariosDisponibles"/>',
+			minLength:1,
+			select:function(e,ui){
+				$("#calendarioFieldId").val(ui.item.id);
+			},
+			appendTo: "#modalContent"
+		});
+	});
+</script>

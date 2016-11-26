@@ -37,6 +37,14 @@ class IncidenciaController {
 		respond incidenciaInstance,[view:'edit']
 		redirect action:'index',params:[tipo:incidenciaInstance.empleado.salario.periodicidad]
 	}
+
+	def show(Incidencia incidenciaInstance) {
+		if(incidenciaInstance==null) {
+			notFound()
+			return
+		}
+		[incidenciaInstance:incidenciaInstance,tipo:incidenciaInstance.empleado.salario.periodicidad]
+	}
 	
 	@Transactional
 	def edit(Incidencia incidenciaInstance) {

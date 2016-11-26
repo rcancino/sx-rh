@@ -7,18 +7,32 @@
 			<f:with bean="empleadoInstance">
 				<f:field input-id="periodicidadField" property="salario.periodicidad" widget-class="form-control" wrapper="bootstrap3"/>	
 				<g:if test="${empleadoInstance?.salario?.salarioDiario}">
-					<f:display property="salario.salarioDiario" widget-class="form-control"  wrapper="bootstrap3"/>	
+					<f:field property="salario.salarioDiario" 
+						widget-id="salarioNuevo" 
+						widget-class="form-control numeric" 
+						wrapper="bootstrap3"/>
 				</g:if>
 				<g:else>
-					<f:field property="salario.salarioDiario" input-id="salarioNuevo"
-						widget-class="form-control " wrapper="bootstrap3"/>
-					<f:field property="salario.salarioVariable" input-id="salarioVariable"
-						widget-class="form-control numeric" wrapper="bootstrap3"/>	
+					<f:field property="salario.salarioDiario" wrapper="bootstrap3">
+						<input type="text" name="salario.salarioDiario" class="form-control numeric" id="salarioNuevo" value="${value}" >
+					</f:field>
+					%{-- <f:field property="salario.salarioDiario" 
+						widget-id="salarioNuevo" 
+						widget-class="form-control numeric" 
+						wrapper="bootstrap3"/> --}%
+					<f:field property="salario.salarioVariable" widget-type="text"
+						widget-id="salarioVariable"
+						widget-class="form-control numeric" 
+						wrapper="bootstrap3"/>	
 				</g:else>
-				<f:field property="salario.salarioDiarioIntegrado" label="SDI"
-						widget-class="form-control " widget-type="text" widget="money"
-						input-readonly="true" wrapper="bootstrap3"/>	
+				
+				<f:field property="salario.salarioDiarioIntegrado" widget-id="sdiNuevo" label="SDI"
+						widget-class="form-control " 
+						widget-readonly="true" 
+						wrapper="bootstrap3"/>	
+
 				<f:field property="salario.formaDePago" widget-class="form-control " wrapper="bootstrap3"/>	
+
 				<f:field property="salario.clabe" widget-class="form-control" input-autocomplete="off" label="CLABE" wrapper="bootstrap3"/>
 				<f:field property="salario.numeroDeCuenta" widget-class="form-control" input-autocomplete="off" wrapper="bootstrap3"/>	
 				<f:field property="salario.banco" widget-class="form-control" wrapper="bootstrap3"/>	

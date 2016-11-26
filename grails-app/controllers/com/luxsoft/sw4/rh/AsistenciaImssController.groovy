@@ -29,7 +29,7 @@ class AsistenciaImssController {
                 break
         }
         calendarioDet.attach()
-        def list=AsistenciaImss.findAll("from AsistenciaImss a where a.asistencia.calendarioDet=?"
+        def list=AsistenciaImss.findAll("from AsistenciaImss a where a.asistencia.calendarioDet=? order by a.dateCreated"
                 ,[calendarioDet])
         def ejercicio=session.ejercicio
         def periodos=CalendarioDet.findAll{calendario.ejercicio==ejercicio && calendario.tipo==tipo}

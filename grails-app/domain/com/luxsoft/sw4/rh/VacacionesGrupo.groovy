@@ -1,45 +1,38 @@
 package com.luxsoft.sw4.rh
 
 import org.grails.databinding.BindingFormat
+import groovy.transform.ToString
 
+@ToString(excludes='dateCreated,lastUpdated',includeNames=true,includePackage=false)
 class VacacionesGrupo {
 	
+	
 	@BindingFormat("dd/MM/yyyy")
-	Date solicitud=new Date()
-	
+	Date fechaInicial = new Date()
+
+	@BindingFormat("dd/MM/yyyy")
+	Date fechaFinal = new Date()
+
 	String comentario
-	
-	boolean pg=false
-	
-	boolean acreditada=false
-	
-	Set dias=new HashSet()
-	
-	int diasPagados=0
 
 	CalendarioDet calendarioDet
 	
-	boolean cierreAnual
-
 	Date dateCreated
 
 	Date lastUpdated
 
 
     static constraints = {
-		comentario nullable:true,maxSize:250
-		acreditada nullable:true
+		comentario maxSize:250
 		calendarioDet nullable:true
-		cierreAnual nullable:true
 	}
 
-	static hasMany = [dias:Date]
+	static hasMany = [partidas: Vacaciones]
 
 	static mapping = {
-		hasMany joinTable: [name: 'vacaciones_grupo_dias',
-                           key: 'vacacines_grupo_id',
-                           column: 'fecha',
-                           type: "date"]
-		solicitud type:'date'
+		fechaInicial type:'date'
+		fechaFinal type:'date'
 	}
+
+	
 }

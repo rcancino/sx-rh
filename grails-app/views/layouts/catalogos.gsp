@@ -108,7 +108,7 @@
                     "language": {
                         "url": "${assetPath(src: 'datatables/dataTables.spanish.txt')}"
                     },
-                    "dom": 'T<"clear">lfrtip',
+                    "dom": 'tT<"clear">lfrip',
                     "tableTools": {
                         "sSwfPath": "${assetPath(src: 'plugins/dataTables/swf/copy_csv_xls_pdf.swf')}"
                     },

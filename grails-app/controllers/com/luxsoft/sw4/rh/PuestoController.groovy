@@ -14,7 +14,7 @@ class PuestoController {
     static allowedMethods = [save: "POST",  delete: "DELETE"]
 
     def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
+        params.max = Math.min(max ?: 500, 1000)
         respond Puesto.list(params), model:[puestoInstanceCount: Puesto.count()]
     }
 

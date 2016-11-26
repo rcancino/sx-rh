@@ -6,7 +6,7 @@
 </head>
 <body>
 	<content tag="header">
-			<h3>Calendarios de operación</h3>
+			Calendarios de operación
 	</content>
 	
 	<content tag="grid">
