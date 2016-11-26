@@ -12,17 +12,13 @@ class ControlDeVacacionesController {
 	def controlDeVacacionesService
 	
 	def index() {
-		
-		//params.sort=params.sort?:'em'
 		params.order='desc'
 		def ejercicio=session.ejercicio
 		def tipo='SEMANA'
-		//def query=ControlDeVacaciones.where{ejercicio==ejercicio}
 		def list=ControlDeVacaciones.findAll{ejercicio==ejercicio}
 		list=list.sort{a,b ->
 			a.empleado.perfil.ubicacion.clave<=>b.empleado.perfil.ubicacion.clave?:a.empleado.nombre<=>b.empleado.nombre
 		}
-		//def partidasMap=list.groupBy([{it.empleado.perfil.ubicacion.clave}])
 		[partidasList:list,ejercicio:ejercicio,tipo:tipo]
 		
 	}

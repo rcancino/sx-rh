@@ -1,5 +1,5 @@
 <g:set var="operacionesControllers" 
-    value="${['nomina','operacionGenerica','operacionGenericaGrupo','incentivo','prestamo','infonavit','fonacot','otraDeduccion','registroDeComisiones']}" />
+    value="${['nomina','operacionGenerica','operacionGenericaGrupo','incentivo','prestamo','infonavit','fonacot','otraDeduccion','registroDeComisiones','controlDeVacaciones']}" />
 
 <g:set var="genericasOp" 
     value="${ (webRequest.controllerName == 'operacionGenerica') || (webRequest.controllerName == 'operacionGenericaGrupo')  }"/>
@@ -69,6 +69,14 @@
         <li class="${webRequest.controllerName=='fonacot'?'active':''}">
             <g:link controller="fonacot" >
                 <span class="nav-label">Fonacot</span> 
+                <span class="fa fa-angle-right pull-right"></span>
+            </g:link>
+            <span class="fa fa-angle-right pull-right"></span>
+        </li>
+
+        <li class="${webRequest.controllerName=='controlDeVacaciones'?'active':''}">
+            <g:link controller="controlDeVacaciones" >
+                <span class="nav-label">Control de vacaciones</span> 
                 <span class="fa fa-angle-right pull-right"></span>
             </g:link>
             <span class="fa fa-angle-right pull-right"></span>

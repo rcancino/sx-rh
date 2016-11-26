@@ -12,7 +12,7 @@ class ConceptoDeNominaController {
 
     def index() { 
         redirect action:'percepciones'
-        respond conceptosList
+        //respond conceptosList
     }
 
     def percepciones(Integer max){
@@ -50,15 +50,12 @@ class ConceptoDeNominaController {
     		return
     	}
     	if(conceptoInstance.hasErrors()){
-    		//respond conceptoInstance.errors, view:'create'
-			println 'Concepto con errores..	'
 			render view:'create',model:[conceptoInstance:conceptoInstance]
             return
     	}
     	conceptoInstance.save flush:true
     	flash.message = message(code: 'default.created.message', args: [message(code: 'conceptoInstance.label', default: 'ConceptoDeNomina'), conceptoInstance.clave])
-		respond conceptoInstance
-        //redirect action:conceptoInstance.tipo=='PERCEPCION'?'percepciones':'deducciones'
+		respond view:'show', conceptoInstance
 
     }
 

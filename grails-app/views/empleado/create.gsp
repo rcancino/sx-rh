@@ -1,12 +1,54 @@
 <html>
 <head>
 	<meta charset="UTF-8">
+	<meta name="layout" content="createForm"/>
+	<title>Alta de empleado</title>
+	<g:set var="entity" value="${empleadoInstance}" scope="request" />
+	<g:set var="editable" value="${true}" scope="request" />
+	<g:set var="imprimible" value="${false}" scope="request" />
+</head>
+<body>
+
+<content tag="header">
+	Alta de empleado
+</content>
+
+<content tag="formFields">
+	<f:with bean="empleadoInstance">
+		<f:field property="apellidoPaterno" widget-class="form-control" wrapper="bootstrap3"/>	
+		<f:field property="apellidoMaterno" widget-class="form-control" wrapper="bootstrap3"/>	
+		<f:field property="nombres" widget-class="form-control" wrapper="bootstrap3"/>	
+		<f:field property="fechaDeNacimiento" widget-class="form-control" label="F.Nacimiento" wrapper="bootstrap3"/>	
+		<f:field property="sexo" widget-class="form-control" wrapper="bootstrap3"/>	
+		<f:field property="curp" widget-class="form-control" wrapper="bootstrap3"/>	
+		<f:field property="rfc" widget-class="form-control" wrapper="bootstrap3"/>	
+		<f:field property="clave" widget-class="form-control" wrapper="bootstrap3"/>	
+		<f:field property="alta" widget-class="form-control" wrapper="bootstrap3"/>	
+		<f:field property="activo" widget-class="form-control" wrapper="bootstrap3"/>
+	</f:with>
+</content>
+	
+</body>
+</html>
+
+
+
+%{-- 	
+	
+</body>
+</html>
+
+
+
+<html>
+<head>
+	<meta charset="UTF-8">
 	<title>Alta de empleado</title>
 </head>
 <body>
 
-<content tag="actions">
-	
+<content tag="title">
+	Alta de empleado
 </content>
 
 <content tag="content">
@@ -15,14 +57,9 @@
 		<div class="col-md-6">
 			<fieldset >
 				<f:with bean="${empleadoInstance}">
-					<f:field property="apellidoPaterno" input-class="form-control" />	
-					<f:field property="apellidoMaterno" input-class="form-control" />	
-					<f:field property="nombres" input-class="form-control" />	
-					<f:field property="fechaDeNacimiento" input-class="form-control" label="F.Nacimiento"/>	
-					<f:field property="sexo" input-class="form-control" />	
+					
 				</f:with>
 			</fieldset>
-		
 		</div>
 		
 		<div class="col-md-6">
@@ -30,11 +67,7 @@
 			<fieldset >
 				<f:with bean="${empleadoInstance}">
 						
-					<f:field property="curp" input-class="form-control" />	
-					<f:field property="rfc" input-class="form-control" />	
-					<f:field property="clave" input-class="form-control" />	
-					<f:field property="alta" input-class="form-control" />	
-					<f:field property="activo" input-class="form-control" />
+					
 				</f:with>
 			</fieldset>
 			
@@ -59,4 +92,4 @@
 </content>
 
 </body>
-</html>
+</html> --}%

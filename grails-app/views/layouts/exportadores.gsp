@@ -11,48 +11,29 @@
 	<lx:warningLabel/>
 </lx:header>
 
-<div class="wrapper wrapper-content animated fadeInRight">
-	<div class="col-md-4">
-		<lx:ibox>
-			<lx:iboxTitle title="Layouts"></lx:iboxTitle>
-			<lx:iboxContent>
+<div class="row wrapper  animated fadeInRight">
+	<div class="col-md-4 toolbar">
+		
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title"> Layouts</h4>
+			</div>
+			<div id="collapse1" class="panel-collapse collapse in">
 				<nav:menu class="nav nav-pills nav-stacked" scope="app/exportadores" />
-				
-				%{-- <nav:menu class="" path="app/exportadores" scope="app/exportadores" /> --}%
-				%{-- <nav:menu id="nav" custom="true" path="app/exportadores" scope="app/exportadores">
-				    <li class="">
-				        <p:callTag tag="g:link"
-				                   attrs="${linkArgs + [class:active ? 'active' : '']}">
-				           <span>
-				               <nav:title item="${item}"/>
-				           </span>
-				        </p:callTag>
-				        <g:if test="${active && item.children}">
-				        <nav:menu scope="${item.id}" custom="true" class="visible">
-				             <li class="${item.data.icon ? 'i_'+item.data.icon : ''}">
-				                 <p:callTag tag="g:link"
-				                            attrs="${linkArgs + [class:active ? 'active' : '']}">
-				                    <span>
-				                        <nav:title item="${item}"/>
-				                    </span>
-				                 </p:callTag>
-				         </nav:menu>
-				         </g:if>
-				    </li>
-				</nav:menu> --}%
-			</lx:iboxContent>
-		</lx:ibox>
+			</div>
+		</div>
+
 	</div>
 
-	<div class="col-md-8">
-		<lx:ibox>
-			<lx:iboxContent>
-				<div class="row">
-					<g:pageProperty name="page.reportForm"/>	
-				</div>
-				
-			</lx:iboxContent>
-		</lx:ibox>
+	<div class="col-md-8 toolbar">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title"> <g:pageProperty name="page.reporteTitle"/></h4>
+			</div>
+			<div class="panel-body">
+				<g:pageProperty name="page.reportForm"/>	
+			</div>
+		</div>
 	</div>
 
 	<script type="text/javascript">

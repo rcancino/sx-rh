@@ -53,7 +53,21 @@
 		</div>
 	</div>
 
-	
+	<script type="text/javascript">
+	    $(function(){
+
+	        $('.date').bootstrapDP({
+	            format: 'dd/mm/yyyy',
+	            keyboardNavigation: false,
+	            forceParse: false,
+	            autoclose: true,
+	            todayHighlight: true,
+
+	        });
+	        
+
+	    });
+	</script>  
 	
 	
 </body>

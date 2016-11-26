@@ -1,25 +1,30 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>${tipoDeForma=='edit'?' Mantenimiento ':' Alta' } de concepto</title>
+	<meta name="layout" content="createForm"/>
+	<g:set var="entity" value="${conceptoInstance}" scope="request" />
+	<g:set var="entityName" value="Incidencia" scope="request" />
+	<g:set var="editable" value="${false}" scope="request" />
+	<g:set var="imprimible" value="${false}" scope="request" />
+	<title>Alta  de concepto</title>
 </head>
 <body>
-	<div class="container">
-		<div class="row">
-			<div class="col-md-3">
-				<div class="list-group">
-					<a href="#" class="list-group-item active">Operaciones</a>
-					<g:link action="index" class="list-group-item">
-						<span class="glyphicon glyphicon-list"></span> Catálogo
-					</g:link>
-					<a href=" link_3" class="list-group-item">Buscar</a>
-				</div>
-			</div>
-			<div class="col-md-9">
-				<g:render template="conceptoForm"/>
-			</div>
-		</div>
-	</div>
+
+<content tag="header">
+	Alta de incidencia
+</content>
+
+
+
+<content tag="formFields">
+	<f:with bean="conceptoInstance">
+		<f:field property="clave" widget-class="form-control" />
+		<f:field property="descripcion" widget-class="form-control" />
+		<f:field property="clase" widget-class="form-control" />
+		<f:field property="claveSat" widget-class="form-control" />
+		<f:field property="tipo" widget-class="form-control" />
+		<f:field property="general" widget-class="form-control" />
+	</f:with>
+</content>
+
 	
-</body>
-</html>

@@ -1,6 +1,12 @@
 <g:set var="catalogosControllers" 
-    value="${['empleado','departamento','puesto','ubicacion','conceptoDeNomina','calendario','turno','diaFestivo','catalogosDelSat','tablas']}" />
+    value="${['empleado','departamento','puesto','ubicacion','conceptoDeNomina','calendario','turno','diaFestivo','catalogosDelSat','tablas','tarifaIsr','subsidioEmpleo']}" />
+
 <g:set var="controller" value="${webRequest.controllerName}"/>
+
+<g:set var="tablasControllers" value="${['tabla','tarifaIsr', 'subsidioEmpleo']}"/>
+
+<g:set var="tablas" value="${tablasControllers.contains(webRequest.controllerName)}"/>
+
 <li class="${catalogosControllers.contains(webRequest.controllerName)?'active':''}">
     <a href="#">
     	<i class="fa fa-table"></i> 
@@ -56,10 +62,30 @@
             	<g:link controller="catalogosDelSat" action="index">SAT</g:link>
             	<span class="fa fa-angle-right pull-right"></span>
             </li>
-            <li class="${webRequest.controllerName == 'tablas' ? 'active' : ''}">
-            	<g:link controller="tablas" action="index">Tablas</g:link>
-            	<span class="fa fa-angle-right pull-right"></span>
+
+            <li class="${tablas ? 'active' : ''}">
+                <a href="#">Tablas <span class="fa arrow"></span></a>
+                <ul class="nav nav-third-level">
+                    
+                    <li class="${webRequest.controllerName == 'tarifaIsr' ? 'active': ''}">
+                        <g:link controller="tarifaIsr" action="index">Tarifas ISR</g:link>
+                        <span class="fa fa-angle-right pull-right"></span>
+                    </li>
+
+                    <li class="${webRequest.controllerName == 'subsidioEmpleo' ? 'active': ''}">
+                        <g:link controller="subsidioEmpleo" action="index">Subsidio empleo</g:link>
+                        <span class="fa fa-angle-right pull-right"></span>
+                    </li>
+
+                    <li class="${webRequest.actionName == 'factorDeIntegracion' ? 'active': ''}">
+                        <g:link controller="tablas" action="factorDeIntegracion">Factor de integración</g:link>
+                        <span class="fa fa-angle-right pull-right"></span>
+                    </li>
+                    
+                </ul>
             </li>
+
+            
             
         </ul>
     </sec:ifAnyGranted>

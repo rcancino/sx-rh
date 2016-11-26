@@ -8,7 +8,7 @@ class SubsidioEmpleoController {
     static scaffold = true
 
     def index(){
-    	params.max = 20
+    	params.max = 200
 		def list=SubsidioEmpleo.findAll("from SubsidioEmpleo t order by t.ejercicio desc,t.desde asc",[],params)
     	[subsidioEmpleoInstanceList:list,subsidioEmpleoInstanceCount:SubsidioEmpleo.count()]
     }

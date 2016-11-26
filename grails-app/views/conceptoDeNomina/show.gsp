@@ -9,6 +9,10 @@
 		<title>Concepto de nómina ${entity.clave}</title>
 	</head>
 	<body>
+
+		<content tag="header">
+			Concepto de nómina: ${entity}
+		</content>
 		<content tag="form">
 			<f:with bean="${entity}">
 				<f:display property="clave" widget-class="form-control"/>

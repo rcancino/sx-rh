@@ -82,9 +82,30 @@
 	<script type="text/javascript">
 		$(function(){
 			$(".money").autoNumeric('init',{wEmpty:'zero',mRound:'B',aSign: '$'});
+			$('.chosen-select').chosen();
+            $(".numeric").autoNumeric('init',{vMin:'0'},{vMax:'9999'});
+			$(".tc").autoNumeric('init',{vMin:'0.0000'});
+			$(".porcentaje").autoNumeric('init',{altDec: '%', vMax: '99.99'});
+
+			$("#salarioNuevo").on('blur', function() {
+				console.log('Detectando cambio de salario....');
+			});
+			$("#salarioNuevo").blur(function(){
+				
+				var salario=$(this).autoNumeric('get');
+				var periodicidad=$("#periodicidadField").val();
+				console.log('Calculando SDI para salario:'+salario+' Periodicidad:'+periodicidad);
+				jQuery.getJSON(
+						'<g:createLink controller="empleadoRest" action="calcularSdiNuevo"/>',
+						{empleadoId:${empleadoInstance.id},salarioNuevo:salario,periodicidad:periodicidad}
+						,function(data){
+
+						}).done(function(data){
+							$('#sdiNuevo').val(data.sdi);
+						});
+			});
 		});
-			
-		</script>
+	</script>
 
 </body>
 </html>

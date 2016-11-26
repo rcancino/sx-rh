@@ -22,8 +22,8 @@
 			--%><fieldset>
 				<legend> Parámetros</legend>
 				<f:with bean="${reportCommand}">
-					<f:field property="ejercicio" input-class="form-control"/>
-					<f:field property="bimestre" input-class="form-control"/>
+					<f:field property="ejercicio" widget-class="form-control" wrapper="bootstrap3"/>
+					<f:field property="bimestre" widget-class="form-control" wrapper="bootstrap3"/>
 				</f:with>
 			</fieldset>
 			<div class="form-group">
