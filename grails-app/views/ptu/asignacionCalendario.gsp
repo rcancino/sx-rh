@@ -2,8 +2,17 @@
 <head>
 	<meta charset="UTF-8">
 	<title>PTU (${ptuInstance.ejercicio})</title>
+	<meta  name="layout" content="operaciones2"/>
 	<r:require modules="forms,datatables"/>
 </head>
+
+<content tag="header">
+	Asignacion manual de calendario para pago de PTU del ejercicio ${ptuInstance.ejercicio}
+</content>
+	
+
+
+
 <body>
 	<div class="container-fluid">
 		<div class="row">
