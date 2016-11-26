@@ -21,49 +21,47 @@
 
 <div class=" row wrapper wrapper-content animated fadeInRight">
     
-    <div class="col-lg-12">
-        <div class="ibox float-e-margins">
-            
-            <div class="ibox-content">
-                <div class="row">
-                    <g:if test="${g.pageProperty(name:'page.filtros')}">
-                        <g:pageProperty name="page.filtros"/>
-                    </g:if>
-                    <g:else>
-                        <div class="col-md-3">
-                            <input id="nombreField" placeholder="Empleado" class="form-control" autofocus="autofocus" autocomplete="off">
-                        </div>
-                        <div class="col-md-3">
-                            <input id="ubicacionField" placeholder="Ubicacion" class="form-control" autocomplete="off" >
-                        </div>
-                    </g:else>
-                    <div class="btn-group">
-                        <lx:refreshButton/>
-                        <lx:createButton/>
+    <div class="ibox float-e-margins">
+        
+        <div class="ibox-content">
+            <div class="row">
+                <g:if test="${g.pageProperty(name:'page.filtros')}">
+                    <g:pageProperty name="page.filtros"/>
+                </g:if>
+                <g:else>
+                    <div class="col-md-3">
+                        <input id="nombreField" placeholder="Empleado" class="form-control" autofocus="autofocus" autocomplete="off">
                     </div>
-                    <div class="btn-group">
-                        <button type="button" name="operaciones"
-                                class="btn btn-success btn-outline dropdown-toggle" data-toggle="dropdown"
-                                role="menu">
-                                Operaciones <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <g:pageProperty name="page.operaciones"/>
-                        </ul>
+                    <div class="col-md-3">
+                        <input id="ubicacionField" placeholder="Ubicacion" class="form-control" autocomplete="off" >
                     </div>
-                    <div class="btn-group">
-                        <button type="button" name="reportes"
-                                class="btn btn-primary btn-outline dropdown-toggle" data-toggle="dropdown"
-                                role="menu">
-                                Reportes <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <g:pageProperty name="page.reportes"/>
-                        </ul>
-                    </div>
+                </g:else>
+                <div class="btn-group">
+                    <lx:refreshButton/>
+                    <lx:createButton/>
                 </div>
-               <g:pageProperty name="page.gridPanel"/>
+                <div class="btn-group">
+                    <button type="button" name="operaciones"
+                            class="btn btn-success btn-outline dropdown-toggle" data-toggle="dropdown"
+                            role="menu">
+                            Operaciones <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <g:pageProperty name="page.operaciones"/>
+                    </ul>
+                </div>
+                <div class="btn-group">
+                    <button type="button" name="reportes"
+                            class="btn btn-primary btn-outline dropdown-toggle" data-toggle="dropdown"
+                            role="menu">
+                            Reportes <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <g:pageProperty name="page.reportes"/>
+                    </ul>
+                </div>
             </div>
+           <g:pageProperty name="page.gridPanel"/>
         </div>
     </div>
 </div>
@@ -89,7 +87,8 @@
                     "language": {
                         "url": "${assetPath(src: 'datatables/dataTables.spanish.txt')}"
                     },
-                    "dom": 'T<"clear">lfrtip',
+                    // "dom": 'T<"clear">lfrtip',
+                    "dom": 't<"clear">lfrp',
                     "tableTools": {
                         "sSwfPath": "${assetPath(src: 'plugins/dataTables/swf/copy_csv_xls_pdf.swf')}"
                     },

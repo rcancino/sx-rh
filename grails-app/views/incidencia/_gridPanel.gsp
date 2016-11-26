@@ -1,6 +1,4 @@
-
-
-<table id="grid" class="table table-striped table-bordered table-condensed">
+<table  class=" grid table table-striped table-bordered table-condensed">
 	<thead>
 		<tr>
 			<g:sortableColumn property="id" title="Folio"/>
@@ -10,7 +8,7 @@
 			<th>F. Inicial</th>
 			<th>F. Final</th>
 			<th>Tipo</th>
-			<th>Con goce</th>
+			<th>CG</th>
 			<th>Comentario</th>
 			
 			
@@ -20,12 +18,12 @@
 		<g:each in="${incidenciaList}" var="row">
 			<tr>
 				<td>
-					<g:link action="edit" id="${row.id}">
+					<g:link action="show" id="${row.id}">
 						<g:formatNumber number="${row.id}" format="####"/>
 					</g:link>
 				</td>
 				<td>
-					<g:link action="edit" id="${row.id}">
+					<g:link action="show" id="${row.id}">
 						<g:fieldValue bean="${row}" field="empleado"/>
 					</g:link>
 				</td>
@@ -42,24 +40,4 @@
 		</g:each>
 	</tbody>
 </table>
-	<r:script>
-			$(function(){
-				var table=$("#grid").dataTable({
-			        "paging":   false,
-			        "ordering": false,
-			        "info":     false,
-			         "dom":'t'
-    				});
-    				$("#nombreField").keyup(function(){
-      					table.DataTable().column(1).search( $(this).val() ).draw();
-					});
-    				$("#ubicacionField").keyup(function(){
-      					table.DataTable().column(2).search( $(this).val() ).draw();
-					});
-					
-					$("#periodicidadField").keyup(function(){
-      					table.DataTable().column(3).search( $(this).val() ).draw();
-					});
-					
-			});
-	</r:script>
+	

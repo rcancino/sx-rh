@@ -2,84 +2,52 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Calculo de aguinaldo</title>
+	<meta name="layout" content="operaciones2"/>
 	<r:require modules="datatables"/> 
 </head>
 <body>
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="alert alert-info">
-					<a href="" data-toggle="modal" data-target="#cambioGlobalDeEjercicioForm">
-						<h3>Módulo para el calculo del aguinaldo (${session.ejercicio})</h3>
-					</a>
-					
-					<g:if test="${flash.message}">
-						<div class="message" role="status">
-							<strong>${flash.message}</strong>
-						</div>
-					</g:if>
-				</div>
-			</div>
-		</div><!-- end .row 1 -->
+
+
+
+	<content tag="header" >
+		<h2>Calculo de Aguinaldo  (${session.ejercicio}) </h2>
+	</content>
+	<content tag="buttonsBar">
+			<g:link action="index" class="btn btn-success btn-outline">
+					Refrescar
+				<span class="glyphicon glyphicon-repeat"></span> 
+			</g:link>
+			<a data-target="#cambioGlobalDeEjercicioForm" class="btn btn-success btn-outline" data-toggle="modal">
+				<span class="glyphicon glyphicon-calendar"></span> Cambiar Ejercicio
+			</a>
+	</content>
+
+	<content tag="operaciones">
+		<li>
+			<g:link action="create">
+				<span class="glyphicon glyphicon-plus"></span> Nuevo
+			</g:link>
+		</li>
+		<li>
+			<g:link action="actualizar">
+				<span class="glyphicon glyphicon-cog"></span> Actualizar
+			</g:link>
+		</li>
 		
-		<div class="row">
-			
-			
-			<div class="button-panel">
-				<div class="btn-group col-md-4">
-					<input type='text' id="nombreField" placeholder="Empleado" class="form-control" autofocus="autofocus" autocomplete="off">
-				</div>
-				<div class="btn-group">
-					<input type='text' id="ubicacionField" placeholder="Ubicacion" class="form-control" autocomplete="off" >
-				</div>
-				<div class="btn-group">
-					<input type='text' id="tipoField" placeholder="Tipo" class="form-control" autocomplete="off" >
-				</div>
-				<div class="btn-group">
-					<g:link action="index" class="btn btn-default"><span class="glyphicon glyphicon-refresh"></span> Refrescar</g:link>
-					<button type="button" name="reportes"
-							class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-							role="menu">
-							Reportes <span class="caret"></span>
-					</button>
-					<ul class="dropdown-menu">
-						<li><%--
-							%{-- <g:jasperReport jasper="Aguinaldo" format="PDF" name="Aguinaldo">
-							</g:jasperReport> --}%
-							--%>
-							<g:link action="reporte" params="[tipo:'BASE']"> Aguinaldo Base</g:link>
-							<g:link action="reporte" params="[tipo:'CALCULO']"> Aguinaldo Cálculo</g:link>
-							<g:link action="reporte" params="[tipo:'IMPUESTO']"> Aguinaldo Impuesto</g:link>
-							<g:link action="reporte" params="[tipo:'PAGO']"> Aguinaldo Pago</g:link>
-						</li>
-					</ul>
-				</div>
-				<div class="btn-group">
-					<button type="button" name="reportes"
-							class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-							role="menu">
-							Operaciones <span class="caret"></span>
-					</button>
-					<ul class="dropdown-menu">
-						<li>
-							<g:link action="create">
-								<span class="glyphicon glyphicon-plus"></span> Nuevo
-							</g:link>
-						</li>
-						<li>
-							<g:link action="actualizar">
-								<span class="glyphicon glyphicon-cog"></span> Actualizar
-							</g:link>
-						</li>
-					</ul>
-				</div>
-			</div>
-			
-			
-			
-		</div><!-- end .row 2 Toolbar -->
-		
-		<div class="row">
+	</content>
+
+	<content tag="reportes">
+		<li>
+			<g:link action="reporte" params="[tipo:'BASE']"> Aguinaldo Base</g:link>
+			<g:link action="reporte" params="[tipo:'CALCULO']"> Aguinaldo Cálculo</g:link>
+			<g:link action="reporte" params="[tipo:'IMPUESTO']"> Aguinaldo Impuesto</g:link>
+			<g:link action="reporte" params="[tipo:'PAGO']"> Aguinaldo Pago</g:link>
+		</li>
+	</content>
+
+
+	<content tag="gridPanel">
+				<div class="row">
 			<div class="col-md-12">
 				<!-- Nav tabs -->
 				<ul class="nav nav-tabs" role="tablist">
@@ -107,7 +75,14 @@
 			</div>
 			
 		</div><!--  end .row 3 Grid -->
-	</div>
+		<g:render template="/_common/cambioGlobalDeEjercicioDialog"/>
+	</content>
+
+
+
+
+
+	
 	
 		<r:script>
 			$(function(){

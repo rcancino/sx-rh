@@ -93,7 +93,7 @@ class EmpleadoController {
 	}
 	
 	def create(){
-		[empleadoInstance:new Empleado(status:'ALTA')]
+		[empleadoInstance:new Empleado(status:'ALTA', alta: new Date(), activo: true)]
 	}
 	
 	def save(Empleado empleado) {

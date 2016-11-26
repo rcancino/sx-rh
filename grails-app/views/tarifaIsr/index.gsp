@@ -6,11 +6,11 @@
 </head>
 <body>
 	<content tag="header">
-			<h3>Tabla de tarifas ISR</h3>
+			Tabla de tarifas ISR
 	</content>
 	<content tag="grid">
-		%{-- <g:render template="grid"/> --}%
-		<table class="table table-striped table-bordered table-condensed">
+		
+		<table id="grid" class=" table table-striped table-bordered table-condensed">
 			<thead>
 				<tr>
 					<th>Ejercicio</th>
@@ -24,8 +24,16 @@
 			<tbody>
 				<g:each in="${tarifaIsrInstanceList}" var="row">
 					<tr>
-						<td>${row.ejercicio}</td>
-						<td>${row.tipo}</td>
+						<td>
+							<g:link action="show" id="${row.id}">
+								<g:formatNumber number="${row.ejercicio}" format="####"/>
+							</g:link>
+						</td>
+						<td>
+							<g:link action="show" id="${row.id}">
+								${row.tipo}
+							</g:link>
+						</td>
 						<td>
 							<g:link action="show" id="${row.id}">
 								<g:formatNumber number="${row.limiteInferior}" format="#,###.##"/>

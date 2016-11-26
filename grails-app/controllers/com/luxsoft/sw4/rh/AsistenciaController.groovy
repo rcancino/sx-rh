@@ -81,7 +81,7 @@ class AsistenciaController {
 	}
 
 	def lectora(Integer max){
-		params.max = Math.min(max ?: 50, 100)
+		params.max = Math.min(max ?: 500, 1000)
 		def periodo=session.periodoDeLecturas
 		if(!periodo){
 			periodo=new Periodo()

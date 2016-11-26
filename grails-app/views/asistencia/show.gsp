@@ -15,7 +15,7 @@
 		</h2>
 		<div class="col-md-4">
 			<li><strong> ${asistenciaInstance.tipo} ${asistenciaInstance?.calendarioDet?.folio}</strong></li>
-			<li></li>
+			%{-- <li>${asistenciaInstance.empleado.perfil.turno.descripcion}</li> --}%
 
 		</div>
 		<div class="col-md-4">
@@ -35,7 +35,7 @@
 	</lx:header>
 
 	<div class="row wrapper white-bg animated fadeInRight">
-	Turno:  ${asistenciaInstance?.empleado?.perfil?.turno.id} 
+	
 		<div class="">
 			<div class="col-md-12">
 				<div class="toolbar">

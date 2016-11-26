@@ -95,26 +95,7 @@
 	<g:render template="agregarDialog"/>
 	<g:render template="reporteDeNomina"/>
 	<g:render template="reporteDeNominaConcentrada"/> 
-	%{-- 
-	<script>
-			$(function(){
-				var table=$("#nominaGrid").dataTable({
-			        "paging":   false,
-			        "ordering": false,
-			        "info":     false,
-			         "dom":'t'
-    				});
-    				
-    				$("#folioField").keyup(function(){
-      					table.DataTable().column(0).search( $(this).val() ).draw();
-					});
-					$("#tipoField").keyup(function(){
-      					table.DataTable().column(1).search( $(this).val() ).draw();
-					});
-					
-			});
-	</script>
-	--}%
+	
 
 	<script type="text/javascript">
 		$(function(){
@@ -142,6 +123,8 @@
                 var term=$(this).val();
                 table.column(1).search(term).draw();
 			});
+
+			$('.chosen-select').chosen();
 			
 		});
 	</script>

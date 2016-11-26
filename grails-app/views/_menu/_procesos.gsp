@@ -1,5 +1,5 @@
 <g:set var="procesosControllers" 
-    value="${['procesos','calculoSdi','modificacionSalarial']}" />
+    value="${['procesos','calculoSdi','modificacionSalarial','aguinaldo','ptu','exportador']}" />
 <li class="${procesosControllers.contains(webRequest.controllerName)?'active':''}">
     <a href="#">
     	<i class="fa fa-cogs"></i> 
@@ -25,7 +25,24 @@
                 <span class="nav-label">Mod. Salarial Bimestre</span> 
                 <span class="fa fa-angle-right pull-right"></span>
             </g:link>
-            
+        </li>
+        <li class="${webRequest.controllerName=='aguinaldo' ?'active':''}">
+            <g:link controller="aguinaldo">
+                <span class="nav-label">Aguinaldo</span> 
+                <span class="fa fa-angle-right pull-right"></span>
+            </g:link>
+        </li>
+        <li class="${webRequest.controllerName=='ptu' ?'active':''}">
+            <g:link controller="ptu">
+                <span class="nav-label">PTU</span> 
+                <span class="fa fa-angle-right pull-right"></span>
+            </g:link>
+        </li>
+        <li class="${webRequest.controllerName=='exportador' ?'active':''}">
+            <g:link controller="exportador">
+                <span class="nav-label">Layouts</span> 
+                <span class="fa fa-angle-right pull-right"></span>
+            </g:link>
         </li>
     </ul>
 </li>

@@ -6,8 +6,8 @@ import groovy.transform.EqualsAndHashCode
 
 import org.grails.databinding.BindingFormat
 
-@ToString(includes='empleado,fecha,comentario,autorizacion',includeNames=true,includePackage=false)
-@EqualsAndHashCode(includes="empleado,fecha")
+@ToString(includes='empleado,comentario,autorizacion',includeNames=true,includePackage=false)
+@EqualsAndHashCode(includes="id,empleado")
 class Vacaciones {
 	
 	//static searchable = true

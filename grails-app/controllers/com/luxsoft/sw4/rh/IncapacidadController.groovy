@@ -12,18 +12,10 @@ class IncapacidadController {
 	def incapacidadService
 	
 	def index(Integer max) {
-		//params.max = Math.min(max ?: 1000, 10000)
-		
-		
 		def list=Incapacidad.findAll(
 			"from Incapacidad i where ( year(i.fechaInicial)=? or year(i.fechaFinal)=? ) order by i.dateCreated desc"
 			,[session.ejercicio,session.ejercicio])
-		
-		
-		//def query=Incapacidad.where{empleado.salario.periodicidad==tipo}
 		[incapacidadesList:list,incapacidadTotalCount:list.size()]
-		//[incapacidadesList:query.list(params),incapacidadTotalCount:query.count(),tipo:tipo]
-		
 	}
 	
 	def create() {

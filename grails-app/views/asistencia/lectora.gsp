@@ -3,49 +3,113 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<meta name="layout" content="operaciones"/>
 	<title>Lectora</title>
 </head>
 <body>
 
-	<content tag="header">
-		<h3>Control de asistencia</h3>
-		
-	</content>
-	<content tag="consultas">
-		
-  		<nav:menu scope="app/operaciones/asistencia" class="nav nav-tabs nav-stacked" path=""/>
-		
-	</content>
-	<content tag="gridTitle">
-		<a href="#periodoForm" data-toggle="modal">
-			Registros de lectora periodo:  ${periodo}  Registros:${checadoTotalCount}
-		</a>
-	</content>
-	<content tag="gridTasks">
-  		
-  		<button class="btn btn-default" data-toggle="modal" data-target="#periodoForm">
-			<span class="glyphicon glyphicon-import"></span> Importar
-		</button>
-		<g:render template="/_common/periodoForm" model="[action:'importarLecturas',periodo:periodo]"/>
-		
-		<button class="btn btn-default" data-toggle="modal" data-target="#cargaPeriodoForm">
-			<span class="glyphicon glyphicon-refresh"></span> Cargar
-		</button>
-		
-  		<g:link class="btn btn-default" action="eliminarRegistrosLectora">
-  			<span class="glyphicon glyphicon-trash"></span> Eliminar
-  		</g:link>
-	</content>
-	<content tag="gridPanel">
-		<g:render template="lecturasGridPanel"/>
-		
-		<g:render template="/_common/periodoForm" ,model="[action:'actualizarPeriodoDeLecturas']"/>
-	</content>
-	
-	
-	
+<lx:header><h2>Registros de lectora</h2>
+	<a href="#periodoForm" data-toggle="modal">
+			<small>Registros de lectora periodo:  ${periodo}  Registros:${checadoTotalCount}</small>
+	</a>
+</lx:header>
 
+<div class=" row wrapper wrapper-content  white-bg animated fadeInRight">
+	<div class="row toolbar">
+	    <div class="col-md-12">
+		    <div class="btn-group">
+		         <button class="btn btn-info btn-outline" data-toggle="modal" data-target="#importarForm">
+		       		<span class="glyphicon glyphicon-import"></span> Importar
+		       	</button>
+		       	
+		       		
+	       		<button class="btn btn-default btn-outline" data-toggle="modal" data-target="#cargaPeriodoForm">
+	       			<span class="glyphicon glyphicon-refresh"></span> Cargar
+	       		</button>
+		       		
+	     		<g:link class="btn btn-default btn-outline" action="eliminarRegistrosLectora">
+	     			<span class="glyphicon glyphicon-trash"></span> Eliminar
+	     		</g:link>
+		    </div>	
+	    </div>
+	</div>
+	<g:render template="lecturasGridPanel"/>
+</div>
+	
+<g:render template="/_common/periodoForm" model="[action:'actualizarPeriodoDeLecturas',periodo:periodo]"/>	
+%{-- <g:render template="/_common/periodoForm" ,model="[modalId:'importarDialog',action:'importarLecturas']"/>	 --}%
+<!-- Modal para el alta de percepciones -->
+<div class="modal fade" id="importarForm" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="importarDialogForm">
+					Importar registros del periodo: ${periodo}
+				</h4>
+			</div>
+			<g:form action="importarLecturas" class="form-horizontal">
+				
+				<div class="modal-body">
+					<div class="form-group">
+    					<label for="fechaIni" class="col-sm-3">Fecha inicial</label>
+    					<div class="col-sm-9">
+    						<input type="text" class="form-control  date" id="fechaIni" name="fechaInicial" 
+    							value="${g.formatDate(date:periodo.fechaInicial,format:'dd/MM/yyyy') }">
+    					</div>
+  					</div>
+  					
+  					<div class="form-group">
+    					<label for="fechaFin" class="col-sm-3">Fecha final</label>
+    					<div class="col-sm-9" >
+    						<input type="text" class="form-control date" id="fechaFin" name="fechaFinal" 
+    							value="${g.formatDate(date:periodo.fechaFinal,format:'dd/MM/yyyy') }">
+    					</div>
+  					</div>
+  					
+				</div>
+				
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+					<g:submitButton class="btn btn-primary" name="Ejecutar"
+							value="ejecutar" />
+				</div>
+				
+			</g:form>
+
+
+		</div>
+		<!-- moda-content -->
+	</div>
+	<!-- modal-di -->
+</div>
+
+<script type="text/javascript">
+    $(function(){
+        var res = $('.grid').dataTable({
+            responsive: true,
+            aLengthMenu: [[20, 40, 60, 100, -1], [20, 40,60, 100, "Todos"]],
+            "language": {
+                "url": "${assetPath(src: 'datatables/dataTables.spanish.txt')}"
+            },
+            "dom": 'lftrip',
+            "tableTools": {
+                "sSwfPath": "${assetPath(src: 'plugins/dataTables/swf/copy_csv_xls_pdf.swf')}"
+            },
+            "order": []
+        });
+        $('.date').bootstrapDP({
+            format: 'dd/mm/yyyy',
+            keyboardNavigation: false,
+            forceParse: false,
+            autoclose: true,
+            todayHighlight: true,
+
+        });
+
+
+    });
+</script>  
 
 	
 </body>

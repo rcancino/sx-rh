@@ -1,6 +1,7 @@
-<table id="aguinaldoCalculoGrid" class="table table-striped table-bordered table-condensed table-small-font">
+<table id="aguinaldoCalculoGrid" class="grid table table-striped table-bordered table-condensed table-small-font">
 	<thead>
 		<tr>
+			<th>Id</th>
 			<th>Empleado</th>
 			<th>Ubicacion</th>
 			<th>T</th>
@@ -19,7 +20,7 @@
 	<tbody>
 		<g:each in="${aguinaldoInstanceList}" var="row">
 			<tr>
-				
+				<td>${row.id}</td>
 				<td class="table-small-font">
 					<g:link action="show" id="${row.id}">
 						${fieldValue(bean:row,field:"empleado.nombre")}

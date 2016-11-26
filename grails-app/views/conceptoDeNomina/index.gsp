@@ -1,35 +1,83 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	
-	<title>Conceptos</title>
+	<title>Conceptos de nómina</title>
 </head>
 <body>
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="alert alert-info">
-					<h3>${"Conceptos de nómina"}</h3>
-					<g:render template="/_common/alertMessage"/>
-				</div>
-				<nav:menu scope="app/catalogos/conceptos" class="nav nav-tabs"/> 
-
-				%{-- <ul class="nav nav-tabs">
-					<li class="active"><a href="#percepciones" data-toggle="tab">Percepciones</a></li>
-					<li><a href="#deducciones" data-toggle="tab">Deducciones</a></li>
-				</ul>
-				<div class="tab-content">
-					<div class="tab-pane active fade" id="percepciones">
-						<h2>Lista de precepciones</h2>
-					</div>
-					<div class="tab-pane fade" id="deducciones">
-						<h2>Lista de deducciones</h2>
-					</div>
-				</div> --}%
-			</div>
+	
+	<lx:header>
+		<h2>Catálogo de conceptos de nómina</h2>
+		<lx:warningLabel bean="${conceptoDeNominaInstance}"/>
+		<ol class="breadcrumb"	>
+			<li>
+				<g:if test="${webRequest.actionName == 'percepciones'}"><strong>Precepciones</strong></g:if>
+				<g:else><g:link action="percepciones">Percepciones</g:link></g:else>
+			</li>
+			<li>
+				<g:if test="${webRequest.actionName == 'deducciones'}"><strong>Deducciones</strong></g:if>
+				<g:else><g:link action="deducciones">Deducciones</g:link></g:else>
+			</li>
+		</ol>
+	</lx:header>
+	
+	<div class=" row wrapper  animated fadeInRight">
+		<div class="row toolbar">
+		    
+		    <div class="col-md-3">
+		        <input id="nombreField" placeholder="Empleado" class="form-control" autofocus="autofocus" autocomplete="off">
+		    </div>
+		    <div class="col-md-3">
+		        <input id="ubicacionField" placeholder="Ubicacion" class="form-control" autocomplete="off" >
+		    </div>
+		    <div class="btn-group">
+		       	<lx:refreshButton/>
+		        <lx:createButton/>
+		    </div>
+		    <div class="btn-group">
+		        <button type="button" name="reportes"
+		                class="btn btn-primary btn-outline dropdown-toggle" data-toggle="dropdown"
+		                role="menu">
+		                Reportes <span class="caret"></span>
+		        </button>
+		        <ul class="dropdown-menu">
+		            
+		        </ul>
+		    </div>
 		</div>
+		<lx:ibox>
+			<lx:iboxContent>
+				<g:render template="grid"/>
+			</lx:iboxContent>
+		</lx:ibox>
 	</div>
-		
-	</content>
+
+	<script type="text/javascript">
+	    $(function(){
+	        var res = $('.grid').dataTable({
+	            responsive: true,
+	            aLengthMenu: [[20, 40, 60, 100, -1], [20, 40,60, 100, "Todos"]],
+	            "language": {
+	                "url": "${assetPath(src: 'datatables/dataTables.spanish.txt')}"
+	            },
+	            "dom": 'lTf<"clear">tfrip',
+	            "tableTools": {
+	                "sSwfPath": "${assetPath(src: 'plugins/dataTables/swf/copy_csv_xls_pdf.swf')}"
+	            },
+	            "order": []
+	        });
+	        
+	        var tables = $('.grid'); //.DataTable();
+
+	        $("#filter").on('keyup',function(e){
+	            var term=$(this).val();
+	            $.each(tables, function(p,v) {
+	                $(this).DataTable().column(1).search(term).draw();
+	                
+	            });
+	        });
+
+	    });
+	</script>  	
+	
 </body>
 </html>

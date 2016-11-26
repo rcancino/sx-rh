@@ -27,7 +27,8 @@
 				</td>
 				<td>${fieldValue(bean:row,field:"empleado.perfil.ubicacion.clave")}</td>
 				<td>${fieldValue(bean:row,field:"empleado.salario.periodicidad")}</td>
-				<td><g:fieldValue bean="${row}" field="pg"/></td>
+				<td>${fieldValue(bean:row,field:"comentario")}</td>
+				%{-- <td><g:fieldValue bean="${row}" field="pg"/></td> --}%
 				<td><g:formatNumber number="${row.pg?row.diasPagados:row.dias.size()}" format="###"/></td>
 				<td><g:formatDate date="${row.lastUpdated}" format="dd/MM/yyyy"/></td>
 				

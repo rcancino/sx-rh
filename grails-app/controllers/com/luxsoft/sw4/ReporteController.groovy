@@ -465,7 +465,7 @@ class ImpuestoSobreNominaCommand{
 
 @Validateable
 class EmpleadoPorEjercicioCommand{
-	
+	Integer id
 	Empleado empleado
 	Integer ejercicio
 	

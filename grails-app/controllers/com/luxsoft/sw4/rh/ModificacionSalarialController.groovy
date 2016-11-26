@@ -49,11 +49,12 @@ class ModificacionSalarialController {
     }
 
     def create(){
-    	[modificacionInstance:new ModificacionSalarial(tipo:'AUMENTO')]
+    	[modificacionInstance:new ModificacionSalarial(fecha:new Date(),tipo:'AUMENTO')]
     }
 
     @Transactional
     def save(ModificacionSalarial modificacionInstance){
+    	log.info('Parametros: ' + params)
     	modificacionInstance.sdiNuevo=0.0
     	modificacionInstance.validate()
     	if(modificacionInstance.hasErrors()){
