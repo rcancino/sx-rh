@@ -12,96 +12,95 @@
 
 	<content tag="header">
 		<h2>PTU del ejercicio ${ptuInstance.ejercicio}</h2>
-		<form action="" class="form-horizontal">
-						<div class="form-group">
-						    <label class="col-sm-3 control-label">Monto PTU</label>
-						    <div class="col-sm-3">
-						      <p class="form-control-static">
-						      	${formatNumber(number:ptuInstance.monto,type:'currency')}
-						      </p>
-						    </div>
-						    <label class="col-sm-3 control-label">Remanente (${ptuInstance.ejercicio-1})</label>
-						    <div class="col-sm-3">
-						      <p class="form-control-static">
-						      	${formatNumber(number:ptuInstance.remanente,type:'currency')}
-						      </p>
-						    </div>
-						</div>
-						<div class="form-group">
-						    <label class="col-sm-3 control-label">Salario tope (Sindicalizado)</label>
-						    <div class="col-sm-3">
-						      <p class="form-control-static" title="${ptuInstance.empleadoTope.empleado}">
-						      	${formatNumber(number:ptuInstance.sindicalizadoMaximo,type:'currency')}  (${ptuInstance.sindicalizadoNombre})
-						      </p>
+		
+		<div class="form-group">
+		    <label class="col-sm-3 control-label">Monto PTU</label>
+		    <div class="col-sm-3">
+		      <p class="form-control-static">
+		      	${formatNumber(number:ptuInstance.monto,type:'currency')}
+		      </p>
+		    </div>
+		    <label class="col-sm-3 control-label">Remanente (${ptuInstance.ejercicio-1})</label>
+		    <div class="col-sm-3">
+		      <p class="form-control-static">
+		      	${formatNumber(number:ptuInstance.remanente,type:'currency')}
+		      </p>
+		    </div>
+		</div>
+		<div class="form-group">
+		    <label class="col-sm-3 control-label">Salario tope (Sindicalizado)</label>
+		    <div class="col-sm-3">
+		      <p class="form-control-static" title="${ptuInstance.empleadoTope.empleado}">
+		      	${formatNumber(number:ptuInstance.sindicalizadoMaximo,type:'currency')}  (${ptuInstance.sindicalizadoNombre})
+		      </p>
 
-						    </div>
-						    <label class="col-sm-3 control-label">Total</label>
-						    <div class="col-sm-3">
-						      <p class="form-control-static" >
-						      	${formatNumber(number:ptuInstance.total,type:'currency')}
-						      </p>
-						    </div>
-						</div>
-						<div class="form-group">
-						    <label class="col-sm-3 control-label">Monto Días</label>
-						    <div class="col-sm-3">
-						      <p class="form-control-static">
-						      	${formatNumber(number:ptuInstance.montoDias,type:'currency')}
-						      </p>
-						    </div>
-						    <label class="col-sm-3 control-label">Monto Salario</label>
-						    <div class="col-sm-3">
-						      <p class="form-control-static" >
-						      	${formatNumber(number:ptuInstance.montoSalario,type:'currency')}
-						      </p>
-						    </div>
-						</div>
-						<div class="form-group">
-						    <label class="col-sm-3 control-label">Días PTU</label>
-						    <div class="col-sm-3">
-						      <p class="form-control-static">
-						      	${formatNumber(number:ptuInstance.diasPtu,format:'##')}
-						      </p>
-						    </div>
-						     <label class="col-sm-3 control-label">Tope anual acu</label>
-						    <div class="col-sm-3">
-						      <p class="form-control-static">
-						      	${formatNumber(number:ptuInstance.topeAnualAcumulado,type:'currency')}
-						      </p>
-						    </div>
-						</div>
-						<div class="form-group">
-						    <label class="col-sm-3 control-label">Factor Días</label>
-						    <div class="col-sm-3">
-						      <p class="form-control-static">
-						      	${formatNumber(number:ptuInstance.factorDias,format:'##.####')}
-						      </p>
-						    </div>
-						    <label class="col-sm-3 control-label">Factor Salario</label>
-						    <div class="col-sm-3">
-						      <p class="form-control-static" >
-						      	${formatNumber(number:ptuInstance.factorSalario,format:'##.####')}
-						      </p>
-						    </div>
-						</div>
-						<div class="form-group">
-						    <label class="col-sm-3 control-label">Salario M.G</label>
-						    <div class="col-sm-3">
-						      <p class="form-control-static">
-						      	${formatNumber(number:ptuInstance.salarioMinimoGeneral,type:'currency')}
-						      </p>
-						    </div>
-						     <label class="col-sm-3 control-label">Excento PTU</label>
-						    <div class="col-sm-3">
-						      <p class="form-control-static">
-						      	${formatNumber(number:ptuInstance.topeSmg,type:'currency')}
-						      </p>
-						    </div>
-						   
-						</div>
-
-
-					</form>
+		    </div>
+		    <label class="col-sm-3 control-label">Total</label>
+		    <div class="col-sm-3">
+		      <p class="form-control-static" >
+		      	${formatNumber(number:ptuInstance.total,type:'currency')}
+		      </p>
+		    </div>
+		</div>
+		<div class="form-group">
+		    <label class="col-sm-3 control-label">Monto Días</label>
+		    <div class="col-sm-3">
+		      <p class="form-control-static">
+		      	${formatNumber(number:ptuInstance.montoDias,type:'currency')}
+		      </p>
+		    </div>
+		    <label class="col-sm-3 control-label">Monto Salario</label>
+		    <div class="col-sm-3">
+		      <p class="form-control-static" >
+		      	${formatNumber(number:ptuInstance.montoSalario,type:'currency')}
+		      </p>
+		    </div>
+		</div>
+		<div class="form-group">
+		    <label class="col-sm-3 control-label">Días PTU</label>
+		    <div class="col-sm-3">
+		      <p class="form-control-static">
+		      	${formatNumber(number:ptuInstance.diasPtu,format:'##')}
+		      </p>
+		    </div>
+		     <label class="col-sm-3 control-label">Tope anual acu</label>
+		    <div class="col-sm-3">
+		      <p class="form-control-static">
+		      	${formatNumber(number:ptuInstance.topeAnualAcumulado,type:'currency')}
+		      </p>
+		    </div>
+		</div>
+		<div class="form-group">
+		    <label class="col-sm-3 control-label">Factor Días</label>
+		    <div class="col-sm-3">
+		      <p class="form-control-static">
+		      	${formatNumber(number:ptuInstance.factorDias,format:'##.####')}
+		      </p>
+		    </div>
+		    <label class="col-sm-3 control-label">Factor Salario</label>
+		    <div class="col-sm-3">
+		      <p class="form-control-static" >
+		      	${formatNumber(number:ptuInstance.factorSalario,format:'##.####')}
+		      </p>
+		    </div>
+		</div>
+		<div class="form-group">
+		    <label class="col-sm-3 control-label">Salario M.G</label>
+		    <div class="col-sm-3">
+		      <p class="form-control-static">
+		      	${formatNumber(number:ptuInstance.salarioMinimoGeneral,type:'currency')}
+		      </p>
+		    </div>
+		     <label class="col-sm-3 control-label">Excento PTU</label>
+		    <div class="col-sm-3">
+		      <p class="form-control-static">
+		      	${formatNumber(number:ptuInstance.topeSmg,type:'currency')}
+		      </p>
+		    </div>
+		   
+		</div>
+			
+		          
 	</content>
 
 	<content tag="filtros">

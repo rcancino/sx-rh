@@ -1,6 +1,7 @@
-<table id="calculoAnualPercepcionesGrid" class="table table-striped table-bordered table-condensed">
+<table id="calculoAnualPercepcionesGrid" class="grid table table-striped table-bordered table-condensed">
 	<thead>
 		<tr>
+			<th>Id</th>
 			<th>Empleado</th>
 			<th>Ubicacion</th>
 			<th>T</th>
@@ -32,7 +33,7 @@
 	<tbody>
 		<g:each in="${calculoAnualInstanceList}" var="row">
 			<tr>
-				
+				<td>${row.id}</td>
 				<td>
 					<g:link action="edit" id="${row.id}">
 						${fieldValue(bean:row,field:"empleado.nombre")}
