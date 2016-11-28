@@ -1,5 +1,3 @@
-<%@page expressionCodec="none"%>
-<r:require module="datepicker"/>
 
 <div class="modal-header">
 	<button type="button" class="close" data-dismiss="modal"
@@ -78,6 +76,3 @@
 	</div>
 </g:form>
 
-<r:script>
-
-</r:script>

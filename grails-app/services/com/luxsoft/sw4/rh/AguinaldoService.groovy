@@ -30,7 +30,7 @@ class AguinaldoService {
 			if(aguinaldo.empleado.salario.salarioDiario<=0.0){
 				aguinaldo.salario=aguinaldo.empleado.salario.salarioVariable
 			}
- println "Salario variable "+aguinaldo.empleado.salario.salarioVariable +" Aguinaldo salario  "aguinaldo.salario
+ 		log.info "Salario variable " + aguinaldo.empleado.salario.salarioVariable + " Aguinaldo salario  " + aguinaldo.salario
 
 
 			aguinaldo.sueldoMensual=empleado.salario.periodicidad=='SEMANAL'?aguinaldo.salario*31:aguinaldo.salario*32
@@ -79,10 +79,10 @@ class AguinaldoService {
 
 	def getCalendario(Aguinaldo a){
 		if(calS==null){
-			calS = CalendarioDet.where{calendario.tipo == 'SEMANA' && calendario.comentario == 'AGUINALDO' && calendario.ejercicio==2015}.first()
+			calS = CalendarioDet.where{calendario.tipo == 'SEMANA' && calendario.comentario == 'AGUINALDO' && calendario.ejercicio== a.ejercicio}.first()
 		}
 		if(calQ == null){
-			calQ = CalendarioDet.where{calendario.tipo == 'QUINCENA' && calendario.comentario == 'AGUINALDO' && calendario.ejercicio==2015}.first()
+			calQ = CalendarioDet.where{calendario.tipo == 'QUINCENA' && calendario.comentario == 'AGUINALDO' && calendario.ejercicio == a.ejercicio}.first()
 		}
 		if(a.empleado.salario.periodicidad == 'SEMANAL')
 			return calS

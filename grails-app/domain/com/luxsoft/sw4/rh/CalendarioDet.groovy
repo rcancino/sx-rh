@@ -52,12 +52,12 @@ class CalendarioDet {
 	}
 
 	String toString(){
-	return "$calendario.tipo $folio  (${inicio.format('dd/MM/yyyy')} - ${fin.format('dd/MM/yyyy')}) ${calendario.comentario?:'NOMINA'}"
+	return "$calendario?.tipo $folio  (${inicio?.format('dd/MM/yyyy')} - ${fin?.format('dd/MM/yyyy')}) ${calendario?.comentario?:'NOMINA'}"
     
 	}
 	
 	String toString2(){
-	return "$calendario.tipo $folio  $calendario.ejercicio $calendario.comentario?:'NOMINA'"
+	return "$calendario?.tipo $folio  $calendario?.ejercicio $calendario?.comentario?:'NOMINA'"
 	}
 	
 }

@@ -2,9 +2,72 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Calculo anual</title>
+	<meta name="layout" content="operaciones2"/>
 	<r:require modules="datatables"/> 
 </head>
 <body>
+	
+	<content tag="header">
+		<h2>Calculo Anual (${session.ejercicio})</h2>
+	</content>
+	
+	<content tag="buttonsBar">
+		<lx:refreshButton/>
+		<a data-target="#cambioGlobalDeEjercicioForm" class="btn btn-success btn-outline" data-toggle="modal">
+			<span class="glyphicon glyphicon-calendar"></span> Cambiar Ejercicio
+		</a>
+	</content>
+	<content tag="operaciones">
+			<li>
+				<g:link action="actualizar">
+					<span class="glyphicon glyphicon-cog"></span> Actualizar
+				</g:link>
+			</li>
+	</content>
+	<content tag="reportes">
+		<li>
+			<g:link action="reporte" params="[tipo:'ACUMULADOS']"> Cálculo Anual Acumulados</g:link>
+		</li>
+		<li>
+			<g:link action="reporte" params="[tipo:'RESULTADOS']"> Cálculo Anual Resultados</g:link>
+		</li>
+		<li>
+			<g:link action="reporte" params="[tipo:'SALDOS']"> Cálculo Anual Saldos</g:link>
+		</li>
+	</content>
+	<content tag="gridPanel">
+		<ul class="nav nav-tabs" role="tablist">
+  					<li role="presentation" 
+  						class="active"><a href="#general" role="tab" 
+  						data-toggle="tab">General </a></li>
+  					<li role="presentation">
+  						<a href="#percepciones" role="tab" data-toggle="tab">Percepciones</a>
+  					</li>
+  					<li role="presentation">
+  						<a href="#deducciones" role="tab" data-toggle="tab">Deducciones</a>
+  					</li>
+  				
+				</ul>
+				<!-- Tab panes -->
+				<div class="tab-content">
+  					<div role="tabpanel" class="tab-pane active" id="general">
+  						<g:render template="calculoAnualGrid"/>
+  					</div>
+  					<div role="tabpanel" class="tab-pane " id="percepciones">
+  						<g:render template="calculoAnualPercepcionesGrid"/>
+  					</div>
+  					<div role="tabpanel" class="tab-pane " id="deducciones">
+  						<g:render template="calculoAnualDeduccionesGrid"/>
+  					</div>  					
+				</div>
+				<g:render template="/_common/cambioGlobalDeEjercicioDialog"/>
+	</content>
+
+
+
+
+
+
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-12">

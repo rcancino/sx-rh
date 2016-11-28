@@ -15,18 +15,9 @@ class CalendarioDetController {
 
     def getCalendariosAsJSON() {
 		def term=params.term.trim()+'%'
-		
-		/*
-		def query=CalendarioDet.where{
-			calendario.tipo=~term || folio.toString()=~term 
-		}
-		def list=query.list(max:100, sort:"folio",order:'desc')
-		*/
 		def list=CalendarioDet
 			.findAll("from CalendarioDet c where c.calendario.ejercicio=? and c.calendario.tipo like ? order by c.folio desc "
 				,[session.ejercicio,term.toUpperCase()])
-		//println 'Buscando por: '+term
-		//println list.size()
 		list=list.collect{ calDet->
 			def nombre="$calDet.calendario.tipo $calDet.folio  $calDet.calendario.ejercicio (${calDet.inicio.text()} - ${calDet.fin.text()})"
 			[id:calDet.id
@@ -35,7 +26,6 @@ class CalendarioDetController {
 			]
 		}
 		def res=list as JSON
-		
 		render res
 	}
 

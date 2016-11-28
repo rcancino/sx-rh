@@ -2,15 +2,13 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Calculo de PTU</title>
-	<r:require modules="datatables"/> 
+
 </head>
 <body>
 
 	<div class="row wrapper border-bottom white-bg page-heading">
 	    <div class="col-lg-10">
-	       <lx:header>
 				<h2>Modulo para el calculo del PTU</h2>
-			</lx:header>
 	        <lx:warningLabel/>
 	        <g:if test="${flash.error}">
 	            <small><span class="label label-danger ">${flash.error}</span></small>
@@ -18,67 +16,40 @@
 	    </div>
 	</div>
 	<div class=" row wrapper wrapper-content  white-bg animated fadeInRight">
-
-	</div>
-
-	
-
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="alert alert-info">
-					<a href="" data-toggle="modal" data-target="#cambioGlobalDeEjercicioForm">
-						<h3>Módulo para el calculo del PTU </h3>
+		<div class="row toolbar">
+			<div class="col-md-3">
+                 <input id="ejercicioField" placeholder="Ejercicio" class="form-control" autofocus="autofocus" autocomplete="off">
+             </div>
+			<div class="btn-group">
+				<g:link action="index" class="btn btn-success btn-outline">
+						Refrescar
+					<span class="glyphicon glyphicon-repeat"></span> 
+				</g:link>
+					<a data-target="#cambioGlobalDeEjercicioForm" class="btn btn-success btn-outline" data-toggle="modal">
+						<span class="glyphicon glyphicon-calendar"></span> Cambiar Ejercicio
 					</a>
-					
-					<g:if test="${flash.message}">
-						<div class="message" role="status">
-							<strong>${flash.message}</strong>
-						</div>
-					</g:if>
-				</div>
-			</div>
-		</div><!-- end .row 1 -->
-		
-		<div class="row">
-			
-			<div class="col-md-12">
-				<div class="button-panel">
-					<div class="btn-group">
-						<g:if test="${!com.luxsoft.sw4.rh.Ptu.findByEjercicio(session.ejercicio-1)}">
-							<g:link action="create" class="btn btn-default">
-								<span class="glyphicon glyphicon-plus"></span> Nuevo
-							</g:link>
-						</g:if>
-						
-						
-						<button type="button" name="reportes"
-								class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-								role="menu">
-								Reportes <span class="caret"></span>
-						</button>
-						<ul class="dropdown-menu">
-							<li>
-								<g:link action="reporteGlobal" > PTU General</g:link>
-								<g:link action="reporteGlobal" > PTU Individual</g:link>
-							</li>
-						</ul>
-					</div>
-					
-				</div>
-			</div>
-			
-		</div><!-- end .row 2 Toolbar -->
-		
-		<div class="row">
-			<div class="col-md-12">
-				<g:render template="grid"/>
-			</div>
-			
-		</div><!--  end .row 3 Grid -->
+				<g:link action="create" class="btn btn-success btn-outline">
+						<span class="glyphicon glyphicon-plus"></span> Nuevo
+				</g:link>
+	             <button type="button" name="reportes"
+	                     class="btn btn-primary btn-outline dropdown-toggle" data-toggle="dropdown"
+	                     role="menu">
+	                     Reportes <span class="caret"></span>
+	             </button>
+	             <ul class="dropdown-menu">
+	                <li>
+						<g:link action="reporteGlobal" > PTU General</g:link>
+						<g:link action="reporteGlobal" > PTU Individual</g:link>
+					</li>
+	             </ul>
+	         </div>
+		</div>
+		<g:render template="grid"/>
+		<g:render template="/_common/cambioGlobalDeEjercicioDialog"/>
 	</div>
+
 	
-	<r:script>
+	<script>
 		$(function(){
 			var table=$("#grid").dataTable({
 		        "paging":   false,
@@ -87,11 +58,21 @@
 		         "dom":'t'
 				});
 				
-				
+			var tables = $('#grid'); //.DataTable();
+
+        		$("#ejercicioField").on('keyup',function(e){
+            	var term=$(this).val();
+            $.each(tables, function(p,v) {
+                //console.log('Pro: ' + p);
+                //console.log('Val: ' + v);
+                $(this).DataTable().column(0).search(term).draw();
+                
+            });
+        });	
 				
 			
 				
 		});
-	</r:script>
+	</script>
 </body>
 </html>

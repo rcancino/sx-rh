@@ -11,27 +11,27 @@ class CalendarioService {
 
     def generarPeriodos(Calendario calendario) {
 		assert !calendario.periodos,"El calendario ya esta generado debe eliminar los periodos para volver a generarlo"
-		if(calendario.tipo=='SEMANA'){
-			return generarPeriodosSemanales(calendario)
-		}else if(calendario.tipo=='QUINCENA'){
-			return generarCalendarioQuincenal(calendario)
-		}
-		/*
 		try {
+			if(calendario.tipo=='SEMANA'){
+				return generarPeriodosSemanales(calendario)
+			}else if(calendario.tipo=='QUINCENA'){
+				return generarCalendarioQuincenal(calendario)
+			}
 			
-			
-		} catch (Exception e) {
-			e.printStackTrace()
-			String msg=ExceptionUtils.getRootCauseMessage(e)
-			throw new CalendarioException(message:"Error al procesar calendario " +msg,exception:e)
 		}
-		*/
+		catch(Exception exception) {
+			def ex = ExceptionUtils.getRootCause(exception)
+			log.error(ex)
+			String msg = ExceptionUtils.getMessage(exception)
+			throw new CalendarioException(calendario,ex,msg)
+		}
+		
     }
 	
 	private Calendario generarPeriodosSemanales(Calendario c){
 		
-		def periodos=Periodo.getPeriodosDelYear(2014)
-		
+		def periodos=Periodo.getPeriodosDelYear(c.ejercicio)
+		println 'Generando semanas para el periodo: ' + periodos.size()
 		def folio=1
 		def mes=1
 		def semanas=[]
@@ -49,14 +49,11 @@ class CalendarioService {
 			  def semana=new Periodo(inicioDeSemana,dia)
 			  semanas<<semana
 			  inicioDeSemana=null
-			  //println 'Semana: '+semana
 			}
 			if(dia==periodo.fechaFinal && inicioDeSemana){
-			  
 			  def semana=new Periodo(inicioDeSemana,dia)
 			  semanas<<semana
 			  inicioDeSemana=null
-			  //println 'Semana: '+semana
 			}
 			
 		  }
@@ -78,7 +75,7 @@ class CalendarioService {
 	}
 	
 	private Calendario generarCalendarioQuincenal(Calendario c){
-		def periodos=Periodo.getPeriodosDelYear(2014)
+		def periodos=Periodo.getPeriodosDelYear(c.ejercicio)
 		
 		def quincenas=[]
 		for(Periodo mes:periodos) {
@@ -105,6 +102,12 @@ class CalendarioService {
 }
 
 class CalendarioException extends RuntimeException{
-	Exception exception
-	String message
+	
+	Calendario calendario
+	
+	CalendarioException(Calendario cal, Exception ex, String message){
+		super(message,ex)
+		this.calendario = cal
+		
+	}
 }

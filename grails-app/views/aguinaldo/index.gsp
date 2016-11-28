@@ -74,7 +74,7 @@
 				</div>
 			</div>
 			
-		</div><!--  end .row 3 Grid -->
+		</div>
 		<g:render template="/_common/cambioGlobalDeEjercicioDialog"/>
 	</content>
 
