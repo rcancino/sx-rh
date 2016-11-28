@@ -48,7 +48,7 @@
 		<g:each 
 			in="${ptuInstance?.partidas.sort({ a,b -> a.empleado.perfil.ubicacion.clave <=> b.empleado.perfil.ubicacion.clave?: a.empleado.apellidoPaterno<=>b.empleado.apellidoPaterno  }) }" var="row">
 			<tr >
-				<td nowrap="nowrap" class="details-control">
+				<td>
 					${fieldValue(bean:row,field:"empleado")}
 				</td>
 				<td>${fieldValue(bean:row,field:'empleado.perfil.ubicacion.clave')}</td>

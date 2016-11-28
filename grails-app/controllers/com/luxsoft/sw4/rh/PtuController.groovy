@@ -181,14 +181,18 @@ class PtuController {
         if(calID)
             calendarioDet=CalendarioDet.get(params.calendarioDet)
        
-        //assert calendarioDet,'No se definio ningun calendario'
+        assert calendarioDet,'No se definio ningun calendario'
         //println "Asignando calendario $calendarioDet BAJAS de PTU: "+ptuInstance.id
         //println 'params: '+params
         
         params.partidas.each{
-            def det=PtuDet.get(it)
+            println "Elemento   "+it
+            if(it){
+                def det=PtuDet.get(it)
             det.calendarioDet=calendarioDet
             det.save flush:true
+            }
+        
            
         }
         redirect action:'asignacionCalendario' ,id:ptuInstance.id

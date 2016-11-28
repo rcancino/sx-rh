@@ -1,23 +1,41 @@
 <html>
 <head>
 	<meta charset="UTF-8">
+	<meta name="layout" content="createForm"/>
 	<title>Alta de PTU</title>
-	<r:require modules="forms"/>
+	<g:set var="entity" value="${ptuInstance}" scope="request" />
+	<g:set var="entityName" value="Alta de PTU" scope="request" />
+	<g:set var="editable" value="${true}" scope="request" />
+	<g:set var="imprimible" value="${false}" scope="request" />
+	
 </head>
 <body>
+
+		<content tag="header">
+			Alta de  PTU
+			
+		</content>
+
+		<content tag="formTitle">
+			
+		</content>
+
+		<content tag="formFields">
+			<f:with bean="${ptuInstance}">
+
+					<f:field property="ejercicio" >
+						<input name="ejercicio" type="text" class="form-control" value="${session.ejercicio}" readonly>
+					</f:field>
+				<f:field property="remanente" input-class="form-control" widget-type="text"/>
+				<f:field property="monto" input-class="form-control" widget-type="text"/>
+				<f:field property="factor" input-class="form-control" widget-type="text"/>
+			</f:with>
+		</content>
+
+
+
+
 	<div class="container-fluid">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="alert alert-info">
-					<h3>Alta de  PTU </h3>
-					<g:if test="${flash.message}">
-						<div class="message" role="status">
-							<strong>${flash.message}</strong>
-						</div>
-					</g:if>
-				</div>
-			</div>
-		</div><!-- end .row 1 -->
 		
 		<div class="row">
 			<div class="col-md-6">
