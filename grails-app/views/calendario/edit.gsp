@@ -4,63 +4,55 @@
 	<title>Calendario ${calendarioInstance.id}</title>
 </head>
 <body>
-	<div class="container">
-	
+
+	<div class="wrapper wrapper-content   animated fadeInRight">
 		<div class="row">
-			<div class="col-md-2">
-				<div class="list-group">
-					<a href=" link_1" class="list-group-item active">Operaciones</a>
-					<g:link action="index" class="list-group-item">
-						<span class="glyphicon glyphicon-list"></span> Calendarios
-					</g:link>
-					<a href=" link_3" class="list-group-item" id="saveLink">
-						<span class="glyphicon glyphicon-floppy-save"></span> Salvar
-					</a>
-					<g:link action="delete" id="${calendarioInstance.id}" class="list-group-item" onclick="return confirm('¿ Elminar todo el calendario de operaciones?');">
-						<span class="glyphicon glyphicon-trash"></span> Eliminar
-					</g:link>
-					<g:if test="${!calendarioInstance.periodos}">
-						<g:link action="generarPeriodos" id="${calendarioInstance.id}" class="list-group-item" onclick="return confirm('¿ Generar periodos del trabajo para el calendario ?');">
-							<span class="glyphicon glyphicon-cog"></span> Generar Periodos
-						</g:link>
-					</g:if>
+			<div class="col-md-8 col-md-offset-2">
+				<lx:ibox>
+					<lx:iboxTitle title="Calendario ${calendarioInstance.ejercicio} (${calendarioInstance.tipo})"/>
+					<lx:errorsHeader bean="${calendarioInstance}"/>
 					
-					
-					<a href="#" class="list-group-item" id="addPartida" data-toggle="modal" data-target="#periodoModalForm">
-						<span class="glyphicon glyphicon-floppy-plus"></span> Agregar
-					</a>
-					
-					
-				</div>
-			</div>
-			<div class="col-md-10">			
-				<g:render template="editForm"/>
-			</div>
-		</div><!-- End .row 1 -->
-		
-		<div class="row">
-			<ul class="nav nav-tabs">
-				<li class="active"><a href="#periodos" data-toggle="tab">Periodos</a></li>
-  				
-			</ul>
-			
-			<div class="tab-content">
-  				<div class="tab-pane active" id="periodos"><g:render template="periodosGrid"></g:render></div>
-  				
+					<g:form action="update" role="form" class="form-horizontal" >
+						<g:hiddenField name="id" value="${calendarioInstance.id}"/>
+                        <g:hiddenField name="version" value="${calendarioInstance.version}"/>
+                        <lx:iboxContent>
+                        	<lx:warningLabel />
+                        	<f:with bean="calendarioInstance">
+                        		<f:display property="ejercicio" />
+                        		<f:display property="tipo" />
+                        		<f:field property="comentario" widget-class="form-control" />
+                        	</f:with>
+                        </lx:iboxContent>
+                        <lx:iboxFooter>
+                        	<lx:backButton class="btn btn-default btn-outline btn-sm"/>
+                        	<button type="submit" class="btn btn-primary btn-outline btn-sm">
+		      					<i class="fa fa-floppy-save"></i> Salvar
+		      				</button>
+                        	
+                        </lx:iboxFooter>
+					</g:form>
+				</lx:ibox>
 			</div>
 		</div>
-		
-	</div> <!-- End .container -->
+
+		<div class="row">
+			<div class="col-md-12">
+				<lx:ibox>
+					<lx:iboxTitle title="Periodos"/>
+					<lx:iboxContent>
+						<g:render template="periodosGrid"/>
+					</lx:iboxContent>
+					<lx:iboxFooter>
+						
+						<g:link action="createPeriodo" class="btn btn-outline btn-info btn-sm" id="${calendarioInstance.id}">
+							<i class="fa fa-plus"></i> Agregar
+						</g:link>
+					</lx:iboxFooter>
+				</lx:ibox>
+			</div>
+		</div>
+	<div>
 	
-	
-	<!-- Modal para el alta de periodos -->
-	<div class="modal fade" id="periodoModalForm" tabindex="-1" >
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<g:render template="agregarPeriodoform"/>
-			</div> <!-- moda-content -->
-		</div> <!-- modal-dialog -->
-	</div> <!-- .modal  -->
 	
 </body>
 </html>

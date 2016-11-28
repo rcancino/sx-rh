@@ -12,11 +12,11 @@
 	<tbody>
 		<g:each in="${calendarioInstanceList}" var="row">
 			<tr>
-				<td><g:link action="edit" id="${row.id}">
+				<td><g:link action="show" id="${row.id}">
 						<g:formatNumber number="${row.id}" format="######"/>
 					</g:link>
 				</td>
-				<td><g:link action="edit" id="${row.id}">
+				<td><g:link action="show" id="${row.id}">
 						<g:formatNumber number="${row.ejercicio}" format="######"/>
 					</g:link>
 				</td>

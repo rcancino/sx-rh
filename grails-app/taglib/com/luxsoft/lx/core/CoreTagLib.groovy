@@ -65,7 +65,10 @@ class CoreTagLib {
         def controller=attrs.controller?:controllerName
         def label=attrs.label?:'Editar'
         def id=attrs.id
-        def model=[action:action,controller:controller,id:id,label:label]
+        if(!id)
+            throw new IllegalArgumentException("Tag lx:editButton requiere del atributo id con el id de la entidad  a editar")
+        def clazz=attrs.class?:'btn btn-outline btn-default'
+        def model=[action:action,controller:controller,id:id,label:label,clazz:clazz]
         out << render(template:"/common/buttons/editButton" ,model:model)
 
     }

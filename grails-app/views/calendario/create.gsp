@@ -1,26 +1,25 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Alta de calendario</title>
+	<meta name="layout" content="createForm"/>
+	title>Alta de calendario</title>
+	<g:set var="entity" value="${calendarioInstance}" scope="request" />
+	<g:set var="editable" value="${true}" scope="request" />
+	<g:set var="imprimible" value="${false}" scope="request" />
 </head>
 <body>
-	<div class="container">
-	
-		<div class="row">
-			<div class="col-md-3">
-				<div class="list-group">
-					<a href=" link_1" class="list-group-item active">Operaciones</a>
-					<g:link action="index" class="list-group-item">
-						<span class="glyphicon glyphicon-list"></span> Calendarios
-					</g:link>
-					<a href=" link_3" class="list-group-item">Buscar</a>
-				</div>
-			</div>
-			<div class="col-md-9">
-				<g:render template="createForm"/>
-			</div>
-		</div>
-	</div>
+
+<content tag="header">
+	Alta de calendario (Ejercicio${session.ejercicio })
+</content>
+
+<content tag="formFields">
+	<f:with bean="calendarioInstance">
+		<f:field property="ejercicio" widget-class="form-control" />
+		<f:field property="tipo" widget-class="form-control" />
+		<f:field property="comentario" widget-class="form-control" />
+	</f:with>
+</content>
 	
 </body>
 </html>
