@@ -21,7 +21,7 @@ class CalendarioController {
 	}
 	
 	def create(){
-		[calendarioInstance:new Calendario(params)]
+		[calendarioInstance:new Calendario(ejercicio:session.ejercicio)]
 	}
 	
 	@Transactional
@@ -37,48 +37,59 @@ class CalendarioController {
 		calendarioInstance.save flush:true
 		flash.message = message(code: 'default.created.message', args: [message(code: 'calendario.label', default: 'Calendario')
 			, calendarioInstance.id])
-		redirect action:'index'
+		redirect action:'edit', id: calendarioInstance.id
+	}
+
+	def show(Calendario calendarioInstance){
+		respond calendarioInstance
 	}
 	
 	def edit(Calendario calendarioInstance){
 		[calendarioInstance:calendarioInstance]
 	}
+
+	def createPeriodo(Calendario calendarioInstance){
+		if(calendarioInstance == null) {
+			notFound()
+			return
+		}
+		def folio = calendarioInstance.periodos.size() + 1
+		def calendarioDetInstance = new CalendarioDet(calendario: calendarioInstance, folio: folio)
+		[calendarioDetInstance: calendarioDetInstance, calendarioInstance: calendarioInstance]
+	}
 	
 	@Transactional
 	def agregarPeriodo(Calendario calendarioInstance){
-		//println 'Parametros: '+params
-		//println 'Agregando periodo a calendario: '+calendarioInstance
-
-		CalendarioDet det=new CalendarioDet(params)
-		if(calendarioInstance.periodos.contains(det)){
-			flash.message="Periodo ya registrado "
-			render view:'edit', model:[calendarioInstance:calendarioInstance]
-
-		}else{
-			calendarioInstance.addToPeriodos(det)
-			calendarioInstance.save failOnError:true
-			render view:'edit', model:[calendarioInstance:calendarioInstance]
+		if(calendarioInstance == null) {
+			notFound()
+			return
 		}
-		
+		CalendarioDet det=new CalendarioDet()
+		bindData(det, params)
+		calendarioInstance.addToPeriodos(det)
+		det.validate()
+		if(det.hasErrors()){
+			render view:'createPeriodo',model:[calendarioDetInstance: det, calendarioInstance: calendarioInstance]
+            return
+		}
+		calendarioInstance.save failOnError:true
+		render view:'edit', model:[calendarioInstance:calendarioInstance]
 	}
 	
 	
 	@Transactional
 	def eliminarPeriodo(Long id){
-		
 		CalendarioDet calendarioDet=CalendarioDet.get(id)
 		if(calendarioDet==null){
 			notFound()
 			return
 		}
-		
 		def calendarioInstance=calendarioDet.calendario
 		calendarioInstance.removeFromPeriodos(calendarioDet)
 		calendarioInstance.save failOnError:true
 		flash.message="Segmento de calendario eliminado"
 		params.id=calendarioInstance.id
 		redirect action:'edit',params:params
-		//render view:'edit', model:[calendarioInstance:calendarioInstance]
 	}
 	
 	@Transactional
@@ -99,13 +110,14 @@ class CalendarioController {
 			return
 		}
 		try{
-			calendarioInstance=calendarioService.generarPeriodos(calendarioInstance)
+			//calendarioInstance=calendarioService.generarPeriodos(calendarioInstance)
 		}catch(Exception ex){
 			println ex
 			flash.message="Error al generar periodo: "+ex.message
 		}
-		params.id=calendarioInstance.id
-		redirect action:'edit',params:params
+		
+		respond calendarioInstance, view:'show'
+		
 	}
 	
 	protected void notFound() {

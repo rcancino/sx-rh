@@ -5,9 +5,7 @@
 	<r:require module="forms"/>
 </head>
 <body>
-
 	<div class="container">
-
 		<div class="row">
 			<div class="col-md-12">
 				<div class="well">
@@ -47,23 +45,23 @@
 		
 			<g:form  name="updateForm" class="form-horizontal" action="update" method="PUT">
 			<div class="row">
-			<div class="col-md-10">	
+			<div class="col-md-6 col-md-offset-2">	
 					<g:hiddenField name="id" value="${aguinaldoInstance.id}" />
 					<g:hiddenField name="version" value="${aguinaldoInstance.version}" />
 				
 					<f:with bean="${aguinaldoInstance }">
 						<fieldset disabled>
-							<f:field property="fechaInicial" input-class="readOnly"/>
+							<f:field property="fechaInicial" widget-class="readOnly"/>
 						</fieldset>
-						<f:field property="porcentajeBono"  input-class="form-control bono" input-type="text"
+						<f:field property="porcentajeBono"  widget-class="form-control bono" widget-type="text"
 							value ="${aguinaldoInstance.porcentajeBono*100}"/>
-						<f:field property="faltas"  input-class="form-control" input-type="text"/>
-						<f:field property="permisoEspecial"  input-class="form-control" input-type="text"/>
-						<f:field property="incapacidades"  input-class="form-control" input-type="text"/>
-						<f:field property="incapacidadesRTT"  input-class="form-control" input-type="text"/>
-						<f:field property="incapacidadesRTE"  input-class="form-control" input-type="text"/>
-						<f:field property="incapacidadesMAT"  input-class="form-control" input-type="text"/>
-						<f:field property="manual"  input-class="form-control" />
+						<f:field property="faltas"  widget-class="form-control" widget-type="text"/>
+						<f:field property="permisoEspecial"  widget-class="form-control" widget-type="text"/>
+						<f:field property="incapacidades"  widget-class="form-control" widget-type="text"/>
+						<f:field property="incapacidadesRTT"  widget-class="form-control" widget-type="text"/>
+						<f:field property="incapacidadesRTE"  widget-class="form-control" widget-type="text"/>
+						<f:field property="incapacidadesMAT"  widget-class="form-control" widget-type="text"/>
+						<f:field property="manual"  widget-class="form-control" />
 					</f:with>
 			</div>
 			</div>	
