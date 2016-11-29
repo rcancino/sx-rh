@@ -13,11 +13,23 @@
 		3% Impuesto sobre nóminas
 	</content>
 
-	<content tag="formFields">
-		<f:with bean="${reportCommand}">
-			<f:field property="ejercicio" widget-class="form-control chosen-select"/>
-			<f:field property="mes" widget-class="form-control chosen-select"/>
-		</f:with>
+	<content tag="reportForm">
+		<g:form action="impuestoSobreNominas" class="form-horizontal">
+			<fieldset>
+				<legend> Parámetros</legend>
+				<f:with bean="${reportCommand}">
+					<f:field property="ejercicio" widget-class="form-control" value="${session.ejercicio}"/>
+					<f:field property="mes" widget-class="form-control"/>
+				</f:with>
+			</fieldset>
+			<div class="form-group">
+		    	<div class="col-sm-offset-2 col-sm-3">
+		      		<button type="submit" class="btn btn-default">
+		      			<span class="glyphicon glyphicon-cog"></span> Ejecutar
+		      		</button>
+		    	</div>
+		  	</div>
+		</g:form>
 	</content>
 	
 </body>

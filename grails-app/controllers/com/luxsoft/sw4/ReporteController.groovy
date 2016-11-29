@@ -280,7 +280,7 @@ class ReporteController {
 	
 	def acumuladoDeNominasPorConcepto(AcumuladoDeNominaPorConceptoCommand command){
 		if(request.method=='GET'){
-			return [reportCommand:new AcumuladoDeNominaPorConceptoCommand()]
+			return [reportCommand:new AcumuladoDeNominaPorConceptoCommand(ejercicio: session.ejercicio)]
 		}
 		command.validate()
 		if(command.hasErrors()){
@@ -360,7 +360,7 @@ class ReporteController {
 
 	def programacionDeVacaciones(EjercicioCommand command){
 		if(request.method=='GET'){
-			return [reportCommand:new EjercicioCommand()]
+			return [reportCommand:new EjercicioCommand(ejercicio: session.ejercicio)]
 		}
 		command.validate()
 		if(command.hasErrors()){
@@ -465,7 +465,7 @@ class ImpuestoSobreNominaCommand{
 
 @Validateable
 class EmpleadoPorEjercicioCommand{
-	Integer id
+	
 	Empleado empleado
 	Integer ejercicio
 	

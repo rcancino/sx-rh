@@ -23,15 +23,8 @@
 				<legend> Parámetros</legend>
 				<f:with bean="${reportCommand}">
 					<f:field property="empleado" input-class="form-control"/>
-					<f:field property="calendario" input-class="form-control">
-						<g:select class="form-control"  
-							name="calendario"
-							from="${com.luxsoft.sw4.rh.CalendarioDet.findAll().sort({it.calendario.tipo})}" 
-							optionKey="id" 
-							optionValue="${{it.calendario.tipo+' '+it.folio}}"
-							
-							/>
-					</f:field>
+					<f:field property="calendario" />
+					
 				</f:with>
 			</fieldset>
 			<div class="form-group">

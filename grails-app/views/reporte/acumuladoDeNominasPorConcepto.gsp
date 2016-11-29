@@ -12,9 +12,36 @@
 	<content tag="reporteTitle">
 		Detalle por concepto de nómina
 	</content>
-	<content tag="formFields">
+	<content tag="reportForm">
 		<g:hiddenField name="reportName" value="AcumuladoDeNominasPorConcepto"/>
-		<f:with bean="${reportCommand}">
+		<g:form action="acumuladoDeNominasPorConcepto" class="form-horizontal">
+			<g:hiddenField name="reportName" value="AcumuladoDeNominasPorConcepto"/>
+			<fieldset>
+				<legend> Parámetros</legend>
+				<f:with bean="${reportCommand}">
+					<f:field property="ejercicio" widget-class="form-control"/>
+					<f:field property="mes" widget-class="form-control"/>
+					<f:field property="periodicidad" widget-class="form-control"/>
+					<f:field property="concepto" widget-class="form-control"/>
+					%{-- <div class="form-group">
+					<label class="col-sm-2 control-label">Concepto</label>
+					<g:select class="form-control"  
+						name="concepto"
+						from="${com.luxsoft.sw4.rh.ConceptoDeNomina.findAll().sort{it.tipo}}" 
+						optionKey="id"/>
+					</div> --}%
+					
+				</f:with>
+			</fieldset>
+			<div class="form-group">
+		    	<div class="col-sm-offset-2 col-sm-3">
+		      		<button type="submit" class="btn btn-default">
+		      			<span class="glyphicon glyphicon-cog"></span> Ejecutar
+		      		</button>
+		    	</div>
+		  	</div>
+		</g:form>
+		%{-- <f:with bean="${reportCommand}">
 			<f:field property="ejercicio" widget-class="form-control"/>
 			<f:field property="mes" widget-class="form-control"/>
 			<f:field property="periodicidad" widget-class="form-control"/>
@@ -28,7 +55,7 @@
 				</div>
 			</div>
 			
-		</f:with>
+		</f:with> --}%
 	</content>
 	
 </body>

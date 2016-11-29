@@ -52,7 +52,25 @@
                 </div>
             </div>
         </div>
+    
+    <script type="text/javascript">
+        $(function(){
+            $('.date').bootstrapDP({
+                format: 'dd/mm/yyyy',
+                keyboardNavigation: false,
+                forceParse: false,
+                autoclose: true,
+                todayHighlight: true
+            });
+            $('.chosen-select').chosen();
+            $(".numeric").autoNumeric('init',{vMin:'0'},{vMax:'9999'});
+            $(".money").autoNumeric('init',{wEmpty:'zero',mRound:'B',aSign: '$'});
+            $(".tc").autoNumeric('init',{vMin:'0.0000'});
+            $(".porcentaje").autoNumeric('init',{altDec: '%', vMax: '99.99'});
 
+            
+        });
+    </script> 
         
         
     </body>

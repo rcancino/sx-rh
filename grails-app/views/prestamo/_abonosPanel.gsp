@@ -1,9 +1,7 @@
 <lx:ibox>
 	<lx:iboxTitle title="Abonos">
 		<lx:iboxTools>
-			<g:link action="agregarAbono" id="${prestamoInstance.id}">
-				<i class="fa fa-plus"></i> Agregar Abono
-			</g:link>
+			
 		</lx:iboxTools>
 	</lx:iboxTitle>
 	<lx:iboxContent>
@@ -42,6 +40,30 @@
 			</tbody>
 		</table>
 	</lx:iboxContent>
+	<lx:iboxFooter>
+		<div class="btn-group">
+			<g:link action="agregarAbono" id="${prestamoInstance.id}">
+				<i class="fa fa-plus"></i> Agregar Abono
+			</g:link>
+		</div>
+		<div class="btn-group">
+		        <button type="button" name="reportes"
+		                class="btn btn-primary btn-outline dropdown-toggle" data-toggle="dropdown"
+		                role="menu">
+		                Reportes <span class="caret"></span>
+		        </button>
+		        <ul class="dropdown-menu">
+	 				<li>
+	 					<g:jasperReport
+	 	          			jasper="EstadoDeCuentaPrestamo"
+	 	          			format="PDF"
+	 	          			name="Estado de Cuenta">
+	 	          			<g:hiddenField name="PRESTAMO_ID" value="${prestamoInstance.id}"/>
+	 	 				</g:jasperReport>
+	 				</li>
+	         	</ul>		
+		    </div>
+	</lx:iboxFooter>
 </lx:ibox>
 
 
