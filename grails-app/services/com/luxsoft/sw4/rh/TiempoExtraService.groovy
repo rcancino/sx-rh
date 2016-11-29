@@ -3,7 +3,7 @@ package com.luxsoft.sw4.rh
 import com.luxsoft.sw4.Dias;
 
 import grails.transaction.Transactional
-import org.joda.time.LocalTime
+
 
 @Transactional
 class TiempoExtraService {
@@ -101,14 +101,14 @@ class TiempoExtraService {
 		
 		if(det.pagarTiempoExtra){
 			
-			LocalTime salidaOficial
-			LocalTime salidaReal
+			Date salidaOficial
+			Date salidaReal
 			if(det.turnoDet.salida2){
 				salidaOficial=det.turnoDet.salida2
-				salidaReal=LocalTime.fromDateFields(det.salida2)
+				salidaReal=det.salida2
 			}else if(det.turnoDet.salida1){
 				salidaOficial=det.turnoDet.salida1
-				salidaReal=LocalTime.fromDateFields(det.salida1)
+				salidaReal=det.salida1
 			}
 			assert salidaOficial, 'Debe haber salida oficial declarada en el turno del empleado para  '+det
 			assert salidaReal,'Debe haber salida registrada  '+det

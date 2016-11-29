@@ -29,7 +29,7 @@ environments {
             driverClassName = "com.mysql.jdbc.Driver"
             dialect = org.hiatasbernate.dialect.MySQL5InnoDBDialect
             username = "root"
-            password = "sys"
+            password = "shoto"
             properties {
                 maxActive = 10
                 maxIdle = 10

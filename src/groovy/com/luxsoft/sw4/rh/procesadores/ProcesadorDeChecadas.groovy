@@ -10,8 +10,6 @@ import com.luxsoft.sw4.rh.TurnoDet
 
 import java.sql.Time
 
-import org.joda.time.Duration;
-import org.joda.time.LocalTime;
 
 class ProcesadorDeChecadas {
 	
@@ -27,16 +25,25 @@ class ProcesadorDeChecadas {
 		
 		def turnosMap=turno.toDiasMap()
 		
+		Calendar calendar = Calendar.getInstance();
 		asistencia.partidas.each{it ->
 			def sdia=Dias.toNombre(it.fecha)
 			TurnoDet turnoDet=turnosMap[sdia]
 			assert turnoDet,"Se requiere turno para ${sdia}"
+
 			
+	
 			it.turnoDet=turnoDet
 			if(turnoDet.entrada1){
-				LocalTime ini=turnoDet.entrada1
-				LocalTime fin=turnoDet.salida2?:turnoDet.salida1
-				def res=fin.getLocalMillis()-ini.getLocalMillis()
+				Date ini=turnoDet.entrada1
+				Date fin=turnoDet.salida2?:turnoDet.salida1
+				calendar.setTime(ini)
+				def iniMillis=calendar.getTimeInMillis()
+				calendar.setTime(fin)
+				def finMillis=calendar.getTimeInMillis()
+				def res=finMillis-iniMillis
+			//	println "Ini millis:  "+iniMillis +"--"+"Fin millis:  "+finMillis +" res: "+res
+
 				
 				//Duration duration=new Duration(turnoDet.entrada1.get)
 				it.horasTrabajadas=(res/(1000*60*60) as BigDecimal)
@@ -59,7 +66,7 @@ class ProcesadorDeChecadas {
 		
 		
 		def time=new Time(chk.hora.time)
-		def lectura=LocalTime.fromDateFields(chk.hora)
+		def lectura=chk.hora
 		
 		def festivo=DiaFestivo.findByFecha(ad.fecha)
 		
@@ -77,7 +84,7 @@ class ProcesadorDeChecadas {
 		
 		//Dia festivo parcial
 		if(festivo && festivo.parcial){
-			def salidaFestivo=LocalTime.fromDateFields(festivo.salida)
+			def salidaFestivo=Date.fromDateFields(festivo.salida)
 			if(lectura<salidaFestivo) {
 				ad.entrada1=time
 				return
@@ -101,7 +108,7 @@ class ProcesadorDeChecadas {
 			}
 			
 			if(ad.entrada1){
-				LocalTime checado=LocalTime.fromDateFields(ad.entrada1)
+				Date checado=ad.entrada1
 				def dif=( ((lectura.getHourOfDay()*60)+lectura.getMinuteOfHour()) - ((checado.getHourOfDay()*60)+checado.getMinuteOfHour()) )
 				if(dif>60){
 					ad.salida1=time

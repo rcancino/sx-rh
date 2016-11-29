@@ -23,8 +23,7 @@ import com.luxsoft.sw4.rh.CalendarioDet
 
 import org.apache.commons.lang.exception.ExceptionUtils
 import org.apache.commons.lang.time.DateUtils;
-import org.joda.time.LocalTime
-import org.joda.time.DateTimeZone
+
 import com.luxsoft.sw4.rh.Vacaciones
 
 import grails.events.Listener
@@ -68,8 +67,7 @@ class AsistenciaService {
 		
 		empleados.each{ empleado ->
 			try {
-				actualizarAsistencia(empleado,tipo,calendarioDet)
-				
+				actualizarAsistencia(empleado,tipo,calendarioDet)		
 			} catch (Exception ex) {
 			   ex.printStackTrace()
 				
@@ -137,7 +135,7 @@ class AsistenciaService {
 		def calendarioFinal=CalendarioDet
 			.executeQuery("select max(c.folio) from CalendarioDet c where c.calendario.tipo=? and c.calendario.ejercicio=? and c.calendario.comentario like ? and c.folio!=108"
 				,[empleado.salario.periodicidad=='SEMANAL'?'SEMANA':'QUINCENA',cal.calendario.ejercicio,'%NOMINA%']) 
-		println 'Calendario id: '+calendarioFinal.get(0)
+		//println 'Calendario id: '+calendarioFinal.get(0)
 		if(calendarioFinal.get(0) ==cal.folio){
 			def ejercicio=cal.calendario.ejercicio
 			def cierre=Vacaciones.executeQuery("from Vacaciones v where v.empleado=? and  year(v.solicitud)=? and cierreAnual=true",[empleado,ejercicio])
@@ -227,7 +225,7 @@ class AsistenciaService {
 	
 	@NotTransactional
 	def recalcularRetardos(Asistencia asistencia) {
-		DateTimeZone.setDefault(DateTimeZone.forTimeZone(TimeZone.getDefault()));
+		//DateTimeZone.setDefault(DateTimeZone.forTimeZone(TimeZone.getDefault()));
 		log.info 'Recalculando retardos para: '+asistencia.empleado+"  Periodo: "+asistencia.periodo
 		def retardoMenor=0
 		asistencia.faltas=0
@@ -240,15 +238,24 @@ class AsistenciaService {
 			it.minutosNoLaborados=0
 			def turnoDet=it.turnoDet
 			
+			Calendar calendar = Calendar.getInstance()
+
 			def diaFestivo=DiaFestivo.findByFecha(it.fecha)
 			
 			
 			if(it.entrada1) {
-				LocalTime inicio=it.turnoDet.entrada1
-				LocalTime entrada=LocalTime.fromDateFields(it.entrada1)
+				Date inicio=it.turnoDet.entrada1
+				Date entrada=it.entrada1
 				
+	
+					calendar.setTime(entrada) 
+					def entradaMinute=(calendar.get(Calendar.HOUR_OF_DAY)*60)+calendar.get(Calendar.MINUTE);
+					calendar.setTime(inicio) 
+					def inicioMinute=(calendar.get(Calendar.HOUR_OF_DAY)*60)+calendar.get(Calendar.MINUTE); 
+
 				
-				def retraso=(((entrada.getHourOfDay()*60)+entrada.getMinuteOfHour())-((inicio.getHourOfDay()*60)+inicio.getMinuteOfHour()))
+				//def retraso=(((entrada.getHourOfDay()*60)+entrada.getMinuteOfHour())-((inicio.getHourOfDay()*60)+inicio.getMinuteOfHour()))
+				def retraso=entradaMinute-inicioMinute
 				it.retardoMayor=retraso<0 ? 0: retraso
 				it.retardoMenor = 0 // Modificacion del 27 Julio de 2016 SE QUITA EL RETRASO MENOR
 
@@ -270,10 +277,16 @@ class AsistenciaService {
 			if(turnoDet.salida1 && turnoDet.entrada2) {
 			
 				if(it.salida1 && it.entrada2) {
-					LocalTime salida=LocalTime.fromDateFields(it.salida1)
-					LocalTime entrada=LocalTime.fromDateFields(it.entrada2)
+					Date salida=it.salida1
+					Date entrada=it.entrada2
+
+					calendar.setTime(entrada) 
+					def entradaMinute=(calendar.get(Calendar.HOUR_OF_DAY)*60)+calendar.get(Calendar.MINUTE);
+					calendar.setTime(salida) 
+					def salidaMinute=(calendar.get(Calendar.HOUR_OF_DAY)*60)+calendar.get(Calendar.MINUTE);
 					
-					def tiempoDeComida=( ((entrada.getHourOfDay()*60)+entrada.getMinuteOfHour()) - ((salida.getHourOfDay()*60)+salida.getMinuteOfHour()) )
+					//def tiempoDeComida=( ((entrada.getHourOfDay()*60)+entrada.getMinuteOfHour()) - ((salida.getHourOfDay()*60)+salida.getMinuteOfHour()) )
+					def tiempoDeComida=entradaMinute-salidaMinute
 					def retardoComida=tiempoDeComida-60
 					
 					/* Modificacion del 27 Julio de 2016 SE QUITA EL RETRASO MENOR COMIDA
@@ -317,10 +330,10 @@ class AsistenciaService {
 			
 			
 			
-			LocalTime salidaOficial=turnoDet.salida2?:turnoDet.salida1
+			Date salidaOficial=turnoDet.salida2?:turnoDet.salida1
 			
 			if(diaFestivo && diaFestivo.parcial){
-				salidaOficial=LocalTime.fromDateFields(diaFestivo.salida)
+				salidaOficial=diaFestivo.salida
 			}
 			
 			if(salidaOficial){
@@ -336,12 +349,19 @@ class AsistenciaService {
 					
 					
 				if(salidaRegistrada){
-					
-					LocalTime salida=LocalTime.fromDateFields(salidaRegistrada)
-					def horas=salidaOficial.getHourOfDay()- salida.getHourOfDay()
-					def minutos=salidaOficial.getMinuteOfHour() - salida.getMinuteOfHour()		
 
-					def salidaAnticipada=horas*60+minutos
+					Date salida=salidaRegistrada
+
+					calendar.setTime(salidaOficial) 
+					def salidaOficialMinute=(calendar.get(Calendar.HOUR_OF_DAY)*60)+calendar.get(Calendar.MINUTE);
+					calendar.setTime(salida) 
+					def salidaMinute=(calendar.get(Calendar.HOUR_OF_DAY)*60)+calendar.get(Calendar.MINUTE);
+
+				//	def horas=salidaOficial.getHourOfDay()- salida.getHourOfDay()
+				//	def minutos=salidaOficial.getMinuteOfHour() - salida.getMinuteOfHour()		
+
+				//	def salidaAnticipada=horas*60+minutos
+					def salidaAnticipada=salidaOficialMinute-salidaMinute
 					
 					if(salidaRegistradaFaltante!=null && salidaAnticipada>0){
 					it.minutosNoLaborados+=salidaAnticipada

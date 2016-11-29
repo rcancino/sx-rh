@@ -2,19 +2,18 @@ package com.luxsoft.sw4.rh
 
 
 //import groovy.time.Duration
-import org.joda.time.LocalTime
-import org.jadira.usertype.dateandtime.joda.*
+
 
 
 class TurnoDet {
 
 	String dia
 
-	LocalTime entrada1
-	LocalTime salida1
+	Date entrada1
+	Date salida1
 	
-	LocalTime entrada2
-	LocalTime salida2
+	Date entrada2
+	Date salida2
 	
 	BigDecimal horasDeTrabajo
 	
@@ -30,10 +29,7 @@ class TurnoDet {
     }
 
     static mapping = {
-    	entrada1 type: PersistentLocalTime
-    	salida1 type: PersistentLocalTime
-    	entrada2 type: PersistentLocalTime
-    	salida2 type: PersistentLocalTime
+    	
     }
 	
 	static transients = ['horasDeTrabajo']
