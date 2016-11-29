@@ -29,7 +29,10 @@ class TurnoDet {
     }
 
     static mapping = {
-    	
+    	entrada1 type:'time'
+    	entrada2 type:'time'
+    	salida1 type:'time'
+    	salida2 type:'time'
     }
 	
 	static transients = ['horasDeTrabajo']
@@ -38,7 +41,7 @@ class TurnoDet {
 		if(horasDeTrabajo==null){
 			def ini=entrada1
 			def fin=salida2?:salida1
-			def res=fin.getLocalMillis()-ini.getLocalMillis()
+			def res=fin.getTime()-ini.getTime()
 			horasDeTrabajo=(res/(1000*60*60) as BigDecimal)
 		}
 		return horasDeTrabajo

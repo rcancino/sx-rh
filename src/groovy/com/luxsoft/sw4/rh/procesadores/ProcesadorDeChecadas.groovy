@@ -18,7 +18,8 @@ class ProcesadorDeChecadas {
 	
 	
 	def registrarChecadas(Asistencia asistencia) {
-		
+			
+		println( 'Registrando checadas....')
 		def empleado=asistencia.empleado
 		def turno=empleado.perfil.turno
 		assert turno,"El empleado ${empleado} debe tener un turno asignado"
@@ -30,10 +31,8 @@ class ProcesadorDeChecadas {
 			def sdia=Dias.toNombre(it.fecha)
 			TurnoDet turnoDet=turnosMap[sdia]
 			assert turnoDet,"Se requiere turno para ${sdia}"
-
-			
-	
 			it.turnoDet=turnoDet
+			
 			if(turnoDet.entrada1){
 				Date ini=turnoDet.entrada1
 				Date fin=turnoDet.salida2?:turnoDet.salida1
@@ -42,18 +41,14 @@ class ProcesadorDeChecadas {
 				calendar.setTime(fin)
 				def finMillis=calendar.getTimeInMillis()
 				def res=finMillis-iniMillis
-			//	println "Ini millis:  "+iniMillis +"--"+"Fin millis:  "+finMillis +" res: "+res
-
-				
-				//Duration duration=new Duration(turnoDet.entrada1.get)
 				it.horasTrabajadas=(res/(1000*60*60) as BigDecimal)
 				
 			}
 			
 			def lecturas=buscarLecturas(empleado,it.fecha)
-			def row=1
-			log.debug "Lecturas detectadas ${lecturas.size()} para empleado: ${empleado} fecha:${it.fecha}"
-			lecturas.each{lec->
+			def row = 1
+			println " Lecturas detectadas ${lecturas.size()} para empleado: ${empleado} fecha:${it.fecha}"
+			lecturas.each{ lec ->
 				if(!it.manual)
 					resolverChecada(turnoDet,it,lec,row++)
 			}
@@ -62,11 +57,9 @@ class ProcesadorDeChecadas {
 	}
 	
 	def resolverChecada(TurnoDet t,AsistenciaDet ad,Checado chk,int row) {
-		
-		
-		
+		println 'Asignando lecturas.....'
 		def time=new Time(chk.hora.time)
-		def lectura=chk.hora
+		def lectura = chk.hora
 		
 		def festivo=DiaFestivo.findByFecha(ad.fecha)
 		
@@ -77,19 +70,20 @@ class ProcesadorDeChecadas {
 			}
 		}
 		
-		if(t.entrada1==null || t.salida1==null) { // Descanso
+		if(t.entrada1==null || t.salida1 == null) { // Descanso
 			ad.tipo='DESCANSO'
 			return 
 		}
 		
 		//Dia festivo parcial
 		if(festivo && festivo.parcial){
-			def salidaFestivo=Date.fromDateFields(festivo.salida)
+			//def salidaFestivo=Date.fromDateFields(festivo.salida)
+			def salidaFestivo=festivo.salida
 			if(lectura<salidaFestivo) {
 				ad.entrada1=time
 				return
 			}
-			if(lectura>=salidaFestivo) {
+			if(lectura >= salidaFestivo) {
 				ad.salida1=time
 				return
 			}
@@ -104,14 +98,17 @@ class ProcesadorDeChecadas {
 			}
 			if(lectura>=t.salida1) {
 				ad.salida1=time
+				println "Salida 1: $time"
 				return
 			}
 			
 			if(ad.entrada1){
 				Date checado=ad.entrada1
-				def dif=( ((lectura.getHourOfDay()*60)+lectura.getMinuteOfHour()) - ((checado.getHourOfDay()*60)+checado.getMinuteOfHour()) )
-				if(dif>60){
+				def dif = (lectura.getTime() - checado.getTime() ) / (1000 * 60)
+				//def dif=( ((lectura.getHourOfDay()*60)+lectura.getMinuteOfHour()) - ((checado.getHourOfDay()*60)+checado.getMinuteOfHour()) )
+				if(dif > 60 ) {
 					ad.salida1=time
+					println "Salida 1: $ad.salida1"
 				}
 				
 			}
@@ -119,22 +116,23 @@ class ProcesadorDeChecadas {
 		}
 		
 		// Jornada Normal	
-		if(lectura<t.salida1) {
-			ad.entrada1=time
+		if(lectura < t.salida1) {
+			ad.entrada1 = time
+			println "Entrada 1: $ad.entrada1"
 			return
 		}
-		if(lectura>=t.salida2 || (row==4)) {
+		println 'Asignando salida2.....'
+		if( lectura >= t.salida2 || (row==4)) {
 			ad.salida2=time
+			println "Salida 2:  ${ad.salida2}"
 			return
 		}
 		
 		if(lectura>t.salida1 && lectura<t.entrada2) {
-			
 			if(ad.salida1==null) {
 				ad.salida1=time
 				return
 			}
-			
 		}
 		
 		if(ad.salida1!=null) {
@@ -144,12 +142,7 @@ class ProcesadorDeChecadas {
 			}
 		}
 		
-		
-		
 	}
-	
-	
-	
 	
 	
 	def buscarLecturas(Empleado e,Date fecha) {

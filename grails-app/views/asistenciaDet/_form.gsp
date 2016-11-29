@@ -1,9 +1,7 @@
-<r:require module="mask"/>
-
 
 <g:form class="form-horizontal" action="update">
 <div class="row">
-<div class="col-md-8">	
+<div class="col-md-10">	
 		<g:hiddenField name="id" value="${asistenciaDetInstance.id}" />
 	
 		<f:with bean="${asistenciaDetInstance }">
@@ -23,6 +21,7 @@
 			<f:field property="cancelarIncentivo"/>
 			<f:field property="pagarTiempoExtra"/>
 			<f:field property="excentarChecadas"/>
+			<f:display property="comentario"/>
 			
 		</f:with>
 </div>

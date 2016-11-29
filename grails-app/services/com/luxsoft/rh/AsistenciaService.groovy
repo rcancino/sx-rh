@@ -45,7 +45,7 @@ class AsistenciaService {
 	
 
 
-	@NotTransactional
+	@Transactional
     def actualizarAsistencia(Asistencia asistencia){
     	def calendarioDet=asistencia.calendarioDet
     	def empleado=asistencia.empleado
@@ -55,7 +55,7 @@ class AsistenciaService {
     	actualizarAsistencia(empleado,tipo,calendarioDet)
     }
 
-    @NotTransactional
+    @Transactional
 	def actualizarAsistencia(CalendarioDet calendarioDet){
 		assert(calendarioDet)
 		def tipo=calendarioDet.calendario.tipo=='SEMANA'?'SEMANAL':'QUINCENAL'
@@ -77,11 +77,10 @@ class AsistenciaService {
 		}
 	}
 	
-	@NotTransactional
+	@Transactional
 	def actualizarAsistencia(Empleado empleado,String tipo,CalendarioDet cal) {
 		
 		def periodo=cal.asistencia
-		//def periodo=new Periodo("07/07/2014","13/07/2014")
 		
 		log.info "Actualizando asistencias ${empleado} ${periodo}"
 		
@@ -99,17 +98,15 @@ class AsistenciaService {
 			log.debug 'Generando registro nuevo de asistencia para '+empleado+" Periodo: "+cal.asistencia
 			asistencia=new Asistencia(empleado:empleado,tipo:tipo,periodo:periodo,calendarioDet:cal)
 		}
-		//println 'Dias trabajados: '+asistencia.diasTrabajados
+		
 		if(asistencia.diasTrabajados){
 			return asistencia
 		}
-		
-		//for(date in periodo.fechaInicial..periodo.fechaFinal){
+
 		List dias=periodo.getListaDeDias()
 		
 		dias.each{ date->
-			//log.info 'Genrando asistencia det para: '+date
-			//println 'Agregando asistenciadet para: '+date
+			
 			if(date>=empleado.alta){
 				def asistenciaDet=asistencia.partidas.find(){det->
 					DateUtils.isSameDay(det.fecha, date)
@@ -127,15 +124,13 @@ class AsistenciaService {
 					}
 				}
 			}
-			
-			
 		}
 		
 		//Buscar vacaciones de cierre anual
 		def calendarioFinal=CalendarioDet
 			.executeQuery("select max(c.folio) from CalendarioDet c where c.calendario.tipo=? and c.calendario.ejercicio=? and c.calendario.comentario like ? and c.folio!=108"
 				,[empleado.salario.periodicidad=='SEMANAL'?'SEMANA':'QUINCENA',cal.calendario.ejercicio,'%NOMINA%']) 
-		//println 'Calendario id: '+calendarioFinal.get(0)
+		
 		if(calendarioFinal.get(0) ==cal.folio){
 			def ejercicio=cal.calendario.ejercicio
 			def cierre=Vacaciones.executeQuery("from Vacaciones v where v.empleado=? and  year(v.solicitud)=? and cierreAnual=true",[empleado,ejercicio])
@@ -146,9 +141,7 @@ class AsistenciaService {
 						def asistenciaDet=new AsistenciaDet(fecha:dia,ubicacion:empleado.perfil.ubicacion,tipo:'VACACIONES')
 						asistencia.addToPartidas(asistenciaDet)
 					}
-					
 				}
-				
 			}
 		}
 		
@@ -157,8 +150,8 @@ class AsistenciaService {
 			def diasPagados=periodoPago.getListaDeDias().size()
 			asistencia.diasTrabajados=diasPagados
 		}
-		procesadorDeChecadas.registrarChecadas(asistencia)
 		
+		procesadorDeChecadas.registrarChecadas(asistencia)
 		recalcularRetardos(asistencia)
 		incapacidadService.procesar(asistencia)
 		vacacionesService.procesar(asistencia)
@@ -190,7 +183,6 @@ class AsistenciaService {
 		
 		asistencia.save failOnError:true
 		return asistencia
-		
 	}
 	
 	@NotTransactional
@@ -285,18 +277,10 @@ class AsistenciaService {
 					calendar.setTime(salida) 
 					def salidaMinute=(calendar.get(Calendar.HOUR_OF_DAY)*60)+calendar.get(Calendar.MINUTE);
 					
-					//def tiempoDeComida=( ((entrada.getHourOfDay()*60)+entrada.getMinuteOfHour()) - ((salida.getHourOfDay()*60)+salida.getMinuteOfHour()) )
+					
 					def tiempoDeComida=entradaMinute-salidaMinute
 					def retardoComida=tiempoDeComida-60
 					
-					/* Modificacion del 27 Julio de 2016 SE QUITA EL RETRASO MENOR COMIDA
-					if(retardoComida>0) {
-						if(retardoComida<=10){
-							it.retardoMenorComida=retardoComida
-						}else
-							it.retardoComida=retardoComida
-					}
-					*/
 					it.retardoMenorComida=0 // Modificacion del 27 Julio de 2016 TODO  A RETARDO COMIDA
 					it.retardoComida=retardoComida < 0 ? 0 : retardoComida
 				}
@@ -395,10 +379,12 @@ class AsistenciaService {
 	@NotTransactional
 	@Listener(namespace='gorm')
 	def afterUpdate(AsistenciaDet det){
-		log.info 'Modificacion manual en asistencia det: '+det
+		println 'Modificacion manual en asistencia det.....: '+det
+		/*
 		def calendarioDet=det.asistencia.calendarioDet
 		def tipo=calendarioDet.calendario.tipo=='SEMANA'?'SEMANAL':'QUINCENAL'
 		actualizarAsistencia(det.asistencia.empleado,tipo,calendarioDet)
+		*/
 	}
 
 	
