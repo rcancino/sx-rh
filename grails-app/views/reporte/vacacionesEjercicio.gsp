@@ -23,7 +23,7 @@
 			<fieldset>
 				<legend> Parámetros</legend>
 				<f:with bean="${reportCommand}">
-					<f:field property="ejercicio" input-class="form-control"/>
+					<f:field property="ejercicio" widget-class="form-control"/>
 				</f:with>
 			</fieldset>
 			<div class="form-group">

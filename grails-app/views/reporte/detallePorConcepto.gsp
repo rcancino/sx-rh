@@ -1,3 +1,4 @@
+<%@ page import="com.luxsoft.sw4.*" %>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -15,17 +16,27 @@
                 <g:renderErrors bean="${reportCommand}" as="list" />
             </div>
         </g:hasErrors>
-		<div class="col-sm-6">
+		<div class="col-sm-8">
 		
 		<g:form action="detallePorConcepto" class="form-horizontal">
 			<g:hiddenField name="reportName" value="DetallePorConcepto"/>
 			<fieldset>
 				<legend> Parámetros</legend>
-				<div class="form-group">
+				<f:with bean="${reportCommand}">
+					<f:field property="nomina">
+						<g:select class="form-control"  
+						name="nomina"
+						from="${com.luxsoft.sw4.rh.Nomina.where{ejercicio == session.ejercicio}.list().sort{it.periodicidad}}" 
+						optionKey="id" 
+						optionValue="${{it.ejercicio+' '+it.periodicidad+' '+it.folio+' '+it.tipo+' '+it.formaDePago}}"/>
+					</f:field>
+					<f:field property="concepto"/>
+				</f:with>
+				%{-- <div class="form-group">
 					<label class="col-sm-2 control-label">Nómina</label>
 					<g:select class="form-control"  
 						name="nomina"
-						from="${com.luxsoft.sw4.rh.Nomina.findAll().sort{it.periodicidad}}" 
+						from="${com.luxsoft.sw4.rh.Nomina.where{ejercicio == session.ejercicio}.list().sort{it.periodicidad}}" 
 						optionKey="id" 
 						optionValue="${{it.ejercicio+' '+it.periodicidad+' '+it.folio+' '+it.tipo+' '+it.formaDePago}}"
 							
@@ -39,7 +50,7 @@
 						optionKey="id"
 							
 					/>
-				</div>
+				</div> --}%
 			</fieldset>
 			<div class="form-group">
 		    	<div class="col-sm-offset-2 col-sm-3">
