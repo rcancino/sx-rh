@@ -261,7 +261,7 @@ class ReporteController {
 	
 	def detallePorConcepto(DetallePorConceptoCommand command){
 		if(request.method=='GET'){
-			return [reportCommand:new DetallePorConceptoCommand(ejercicio: session.ejercicio)]
+			return [reportCommand:new DetallePorConceptoCommand()]
 		}
 		command.validate()
 		if(command.hasErrors()){
