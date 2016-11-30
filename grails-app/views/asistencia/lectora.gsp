@@ -22,9 +22,7 @@
 		       	</button>
 		       	
 		       		
-	       		<button class="btn btn-default btn-outline" data-toggle="modal" data-target="#cargaPeriodoForm">
-	       			<span class="glyphicon glyphicon-refresh"></span> Cargar
-	       		</button>
+	       		%{-- <lx:refreshButton action="lectora"/> --}%
 		       		
 	     		<g:link class="btn btn-default btn-outline" action="eliminarRegistrosLectora">
 	     			<span class="glyphicon glyphicon-trash"></span> Eliminar

@@ -85,7 +85,7 @@ class AsistenciaController {
 		def periodo=session.periodoDeLecturas
 		if(!periodo){
 			periodo=new Periodo()
-			session.periodoDeLEcturas=periodo
+			session.periodoDeLecturas=periodo
 		}
 		def query=Checado.where{fecha>=periodo.fechaInicial &&
 			fecha<=periodo.fechaFinal
@@ -99,7 +99,8 @@ class AsistenciaController {
 		redirect action:'lectora'
 	}
 	
-	def importarLecturas(Periodo periodo){
+	def importarLecturas(){
+		def periodo = session.periodoDeLecturas
 		checadoService.importarLecturas(periodo)
 		session.periodoDeLecturas=periodo
 		redirect action:'lectora'
