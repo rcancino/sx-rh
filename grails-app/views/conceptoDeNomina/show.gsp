@@ -20,6 +20,7 @@
 				<f:display property="claveSat" widget-class="form-control" />
 				<f:display property="tipo" widget-class="form-control" />
 				<f:display property="general" widget-class="form-control" />
+				<f:display property="clase" widget-class="form-control" />
 			</f:with>
 			
 		</content>
