@@ -40,7 +40,7 @@ beans = {
 	switch(Environment.current){
 			case Environment.PRODUCTION:
 				cfdiTimbrador(CfdiTimbrador){
-					timbradoDePrueba=true
+					timbradoDePrueba = false
 				}
 				break
 			case Environment.DEVELOPMENT:
