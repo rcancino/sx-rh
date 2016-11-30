@@ -19,8 +19,8 @@
 
 		</div>
 		<div class="col-md-4">
-			<li>Ret Menor:    <strong> ${asistenciaInstance.retardoMenorComida}</strong></li>
-			<li>Ret men com:  <strong> ${asistenciaInstance.retardoComida}</strong></li>
+			<li>Retardo:    <strong> ${asistenciaInstance.retardoMayor}</strong></li>
+			<li>Retardo comida:  <strong> ${asistenciaInstance.retardoComida}</strong></li>
 			<li>Minutos NL:   <strong> ${asistenciaInstance.minutosNoLaborados} </strong></li>
 		</div>
 
