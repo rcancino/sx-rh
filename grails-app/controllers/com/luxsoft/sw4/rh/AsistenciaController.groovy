@@ -102,7 +102,12 @@ class AsistenciaController {
 	def importarLecturas(){
 		def periodo = session.periodoDeLecturas
 		checadoService.importarLecturas(periodo)
-		session.periodoDeLecturas=periodo
+		redirect action:'lectora'
+	}
+
+	def eliminarRegistrosLectora(){
+		def periodo = session.periodoDeLecturas
+		checadoService.eliminarLecturas(periodo)
 		redirect action:'lectora'
 	}
 

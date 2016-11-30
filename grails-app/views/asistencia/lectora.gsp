@@ -24,7 +24,8 @@
 		       		
 	       		%{-- <lx:refreshButton action="lectora"/> --}%
 		       		
-	     		<g:link class="btn btn-default btn-outline" action="eliminarRegistrosLectora">
+	     		<g:link class="btn btn-default btn-outline" action="eliminarRegistrosLectora" 
+	     		onclick="return confirm('Eliminar registros de checado del periodo ' );">
 	     			<span class="glyphicon glyphicon-trash"></span> Eliminar
 	     		</g:link>
 		    </div>	
