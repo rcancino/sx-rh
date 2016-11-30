@@ -165,7 +165,7 @@ log4j.main = {
         debug 'com.luxsoft.econta.polizas'
         info 'grails.app.services.com.luxsoft.sw4'
         info 'grails.app.services.com.luxsoft.rh'
-        info 'grails.app.services.com.luxsoft.rh.AsistenciaService'
+        debug 'grails.app.services.com.luxsoft.rh.AsistenciaService'
         info 'grails.app.services.com.luxsoft.rh.IncentivoService'
         info 'grails.app.services.com.luxsoft.rh.NominaService'
         info 'grails.app.services.com.luxsoft.sw4.rh.IncentivoService'

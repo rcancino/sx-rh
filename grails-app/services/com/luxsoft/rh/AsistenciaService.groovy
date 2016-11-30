@@ -43,7 +43,21 @@ class AsistenciaService {
 	
 	def vacacionesService
 	
-
+	@Transactional
+	def actualizarAsistencia(CalendarioDet calendarioDet){
+		assert(calendarioDet)
+		def tipo=calendarioDet.calendario.tipo=='SEMANA'?'SEMANAL':'QUINCENAL'
+		
+		def empleados=Empleado.findAll(
+			"from Empleado e where e.salario.periodicidad=? order by e.perfil.ubicacion.clave,e.apellidoPaterno asc",[tipo])
+		
+		log.info ("Actualizando asistencia de ${empleados.size()} empleados")
+		
+		empleados.each{ empleado ->
+			actualizarAsistencia(empleado,tipo,calendarioDet)		
+		}
+		
+	}
 
 	@Transactional
     def actualizarAsistencia(Asistencia asistencia){
@@ -55,34 +69,14 @@ class AsistenciaService {
     	actualizarAsistencia(empleado,tipo,calendarioDet)
     }
 
-    @Transactional
-	def actualizarAsistencia(CalendarioDet calendarioDet){
-		assert(calendarioDet)
-		def tipo=calendarioDet.calendario.tipo=='SEMANA'?'SEMANAL':'QUINCENAL'
-		
-		
-		def empleados=Empleado.findAll(
-			"from Empleado e where e.salario.periodicidad=? order by e.perfil.ubicacion.clave,e.apellidoPaterno asc",[tipo])
-		
-		
-		empleados.each{ empleado ->
-			try {
-				actualizarAsistencia(empleado,tipo,calendarioDet)		
-			} catch (Exception ex) {
-			   ex.printStackTrace()
-				
-				def msg=ExceptionUtils.getRootCauseMessage(ex)
-				log.error "Error actualizando asistencia $msg  $empleado"
-			}
-		}
-	}
+    
 	
 	@Transactional
 	def actualizarAsistencia(Empleado empleado,String tipo,CalendarioDet cal) {
 		
 		def periodo=cal.asistencia
 		
-		log.info "Actualizando asistencias ${empleado} ${periodo}"
+		
 		
 		def asistencia =Asistencia.find(
 				"from Asistencia a where a.empleado=? and a.calendarioDet=?"
@@ -90,14 +84,17 @@ class AsistenciaService {
 		
 		boolean valid=validarEmpleado(empleado,cal,asistencia)
 		if(!valid){
-			log.debug 'Empleado no valido para control de asistencias '+empleado
+			//log.debug 'Empleado no valido para control de asistencias '+empleado
 			return
 		}
 
 		if(!asistencia) {
 			log.debug 'Generando registro nuevo de asistencia para '+empleado+" Periodo: "+cal.asistencia
 			asistencia=new Asistencia(empleado:empleado,tipo:tipo,periodo:periodo,calendarioDet:cal)
+		}else{
+			log.debug "Actualizando asistencias ${empleado} ${periodo}"
 		}
+		
 		
 		if(asistencia.diasTrabajados){
 			return asistencia
@@ -185,7 +182,7 @@ class AsistenciaService {
 		return asistencia
 	}
 	
-	@NotTransactional
+	
 	def boolean validarEmpleado(Empleado empleado,CalendarioDet calendarioDet,Asistencia asistencia){
 		
 		def asistenciaInicial=calendarioDet.asistencia.fechaInicial
@@ -215,10 +212,10 @@ class AsistenciaService {
 	}
 
 	
-	@NotTransactional
+	
 	def recalcularRetardos(Asistencia asistencia) {
 		//DateTimeZone.setDefault(DateTimeZone.forTimeZone(TimeZone.getDefault()));
-		log.info 'Recalculando retardos para: '+asistencia.empleado+"  Periodo: "+asistencia.periodo
+		//log.info 'Recalculando retardos para: '+asistencia.empleado+"  Periodo: "+asistencia.periodo
 		def retardoMenor=0
 		asistencia.faltas=0
 		asistencia.partidas.each{ it-> //Iteracion dia por dia

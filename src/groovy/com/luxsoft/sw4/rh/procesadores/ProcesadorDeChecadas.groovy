@@ -18,8 +18,6 @@ class ProcesadorDeChecadas {
 	
 	
 	def registrarChecadas(Asistencia asistencia) {
-			
-		println( 'Registrando checadas....')
 		def empleado=asistencia.empleado
 		def turno=empleado.perfil.turno
 		assert turno,"El empleado ${empleado} debe tener un turno asignado"
@@ -47,7 +45,7 @@ class ProcesadorDeChecadas {
 			
 			def lecturas=buscarLecturas(empleado,it.fecha)
 			def row = 1
-			println " Lecturas detectadas ${lecturas.size()} para empleado: ${empleado} fecha:${it.fecha}"
+			log.debug " Lecturas detectadas ${lecturas.size()} para empleado: ${empleado} fecha:${it.fecha}"
 			lecturas.each{ lec ->
 				if(!it.manual)
 					resolverChecada(turnoDet,it,lec,row++)
@@ -57,7 +55,7 @@ class ProcesadorDeChecadas {
 	}
 	
 	def resolverChecada(TurnoDet t,AsistenciaDet ad,Checado chk,int row) {
-		println 'Asignando lecturas.....'
+		
 		def time=new Time(chk.hora.time)
 		def lectura = chk.hora
 		
@@ -98,7 +96,7 @@ class ProcesadorDeChecadas {
 			}
 			if(lectura>=t.salida1) {
 				ad.salida1=time
-				println "Salida 1: $time"
+				
 				return
 			}
 			
@@ -108,7 +106,7 @@ class ProcesadorDeChecadas {
 				//def dif=( ((lectura.getHourOfDay()*60)+lectura.getMinuteOfHour()) - ((checado.getHourOfDay()*60)+checado.getMinuteOfHour()) )
 				if(dif > 60 ) {
 					ad.salida1=time
-					println "Salida 1: $ad.salida1"
+					
 				}
 				
 			}
@@ -118,13 +116,13 @@ class ProcesadorDeChecadas {
 		// Jornada Normal	
 		if(lectura < t.salida1) {
 			ad.entrada1 = time
-			println "Entrada 1: $ad.entrada1"
+			
 			return
 		}
-		println 'Asignando salida2.....'
+		
 		if( lectura >= t.salida2 || (row==4)) {
 			ad.salida2=time
-			println "Salida 2:  ${ad.salida2}"
+			
 			return
 		}
 		
@@ -136,7 +134,7 @@ class ProcesadorDeChecadas {
 		}
 		
 		if(ad.salida1!=null) {
-			//println "Evaluando ${ad.fecha.format('EEEE-MM')} Turno ${t.entrada1} - ${t.salida1}   ${t.entrada2} - ${t.salida2}"
+			
 			if(lectura>t.salida1) {
 				ad.entrada2=time
 			}

@@ -16,7 +16,7 @@ class ProcesadorDeChecadasFaltantes {
 	
 	
 	def procesar(Asistencia asistencia) {
-		log.info 'Procesando checadas faltantes para: '+asistencia.empleado+"  Periodo: "+asistencia.periodo
+		log.debug 'Procesando checadas faltantes para: '+asistencia.empleado+"  Periodo: "+asistencia.periodo
 		asistencia.partidas.findAll{it.tipo=='ASISTENCIA'}.each{ it -> //Iteracion dia por dia
 		//asistencia.partidas.each{ it -> //Iteracion dia por dia
 
@@ -52,20 +52,20 @@ class ProcesadorDeChecadasFaltantes {
 			int faltantes = checadasRequeridas - checadas
 			
 			if(faltantes == 0){
-				log.info("${it.fecha.text()}  ASISTENCIA Checadas faltantes:  $faltantes ")
+				//log.debug("${it.fecha.text()}  ASISTENCIA Checadas faltantes:  $faltantes ")
 				
 				it.tipo = tipo
 				//it.comentario = ''
 
 			} else if(faltantes > maximosPermitidas){
-				log.info("${it.fecha.text()}  FALTA Checadas faltantes:  $faltantes   Maximos permitidas: $maximosPermitidas")
+				//log.debug("${it.fecha.text()}  FALTA Checadas faltantes:  $faltantes   Maximos permitidas: $maximosPermitidas")
 				it.comentario="FALTA POR ${faltantes} CHECADAS FALTANTES "
 				it.tipo='FALTA'
 			} else {
 				//log.info " Procesando minutos no laborados por ${faltantes} checadas faltantes"
 				actualizarMinutosNolaborados(it,faltantes)
 			}
-			it.save failOnError:true
+			
 		}
 		asistencia.minutosNoLaborados=asistencia.partidas.sum 0,{it.minutosNoLaborados}
 		return asistencia
