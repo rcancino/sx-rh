@@ -53,7 +53,7 @@
     					<label for="fechaIni" class="col-sm-3">Fecha inicial</label>
     					<div class="col-sm-9">
     						<input type="text" class="form-control  date" id="fechaIni" name="fechaInicial" 
-    							value="${g.formatDate(date:periodo.fechaInicial,format:'dd/MM/yyyy') }">
+    							value="${g.formatDate(date:periodo.fechaInicial,format:'dd/MM/yyyy') }" disabled>
     					</div>
   					</div>
   					
@@ -61,7 +61,7 @@
     					<label for="fechaFin" class="col-sm-3">Fecha final</label>
     					<div class="col-sm-9" >
     						<input type="text" class="form-control date" id="fechaFin" name="fechaFinal" 
-    							value="${g.formatDate(date:periodo.fechaFinal,format:'dd/MM/yyyy') }">
+    							value="${g.formatDate(date:periodo.fechaFinal,format:'dd/MM/yyyy') }" disabled>
     					</div>
   					</div>
   					

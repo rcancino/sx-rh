@@ -103,19 +103,17 @@ environments {
         grails.logging.jul.usebridge = true
         grails.plugin.springsecurity.debug.useFilter = true
         grails.plugin.springsecurity.active = true
+        sw4.rh.asistencia.rawdata="Y://NOMIPLUS//RAWDATA"
     }
     production {
         grails.logging.jul.usebridge = false
-        //grails.app.context = '/paperx2'
-        // TODO: grails.serverURL = "http://www.changeme.com"
+        sw4.rh.asistencia.rawdata="/mnt/RAWDATA/NOMIPLUS/RAWDATA"
     }
     test{
         grails.plugin.springsecurity.debug.useFilter = false
         grails.plugin.springsecurity.active = false
     }
-    impapx {
-      //grails.app.context = '/impapx'
-    }
+    
 }
 
 
@@ -231,6 +229,8 @@ grails.plugin.springsecurity.failureHandler.exceptionMappings = [
    'org.springframework.security.authentication.CredentialsExpiredException': '/usuario/passwordExpired'
 ]
 grails.plugin.springsecurity.apf.storeLastUsername=true
+
+
 
 proveedorOrigenParaCompras=42
 environments{
