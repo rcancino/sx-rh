@@ -35,8 +35,7 @@
 from  empleado e   JOIN  perfil_de_empleado P ON (P.empleado_id=E.ID) JOIN ubicacion U ON (U.ID=P.ubicacion_id)
 join nomina_por_empleado ne on (e.id=ne.empleado_id)  join nomina n on (n.id=ne.nomina_id)
 join modificacion_salarial m on (e.id=m.empleado_id)
-where periodicidad='SEMANAL' 
-AND n.id=$P{NOMINA_ID}
+where n.id=$P{NOMINA_ID}
 and m.tipo IN ('ALTA','AUMENTO')
 AND M.FECHA BETWEEN N.periodo_fecha_inicial AND n.periodo_fecha_final
 ORDER BY U.ID,E.CLAVE]]></queryString>
