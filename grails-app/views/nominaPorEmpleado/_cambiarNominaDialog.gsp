@@ -1,8 +1,9 @@
-<%@page expressionCodec="none"%>
-<g:form action="edit" class="form-horizontal numeric-form" >
+
+
 <div class="modal fade" id="cambiarNominaDialog" tabindex="-1" >
 	<div class="modal-dialog">
 		<div class="modal-content">
+			<g:form action="edit" class="form-horizontal numeric-form" >
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"
 				aria-hidden="true">&times;</button>
@@ -27,12 +28,12 @@
 				<g:submitButton class="btn btn-primary" name="update" value="Buscar"/>
 			</div>
 	
-				
+			</g:form>	
 		</div> <!-- moda-content -->
 	</div> <!-- modal-dialog -->
 </div> <!-- .modal  -->
 
-</g:form>
+
 <script type="text/javascript">
 	$(function(){
 		$("#empleadoField").autocomplete({

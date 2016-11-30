@@ -103,7 +103,8 @@ environments {
         grails.logging.jul.usebridge = true
         grails.plugin.springsecurity.debug.useFilter = true
         grails.plugin.springsecurity.active = true
-        sw4.rh.asistencia.rawdata="Y://NOMIPLUS//RAWDATA"
+        //sw4.rh.asistencia.rawdata="Y://NOMIPLUS//RAWDATA"
+        sw4.rh.asistencia.rawdata="/Users/rcancino/dumps/rh/RAWDATA"
     }
     production {
         grails.logging.jul.usebridge = false

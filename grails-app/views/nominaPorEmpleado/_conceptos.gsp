@@ -6,9 +6,10 @@
 			<th>Concepto</th>
 			<th>Gravado</th>
 			<th>Excento</th>
-			<g:if test="${!nominaPorEmpleadoInstance.cfdi}">
+			
 			<th></th>
 			%{-- <th></th> --}%
+			<g:if test="${!nominaPorEmpleadoInstance.cfdi}">
 			<th></th>
 			</g:if>
 		</tr>
@@ -26,7 +27,7 @@
 				</td>
 				<td class="text-right"><g:formatNumber number="${it.importeGravado}" format="#,###,###.##" minFractionDigits="2"/></td>
 				<td class="text-right"><g:formatNumber number="${it.importeExcento}" format="#,###,###.##" minFractionDigits="2"/></td>
-				<g:if test="${!nominaPorEmpleadoInstance.cfdi}">
+				
 				<td>
 					<a  data-target="#conceptoInfoDialog" data-toggle="modal"
 						data-url="${g.createLink(action:'informacionDeConcepto',id:it.id)}">
@@ -49,12 +50,13 @@
 					</g:link>
 					
 				</td> --}%
-				<td class="text-center">
-					<g:link action="eliminarConcepto" id="${it.id}" data-toggle="tooltip"  title="Eliminar concepto"
-						onclick="return confirm('Eliminar concepto?')">
-						<span class="glyphicon glyphicon-trash"></span>
-					</g:link>
-				</td>
+				<g:if test="${!nominaPorEmpleadoInstance.cfdi}">
+					<td class="text-center">
+						<g:link action="eliminarConcepto" id="${it.id}" data-toggle="tooltip"  title="Eliminar concepto"
+							onclick="return confirm('Eliminar concepto?')">
+							<span class="glyphicon glyphicon-trash"></span>
+						</g:link>
+					</td>
 				</g:if>
 			</tr>
 		</g:findAll>
