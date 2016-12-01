@@ -23,8 +23,7 @@ import com.luxsoft.sw4.rh.CalendarioDet
 
 import org.apache.commons.lang.exception.ExceptionUtils
 import org.apache.commons.lang.time.DateUtils;
-import org.joda.time.LocalTime
-import org.joda.time.DateTimeZone
+
 import com.luxsoft.sw4.rh.Vacaciones
 
 import grails.events.Listener
@@ -44,9 +43,23 @@ class AsistenciaService {
 	
 	def vacacionesService
 	
+	@Transactional
+	def actualizarAsistencia(CalendarioDet calendarioDet){
+		assert(calendarioDet)
+		def tipo=calendarioDet.calendario.tipo=='SEMANA'?'SEMANAL':'QUINCENAL'
+		
+		def empleados=Empleado.findAll(
+			"from Empleado e where e.salario.periodicidad=? order by e.perfil.ubicacion.clave,e.apellidoPaterno asc",[tipo])
+		
+		log.info ("Actualizando asistencia de ${empleados.size()} empleados")
+		
+		empleados.each{ empleado ->
+			actualizarAsistencia(empleado,tipo,calendarioDet)		
+		}
+		
+	}
 
-
-	@NotTransactional
+	@Transactional
     def actualizarAsistencia(Asistencia asistencia){
     	def calendarioDet=asistencia.calendarioDet
     	def empleado=asistencia.empleado
@@ -56,36 +69,14 @@ class AsistenciaService {
     	actualizarAsistencia(empleado,tipo,calendarioDet)
     }
 
-    @NotTransactional
-	def actualizarAsistencia(CalendarioDet calendarioDet){
-		assert(calendarioDet)
-		def tipo=calendarioDet.calendario.tipo=='SEMANA'?'SEMANAL':'QUINCENAL'
-		
-		
-		def empleados=Empleado.findAll(
-			"from Empleado e where e.salario.periodicidad=? order by e.perfil.ubicacion.clave,e.apellidoPaterno asc",[tipo])
-		
-		
-		empleados.each{ empleado ->
-			try {
-				actualizarAsistencia(empleado,tipo,calendarioDet)
-				
-			} catch (Exception ex) {
-			   ex.printStackTrace()
-				
-				def msg=ExceptionUtils.getRootCauseMessage(ex)
-				log.error "Error actualizando asistencia $msg  $empleado"
-			}
-		}
-	}
+    
 	
-	@NotTransactional
+	@Transactional
 	def actualizarAsistencia(Empleado empleado,String tipo,CalendarioDet cal) {
 		
 		def periodo=cal.asistencia
-		//def periodo=new Periodo("07/07/2014","13/07/2014")
 		
-		log.info "Actualizando asistencias ${empleado} ${periodo}"
+		
 		
 		def asistencia =Asistencia.find(
 				"from Asistencia a where a.empleado=? and a.calendarioDet=?"
@@ -93,25 +84,26 @@ class AsistenciaService {
 		
 		boolean valid=validarEmpleado(empleado,cal,asistencia)
 		if(!valid){
-			log.debug 'Empleado no valido para control de asistencias '+empleado
+			//log.debug 'Empleado no valido para control de asistencias '+empleado
 			return
 		}
 
 		if(!asistencia) {
 			log.debug 'Generando registro nuevo de asistencia para '+empleado+" Periodo: "+cal.asistencia
 			asistencia=new Asistencia(empleado:empleado,tipo:tipo,periodo:periodo,calendarioDet:cal)
+		}else{
+			log.debug "Actualizando asistencias ${empleado} ${periodo}"
 		}
-		//println 'Dias trabajados: '+asistencia.diasTrabajados
+		
+		
 		if(asistencia.diasTrabajados){
 			return asistencia
 		}
-		
-		//for(date in periodo.fechaInicial..periodo.fechaFinal){
+
 		List dias=periodo.getListaDeDias()
 		
 		dias.each{ date->
-			//log.info 'Genrando asistencia det para: '+date
-			//println 'Agregando asistenciadet para: '+date
+			
 			if(date>=empleado.alta){
 				def asistenciaDet=asistencia.partidas.find(){det->
 					DateUtils.isSameDay(det.fecha, date)
@@ -129,15 +121,13 @@ class AsistenciaService {
 					}
 				}
 			}
-			
-			
 		}
 		
 		//Buscar vacaciones de cierre anual
 		def calendarioFinal=CalendarioDet
 			.executeQuery("select max(c.folio) from CalendarioDet c where c.calendario.tipo=? and c.calendario.ejercicio=? and c.calendario.comentario like ? and c.folio!=108"
 				,[empleado.salario.periodicidad=='SEMANAL'?'SEMANA':'QUINCENA',cal.calendario.ejercicio,'%NOMINA%']) 
-		println 'Calendario id: '+calendarioFinal.get(0)
+		
 		if(calendarioFinal.get(0) ==cal.folio){
 			def ejercicio=cal.calendario.ejercicio
 			def cierre=Vacaciones.executeQuery("from Vacaciones v where v.empleado=? and  year(v.solicitud)=? and cierreAnual=true",[empleado,ejercicio])
@@ -148,9 +138,7 @@ class AsistenciaService {
 						def asistenciaDet=new AsistenciaDet(fecha:dia,ubicacion:empleado.perfil.ubicacion,tipo:'VACACIONES')
 						asistencia.addToPartidas(asistenciaDet)
 					}
-					
 				}
-				
 			}
 		}
 		
@@ -159,8 +147,8 @@ class AsistenciaService {
 			def diasPagados=periodoPago.getListaDeDias().size()
 			asistencia.diasTrabajados=diasPagados
 		}
-		procesadorDeChecadas.registrarChecadas(asistencia)
 		
+		procesadorDeChecadas.registrarChecadas(asistencia)
 		recalcularRetardos(asistencia)
 		incapacidadService.procesar(asistencia)
 		vacacionesService.procesar(asistencia)
@@ -192,10 +180,9 @@ class AsistenciaService {
 		
 		asistencia.save failOnError:true
 		return asistencia
-		
 	}
 	
-	@NotTransactional
+	
 	def boolean validarEmpleado(Empleado empleado,CalendarioDet calendarioDet,Asistencia asistencia){
 		
 		def asistenciaInicial=calendarioDet.asistencia.fechaInicial
@@ -225,10 +212,10 @@ class AsistenciaService {
 	}
 
 	
-	@NotTransactional
+	
 	def recalcularRetardos(Asistencia asistencia) {
-		DateTimeZone.setDefault(DateTimeZone.forTimeZone(TimeZone.getDefault()));
-		log.info 'Recalculando retardos para: '+asistencia.empleado+"  Periodo: "+asistencia.periodo
+		//DateTimeZone.setDefault(DateTimeZone.forTimeZone(TimeZone.getDefault()));
+		//log.info 'Recalculando retardos para: '+asistencia.empleado+"  Periodo: "+asistencia.periodo
 		def retardoMenor=0
 		asistencia.faltas=0
 		asistencia.partidas.each{ it-> //Iteracion dia por dia
@@ -240,15 +227,24 @@ class AsistenciaService {
 			it.minutosNoLaborados=0
 			def turnoDet=it.turnoDet
 			
+			Calendar calendar = Calendar.getInstance()
+
 			def diaFestivo=DiaFestivo.findByFecha(it.fecha)
 			
 			
 			if(it.entrada1) {
-				LocalTime inicio=it.turnoDet.entrada1
-				LocalTime entrada=LocalTime.fromDateFields(it.entrada1)
+				Date inicio=it.turnoDet.entrada1
+				Date entrada=it.entrada1
 				
+	
+					calendar.setTime(entrada) 
+					def entradaMinute=(calendar.get(Calendar.HOUR_OF_DAY)*60)+calendar.get(Calendar.MINUTE);
+					calendar.setTime(inicio) 
+					def inicioMinute=(calendar.get(Calendar.HOUR_OF_DAY)*60)+calendar.get(Calendar.MINUTE); 
+
 				
-				def retraso=(((entrada.getHourOfDay()*60)+entrada.getMinuteOfHour())-((inicio.getHourOfDay()*60)+inicio.getMinuteOfHour()))
+				//def retraso=(((entrada.getHourOfDay()*60)+entrada.getMinuteOfHour())-((inicio.getHourOfDay()*60)+inicio.getMinuteOfHour()))
+				def retraso=entradaMinute-inicioMinute
 				it.retardoMayor=retraso<0 ? 0: retraso
 				it.retardoMenor = 0 // Modificacion del 27 Julio de 2016 SE QUITA EL RETRASO MENOR
 
@@ -270,20 +266,18 @@ class AsistenciaService {
 			if(turnoDet.salida1 && turnoDet.entrada2) {
 			
 				if(it.salida1 && it.entrada2) {
-					LocalTime salida=LocalTime.fromDateFields(it.salida1)
-					LocalTime entrada=LocalTime.fromDateFields(it.entrada2)
+					Date salida=it.salida1
+					Date entrada=it.entrada2
+
+					calendar.setTime(entrada) 
+					def entradaMinute=(calendar.get(Calendar.HOUR_OF_DAY)*60)+calendar.get(Calendar.MINUTE);
+					calendar.setTime(salida) 
+					def salidaMinute=(calendar.get(Calendar.HOUR_OF_DAY)*60)+calendar.get(Calendar.MINUTE);
 					
-					def tiempoDeComida=( ((entrada.getHourOfDay()*60)+entrada.getMinuteOfHour()) - ((salida.getHourOfDay()*60)+salida.getMinuteOfHour()) )
+					
+					def tiempoDeComida=entradaMinute-salidaMinute
 					def retardoComida=tiempoDeComida-60
 					
-					/* Modificacion del 27 Julio de 2016 SE QUITA EL RETRASO MENOR COMIDA
-					if(retardoComida>0) {
-						if(retardoComida<=10){
-							it.retardoMenorComida=retardoComida
-						}else
-							it.retardoComida=retardoComida
-					}
-					*/
 					it.retardoMenorComida=0 // Modificacion del 27 Julio de 2016 TODO  A RETARDO COMIDA
 					it.retardoComida=retardoComida < 0 ? 0 : retardoComida
 				}
@@ -317,10 +311,10 @@ class AsistenciaService {
 			
 			
 			
-			LocalTime salidaOficial=turnoDet.salida2?:turnoDet.salida1
+			Date salidaOficial=turnoDet.salida2?:turnoDet.salida1
 			
 			if(diaFestivo && diaFestivo.parcial){
-				salidaOficial=LocalTime.fromDateFields(diaFestivo.salida)
+				salidaOficial=diaFestivo.salida
 			}
 			
 			if(salidaOficial){
@@ -336,12 +330,19 @@ class AsistenciaService {
 					
 					
 				if(salidaRegistrada){
-					
-					LocalTime salida=LocalTime.fromDateFields(salidaRegistrada)
-					def horas=salidaOficial.getHourOfDay()- salida.getHourOfDay()
-					def minutos=salidaOficial.getMinuteOfHour() - salida.getMinuteOfHour()		
 
-					def salidaAnticipada=horas*60+minutos
+					Date salida=salidaRegistrada
+
+					calendar.setTime(salidaOficial) 
+					def salidaOficialMinute=(calendar.get(Calendar.HOUR_OF_DAY)*60)+calendar.get(Calendar.MINUTE);
+					calendar.setTime(salida) 
+					def salidaMinute=(calendar.get(Calendar.HOUR_OF_DAY)*60)+calendar.get(Calendar.MINUTE);
+
+				//	def horas=salidaOficial.getHourOfDay()- salida.getHourOfDay()
+				//	def minutos=salidaOficial.getMinuteOfHour() - salida.getMinuteOfHour()		
+
+				//	def salidaAnticipada=horas*60+minutos
+					def salidaAnticipada=salidaOficialMinute-salidaMinute
 					
 					if(salidaRegistradaFaltante!=null && salidaAnticipada>0){
 					it.minutosNoLaborados+=salidaAnticipada
@@ -375,10 +376,12 @@ class AsistenciaService {
 	@NotTransactional
 	@Listener(namespace='gorm')
 	def afterUpdate(AsistenciaDet det){
-		log.info 'Modificacion manual en asistencia det: '+det
+		println 'Modificacion manual en asistencia det.....: '+det
+		/*
 		def calendarioDet=det.asistencia.calendarioDet
 		def tipo=calendarioDet.calendario.tipo=='SEMANA'?'SEMANAL':'QUINCENAL'
 		actualizarAsistencia(det.asistencia.empleado,tipo,calendarioDet)
+		*/
 	}
 
 	

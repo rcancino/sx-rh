@@ -51,3 +51,12 @@
 		</g:each>
 	</tbody>
 </table>
+<g:jasperReport jasper="AsistenciaRH" format="PDF" name="Asistencia RH">
+	<g:hiddenField name="CALENDARIO_ID" 
+			value="${calendarioDet.id}" />
+	<g:if test="${partidasList!=null}">
+		<g:hiddenField name="UBICACION_ID" 
+			value="${partidasList[0].empleado?.perfil?.ubicacion?.id}" />
+	</g:if>
+								
+</g:jasperReport>

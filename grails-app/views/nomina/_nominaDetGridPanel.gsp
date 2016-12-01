@@ -61,7 +61,7 @@
 			<th>Total </th>
 			<th></th>
 			<th></th>
-			<th class="text-right"><g:formatNumber number="${nominaInstance.total}" format="#,###,###.##"/></th>
+			<th class="text-right"><g:formatNumber number="${nominaInstance.getTotalCalculado()}" format="#,###,###.##"/></th>
 			<th></th>
 		</tr>
 	</tfoot>

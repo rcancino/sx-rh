@@ -1,7 +1,7 @@
-<g:form action="show" class="form-horizontal numeric-form" >
 <div class="modal fade" id="cambiarEmpleadoDialog" tabindex="-1" >
 	<div class="modal-dialog">
 		<div class="modal-content">
+		<g:form action="show" class="form-horizontal numeric-form" >
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"
 				aria-hidden="true">&times;</button>
@@ -23,15 +23,16 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-				<g:submitButton class="btn btn-primary" name="update" value="Buscar"/>
+				<g:submitButton class="btn btn-primary" name="Buscar"
+							value="aceptar" />
 			</div>
 	
-				
+		</g:form>	
 		</div> <!-- moda-content -->
 	</div> <!-- modal-dialog -->
 </div> <!-- .modal  -->
 
-</g:form>
+
 
 <script type="text/javascript">
 	$(function(){

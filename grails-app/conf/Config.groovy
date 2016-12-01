@@ -103,19 +103,18 @@ environments {
         grails.logging.jul.usebridge = true
         grails.plugin.springsecurity.debug.useFilter = true
         grails.plugin.springsecurity.active = true
+        //sw4.rh.asistencia.rawdata="Y://NOMIPLUS//RAWDATA"
+        sw4.rh.asistencia.rawdata="/Users/rcancino/dumps/rh/RAWDATA"
     }
     production {
         grails.logging.jul.usebridge = false
-        //grails.app.context = '/paperx2'
-        // TODO: grails.serverURL = "http://www.changeme.com"
+        sw4.rh.asistencia.rawdata="/mnt/RAWDATA/NOMIPLUS/RAWDATA"
     }
     test{
         grails.plugin.springsecurity.debug.useFilter = false
         grails.plugin.springsecurity.active = false
     }
-    impapx {
-      //grails.app.context = '/impapx'
-    }
+    
 }
 
 
@@ -165,6 +164,29 @@ log4j.main = {
         info  'grails.app.jobs'
         debug 'com.luxsoft.impapx'
         debug 'com.luxsoft.econta.polizas'
+        info 'grails.app.services.com.luxsoft.sw4'
+        info 'grails.app.services.com.luxsoft.rh'
+        debug 'grails.app.services.com.luxsoft.rh.AsistenciaService'
+        info 'grails.app.services.com.luxsoft.rh.IncentivoService'
+        info 'grails.app.services.com.luxsoft.rh.NominaService'
+        info 'grails.app.services.com.luxsoft.sw4.rh.IncentivoService'
+        info 'grails.app.services.com.luxsoft.sw4.rh.InfonavitService'
+        info 'grails.app.com.luxsoft.sw4.rh.TiempoExtraService'
+        info 'grails.app.services.com.luxsoft.rh.AguinaldoService'
+        debug 'grails.app.service.com.luxsoft.sw4.rh.PtuService'
+        off 'com.luxsoft.sw4.rh.ProcesadorDeSueldo'
+        off 'com.luxsoft.sw4.rh.procesadores.ProcesadorDeChecadas'
+        off 'com.luxsoft.sw4.rh.procesadores.AjusteMensualISR'
+        off 'com.luxsoft.sw4.rh.ProcesadorSeguroSocial'
+        off 'com.luxsoft.sw4.rh.ProcesadorDeISTP'
+        off 'com.luxsoft.sw4.rh.ProcesadorDeVacaciones'
+        off 'com.luxsoft.sw4.rh.ProcesadorDePrestamosPersonales'
+        off 'com.luxsoft.sw4.rh.ProcesadorDeIncentivo'
+        off 'com.luxsoft.sw4.rh.ProcesadorDePensionAlimenticia'
+        off 'com.luxsoft.sw4.rh.ProcesadorDeOtrasDeducciones'
+        info 'com.luxsoft.sw4.rh.procesadores.AjusteIsr'
+        off 'com.luxsoft.sw4.rh.ExportadorDim'
+        debug 'com.luxsoft.sw4.rh.procesadores.ProcesadorDeChecadasFaltantes'
 
       }
         
@@ -208,6 +230,8 @@ grails.plugin.springsecurity.failureHandler.exceptionMappings = [
    'org.springframework.security.authentication.CredentialsExpiredException': '/usuario/passwordExpired'
 ]
 grails.plugin.springsecurity.apf.storeLastUsername=true
+
+
 
 proveedorOrigenParaCompras=42
 environments{

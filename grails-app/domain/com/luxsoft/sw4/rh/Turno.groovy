@@ -1,15 +1,14 @@
 package com.luxsoft.sw4.rh
 
-import org.joda.time.LocalTime
-import org.jadira.usertype.dateandtime.joda.*
+
 
 class Turno {
 
 	String descripcion
 	
-	LocalTime inicioDeDia
-	LocalTime horaLimiteDeTrabajo
-	LocalTime inicioDeTiempoExtra
+	Date inicioDeDia
+	Date horaLimiteDeTrabajo
+	Date inicioDeTiempoExtra
 
 	List dias
 
@@ -29,9 +28,7 @@ class Turno {
 
     static mapping = {
     	dias cascade: "all-delete-orphan"
-    	inicioDeDia type: PersistentLocalTime
-    	horaLimiteDeTrabajo type: PersistentLocalTime
-    	inicioDeTiempoExtra type: PersistentLocalTime
+    
     }
     
 	

@@ -22,11 +22,10 @@
 		       	</button>
 		       	
 		       		
-	       		<button class="btn btn-default btn-outline" data-toggle="modal" data-target="#cargaPeriodoForm">
-	       			<span class="glyphicon glyphicon-refresh"></span> Cargar
-	       		</button>
+	       		%{-- <lx:refreshButton action="lectora"/> --}%
 		       		
-	     		<g:link class="btn btn-default btn-outline" action="eliminarRegistrosLectora">
+	     		<g:link class="btn btn-default btn-outline" action="eliminarRegistrosLectora" 
+	     		onclick="return confirm('Eliminar registros de checado del periodo ' );">
 	     			<span class="glyphicon glyphicon-trash"></span> Eliminar
 	     		</g:link>
 		    </div>	
@@ -55,7 +54,7 @@
     					<label for="fechaIni" class="col-sm-3">Fecha inicial</label>
     					<div class="col-sm-9">
     						<input type="text" class="form-control  date" id="fechaIni" name="fechaInicial" 
-    							value="${g.formatDate(date:periodo.fechaInicial,format:'dd/MM/yyyy') }">
+    							value="${g.formatDate(date:periodo.fechaInicial,format:'dd/MM/yyyy') }" disabled>
     					</div>
   					</div>
   					
@@ -63,7 +62,7 @@
     					<label for="fechaFin" class="col-sm-3">Fecha final</label>
     					<div class="col-sm-9" >
     						<input type="text" class="form-control date" id="fechaFin" name="fechaFinal" 
-    							value="${g.formatDate(date:periodo.fechaFinal,format:'dd/MM/yyyy') }">
+    							value="${g.formatDate(date:periodo.fechaFinal,format:'dd/MM/yyyy') }" disabled>
     					</div>
   					</div>
   					

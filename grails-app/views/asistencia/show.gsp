@@ -15,12 +15,12 @@
 		</h2>
 		<div class="col-md-4">
 			<li><strong> ${asistenciaInstance.tipo} ${asistenciaInstance?.calendarioDet?.folio}</strong></li>
-			%{-- <li>${asistenciaInstance.empleado.perfil.turno.descripcion}</li> --}%
+			<li> Turno: ${asistenciaInstance.empleado.perfil.turno.descripcion}</li>
 
 		</div>
 		<div class="col-md-4">
-			<li>Ret Menor:    <strong> ${asistenciaInstance.retardoMenorComida}</strong></li>
-			<li>Ret men com:  <strong> ${asistenciaInstance.retardoComida}</strong></li>
+			<li>Retardo:    <strong> ${asistenciaInstance.retardoMayor}</strong></li>
+			<li>Retardo comida:  <strong> ${asistenciaInstance.retardoComida}</strong></li>
 			<li>Minutos NL:   <strong> ${asistenciaInstance.minutosNoLaborados} </strong></li>
 		</div>
 

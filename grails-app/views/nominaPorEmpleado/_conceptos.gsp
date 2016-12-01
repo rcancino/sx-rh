@@ -6,9 +6,10 @@
 			<th>Concepto</th>
 			<th>Gravado</th>
 			<th>Excento</th>
-			<g:if test="${!nominaPorEmpleadoInstance.cfdi}">
+			
 			<th></th>
 			%{-- <th></th> --}%
+			<g:if test="${!nominaPorEmpleadoInstance.cfdi}">
 			<th></th>
 			</g:if>
 		</tr>
@@ -26,17 +27,22 @@
 				</td>
 				<td class="text-right"><g:formatNumber number="${it.importeGravado}" format="#,###,###.##" minFractionDigits="2"/></td>
 				<td class="text-right"><g:formatNumber number="${it.importeExcento}" format="#,###,###.##" minFractionDigits="2"/></td>
-				<g:if test="${!nominaPorEmpleadoInstance.cfdi}">
+				
 				<td>
-					<a  
+					<a  data-target="#conceptoInfoDialog" data-toggle="modal"
+						data-url="${g.createLink(action:'informacionDeConcepto',id:it.id)}">
+						<span class="glyphicon glyphicon-info-sign"></span>
+					</a>
+					%{-- <a  
 						data-container="body"
 						data-toggle="popover"
 						data-placement="right" 
 						data-title="Resumen"
+						data-content=" PENDIENTE "
 						data-url="${g.createLink(action:'informacionDeConcepto',id:it.id)}"
 						>
   						 <span class="glyphicon glyphicon-info-sign"></span>
-					</a>
+					</a> --}%
 				</td>
 				%{-- <td class="text-center">
 					<g:link class="disabled" action="modificarConcepto" id="${it.id}" data-toggle="tooltip"  title="Modificar concepto">
@@ -44,12 +50,13 @@
 					</g:link>
 					
 				</td> --}%
-				<td class="text-center">
-					<g:link action="eliminarConcepto" id="${it.id}" data-toggle="tooltip"  title="Eliminar concepto"
-						onclick="return confirm('Eliminar concepto?')">
-						<span class="glyphicon glyphicon-trash"></span>
-					</g:link>
-				</td>
+				<g:if test="${!nominaPorEmpleadoInstance.cfdi}">
+					<td class="text-center">
+						<g:link action="eliminarConcepto" id="${it.id}" data-toggle="tooltip"  title="Eliminar concepto"
+							onclick="return confirm('Eliminar concepto?')">
+							<span class="glyphicon glyphicon-trash"></span>
+						</g:link>
+					</td>
 				</g:if>
 			</tr>
 		</g:findAll>
@@ -71,8 +78,76 @@
 	</tfoot>
 </table>
 
+<div class="modal fade" id="conceptoInfoDialog" tabindex="-1" >
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+				aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModalLabel">Detalle de concepto</h4>
+			</div>
+	
+			<div class="modal-body">
+				<div id="modalTarget">
+					
+				</div>
+				
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+			</div>
+	
+				
+		</div> <!-- moda-content -->
+	</div> <!-- modal-dialog -->
+</div> <!-- .modal  -->
+
+
 <script type="text/javascript">
-	$(function(){
+	$(document).ready(function(){
+
+		// $(".modalBtn").on('click', function(e) {
+		//    $modal.modal('toggle', $(this));
+		// });
+
+		$("a[data-toggle='modal']").on('click', function(e) {
+		    $_clObj = $(this); //clicked object
+		    $_mdlObj = $_clObj.attr('data-target'); //modal element id 
+		    $($_mdlObj).on('shown.bs.modal',{ _clObj: $_clObj }, function (event) {
+		           $_clObj = event.data._clObj; //$_clObj is the clicked element !!!
+		           //do your stuff here...
+		           var url = $_clObj.data('url'); // Extract info from data-* attributes
+		           //console.log(url);
+		           var modal = $(this);
+					modal.find('#modalTarget').text('Cargando datos...');
+					$.ajax({
+						type:'GET',
+						url:url,
+						dataType:'html',
+						success:function(data){
+							modal.find('#modalTarget').html(data);
+							// element.attr('data-content',data);
+							// element.attr('data-popover-visible',"true");
+							// element.popover('show');
+						}
+					});
+
+		    });
+		});
+		/*
+		$("#conceptoInfoDialog").on('show.bs.modal', function(event){
+			var button = $(event.relatedTarget); // Button that triggered the modal
+			var url = button.data('url'); // Extract info from data-* attributes
+			var surtido = button.data('surtido');
+			console.log(url);
+			
+
+
+			var modal = $(this);
+			modal.find('#modalTarget').text(url);
+
+		});
+		*/
 		var get_data_for_popover=function(){
 			var element=$(this);
 			var url=$(this).attr('data-url');
@@ -98,12 +173,12 @@
 			*/
 		}
 		
-		$('[data-toggle="popover"]').popover({container:'body', content:get_data_for_popover});
-		$('[data-toggle="popover"]').click(get_data_for_popover);
+		//$('[data-toggle="popover"]').popover({container:'body', html: true, content:'HOLA'});
+		//$('[data-toggle="popover"]').click(get_data_for_popover);
 		
 		//$('[data-popover=true]').popover({"trigger":"manual","html":"true"});
-		
 	});
+	
 	
 </script>
 

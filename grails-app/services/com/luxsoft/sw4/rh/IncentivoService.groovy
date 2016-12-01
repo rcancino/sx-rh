@@ -6,7 +6,7 @@ import grails.transaction.NotTransactional
 import com.luxsoft.sw4.Mes
 import com.luxsoft.sw4.Periodo
 
-import org.joda.time.LocalTime
+
 
 @Transactional
 class IncentivoService {
@@ -255,9 +255,15 @@ class IncentivoService {
 		}else{
 		 		return false
 		}
-		 	LocalTime salidaInv=LocalTime.fromDateFields(salidaRegistrada)
+		 	Date salidaInv=salidaRegistrada
 	 	// 16 * 60 = 960  corresponde a las 16:00 horas el dia del inventario en minutos
-	 	if(((salidaInv.getHourOfDay()*60)+salidaInv.getMinuteOfHour())<(15*60)){
+	 	Calendar calendar = Calendar.getInstance()
+	 	calendar.setTime(salidaInv) 
+		def salidaInvMinute=(calendar.get(Calendar.HOUR_OF_DAY)*60)+calendar.get(Calendar.MINUTE);
+		
+
+		if(salidaInvMinute<(15*60)){
+	 	//if(((salidaInv.getHourOfDay()*60)+salidaInv.getMinuteOfHour())<(15*60)){
 			return false
 		}
 		 return true	

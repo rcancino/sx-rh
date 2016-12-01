@@ -1,5 +1,5 @@
 <g:set var="procesosControllers" 
-    value="${['procesos','calculoSdi','modificacionSalarial','aguinaldo','ptu','calculoAnual','exportador']}" />
+    value="${['procesos','calculoSdi','modificacionSalarial','aguinaldo','ptu','calculoAnual','exportador','finiquito']}" />
 <li class="${procesosControllers.contains(webRequest.controllerName)?'active':''}">
     <a href="#">
     	<i class="fa fa-cogs"></i> 
@@ -41,6 +41,12 @@
         <li class="${webRequest.controllerName=='calculoAnual' ?'active':''}">
             <g:link controller="calculoAnual">
                 <span class="nav-label">Calculo Anual</span> 
+                <span class="fa fa-angle-right pull-right"></span>
+            </g:link>
+        </li>
+        <li class="${webRequest.controllerName=='finiquito' ?'active':''}">
+            <g:link controller="finiquito">
+                <span class="nav-label">Finiquito</span> 
                 <span class="fa fa-angle-right pull-right"></span>
             </g:link>
         </li>

@@ -60,7 +60,21 @@
 					
 					<g:if test="${!nominaPorEmpleadoInstance.cfdi}">
 					
-					
+					<g:link  action="agregarConcepto" params="[tipo:'PERCEPCION']"
+							id="${nominaPorEmpleadoInstance.id}" 
+							class="list-group-item" 
+							data-toggle="modal"
+							data-target="#percepcionModal">
+							<span class="glyphicon glyphicon-plus"></span> Agregar Percepción
+						</g:link>
+						
+						<g:link  action="agregarConcepto" params="[tipo:'DEDUCCION']"
+							id="${nominaPorEmpleadoInstance.id}" 
+							class="list-group-item" 
+							data-toggle="modal"
+							data-target="#deduccionModal">
+							<span class="glyphicon glyphicon-plus"></span> Agregar Deducción
+					</g:link>
 					
 					<g:link class="list-group-item"
 							action="actualizarNominaPorEmpleado"
