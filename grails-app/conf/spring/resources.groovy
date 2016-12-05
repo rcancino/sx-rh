@@ -25,6 +25,7 @@ import com.luxsoft.sw4.rh.ProcesadorDeTiempoExtra
 import com.luxsoft.sw4.rh.procesadores.*
 import com.luxsoft.sw4.rh.ProcesadorDePercepcionGenerica
 import com.luxsoft.sw4.rh.ProcesadorDeDeduccionGenerica
+import com.luxsoft.sw4.rh.RevisionAguinaldoExport
 
 import com.luxsoft.sw4.rh.ExportadorDim
 
@@ -129,5 +130,8 @@ beans = {
 	
 	exportadorDim(ExportadorDim){}
 	procesadorDeChecadasFaltantes(ProcesadorDeChecadasFaltantes){}
+	revisionAguinaldoExport(RevisionAguinaldoExport){
+		dataSource: ref('dataSource')
+	}
 	
 }

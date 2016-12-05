@@ -174,7 +174,8 @@ navigation={
 			dimPagosPorSeparacion (titleText:'DIM Pagos Por Separacion')	
 			rfc(titleText:'RFC')
 			reporteDeRFC()
-			
+			revisionDeAguinaldoExport(titleText:'Revision Aguinaldo')
+			revisionNominaExport(titleText:'Revision Nomina')
 			
 		}
 		 

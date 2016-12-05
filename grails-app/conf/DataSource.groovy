@@ -27,9 +27,9 @@ environments {
             //url = 'jdbc:mysql://10.10.1.229/sx_rh?autoReconnect=true'
             url = 'jdbc:mysql://localhost/sx_rh?autoReconnect=true'
             driverClassName = "com.mysql.jdbc.Driver"
-            dialect = org.hiatasbernate.dialect.MySQL5InnoDBDialect
+            dialect = org.hibernate.dialect.MySQL5InnoDBDialect
             username = "root"
-            password = "sys"
+            password = "shoto"
             properties {
                 maxActive = 10
                 maxIdle = 10

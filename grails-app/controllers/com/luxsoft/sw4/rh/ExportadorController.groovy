@@ -23,6 +23,9 @@ import com.luxsoft.sw4.rh.tablas.TarifaIsr
 @Transactional(readOnly = true)
 class ExportadorController {
 
+
+	def dataSource
+
 	def jasperService
 
     //static defaultAction = "nominaBanamex"
@@ -1727,12 +1730,45 @@ def reporteDeRFC(){
 }
 
 
+def revisionDeAguinaldoExport(){
+	[reportCommand:new EjercicioCommand()]
+}
 
+def generarArchivoAguinaldo(EjercicioCommand command){
 
+	def revision=new RevisionAguinaldoExport()
+	revision.dataSource=dataSource
 
+	println "Generando Archivo de Aguinaldo"+command.ejercicio
+	
+	def arch=revision.generarArchivo(command.ejercicio)
 
+	String name="RevisionAguinaldo.csv"
+		println "Generando Archivo de Aguinaldo1"+command.ejercicio+"             "  +arch.toURI()
+		response.setContentType("application/octet-stream")
+		response.setHeader("Content-disposition", "attachment; filename=\"$name\"")
+		response.outputStream << arch.newInputStream()
+}
 
+def revisionNominaExport(){
 
+}
+
+def generarArchivoNomina(Nomina nomina){
+
+	def revision=new RevisionNominaExport()
+	revision.dataSource=dataSource
+
+	println "Generando Archivo de Aguinaldo"
+	
+	def arch=revision.generarArchivo(nomina)
+
+	String name="RevisionNomina.csv"
+		println "Generando Archivo de Nomina"+"             "  +arch.toURI()
+		response.setContentType("application/octet-stream")
+		response.setHeader("Content-disposition", "attachment; filename=\"$name\"")
+		response.outputStream << arch.newInputStream()
+}
 
 }
 
