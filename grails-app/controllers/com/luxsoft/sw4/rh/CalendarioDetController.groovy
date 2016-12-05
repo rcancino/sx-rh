@@ -19,7 +19,7 @@ class CalendarioDetController {
 			.findAll("from CalendarioDet c where c.calendario.ejercicio=? and c.calendario.tipo like ? order by c.folio desc "
 				,[session.ejercicio,term.toUpperCase()])
 		list=list.collect{ calDet->
-			def nombre="$calDet.calendario.tipo $calDet.folio  $calDet.calendario.ejercicio (${calDet.inicio.text()} - ${calDet.fin.text()})"
+			def nombre="$calDet.calendario.tipo $calDet.folio  $calDet.calendario.ejercicio (${calDet.inicio.text()} - ${calDet.fin.text()}) ${calDet.calendario.comentario}"
 			[id:calDet.id
 				,label:nombre
 				,value:nombre
@@ -41,8 +41,8 @@ class CalendarioDetController {
 		def nominaQuincena = Nomina.where {periodicidad == 'QUINCENAL'}.find([sort: 'id', order: 'desc', max:1])
 		def quincena = session.calendarioQuincena
 
-		def list = CalendarioDet.where{ calendario.ejercicio == year && calendario.tipo == 'SEMANA' && id > semana.id}.list()
-		def l2 = CalendarioDet.where{ calendario.ejercicio == year && calendario.tipo == 'QUINCENA' && id > quincena.id}.list()
+		def list = CalendarioDet.where{ calendario.ejercicio == year && calendario.tipo == 'SEMANA' }.list()
+		def l2 = CalendarioDet.where{ calendario.ejercicio == year && calendario.tipo == 'QUINCENA' }.list()
 		list.addAll(l2)
 		
 		list=list.collect{ calDet->
