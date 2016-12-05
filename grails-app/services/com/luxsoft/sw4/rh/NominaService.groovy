@@ -332,7 +332,7 @@ class NominaService {
 			ne.conceptos.clear()
 			def aguinaldo=Aguinaldo.findByNominaPorEmpleado(ne)
 			if(aguinaldo && (aguinaldo.aguinaldoGravado || aguinaldo.aguinaldoExcento )){
-				log.info 'Actualizando aguinaldo: '+aguinaldo
+				log.info "Actualizando aguinaldo: ${aguinaldo.id} $aguinaldo.ejercicio  $aguinaldo.empleado E: $aguinaldo.aguinaldoExcento G: $aguinaldo.aguinaldoGravado"
 				//Percepcion 1
 				def p1=new NominaPorEmpleadoDet(concepto:ConceptoDeNomina.findByClave('P002')
 					,importeGravado:aguinaldo.aguinaldoGravado
@@ -379,7 +379,7 @@ class NominaService {
 				}
 				
 			}
-			
+			ne.save failOnErro:true, flush:true
 		}
 	}
 	

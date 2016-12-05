@@ -49,6 +49,7 @@ class BootStrap {
     			        		 )
     			        
     			    }
+            java.security.Security.addProvider(new BouncyCastleProvider())
     }
     
     def destroy = {

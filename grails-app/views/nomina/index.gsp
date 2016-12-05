@@ -105,7 +105,7 @@
                 "language": {
                     "url": "${assetPath(src: 'datatables/dataTables.spanish.txt')}"
                 },
-                "dom": 't',
+                "dom": 't<"clear">lfrip',
                 "order": []
 			});
 			

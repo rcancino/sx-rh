@@ -242,6 +242,8 @@ class AguinaldoService {
 			}else{
 				a.otrasDed=percepcion
 			}
+		}else{
+			a.otrasDed=0.0
 		}
 		
 		def prestamos=buscarPrestamos(a.empleado)
@@ -254,7 +256,10 @@ class AguinaldoService {
 			}else{
 				a.prestamo=percepcion
 			}
+		}else{
+			a.prestamo=0.0
 		}
+
 
 		a.netoPagado=a.subTotal-a.pensionA-a.otrasDed-a.prestamo
 		

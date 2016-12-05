@@ -81,7 +81,7 @@ class NominaController {
 
 		if(nomina.tipo == 'AGUINALDO' ){
 			nominaService.actualizarAguinaldo(nomina)
-			flash.message="Nomina de Aguinaldo actualizada"
+			flash.message="Nomina de Aguinaldo Folio: ${nomina.id} Tipo: $nomina.tipo actualizada"
 			redirect action:'show',params:[id:id]
 			return
 		}

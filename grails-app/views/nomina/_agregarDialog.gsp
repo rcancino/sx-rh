@@ -1,7 +1,7 @@
 <%@page expressionCodec="none"%>
 <%@ page import="com.luxsoft.sw4.rh.CalendarioDet" %>
 <div class="modal fade" id="agregarNominaForm" tabindex="-1">
-	<div class="modal-dialog">
+	<div class="modal-dialog modal-lg">
 		<div id="modalContent" class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"
@@ -72,7 +72,7 @@
 <script type="text/javascript">
 	$(function(){
 		$("#calendarioDetField").autocomplete({
-			source:'<g:createLink controller="calendarioDet" action="getCalendariosDisponibles"/>',
+			source:'<g:createLink controller="calendarioDet" action="getCalendariosAsJSON"/>',
 			minLength:1,
 			select:function(e,ui){
 				$("#calendarioFieldId").val(ui.item.id);

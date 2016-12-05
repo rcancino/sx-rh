@@ -243,7 +243,7 @@ class AsistenciaController {
 		for(int i=0;i<list.size();i++){
 			def a=list[i]
 			a.orden=i+1
-			a.save()
+			a.save failOnError:true, flush:true
 		}
 		
 		redirect action:'index'

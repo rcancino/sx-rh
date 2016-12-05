@@ -10,7 +10,9 @@
 
 
 	<content tag="header" >
-		<h2>Calculo de Aguinaldo  (${session.ejercicio}) </h2>
+		<h2>Calculo de Aguinaldo  (${session.ejercicio}) 
+		<small>Total Neto: ${g.formatNumber(number:aguinaldoInstanceList.sum{it.netoPagado},type:'currency')}</small>
+		</h2>
 	</content>
 	<content tag="buttonsBar">
 			<g:link action="index" class="btn btn-success btn-outline">
