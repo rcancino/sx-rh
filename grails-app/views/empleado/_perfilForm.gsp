@@ -18,7 +18,7 @@
 							value="${value?:com.luxsoft.sw4.rh.sat.SatRegimenContratacion.findByClave(2) }" />
 						<f:field property="perfil.riesgoPuesto" widget-class="form-control"
 							value="${value?:com.luxsoft.sw4.rh.sat.SatRiesgoPuesto.findByClave(3) }" wrapper="bootstrap3"/>
-						<f:field property="perfil.turno" widget-class="form-control" />
+						<f:field property="perfil.turno" widget-class="form-control" wrapper="bootstrap3"/>
 						<f:field property="perfil.tipoDeIncentivo" widget-class="form-control" wrapper="bootstrap3"/>
 						<f:field property="perfil.declaracionAnual" label="Presenta Declaracion" widget-class="form-control" />
 					</f:with>
