@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<meta name="layout" content="operaciones2"/>
 	<title>Asistencia (IMSS)</title>
-	<r:require modules="datatables,forms"/> 
+	
 </head>
 <body>
 
@@ -14,6 +14,31 @@
 	<small><a href="" data-toggle="modal" data-target="#calendarioForm">
 			${calendarioDet.calendario.tipo}  ${calendarioDet.folio } (${session.ejercicio })
 		</a></small></h2>
+        <ol class="breadcrumb">
+    	    <li >
+    	    	<g:if test="${calendarioDet.calendario.tipo=='QUINCENA'}">
+    	    		<strong>Quincenal</strong>
+    	    	</g:if>
+    	    	<g:else>
+    	    		<g:link action="index" params="[tipo:'QUINCENA'	]" >
+    	    			Quincenal
+    	    		</g:link>
+    	    	</g:else>
+    	    	
+    	    </li>
+    	    <li >
+    	    	<g:if test="${calendarioDet.calendario.tipo =='SEMANA'}">
+    	    		<strong>Semanal</strong>
+    	    	</g:if>
+    	    	<g:else>
+    	    		<g:link action="index" params="[tipo:'SEMANA'	]" >
+    	    			Semanal	
+    	    		</g:link>
+    	    		
+    	    	</g:else>
+    	    	
+    	    </li>
+		</ol>
 </content>
 	
 <content tag="buttonsBar">

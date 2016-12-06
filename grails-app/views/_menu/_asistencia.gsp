@@ -44,7 +44,7 @@
         </li>
         <li class="${webRequest.controllerName=='asistenciaImss'?'active':''}">
             <g:link controller="asistenciaImss">
-                <span class="nav-label">Asistenaic IMSS</span> 
+                <span class="nav-label">Asistencia IMSS</span> 
                 <span class="fa fa-angle-right pull-right"></span>
             </g:link>
             <span class="fa fa-angle-right pull-right"></span>
