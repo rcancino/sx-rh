@@ -15,7 +15,7 @@
         	    <li><g:link action="perfil" id="${empleadoInstance.id}">Perfil</g:link></li>
         	    <li><g:link action="salario" id="${empleadoInstance.id}">Salario</g:link></li>
         	    <li><g:link action="seguridadSocial" id="${empleadoInstance.id}">Seguridad social</g:link></li>
-        	    <li><g:link action="contactos" id="${empleadoInstance.id}"><strong>Contactos</strong></g:link></li>
+        	    <li><strong>Contactos</strong></li>
         	    <li><g:link controller='pensionAlimenticia' action='edit' id="${empleadoInstance.id}">Pensión</g:link></li>
         	    <li><g:link controller='expediente' action='edit' id="${empleadoInstance.id}">Expediente</g:link></li>
 	        </ol>

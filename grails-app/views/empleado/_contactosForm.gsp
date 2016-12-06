@@ -1,7 +1,8 @@
 <form  class="form-horizontal numeric-form" method="post">
 	<g:hiddenField name="id" value="${empleadoInstance.id}"/>
 	<g:hiddenField name="version" value="${empleadoInstance?.version}" />
-	
+	<g:hiddenField name="view" value="contactos" />
+
 	<div class="col-md-10">
 		<fieldset ${!edit?'disabled=""':''}>
 			<f:with bean="empleadoInstance">
@@ -9,10 +10,10 @@
 				<f:field property="contacto.parentesco" widget-class="form-control" />
 				<f:field property="contacto.telefono1" widget-class="form-control" />
 				<f:field property="contacto.telefono2" widget-class="form-control" />
-				%{-- <f:field property="contacto.direccion"  /> --}%
-				<g:render template="/common/direccion" bean="${empleadoInstance.contacto}"/>
+				<f:field property="contacto.direccion"  />
 			</f:with>
 		</fieldset>
+		
 	</div>
 
 	<g:if test="${edit}">
@@ -25,3 +26,9 @@
 	</g:if>
 
 </form>
+
+<script type="text/javascript">
+	$(function(){
+		$('input[type=text]').addClass('form-control');
+	});
+</script>

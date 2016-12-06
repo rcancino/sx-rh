@@ -72,10 +72,7 @@ class EmpleadoService {
 					empleado.datosPersonales.empleado=empleado
 				}
 				empleado.datosPersonales.validate()
-				//println 'Errores en datos personales: '+empleado.datosPersonales.hasErrors()
-				empleado.datosPersonales.errors.each{
-					println 'Error: '+it
-				}
+				
 				if(empleado.datosPersonales.hasErrors()){
 					throw new EmpleadoException(
 						message:'Errores de validacion en los datos personales',
@@ -87,17 +84,12 @@ class EmpleadoService {
 			if(empleado.perfil){
 				
 				if(!empleado.perfil.id){
-					//println 'Perfil de empleado: '+empleado.perfil
 					empleado.perfil.empleado=empleado
 					def empresa=Empresa.get(1)
-					//println 'Empresa: '+empresa
 					empleado.perfil.empresa=empresa
 				}
 				empleado.perfil.validate()
-				//println 'Errores en Perfil: '+empleado.perfil.hasErrors()
-				empleado.perfil.errors.each{
-					println 'Error: '+it
-				}
+				
 				if(empleado.perfil.hasErrors()){
 					throw new EmpleadoException(
 						message:'Errores de validacion pefil de empleado',

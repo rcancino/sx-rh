@@ -112,35 +112,26 @@ class EmpleadoController {
 		}catch(EmpleadoException ex) {
 			ex.printStackTrace()
 			flash.message=ex.message
-			println 'Errores: '+ex.empleado.errors
 			render view:'create' ,model:[empleadoInstance:ex.empleado,edit:true]
 		}
 	}
 
 	def update(Empleado empleadoInstance){
 		//def empleadoInstance=Empleado.get(id)
-		//log.info 'Salvando empleado: '+empleadoInstance
-		//log.info 'Datos de salario: '+empleadoInstance.salario
-		//println 'Salvando: '+empleadoInstance.perfil
+		log.info 'Salvando empleado: ' + empleadoInstance
+		log.info 'Pamaetros: '+params
+		
 		def v=params.view?:'generales'
-		//log.info 'Pamaetros: '+params
-		//bindData(empleadoInstance.salario, params)
 		
 		if(empleadoInstance==null){
 			notFound()
 			return
 		}
 		
-		try{
-			
-			empleadoInstance=empleadoService.updateEmpleado(empleadoInstance)
-			flash.message="Empleado ${empleadoInstance.clave} actualizado"
-			render view:v,model:[empleadoInstance:empleadoInstance,edit:false]
-		}catch(EmpleadoException ex){
-			//println ex.message
-			flash.message=ex.message
-			render view:v,model:[empleadoInstance:ex.empleado,edit:true]
-		}
+		empleadoInstance=empleadoService.updateEmpleado(empleadoInstance)
+		flash.message="Empleado ${empleadoInstance.clave} actualizado"
+		//redirect action:'edit', id: empleadoInstance.id
+		render view:v,model:[empleadoInstance:empleadoInstance,edit:true]
 		
 	}
 	
