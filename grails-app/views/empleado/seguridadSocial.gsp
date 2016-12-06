@@ -25,7 +25,7 @@
 	        <g:if test="${flash.message}">
 	            <small><span class="label label-warning ">${flash.message}</span></small>
 	        </g:if> 
-	        <lx:errorsHeader bean="${empleadoInstance?.datosPersonales}"/>
+	        <lx:errorsHeader bean="${empleadoInstance}"/>
 	    </div>
 	</div>
 
