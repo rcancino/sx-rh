@@ -16,6 +16,7 @@ import org.codehaus.groovy.grails.plugins.jasper.JasperReportDef
 import org.apache.commons.lang.WordUtils
 import java.math.*
 import com.luxsoft.sw4.rh.tablas.TarifaIsr
+import com.luxsoft.sw4.rh.CalendarioDet 
 
 
 
@@ -1739,12 +1740,11 @@ def generarArchivoAguinaldo(EjercicioCommand command){
 	def revision=new RevisionAguinaldoExport()
 	revision.dataSource=dataSource
 
-	println "Generando Archivo de Aguinaldo"+command.ejercicio
+
 	
 	def arch=revision.generarArchivo(command.ejercicio)
 
-	String name="RevisionAguinaldo.csv"
-		println "Generando Archivo de Aguinaldo1"+command.ejercicio+"             "  +arch.toURI()
+	String name="REVISION AGUINALDO ${command.ejercicio}.csv"
 		response.setContentType("application/octet-stream")
 		response.setHeader("Content-disposition", "attachment; filename=\"$name\"")
 		response.outputStream << arch.newInputStream()
@@ -1754,23 +1754,33 @@ def revisionNominaExport(){
 
 }
 
-def generarArchivoNomina(Nomina nomina){
+def generarArchivoNomina(Long calendarioDet,String calendarioField){
 
 	def revision=new RevisionNominaExport()
-	revision.dataSource=dataSource
+	revision.dataSource=dataSource	
+	def arch=revision.generarArchivo(calendarioDet)
 
-	println "Generando Archivo de Aguinaldo"
-	
-	def arch=revision.generarArchivo(nomina)
+	String name="REVISION ${calendarioField}.csv"
+		response.setContentType("application/octet-stream")
+		response.setHeader("Content-disposition", "attachment; filename=\"$name\"")
+		response.outputStream << arch.newInputStream()
+}
 
-	String name="RevisionNomina.csv"
-		println "Generando Archivo de Nomina"+"             "  +arch.toURI()
+
+def validacionSatRfc(){
+		
+		def validacion=new ValidacionRfcExport()
+		validacion.dataSource=dataSource	
+		def arch=validacion.generarArchivo()
+		String name="VALIDACION SAT RFC.csv"
 		response.setContentType("application/octet-stream")
 		response.setHeader("Content-disposition", "attachment; filename=\"$name\"")
 		response.outputStream << arch.newInputStream()
 }
 
 }
+
+
 
 
 

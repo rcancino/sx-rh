@@ -41,7 +41,7 @@ class RevisionAguinaldoExport {
 
 		def sql=new Sql(dataSource)
 
-		println "Generando Archivo de Aguinaldo"+ejercicio
+		
 		def temp = File.createTempFile("temp",".txt",null)
 
 
@@ -50,7 +50,7 @@ class RevisionAguinaldoExport {
 		temp.with{
 				append("""id,clave,nombre,numTrab,periodicidad,puesto,ubicacion,alta,status,f_baja,years,dias,ejercicio,fecha_inicial,fecha_final,salario,faltas,incEG,incapacidadesmat,incapacidadesrte,incapacidadesrtt,permiso_especial,aguinaldo_excento,aguinaldo_gravado,total_gravable,promedio_gravable,sueldo_mensual,proporcion_promedio_mensual,isr_mensual,isr_promedio,dif_isr_mensual_promedio,tasa,isr_por_retener,subsidio,isrosubsidio,resultado_isr_subsidio,tabla_normal_isr_sub,beneficio_perjuicio,isr_ejer_ant,sub_total,pensiona,otras_ded,prestamo,neto_pagado\r\n""" )
 				sql.eachRow(query,[ejercicio]){ row->
-				println row
+			
 				append(row.id+','+row.clave+','+row.nombre+','+row.numero_de_trabajador+','+row.periodicidad+','+row.puesto+','+row.ubicacion+','+row.alta+','+row.status+','+row.f_baja+','+row.years+','+row.dias+','+row.ejercicio+','+row.fecha_inicial+','+row.fecha_final+','+row.salario+','+row.faltas+','+row.incapacidades+','+row.incapacidadesmat+','+row.incapacidadesrte+','+row.incapacidadesrtt+','+row.permiso_especial+','+row.aguinaldo_excento+','+row.aguinaldo_gravado+','+row.total_gravable+','+row.promedio_gravable+','+row.sueldo_mensual+','+row.proporcion_promedio_mensual+','+row.isr_mensual+','+row.isr_promedio+','+row.dif_isr_mensual_promedio+','+row.tasa+','+row.isr_por_retener+','+row.subsidio+','+row.isrosubsidio+','+row.resultado_isr_subsidio+','+row.tabla_normal_isr_sub+','+row.beneficio_perjuicio+','+row.isr_ejer_ant+','+row.sub_total+','+row.pensiona+','+row.otras_ded+','+row.prestamo+','+row.neto_pagado+"\r\n" )
 			}
 		}

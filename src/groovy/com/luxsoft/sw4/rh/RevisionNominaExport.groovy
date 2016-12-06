@@ -66,8 +66,9 @@ class RevisionNominaExport {
 			JOIN perfil_de_empleado P ON(E.ID=P.empleado_id)
 			join concepto_de_nomina c on(c.id=ned.concepto_id)
 			where 
-			n.id=?
+			n.calendario_det_id=?
 			group by ne.id
+			order by e.clave
 		"""
 
 
@@ -76,23 +77,18 @@ class RevisionNominaExport {
 
 	def dataSource
 	
-	def generarArchivo(nomina){
+	def generarArchivo(id){
 
 		def sql=new Sql(dataSource)
-
-		println "Generando Archivo de Aguinaldo"+nomina
 		def temp = File.createTempFile("temp",".txt",null)
-
-
 
 		
 		temp.with{
-				append("""id,clave, nombre,numero_de_trabajador,e.alta, baja ,ubicacion,tipo,forma_de_pago,periodicidad,folio,periodo_fecha_inicial,periodo_fecha_final,dias_del_periodo,salario_diario_base,salario_diario_integrado,dias_trabajados,vacaciones,incapacidades,faltas,fraccion_descanso,SUELDO,COMISIONES,INCENTIVO,VACACIONES, VACACIONES_P, PRIMA_VAC_E, PRIMA_VAC_G, PRIMA_ANT_E, PRIMA_ANT_G,PRIMA_DOM_E, PRIMA_DOM_G, AGUINALDO_E, AGUINALDO_G, PTU_E, PTU_G,INDEMNIZACION_E,INDEMNIZACION_G, HRS_EXTRAS_DOBLES_E, HRS_EXTRAS_DOBLES_G, HRS_EXTRAS_TRIPLES,COMPENSACION, BONO, BONO_ANT, BONO_PRODUCT, BONO__DESEMP, GRATIFICACION,PERMISO_PATERNID,OTRAS_E,OTRAS_G, SUB__EMP_PAG_E,OTRAS_DEV_ISPT_E,COMPENSACION_SAF_E, SUB_EMP_APLIC,IMSS, ISR,RETARDOS,PENSION_ALIMENT, ANTICIPO, INFONAVIT, INFONACOT, PRESTAMO, OTRAS, RET_COMPENSACION_SAF
-				\r\n""" )
-				sql.eachRow(query,[nomina.id]){ row->
-				println row
+			append("""id,clave, nombre,numero_de_trabajador,e.alta, baja ,ubicacion,tipo,forma_de_pago,periodicidad,folio,periodo_fecha_inicial,periodo_fecha_final,dias_del_periodo,salario_diario_base,salario_diario_integrado,dias_trabajados,vacaciones,incapacidades,faltas,fraccion_descanso,SUELDO,COMISIONES,INCENTIVO,VACACIONES, VACACIONES_P, PRIMA_VAC_E, PRIMA_VAC_G, PRIMA_ANT_E, PRIMA_ANT_G,PRIMA_DOM_E, PRIMA_DOM_G, AGUINALDO_E, AGUINALDO_G, PTU_E, PTU_G,INDEMNIZACION_E,INDEMNIZACION_G, HRS_EXTRAS_DOBLES_E, HRS_EXTRAS_DOBLES_G, HRS_EXTRAS_TRIPLES,COMPENSACION, BONO, BONO_ANT, BONO_PRODUCT, BONO__DESEMP, GRATIFICACION,PERMISO_PATERNID,OTRAS_E,OTRAS_G, SUB__EMP_PAG_E,OTRAS_DEV_ISPT_E,COMPENSACION_SAF_E, SUB_EMP_APLIC,IMSS, ISR,RETARDOS,PENSION_ALIMENT, ANTICIPO, INFONAVIT, INFONACOT, PRESTAMO, OTRAS, RET_COMPENSACION_SAF\r\n""" )
+				sql.eachRow(query,[id]){ row->
 				append(row.id+","+row.clave+","+row.nombre+","+row.numero_de_trabajador+","+row.alta+","+row.baja+","+row.ubicacion+","+row.tipo+","+row.forma_de_pago+","+row.periodicidad+","+row.folio+","+row.periodo_fecha_inicial+","+row.periodo_fecha_final+","+row.dias_del_periodo+","+row.salario_diario_base+","+row.salario_diario_integrado+","+row.dias_trabajados+","+row.vacaciones+","+row.incapacidades+","+row.faltas+","+row.fraccion_descanso+","+row.SUELDO+","+row.COMISIONES+","+row.INCENTIVO+","+row.VACACIONES+","+row.VACACIONES_P+","+row.PRIMA_VAC_E+","+row. PRIMA_VAC_G+","+row.PRIMA_ANT_E+","+row.PRIMA_ANT_G+","+row.PRIMA_DOM_E+","+row. PRIMA_DOM_G+","+row.AGUINALDO_E+","+row.AGUINALDO_G+","+row.PTU_E+","+row.PTU_G+","+row.INDEMNIZACION_E+","+row.INDEMNIZACION_G+","+row.HRS_EXTRAS_DOBLES_E+","+row.HRS_EXTRAS_DOBLES_G+","+row.HRS_EXTRAS_TRIPLES+","+row.COMPENSACION+","+row.BONO+","+row.BONO_ANT+","+row.BONO_PRODUCT+","+row.BONO__DESEMP+","+row.GRATIFICACION+","+row.PERMISO_PATERNID+","+row.OTRAS_E+","+row.OTRAS_G+","+row.SUB__EMP_PAG_E+","+row.OTRAS_DEV_ISPT_E+","+row.COMPENSACION_SAF_E+","+row.SUB_EMP_APLIC+","+row.IMSS+","+row.ISR+","+row.RETARDOS+","+row.PENSION_ALIMENT+","+row.ANTICIPO+","+row.INFONAVIT+","+row.INFONACOT+","+row.PRESTAMO+","+row.OTRAS+","+row.RET_COMPENSACION_SAF+"\r\n" )
 			}
+			
 		}
 		
 		return temp

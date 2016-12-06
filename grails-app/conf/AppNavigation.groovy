@@ -176,6 +176,7 @@ navigation={
 			reporteDeRFC()
 			revisionDeAguinaldoExport(titleText:'Revision Aguinaldo')
 			revisionNominaExport(titleText:'Revision Nomina')
+			validacionSatRfc(titleText:'Validacion SAT RFC')
 			
 		}
 		 

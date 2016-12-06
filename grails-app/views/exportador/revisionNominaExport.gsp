@@ -1,13 +1,32 @@
+<%@ page import="com.luxsoft.sw4.rh.CalendarioDet" %>
 <html>
 <head>
 <meta charset="UTF-8">
 <meta name="layout" content="exportadores"/>
 <title>Exportacion</title>
+
+<script>
+$(function(){
+			console.log('Autocompletando calendarios');
+			$("#calendarioDetField").autocomplete({
+				source:'<g:createLink controller="calendarioDet" action="getCalendariosAsJSON"/>',
+				minLength:1,
+				select:function(e,ui){
+					$("#calendarioFieldId").val(ui.item.id);
+				}
+			});
+		});
+</script>
 </head>
 <body>
 
+
+		
+
+
 	<content tag="reporteTitle">
 		Revision de Nomina
+
 	</content>
 	
 	<content tag="reportForm">
@@ -20,21 +39,23 @@
 		
 		<g:form action="generarArchivoNomina" class="form-horizontal">
 			<fieldset>
-				<legend> Parámetros</legend>
-				<div class="form-group">
-					<label for="cantidad" class="col-sm-2 control-label">Nómina</label>
-					<div class="col-sm-10">
-						<g:select class="form-control"  
-							name="id" 
-							value="com.luxsoft.sw4.rh.Nomina.last()"
-							from="${com.luxsoft.sw4.rh.Nomina.findAll("from Nomina n order by n.lastUpdated desc")}" 
-							optionKey="id" 
-							noSelection="[null:'Seleccione una nómina']"
-							/>
-					</div>
-				</div>
-
+				<legend> Parámetros</legend>	
 				
+				<div class="form-group">
+  						<label for="comentarioField" class="col-sm-3">Calendario</label>
+    					<div class="col-sm-9">
+							<g:hiddenField id="calendarioFieldId" name="calendarioDet"  />
+							<input 
+								id="calendarioDetField" 
+								type="text" 
+								name="calendarioField"  
+								class="form-control " 
+								value="" 
+								placeholder="Seleccione un calendario">
+							</input>
+    					</div>
+  					</div>
+
 			</fieldset>
 			<div class="form-group">
 		    	<div class="col-sm-offset-2 col-sm-3">
@@ -46,7 +67,11 @@
 		</g:form>
 		</div>
 	</content>
+
+
 	
 </body>
+
+
 
 </html>
