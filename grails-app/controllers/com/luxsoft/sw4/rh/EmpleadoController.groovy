@@ -131,7 +131,7 @@ class EmpleadoController {
 		empleadoInstance=empleadoService.updateEmpleado(empleadoInstance)
 		flash.message="Empleado ${empleadoInstance.clave} actualizado"
 		//redirect action:'edit', id: empleadoInstance.id
-		render view:v,model:[empleadoInstance:empleadoInstance,edit:true]
+		render view:v,model:[empleadoInstance:empleadoInstance,edit:false]
 		
 	}
 	
