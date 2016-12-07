@@ -9,6 +9,7 @@
 			<th><g:message code="Empleado.deducciones.label" default="Deducciones" encodeAs="html"/></th>
 			<th><g:message code="Empleado.deducciones.total" default="Total" encodeAs="html"/></th>
 			<th><g:message code="Empleado.deducciones.total" default="CFDI" encodeAs="html"/></th>
+			<th><g:message code="Empleado.deducciones.total" default="R F" encodeAs="html"/></th>
 			
 		</tr>
 	</thead>
@@ -49,6 +50,8 @@
 						<p class="text-danger">PENDIENTE</p>
 					</g:else>
 				</td>
+
+				<td><g:checkBox name="myCheckbox" value="${row.reciboFirmado}" disabled="disabled" /></td>
 				
 			</tr>
 		</g:each>

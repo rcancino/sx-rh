@@ -53,6 +53,8 @@ class NominaPorEmpleado {
 
 	Boolean finiquito=false
 
+	Boolean reciboFirmado = false
+
     static constraints = {
     	comentario nullable:true,maxSize:200
 		antiguedadEnSemanas nullable:false,minSize:1

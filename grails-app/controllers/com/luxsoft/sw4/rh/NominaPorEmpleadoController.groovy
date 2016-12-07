@@ -125,6 +125,15 @@ class NominaPorEmpleadoController {
 		//event("ActualizacionDeNominaDet")
 		
 	}
+
+	def actualizarFirmaRecibo(Long id){
+
+		println params.reciboFirmado
+
+		def ne=nominaPorEmpleadoService.actualizarFirmaRecibo(id,params.reciboFirmado)
+		redirect action:'edit',params:[id:ne.id]
+			return
+	}
 	
 	def depurar(NominaPorEmpleado ne){
 		nominaPorEmpleadoService.depurarNominaPorEmpleado(ne.id)

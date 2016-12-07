@@ -16,6 +16,7 @@
 		<div class="col-md-4">
 			<li><strong> ${asistenciaInstance.tipo} ${asistenciaInstance?.calendarioDet?.folio}</strong></li>
 			<li> Turno: ${asistenciaInstance.empleado.perfil.turno.descripcion}</li>
+			<li> Ubicación: ${asistenciaInstance.empleado.perfil.ubicacion}</li>
 
 		</div>
 		<div class="col-md-4">

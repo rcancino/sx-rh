@@ -70,6 +70,22 @@ class NominaPorEmpleadoService {
 		return res
 
 	}
+	@Transactional
+	def actualizarFirmaRecibo(Long id,firma){
+		println "Actualizando firma de recibido"
+
+		NominaPorEmpleado ne=NominaPorEmpleado.get(id)
+
+		if(firma){
+			
+			ne.reciboFirmado=firma
+			
+		}else{
+			ne.reciboFirmado=false
+		}
+		ne.save flush:true
+		return ne
+	}
 	
 	@Transactional
 	def depurarNominaPorEmpleado(Long id){
