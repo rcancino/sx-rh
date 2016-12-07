@@ -451,7 +451,7 @@ def generarTrabajadoresSua(PeriodoCommand command){
 			 }
 		  def fechaAlta=df.format(empleado.alta)
 		  //def sdi=empleado.salario.salarioDiarioIntegrado.toString().replace('.','').padLeft(7,"0")
-		  def sdi=ModificacionSalarial.findByEmpleadoAndTipo(empleado,'ALTA').sdiNuevo.toString().replace('.','').padLeft(7,"0")
+		  def sdi=ModificacionSalarial.findByEmpleadoAndTipoAndFecha(empleado,'ALTA',empleado.alta).sdiNuevo.toString().replace('.','').padLeft(7,"0")
 		  def ubicacion=StringUtils.leftPad("",17)
 		  
 		  def infonavitNumero=StringUtils.leftPad("",10)

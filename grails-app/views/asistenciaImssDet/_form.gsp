@@ -13,6 +13,8 @@
 				
 			</fieldset>
 			<f:field property="cambio"  input-class="form-control"/>
+
+			<f:field property="excluir"><g:checkBox name="excluir" value="${asistenciaImssDetInstance.excluir}"  /></f:field>
 			
 			
 		</f:with>

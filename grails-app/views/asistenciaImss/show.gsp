@@ -129,7 +129,7 @@
 										<g:formatDate date="${row.cambio}" format="dd/MM/yyyy"/>
 									</g:link>
 								</td>
-								<td><g:checkBox name="myCheckbox" value="${row.excluir}" /></td>
+								<td><g:checkBox name="myCheckbox" value="${row.excluir}" disabled="disabled" /></td>
 							</tr>
 						</g:each>
 					</tbody>
@@ -160,8 +160,6 @@
 								<g:else>
 									<td></td>
 								</g:else>
-								
-								
 							</tr>
 						</g:each>
 					</tbody>
