@@ -6,8 +6,9 @@ import mx.gob.sat.cfd.x3.ComprobanteDocument;
 
 import org.bouncycastle.util.encoders.Base64
 import org.apache.commons.lang.exception.ExceptionUtils
+import org.springframework.beans.factory.InitializingBean
 
-class CfdiSellador {
+class CfdiSellador implements InitializingBean{
 	
 	String algoritmo="SHA1withRSA"
 	
@@ -30,6 +31,10 @@ class CfdiSellador {
 			log.error(msg,e);
 			throw new CfdiException(message:msg)
 		}
+	}
+
+	void afterPropertiesSet() throws Exception{
+		java.security.Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider())
 	}
 
 }
