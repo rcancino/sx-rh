@@ -11,7 +11,7 @@ class AguinaldoController {
 
     static scaffold = true
 
-    static allowedMethods = [save: "POST", update: "PUT"]
+    static allowedMethods = [save: "POST", update: "PUT", delete: "GET"]
 
     def aguinaldoService
 
@@ -136,6 +136,15 @@ class AguinaldoController {
         return pdfStream
         
     }
+
+    def eliminar(){
+        def ejercicio = session.ejercicio
+        def res = Aguinaldo.executeUpdate("delete from Aguinaldo a where a.ejercicio = ? ",[ejercicio])
+        flash.message = "${res} Registros de aguinaldo del ejercicio ${ejercicio} eliminados"
+        redirect action:'index'
+    }
+
+
 }
 
 class AguinaldoCommand {

@@ -13,12 +13,15 @@ import com.luxsoft.sw4.rh.imss.*
 import com.luxsoft.sw4.rh.acu.*
 
 import java.math.RoundingMode
+import com.luxsoft.sw4.Empresa
 
 @Transactional
 class AguinaldoService {
 
+	Empresa empresa
 
 	def generar(Empleado empleado ,Integer ejercicio){
+		
 		def aguinaldo=Aguinaldo.find{ejercicio==ejercicio && empleado==empleado}
 		if(!aguinaldo){
 			log.info "Generando aguinaldo para $empleado ($ejercicio)"
@@ -30,7 +33,7 @@ class AguinaldoService {
 			if(aguinaldo.empleado.salario.salarioDiario<=0.0){
 				aguinaldo.salario=aguinaldo.empleado.salario.salarioVariable
 			}
- 		log.info "Salario variable " + aguinaldo.empleado.salario.salarioVariable + " Aguinaldo salario  " + aguinaldo.salario
+ 			log.info "Salario variable " + aguinaldo.empleado.salario.salarioVariable + " Aguinaldo salario  " + aguinaldo.salario
 
 
 			aguinaldo.sueldoMensual=empleado.salario.periodicidad=='SEMANAL'?aguinaldo.salario*31:aguinaldo.salario*32
@@ -42,6 +45,10 @@ class AguinaldoService {
 			
 			aguinaldo.diasParaAguinaldo=aguinaldo.getDiasDelEjercicio()
 			aguinaldo.diasParaBono=aguinaldo.getDiasDelEjercicio()
+			if(getEmpresa().clave != 'PAPEL'){
+				aguinaldo.diasParaBono = 0
+				aguinaldo.porcentajeBono = 0.0
+			}
 			aguinaldo.save failOnError:true
 
 		}else{
@@ -52,7 +59,7 @@ class AguinaldoService {
 		return aguinaldo
 	}
 
-	@NotTransactional
+	
 	def calcular(Integer ejercicio){
 		
 		def ids=NominaPorEmpleado.executeQuery(
@@ -60,17 +67,11 @@ class AguinaldoService {
 		log.info "Calculando aguinaldo para $ids.size empleados del ejercicio $ejercicio"
 		ids.each{ 
 			def empleado=Empleado.get(it)
-			try {
-				def aguinaldo=Aguinaldo.findOrCreateWhere(ejercicio: ejercicio,empleado:empleado)
-
-				def periodo=Periodo.getPeriodoAnual(aguinaldo.ejercicio)
-				//aguinaldo.fechaInicial=DateUtils.addMonths(periodo.fechaInicial,-1)
-				//aguinaldo.fechaFinal=DateUtils.addMonths(periodo.fechaFinal,-1)
-				calcular(aguinaldo)
-			}
-			catch(Exception e) {
-				log.error "Error calculando aguinaldo de $empleado ($ejercicio)",e
-			}
+			def aguinaldo=Aguinaldo.findOrCreateWhere(ejercicio: ejercicio,empleado:empleado)
+			def periodo=Periodo.getPeriodoAnual(aguinaldo.ejercicio)
+			//aguinaldo.fechaInicial=DateUtils.addMonths(periodo.fechaInicial,-1)
+			//aguinaldo.fechaFinal=DateUtils.addMonths(periodo.fechaFinal,-1)
+			calcular(aguinaldo)
 		}
 	}
 
@@ -123,6 +124,10 @@ class AguinaldoService {
 		
 		aguinaldo.diasParaAguinaldo=aguinaldo.getDiasDelEjercicio()
 		aguinaldo.diasParaBono=aguinaldo.getDiasDelEjercicio()
+		if(getEmpresa().clave != 'PAPEL'){
+			aguinaldo.diasParaBono = 0
+			aguinaldo.porcentajeBono=0.0
+		}
 
 		if(!aguinaldo.manual)
 			registrarFaltas(aguinaldo)
@@ -140,9 +145,16 @@ class AguinaldoService {
 			if(aguinaldo.antiguedad<diasDelEjercicioReales){
 				aguinaldo.porcentajeBono=0.0
 			}
+			if(getEmpresa().clave != 'PAPEL'){
+				aguinaldo.diasParaBono = 0
+				aguinaldo.porcentajeBono=0.0
+			}
     	}
 		
 		aguinaldo.diasParaBono=aguinaldo.diasDelEjercicio-aguinaldo.faltas-aguinaldo.incapacidades-aguinaldo.permisoEspecial-aguinaldo.incapacidadesMAT-aguinaldo.incapacidadesRTT-aguinaldo.incapacidadesRTE
+		if(getEmpresa().clave != 'PAPEL'){
+			aguinaldo.diasParaBono = 0
+		}
 		def factorBono=(aguinaldo.diasDeBono/diasDelEjercicioReales)*aguinaldo.diasParaBono
 		aguinaldo.bonoPreliminar=factorBono*aguinaldo.salario
 		aguinaldo.bono=aguinaldo.bonoPreliminar*aguinaldo.porcentajeBono
@@ -284,6 +296,12 @@ class AguinaldoService {
 		def incapacidadesRTE=rows.count{it.tipo == 'INCAPACIDAD' && it.comentario=='INCAPACIDAD RTE'}
 
 		def incapacidadesMAT=rows.count{it.tipo == 'INCAPACIDAD' && it.comentario=='INCAPACIDAD MAT'}
+		if(getEmpresa().clave != 'PAPEL'){
+			incapacidades = 0
+			incapacidadesRTT = 0
+			incapacidadesRTE = 0
+			incapacidadesMAT = 0
+		}
 
 
 		a.faltas=faltas
@@ -331,5 +349,12 @@ class AguinaldoService {
 		def d=OtraDeduccion.findAll("from OtraDeduccion d where d.saldo>0 and d.empleado=? order by d.saldo desc"
 			,[e],[max:1])
 		return d?d[0]:null
+	}
+
+	Empresa getEmpresa(){
+		if(!empresa){
+			empresa = Empresa.first()
+		}
+		return empresa
 	}
 }

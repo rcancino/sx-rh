@@ -34,6 +34,9 @@
 			<g:link action="actualizar">
 				<span class="glyphicon glyphicon-cog"></span> Actualizar
 			</g:link>
+			<g:link action="eliminar" onclick="return confirm('Eliminar todos los registros de auinaldo para el ejerccio');">
+				<i class="fa fa-trash"></i> Eliminar
+			</g:link>
 		</li>
 		
 	</content>
