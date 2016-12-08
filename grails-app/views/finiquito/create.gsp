@@ -17,7 +17,17 @@
 	
 	<content tag="formFields">
 		<f:with bean="${finiquitoInstance }">
-			<f:field property="empleado" widget-class="form-control"/>
+			<f:field property="baja" widget-class="form-control">
+				<g:select class="form-control chosen-select"  
+					name="${property}" 
+					value="${value?.id}"
+					from="${bajas}" 
+					optionKey="id" 
+					optionValue = "empleado"
+					noSelection="${['null':'Seleccione una baja']}"
+					required='required'
+					/>
+			</f:field>
 			<f:field property="comentario" widget-class="form-control"/>
 		</f:with>
 

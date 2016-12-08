@@ -25,7 +25,10 @@ class FiniquitoController {
     }
 
     def create() {
-        respond new Finiquito(params)
+        def bajas = BajaDeEmpleado
+            .findAll('from BajaDeEmpleado b where date(b.fecha) > ? and b not in(select f.baja from Finiquito f)',
+                [Date.parse('dd/MM/yyyy','01/11/2016')])
+        [finiquitoInstance: new Finiquito(params), bajas:bajas]
     }
 
     @Transactional
@@ -34,7 +37,8 @@ class FiniquitoController {
             notFound()
             return
         }
-
+        finiquitoInstance.empleado = finiquitoInstance?.baja?.empleado
+        finiquitoInstance.validate()
         if (finiquitoInstance.hasErrors()) {
             respond finiquitoInstance.errors, view:'create'
             return
