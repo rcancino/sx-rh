@@ -40,21 +40,9 @@ class ReciboDeNominaController {
 		
 		params.periodicidad=params.periodicidad?:'QUINCENAL'
 		
-		//println 'Lista de recibos para : '+params
-		
-		def nominasPorMes=[:]
-		Mes.getMeses().each{
-			nominasPorMes[it.nombre]=Nomina.findAll(
-			"from Nomina n where n.periodicidad=? and month(n.periodo.fechaInicial)=?"
-			,[params.periodicidad,it.clave+1])
-		}
-		
-		def nominasList=[]
-		
-		[
-			nominasPorMesInstanceMap:nominasPorMes  //Para el scrollpane
-			,nominaInstance:Nomina.get(nominaId) //La nomina seleccionada
-			,mesInstance:params.mesInstance //Para seleccionar el scrollpan activo
+		def query=Nomina.where{periodicidad==params.periodicidad && ejercicio==session.ejercicio}
+		[nominaInstanceList:query.list(params)
+			,nominaInstanceListTotal:query.count(params)
 			,periodicidad:params.periodicidad
 		]
 		

@@ -152,6 +152,31 @@ environments {
         }
     }
 
+    kyo {
+        dataSource {
+            pooled = true
+            dbCreate="update"
+            url = 'jdbc:mysql://localhost/sx_rh_kyo?autoReconnect=true'
+            driverClassName = "com.mysql.jdbc.Driver"
+            dialect = org.hibernate.dialect.MySQL5InnoDBDialect
+            username = "root"
+            password = "sys"
+            properties {
+                maxActive = 10
+                maxIdle = 10
+                minIdle = 3
+                initialSize = 3
+                minEvictableIdleTimeMillis=1800000
+                timeBetweenEvictionRunsMillis=1800000
+                numTestsPerEvictionRun=3
+                testOnBorrow=true
+                testWhileIdle=true
+                testOnReturn=true
+                maxWait = 10000
+            }
+        }
+    }
+
     
     
 }

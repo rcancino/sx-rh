@@ -26,21 +26,7 @@
             <span class="fa fa-angle-right pull-right"></span>
         </li>
 
-        %{-- <li class="${webRequest.controllerName=='reciboDeNomina'?'active':''}">
-            <g:link controller="reciboDeNomina">
-                <span class="nav-label">Recibos (Quincena)</span> 
-                <span class="fa fa-angle-right pull-right"></span>
-            </g:link>
-            <span class="fa fa-angle-right pull-right"></span>
-        </li>
-
-        <li class="${webRequest.controllerName=='reciboDeNomina'?'active':''}">
-            <g:link controller="reciboDeNomina" action="semanal">
-                <span class="nav-label">Recibos (Semana)</span> 
-                <span class="fa fa-angle-right pull-right"></span>
-            </g:link>
-            <span class="fa fa-angle-right pull-right"></span>
-        </li> --}%
+        
 
         <li class="${webRequest.controllerName=='incentivo'?'active':''}">
             <g:link controller="incentivo" action="semanal">
@@ -97,6 +83,24 @@
             </g:link>
             <span class="fa fa-angle-right pull-right"></span>
         </li>
+
+        <li class="${webRequest.controllerName=='reciboDeNomina'?'active':''}">
+            <g:link controller="reciboDeNomina">
+                <span class="nav-label">Recibos (CFDI)</span> 
+                <span class="fa fa-angle-right pull-right"></span>
+            </g:link>
+            <span class="fa fa-angle-right pull-right"></span>
+        </li>
+
+        %{-- 
+
+        <li class="${webRequest.controllerName=='reciboDeNomina'?'active':''}">
+            <g:link controller="reciboDeNomina" action="semanal">
+                <span class="nav-label">Recibos (Semana)</span> 
+                <span class="fa fa-angle-right pull-right"></span>
+            </g:link>
+            <span class="fa fa-angle-right pull-right"></span>
+        </li> --}%
         
     </ul>
 </li>

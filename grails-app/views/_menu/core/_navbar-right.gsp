@@ -6,6 +6,13 @@
         </g:link>
         
     </li>
+
+    <li>
+        <a href="" data-toggle="modal" data-target="#cambioGlobalDeEjercicioForm">
+            <i class="fa fa-calendar"></i>
+        </a>
+    </li>
+
     <li>
         <a data-target="#empleadoSearchDialog" data-toggle="modal">
             <i class="fa fa-user"></i> 

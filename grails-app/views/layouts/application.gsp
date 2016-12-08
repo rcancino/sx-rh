@@ -47,5 +47,6 @@
 			<g:render template="/_menu/core/right-sidebar"/>
 		</div>
 		<g:render template="/empleado/empleadoSearch"/>
+		<g:render template="/_common/cambioGlobalDeEjercicioDialog"/>
 	</body>
 </html>
