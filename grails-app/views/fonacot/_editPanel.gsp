@@ -7,12 +7,12 @@
 			<g:hiddenField name="version" value="${fonacotInstance.version}" />
 			
 			<f:with bean="${fonacotInstance }" >
-				<f:display property="importe" wrapper="bootstrap3"/>
-				<f:display property="retencionMensual" wrapper="bootstrap3"/>
+				<f:field property="importe"  widget="numeric" widget-class="form-control"/>
+				<f:field property="retencionMensual"  widget="numeric" widget-class="form-control"/>
 				<f:display property="retencionDiaria" wrapper="bootstrap3"/>
 				<f:display property="totalAbonos" wrapper="bootstrap3"/>
 				<f:display property="saldo" wrapper="bootstrap3"/>
-				<f:display property="activo" wrapper="bootstrap3"/>
+				<f:field property="activo" wrapper="bootstrap3" widget-class="form-control"/>
 			</f:with>
 		</lx:iboxContent>
 
@@ -62,5 +62,6 @@
 		    
 		    return true;
 		});
+		$(".numeric").autoNumeric('init',{vMin:'0'},{vMax:'9999999'});
 	});
 </script>

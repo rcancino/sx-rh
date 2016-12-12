@@ -2,17 +2,17 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="layout" content="operaciones2"/>
-	<title>Prestamos</title>
+	<title>FONACOT</title>
 </head>
 <body>
 
 <content tag="header">
-	<h2>Prestamos FONACTO</h2>
+	<h2>Prestamos FONACOT</h2>
 </content>
 
 <content tag="reportes">
 	<li>
-		<g:jasperReport jasper="FonactotGeneral"
+		<g:jasperReport jasper="FonacotGeneral"
 					format="PDF" name="Vigentes">
 		</g:jasperReport>
 	</li>

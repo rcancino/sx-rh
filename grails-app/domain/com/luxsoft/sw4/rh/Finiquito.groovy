@@ -43,7 +43,7 @@ class Finiquito {
 
 	/***********/
 
-
+/*
 	Integer antiguedad=0
 
 	BigDecimal salario=0.0	
@@ -137,7 +137,7 @@ class Finiquito {
 		empleado unique:true
 		baja uniqut:true
 		nominaPorEmpleado nullable:true
-		comentario nullable:true
+		//comentario nullable:true
     }
 
     static mapping = {
