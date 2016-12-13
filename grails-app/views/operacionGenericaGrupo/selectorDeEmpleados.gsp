@@ -44,7 +44,7 @@
 								<g:each in="${empleados}" var="row">
 									<tr id="${row.id}">
 										<td>${fieldValue(bean:row,field:"clave")}</td>
-										<td>${fieldValue(bean:row,field:"nombres")}</td>
+										<td>${fieldValue(bean:row,field:"nombre")}</td>
 										<td>${fieldValue(bean:row,field:"status")}</td>
 										<td><g:formatDate date="${row.alta}"/></td>
 										<td><g:formatDate date="${row?.baja?.fecha}"/></td>

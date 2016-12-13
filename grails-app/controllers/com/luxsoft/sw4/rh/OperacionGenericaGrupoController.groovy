@@ -98,9 +98,9 @@ class OperacionGenericaGrupoController {
 
 
     def selectorDeEmpleados(OperacionGenericaGrupo operacionGenericaGrupoInstance) {
-        params.sort = 'apellidoPaterno'
-        params.order =  'desc'
-        def empleados = Empleado.where{activo==true}.list(params)
+        params.sort = 'clave'
+        params.order =  'asc'
+        def empleados = Empleado.where{activo==true && salario.periodicidad==operacionGenericaGrupoInstance.calendarioDet.calendario.tipo+'L' && status=='ALTA'}.list(params)
         [empleados: empleados, operacion: operacionGenericaGrupoInstance]
     }
 
