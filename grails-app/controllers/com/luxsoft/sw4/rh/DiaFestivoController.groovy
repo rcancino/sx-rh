@@ -9,12 +9,14 @@ import grails.transaction.Transactional
 class DiaFestivoController {
 
     def index(Integer max) {
-		params.max = Math.min(max ?: 15, 100)
+		params.max = Math.min(max ?: 100, 500)
+		params.sort = 'fecha'
+		params.order = 'desc'
 		[diaFestivoList:DiaFestivo.list(params), diaFestivoTotalCount: DiaFestivo.count()]
 	}
 	
 	def create() {
-		[diaFestivoInstance:new DiaFestivo(fecha:new Date(),ejercicio:new Date().year)]
+		[diaFestivoInstance:new DiaFestivo(fecha:new Date(),ejercicio:session.ejercicio)]
 	}
 	
 	@Transactional
@@ -30,6 +32,10 @@ class DiaFestivoController {
 		flash.message="Fecha registrada : "+diaFestivoInstance.id
 		
 		redirect action:'index'
+	}
+
+	def show(DiaFestivo diaFestivoInstance){
+		respond diaFestivoInstance
 	}
 	
 	def edit(DiaFestivo diaFestivoInstance) {

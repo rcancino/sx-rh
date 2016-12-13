@@ -1,13 +1,18 @@
 package com.luxsoft.sw4.rh
 
-
+import org.grails.databinding.BindingFormat
 
 class Turno {
 
 	String descripcion
 	
+	@BindingFormat('HH:mm')
 	Date inicioDeDia
+
+	@BindingFormat('HH:mm')
 	Date horaLimiteDeTrabajo
+	
+	@BindingFormat('HH:mm')
 	Date inicioDeTiempoExtra
 
 	List dias
@@ -28,6 +33,9 @@ class Turno {
 
     static mapping = {
     	dias cascade: "all-delete-orphan"
+    	inicioDeDia type:'time'
+    	horaLimiteDeTrabajo type: 'time'
+    	inicioDeTiempoExtra type: 'time'
     
     }
     

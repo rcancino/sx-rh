@@ -28,7 +28,7 @@
 					required='required'
 					/>
 			</f:field>
-			<f:field property="comentario" widget-class="form-control"/>
+			
 		</f:with>
 
 		<script type="text/javascript">

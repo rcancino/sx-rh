@@ -1,5 +1,4 @@
 <%@page expressionCodec="none" %>
-<r:require module="mask"/>
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h3 class="panel-title">Alta de turno</h3>
@@ -9,21 +8,32 @@
 		<g:form action="save" role="form" class="form-horizontal" >
 			<div class="well">
 				<f:with bean="turnoInstance">
-					<f:field property="descripcion" input-class="form-control"/>
+					<f:field property="descripcion" widget-class="form-control"/>
 					<f:field property="inicioDeDia">
-						<joda:timeField name="inicioDeDia" class="form-control time" type="text" 
-							value="${turnoInstance?.inicioDeDia}"/>
-					</f:field>
-					
-					<f:field property="horaLimiteDeTrabajo" label="Hora máxima de trabajo">
-						<joda:timeField name="horaLimiteDeTrabajo" class="form-control time" />
+						<input class=" form-control time " 
+						type="text" 
+						name="inicioDeDia" 
+						value="${g.formatDate(date:value,format:'HH:mm') }" >
 					</f:field>
 
-					<f:field property="horaLimiteSiguienteDia" input-class="form-control" label="Siguiente día"/>
+					<f:field property="horaLimiteDeTrabajo" label="Hora máxima de trabajo">
+						<input class=" form-control time " 
+						type="text" 
+						name="horaLimiteDeTrabajo" 
+						value="${g.formatDate(date:value,format:'HH:mm') }" >
+					</f:field>
+
+					<f:field property="horaLimiteSiguienteDia" widget-class="form-control" label="Siguiente día"
+						value="${turnoInstance.horaLimiteSiguienteDia}"/>
 					
 					<f:field property="inicioDeTiempoExtra" label="Hora máxima de trabajo">
-						<joda:timeField name="inicioDeTiempoExtra" class="form-control time" />
+						<input class=" form-control time " 
+						type="text" 
+						name="inicioDeTiempoExtra" 
+						value="${g.formatDate(date:value,format:'HH:mm') }" >
 					</f:field>
+
+					
 				</f:with>
 			</div>
 			<div class="panel-header">
@@ -43,10 +53,29 @@
 								<g:hiddenField name="dias[${row}].dia" 
 									value="${turnoInstance.dias[row].dia}"/>
 							</td>
-							<td><joda:timeField class="time" name="dias[${row}].entrada1"/></td>
-							<td><joda:timeField class="time" name="dias[${row}].salida1"/></td>
-							<td><joda:timeField class="time" name="dias[${row}].entrada2"/></td>
-							<td><joda:timeField class="time" name="dias[${row}].salida2"/></td>
+							<td>
+								<input class="time " 
+									type="text" 
+									name="dias[${row}].entrada1" 
+									value="${turnoInstance.dias[row].entrada1}" >
+							</td>
+							<td>
+								<input class="time " 
+									type="text" 
+									name="dias[${row}].salida1" 
+									value="${turnoInstance.dias[row].salida1}" >
+							<td>
+								<input class="time " 
+									type="text" 
+									name="dias[${row}].entrada2" 
+									value="${turnoInstance.dias[row].entrada2}" >
+							</td>
+							<td>
+								<input class="time " 
+									type="text" 
+									name="dias[${row}].salida2" 
+									value="${turnoInstance.dias[row].salida2}" >
+							</td>
 						</tr>
 						</g:each>
 					</tbody>
@@ -67,8 +96,8 @@
 	
 </div>
 
-<r:script>
+<script type="text/javascript">
 	$(document).ready(function(){
-  		$('.time').mask('00:00:00');
+  		$('.time').mask('00:00');
 	});
-</r:script>
+</script>

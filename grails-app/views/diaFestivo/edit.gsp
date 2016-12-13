@@ -1,30 +1,28 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Día festivo ${diaFestivoInstance.id}</title>
+	<meta name="layout" content="editForm"/>
+	<title>Día festivo ${diaFestivoInstance.fecha.text()}</title>
+	<g:set var="entity" value="${diaFestivoInstance}" scope="request" />
+	<g:set var="imprimible" value="${false}" scope="request" />
 </head>
 <body>
-	<div class="container">
-	
-		<div class="row">
-			<ul class="nav nav-tabs">
-				<li>
-					<g:link action="index" class="list-group-item">
-						<span class="glyphicon glyphicon-list"></span> Días festivos
-					</g:link>
-				</li>
-				<li>
-					<g:link controller="asistencia" action="index" class="list-group-item">
-						<span class="glyphicon glyphicon-list"></span> Control de asistencias
-					</g:link>
-				</li>
-			</ul>
-			<div class="col-md-12">
-				<g:render template="editForm"/>
-			</div>
-			
-		</div>
-	</div>
+
+<content tag="header">
+	Día festivo ${diaFestivoInstance.fecha.text()} 
+</content>
+
+<content tag="formFields">
+	<f:with bean="diaFestivoInstance">
+		<f:field property="ejercicio" widget-class="form-control"/>
+		<f:field property="fecha"  />
+		<f:field property="descripcion" widget-class="form-control" />
+		<f:field property="parcial" widget-class="form-control" />
+		<f:field property="salida" widget-class="form-control" />
+	</f:with>
+</content>
 	
 </body>
 </html>
+
+

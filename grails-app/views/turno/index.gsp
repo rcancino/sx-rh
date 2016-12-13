@@ -6,7 +6,7 @@
 </head>
 <body>
 	<content tag="header">
-		<h3>Catálogo de turnos </h3>
+		Catálogo de turnos 
 		
 	</content>
 	<content tag="grid">

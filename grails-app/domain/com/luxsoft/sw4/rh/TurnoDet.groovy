@@ -1,6 +1,6 @@
 package com.luxsoft.sw4.rh
 
-
+import org.grails.databinding.BindingFormat
 //import groovy.time.Duration
 
 
@@ -8,11 +8,13 @@ package com.luxsoft.sw4.rh
 class TurnoDet {
 
 	String dia
-
+	@BindingFormat('HH:mm')
 	Date entrada1
+	@BindingFormat('HH:mm')
 	Date salida1
-	
+	@BindingFormat('HH:mm')
 	Date entrada2
+	@BindingFormat('HH:mm')
 	Date salida2
 	
 	BigDecimal horasDeTrabajo

@@ -21,7 +21,7 @@ class Calendario {
 	Date lastUpdated
 
     static constraints = {
-		ejercicio size:2014..2030
+		ejercicio inList:[2014,2015,2016,2017,2018,2019,2020]
 		tipo inList:['SEMANA','QUINCENA','MES','CATORCENA','BIMESTRE','ESPECIAL']
     	comentario nullable:true,maxSize:200
     }

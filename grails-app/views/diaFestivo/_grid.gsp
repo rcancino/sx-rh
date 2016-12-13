@@ -11,7 +11,7 @@
 	<tbody>
 		<g:each in="${diaFestivoList}" var="row">
 			<tr>
-				<td><g:link action="edit" id="${row.id}">
+				<td><g:link action="show" id="${row.id}">
 						<g:formatNumber number="${row.ejercicio}" format="####"/>
 					</g:link>
 				</td>

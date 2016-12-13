@@ -6,7 +6,7 @@
 </head>
 <body>
 	<content tag="header">
-			<h3>Calendarios de operación</h3>
+			Dias festivos
 	</content>
 	
 	<content tag="grid">

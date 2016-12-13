@@ -12,7 +12,9 @@ class TurnoController {
     static allowedMethods = [save: "POST", update: "PUT"]
 
     def index(Long max){
-    	params.max = Math.min(max ?: 15, 100)
+    	params.max = Math.min(max ?: 50, 100)
+        params.sort = 'id'
+        params.order = 'desc'
     	[turnoInstanceList:Turno.list(params),turnoInstanceCount:Turno.count()]
     }
 
@@ -42,9 +44,8 @@ class TurnoController {
 		redirect action:'index'
     }
 
-    def show(Long id){
-    	def turnoInstance=Turno.get(id)
-    	[turnoInstance:turnoInstance]
+    def show(Turno turnoInstance){
+    	respond turnoInstance
     }
 
     def edit(Long id){
@@ -65,7 +66,7 @@ class TurnoController {
     	turnoInstance.validate()
     	if(turnoInstance.hasErrors()){
     		flash.message="Turno invalido"
-    		render view:'edit',[turnoInstance:turnoInstance]
+    		render view:'edit',model:[turnoInstance:turnoInstance]
 
     	}
     	turnoInstance.save failOnError:true

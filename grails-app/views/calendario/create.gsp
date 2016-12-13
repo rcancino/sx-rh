@@ -2,7 +2,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="layout" content="createForm"/>
-	title>Alta de calendario</title>
+	<title>Alta de calendario</title>
 	<g:set var="entity" value="${calendarioInstance}" scope="request" />
 	<g:set var="editable" value="${true}" scope="request" />
 	<g:set var="imprimible" value="${false}" scope="request" />

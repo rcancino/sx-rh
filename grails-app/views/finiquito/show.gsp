@@ -17,7 +17,7 @@
 			<f:with bean="${entity}">
 				<f:display property="empleado" widget-class="form-control"/>
 				<f:display property="baja.fecha" widget-class="form-control" label="Baja"/>
-				<f:display property="comentario" widget-class="form-control" />
+				
 				
 			</f:with>
 			

@@ -15,21 +15,25 @@ class Finiquito {
 
 	Date alta
 
-	Integer antiguedad=0
+	Integer antiguedad = 0
 
 	BigDecimal salario = 0.0
 	
 	BigDecimal salarioDiarioIntegrado=0.0
 
 	BigDecimal factorLiquidacion=0.0000
+	
+	Integer diasParaAguinaldo = 0
 
-	Integer diasParaAguinaldo=15
+	Integer diasAguinaldo = 15
 
 	BigDecimal primaVacacional=0.0
 
 	BigDecimal salarioDiarioIntegradoLiq=0.0
 
 	BigDecimal sueldo=0.0
+
+	Integer diasDelEjercicio = 0
 
 	Integer diasTrabajadoEjercicio=0
 
@@ -40,6 +44,8 @@ class Finiquito {
 	Integer vacacionesEjercicio=0
 
 	Integer vacacionesAplicadas=0
+
+	Integer anosTrabajados = 0
 
 	/***********/
 
@@ -137,7 +143,9 @@ class Finiquito {
 		empleado unique:true
 		baja uniqut:true
 		nominaPorEmpleado nullable:true
+		diasDelEjercicio nullable:true
 		//comentario nullable:true
+		anosTrabajados nullable: true
     }
 
     static mapping = {
@@ -145,25 +153,14 @@ class Finiquito {
 		// fechaFinal type:'date'
 	}
 
-	static transients = ['antiguedad']
+	
 
     String toString(){
     	return "Finiquito $empleado "
     }
     
 
-	public Integer getAntiguedad(){
-    	if(!antiguedad && empleado){
-			
-			def fecha=fechaFinal
-			if(empleado.baja && (empleado.alta<empleado.baja.fecha)){
-				if(fechaFinal>empleado.baja.fecha)
-					fecha=empleado.baja.fecha
-			}
-			return (fecha-empleado.alta)+1
-    	}
-    	return antiguedad
-	}
+	
 	
 
 }
