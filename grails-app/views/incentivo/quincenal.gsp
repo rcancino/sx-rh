@@ -33,7 +33,7 @@
 			<div class="col-md-8">
 				<div class="btn-group">
 					<lx:refreshButton action="${webRequest.actionName}"/>
-					<g:link action="generarIncentivoSemanal" 
+					<g:link action="generarIncentivoQuincena" 
 							class="btn btn-default btn-outline btn-primary" 
 							onclick="return confirm('Generar/Actualizar incentivos semana: '+' ${calendarioDet?.folio}');" 
 							id="${calendarioDet.id}">

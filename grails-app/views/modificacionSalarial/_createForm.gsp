@@ -13,11 +13,13 @@
 	<f:field property="salarioAnterior" >
 		<input name="salarioAnterior" type="text" class="form-control" id = "salarioAnteriorField"readonly   >
 	</f:field>
+	
 
 
 	<f:field input-id="salarioNuevo" 
 			property="salarioNuevo" 
-			widget-class="form-control numerico" 
+			widget="numeric"
+			widget-class="form-control" 
 			input-type="text"
 			input-autocomplete="off"/>
 	
