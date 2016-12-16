@@ -120,8 +120,8 @@ class NominaPorEmpleado {
 	
 	def actualizar() {
 		//total=getPercepciones().subtract(getDeducciones()).setScale(2, RoundingMode.HALF_EVEN);
-		total=getPercepciones().setScale(2, RoundingMode.HALF_EVEN);
-		total-=getDeducciones().setScale(2, RoundingMode.HALF_EVEN);
+		total=getPercepciones() //.setScale(2, RoundingMode.HALF_EVEN);
+		total-=getDeducciones() //.setScale(2, RoundingMode.HALF_EVEN);
 		//total=percepciones-deducciones
 		totalGravado=percepcionesGravadas
 		totalExcento=percepcionesExcentas
@@ -139,6 +139,7 @@ class NominaPorEmpleado {
 	def beforeUpdate() {
 		this.baseGravable=getPercepcionesGravadas()
 		actualizar()
+		
 		
 	}
 	def beforeInsert(){

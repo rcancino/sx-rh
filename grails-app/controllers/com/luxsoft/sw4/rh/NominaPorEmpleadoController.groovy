@@ -131,7 +131,7 @@ class NominaPorEmpleadoController {
 		println params.reciboFirmado
 
 		def ne=nominaPorEmpleadoService.actualizarFirmaRecibo(id,params.reciboFirmado)
-		redirect action:'edit',params:[id:ne.id]
+		redirect controller:'nomina',action:'show',params:[id:ne.nomina.id]
 			return
 	}
 	

@@ -18,6 +18,8 @@ class Finiquito {
 	Integer antiguedad = 0
 
 	BigDecimal salario = 0.0
+
+	BigDecimal salarioVariable = 0.0
 	
 	BigDecimal salarioDiarioIntegrado=0.0
 
@@ -30,8 +32,6 @@ class Finiquito {
 	BigDecimal primaVacacional=0.0
 
 	BigDecimal salarioDiarioIntegradoLiq=0.0
-
-	BigDecimal sueldo=0.0
 
 	Integer diasDelEjercicio = 0
 
@@ -47,12 +47,7 @@ class Finiquito {
 
 	Integer anosTrabajados = 0
 
-	/***********/
-
-/*
-	Integer antiguedad=0
-
-	BigDecimal salario=0.0	
+	Integer diasPorPagar = 0
 
 	BigDecimal sueldo=0.0
 	
@@ -84,15 +79,15 @@ class Finiquito {
 	
 	BigDecimal compensacion=0.0
 
-	BigDecimal BonoDeProductividad=0.0
+	BigDecimal bonoDeProductividad=0.0
 	
 	BigDecimal permisoPorPaternidad=0.0
 
 	BigDecimal compensacionSAF=0.0
 	
-	BigDecimal SubsEmpPagado=0.0
+	BigDecimal subsEmpPagado=0.0
 	
-	BigDecimal SubsEmpAplicado=0.0
+	BigDecimal subsEmpAplicado=0.0
 	
 	BigDecimal ingresoTotal=0.0
 
@@ -132,7 +127,6 @@ class Finiquito {
 
 	BigDecimal subsidioAcumuladoMes=0.0
 
-	/************/
 		
 	Date dateCreated
 	

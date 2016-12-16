@@ -220,21 +220,7 @@
 							<td></td>
 							<td></td>
 						</tr>
-						<tr>
-							<td>Recibo Firmado</td>
-							<td>
-							<g:form class="form-inline" role="form" 
-							controller="nominaPorEmpleado" 
-							action="actualizarFirmaRecibo" id="${nominaPorEmpleadoInstance.id}">
-								<g:checkBox name="reciboFirmado" value="${nominaPorEmpleadoInstance.reciboFirmado}"/>
-								<button type="submit" class="btn btn-default">
-								<span class="glyphicon glyphicon-ok"></span> 
-							</button>
-							</g:form>
-							</td>
-							<td></td>
-							<td></td>
-						</tr>
+						
 					</tbody>
 				</table>
 			</div>

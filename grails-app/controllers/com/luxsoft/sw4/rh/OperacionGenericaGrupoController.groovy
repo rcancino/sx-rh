@@ -100,7 +100,7 @@ class OperacionGenericaGrupoController {
     def selectorDeEmpleados(OperacionGenericaGrupo operacionGenericaGrupoInstance) {
         params.sort = 'clave'
         params.order =  'asc'
-        def empleados = Empleado.where{activo==true && salario.periodicidad==operacionGenericaGrupoInstance.calendarioDet.calendario.tipo+'L' && status=='ALTA'}.list(params)
+        def empleados = Empleado.where{activo==true && salario.periodicidad==operacionGenericaGrupoInstance.calendarioDet.calendario.tipo+'L' && status!='BAJA'}.list(params)
         [empleados: empleados, operacion: operacionGenericaGrupoInstance]
     }
 

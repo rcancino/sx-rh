@@ -28,6 +28,7 @@
 					required='required'
 					/>
 			</f:field>
+			<f:field property="diasPorPagar" widget-class="form-control"/>
 			
 		</f:with>
 

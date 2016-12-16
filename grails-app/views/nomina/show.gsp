@@ -24,7 +24,7 @@
 		
 		<div class="col-md-12">
 			<div class="btn-group">
-				<g:link action="index" class="btn btn-default btn-outline">
+				<g:link controller="nomina" action="show" id="${nominaInstance.id}" class="btn btn-default btn-outline">
 					<span class="glyphicon glyphicon-repeat"></span> Refrescar
 				</g:link>
 			</div>

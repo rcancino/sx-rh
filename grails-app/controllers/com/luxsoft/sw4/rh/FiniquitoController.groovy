@@ -13,6 +13,8 @@ class FiniquitoController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
+    def finiquitoService
+
     def index(Integer max) {
         params.max = Math.min(max ?: 40, 100)
         params.sort = 'dateCreated'
@@ -36,6 +38,8 @@ class FiniquitoController {
         [finiquitoInstance: new Finiquito(params), bajas:getBajas()]
     }
 
+
+
     @Transactional
     def save(Finiquito finiquitoInstance) {
         if (finiquitoInstance == null) {
@@ -52,6 +56,7 @@ class FiniquitoController {
         }
 
         finiquitoInstance.save flush:true
+        //finiquitoInstance = finiquitoService.calcular(session.ejercicio,finiquitoService)
 
         request.withFormat {
             form multipartForm {

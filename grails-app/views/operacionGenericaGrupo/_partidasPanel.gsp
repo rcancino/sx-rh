@@ -34,7 +34,7 @@
                                 ${g.formatNumber(number:row.id, format:'#####')}    
                             </g:link>
                         </td>
-                        <td>${fieldValue(bean:row,field:"empleado.nombres")}</td>
+                        <td>${fieldValue(bean:row,field:"empleado.nombre")}</td>
                         <td>${fieldValue(bean:row,field:"empleado.perfil.ubicacion.clave")}</td>
                         <g:if test="${editable == true}">
                             <td>

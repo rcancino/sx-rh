@@ -50,8 +50,16 @@
 						<p class="text-danger">PENDIENTE</p>
 					</g:else>
 				</td>
-
-				<td><g:checkBox name="myCheckbox" value="${row.reciboFirmado}" disabled="disabled" /></td>
+				<td>
+					<g:form class="form-inline" role="form" 
+					controller="nominaPorEmpleado" 
+					action="actualizarFirmaRecibo" id="${row.id}">
+						<g:checkBox name="reciboFirmado" value="${row.reciboFirmado}"/>
+						<button type="submit" class="btn btn-default">
+						<span class="glyphicon glyphicon-ok"></span> 
+					</button>
+					</g:form>
+				</td>
 				
 			</tr>
 		</g:each>
