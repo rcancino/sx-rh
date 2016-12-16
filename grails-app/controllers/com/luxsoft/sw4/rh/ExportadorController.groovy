@@ -1679,104 +1679,123 @@ def reporteDeInfonavit(){
 }
 
 
-def rfc(){
-	[reportCommand:new PeriodoCommand()]
-}
+		def rfc(){
+			[reportCommand:new PeriodoCommand()]
+		}
 
-def generarRfc(PeriodoCommand command){
-	
-def temp = File.createTempFile('temp', '.txt')
-	
-	def consecutivo="01"
-	  Empresa emp=Empresa.first()
-	
-	temp.with {
-	  
-	def fechaIni=command.fechaInicial  //new Date('2015/01/13')
-	def fechaFin=command.fechaFinal    //new Date('2015/01/31')
-	SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy")
+		def generarRfc(PeriodoCommand command){
+			
+		def temp = File.createTempFile('temp', '.txt')
+			
+			def consecutivo="01"
+			  Empresa emp=Empresa.first()
+			
+			temp.with {
+			  
+			def fechaIni=command.fechaInicial  //new Date('2015/01/13')
+			def fechaFin=command.fechaFinal    //new Date('2015/01/31')
+			SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy")
 
-	
-	def rfc=emp.rfc
-	def p="|"
-	def empleados = Empleado.findAll("from Empleado e where e.alta between ? and ?",[fechaIni,fechaFin]).each{ empleado ->
-  
-		  def curp=empleado.curp
-		  def apellidoPaterno=empleado.apellidoPaterno?empleado.apellidoPaterno:empleado.apellidoMaterno
-		  def apellidoMaterno=empleado.apellidoPaterno?empleado.apellidoMaterno:""
-		  def nombre=empleado.nombres
-		  def ingreso=df.format(empleado.alta)
-		  def tipoSalario="2"
+			
+			def rfc=emp.rfc
+			def p="|"
+			def empleados = Empleado.findAll("from Empleado e where e.alta between ? and ?",[fechaIni,fechaFin]).each{ empleado ->
 		  
-  
- 
-	  def registro=curp+p+apellidoPaterno+p+apellidoMaterno+p+nombre+p+ingreso+p+tipoSalario+p+rfc+"\r\n"
-	 	append registro
-	 //println registro
+				  def curp=empleado.curp
+				  def apellidoPaterno=empleado.apellidoPaterno?empleado.apellidoPaterno:empleado.apellidoMaterno
+				  def apellidoMaterno=empleado.apellidoPaterno?empleado.apellidoMaterno:""
+				  def nombre=empleado.nombres
+				  def ingreso=df.format(empleado.alta)
+				  def tipoSalario="2"
+				  
 		  
-	 }
+		 
+			  def registro=curp+p+apellidoPaterno+p+apellidoMaterno+p+nombre+p+ingreso+p+tipoSalario+p+rfc+"\r\n"
+			 	append registro
+			 //println registro
+				  
+			 }
 
-}
-	String name=emp.rfc+"_"+new Date().format("ddMMyyyy")+"_"+consecutivo+".txt"
-	response.setContentType("application/octet-stream")
-	response.setHeader("Content-disposition", "attachment; filename=\"$name\"")
-	response.outputStream << temp.newInputStream()
-  
+		}
+			String name=emp.rfc+"_"+new Date().format("ddMMyyyy")+"_"+consecutivo+".txt"
+			response.setContentType("application/octet-stream")
+			response.setHeader("Content-disposition", "attachment; filename=\"$name\"")
+			response.outputStream << temp.newInputStream()
+		  
 
-}
-
-
-def reporteDeRFC(){
-	[reportCommand:new PeriodoCommand()]
-}
-
-
-def revisionDeAguinaldoExport(){
-	[reportCommand:new EjercicioCommand()]
-}
-
-def generarArchivoAguinaldo(EjercicioCommand command){
-
-	def revision=new RevisionAguinaldoExport()
-	revision.dataSource=dataSource
+		}
 
 
-	
-	def arch=revision.generarArchivo(command.ejercicio)
-
-	String name="REVISION AGUINALDO ${command.ejercicio}.csv"
-		response.setContentType("application/octet-stream")
-		response.setHeader("Content-disposition", "attachment; filename=\"$name\"")
-		response.outputStream << arch.newInputStream()
-}
-
-def revisionNominaExport(){
-
-}
-
-def generarArchivoNomina(Long calendarioDet,String calendarioField){
-
-	def revision=new RevisionNominaExport()
-	revision.dataSource=dataSource	
-	def arch=revision.generarArchivo(calendarioDet)
-
-	String name="REVISION ${calendarioField}.csv"
-		response.setContentType("application/octet-stream")
-		response.setHeader("Content-disposition", "attachment; filename=\"$name\"")
-		response.outputStream << arch.newInputStream()
-}
+		def reporteDeRFC(){
+			[reportCommand:new PeriodoCommand()]
+		}
 
 
-def validacionSatRfc(){
-		
-		def validacion=new ValidacionRfcExport()
-		validacion.dataSource=dataSource	
-		def arch=validacion.generarArchivo()
-		String name="VALIDACION SAT RFC.csv"
-		response.setContentType("application/octet-stream")
-		response.setHeader("Content-disposition", "attachment; filename=\"$name\"")
-		response.outputStream << arch.newInputStream()
-}
+		def revisionDeAguinaldoExport(){
+			[reportCommand:new EjercicioCommand()]
+		}
+
+		def generarArchivoAguinaldo(EjercicioCommand command){
+
+			def revision=new RevisionAguinaldoExport()
+			revision.dataSource=dataSource
+
+
+			
+			def arch=revision.generarArchivo(command.ejercicio)
+
+			String name="REVISION AGUINALDO ${command.ejercicio}.csv"
+				response.setContentType("application/octet-stream")
+				response.setHeader("Content-disposition", "attachment; filename=\"$name\"")
+				response.outputStream << arch.newInputStream()
+		}
+
+		def revisionNominaExport(){
+
+		}
+
+		def generarArchivoNomina(Long calendarioDet,String calendarioField){
+
+			def revision=new RevisionNominaExport()
+			revision.dataSource=dataSource	
+			def arch=revision.generarArchivo(calendarioDet)
+
+			String name="REVISION ${calendarioField}.csv"
+				response.setContentType("application/octet-stream")
+				response.setHeader("Content-disposition", "attachment; filename=\"$name\"")
+				response.outputStream << arch.newInputStream()
+		}
+
+
+		def validacionSatRfc(){
+				
+				def validacion=new ValidacionRfcExport()
+				validacion.dataSource=dataSource	
+				def arch=validacion.generarArchivo()
+				String name="VALIDACION SAT RFC.csv"
+				response.setContentType("application/octet-stream")
+				response.setHeader("Content-disposition", "attachment; filename=\"$name\"")
+				response.outputStream << arch.newInputStream()
+		}
+
+		def revisionDeCalculoAnual(){
+			[reportCommand:new EjercicioCommand()]
+		}
+
+		def generarArchivoCalculoAnual(EjercicioCommand command){
+			def revision=new RevisionCalculoExport()
+			revision.dataSource=dataSource
+			
+			println "Realizando el calculo anual"+command
+
+			def arch=revision.generarArchivo(command.ejercicio)
+
+
+			String name="REVISION CALCULO ANUAL ${command.ejercicio}.csv"
+				response.setContentType("application/octet-stream")
+				response.setHeader("Content-disposition", "attachment; filename=\"$name\"")
+				response.outputStream << arch.newInputStream()
+		}
 
 }
 
