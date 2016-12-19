@@ -69,7 +69,6 @@ class AsistenciaService {
     	actualizarAsistencia(empleado,tipo,calendarioDet)
     }
 
-    
 	
 	@Transactional
 	def actualizarAsistencia(Empleado empleado,String tipo,CalendarioDet cal) {
@@ -181,8 +180,68 @@ class AsistenciaService {
 		asistencia.save failOnError:true
 		return asistencia
 	}
+
+	@Transactional
+    def asistenciaCierreAnual(CalendarioDet calendario){
+
+    	assert(calendarioDet)
+		def tipo=calendarioDet.calendario.tipo=='SEMANA'?'SEMANAL':'QUINCENAL'
+		
+		def empleados=Empleado.findAll(
+			"from Empleado e where e.salario.periodicidad=? order by e.perfil.ubicacion.clave,e.apellidoPaterno asc",[tipo])
+		
+		log.info ("Realizando cierre anual de Asistencia")
+		
+		empleados.each{ empleado ->
+			asistenciaCierreAnual(calendario,empleado)
+		}
+
+    }
+
+	@Transactional
+    def asistenciaCierreAnual(CalendarioDet calendario, Empleado empleado){
+
+    	println "Validando Existencia para"+ empleado.nombre
+    	
+    	
+		def asistencia =Asistencia.find(
+				"from Asistencia a where a.empleado=? and a.calendarioDet=?"
+				,[empleado,calendario])
 	
+		if(asistencia.diasTrabajados){
+			return asistencia
+		}
 	
+		def periodo=asistencia.periodo
+		List dias=periodo.getListaDeDias()
+		
+		dias.each{ date->
+
+				println "Evaluando : "+date
+					asistencia.partidas.findAll(){det->
+						println "det  "+det+"  -  "+ det.tipo
+						if(det.tipo=='FALTA'){	
+							
+						if(periodo.diaSemana(date)==6){
+									/*det.entrada1=java.sql.Time.valueOf('09:00:00');
+									det.salida1=java.sql.Time.valueOf('14:00:00');
+									det.manual=true*/
+						
+					//}else{
+									det.entrada1=java.sql.Time.valueOf('09:00:00');
+									det.salida1=java.sql.Time.valueOf('14:00:00');
+									det.entrada2=java.sql.Time.valueOf('15:00:00');
+									det.salida2=java.sql.Time.valueOf('18:30:00');
+									//det.manual=true
+					//}
+							
+						}
+						
+					}	
+					
+		    	}
+		    asistencia.save failOnError:true,flush:true
+	}	
 	def boolean validarEmpleado(Empleado empleado,CalendarioDet calendarioDet,Asistencia asistencia){
 		
 		def asistenciaInicial=calendarioDet.asistencia.fechaInicial

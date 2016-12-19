@@ -275,7 +275,7 @@ class ReporteController {
 		repParams.reportName=params.reportName?:'FaltaNombre Del Reporte'
 		ByteArrayOutputStream  pdfStream=runReport(repParams)
 		render(file: pdfStream.toByteArray(), contentType: 'application/pdf'
-			,fileName:repParams.reportName)
+			,fileName:command.concepto.descripcion+".pdf")
 	}
 	
 	def acumuladoDeNominasPorConcepto(AcumuladoDeNominaPorConceptoCommand command){
