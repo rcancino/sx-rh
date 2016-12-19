@@ -19,7 +19,7 @@ class VacacionesController {
 	
 	def index(Integer max) {
 		
-		params.max = 100
+		//params.max = 100
 		params.sort = 'lastUpdated'
 		params.order = 'desc'
 		def ejercicio=session.ejercicio
@@ -28,7 +28,8 @@ class VacacionesController {
 		// def list=Vacaciones.findAll("from Vacaciones i  where year(i.lastUpdated)=? order by i.lastUpdated desc"
 		// 	,[ejercicio])
 		
-		[vacacionesList:list,vacacinesTotalCount:list.size()]
+		//[vacacionesList:list,vacacinesTotalCount:list.size()]
+		[vacacionesList:list]
 	}
 	
 	def create() {
