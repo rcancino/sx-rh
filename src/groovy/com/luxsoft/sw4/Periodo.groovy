@@ -182,6 +182,8 @@ class Periodo implements Comparable<Periodo>{
 		Calendar c = Calendar.getInstance();
 						c.setTime(date);
 		int diaSemana = c.get(Calendar.DAY_OF_WEEK);
+
+	
 		return diaSemana;
 	}
 

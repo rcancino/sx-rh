@@ -182,7 +182,7 @@ class AsistenciaService {
 	}
 
 	@Transactional
-    def asistenciaCierreAnual(CalendarioDet calendario){
+    def asistenciaCierreAnual(CalendarioDet calendarioDet){
 
     	assert(calendarioDet)
 		def tipo=calendarioDet.calendario.tipo=='SEMANA'?'SEMANAL':'QUINCENAL'
@@ -193,7 +193,7 @@ class AsistenciaService {
 		log.info ("Realizando cierre anual de Asistencia")
 		
 		empleados.each{ empleado ->
-			asistenciaCierreAnual(calendario,empleado)
+			asistenciaCierreAnual(calendarioDet,empleado)
 		}
 
     }
@@ -201,46 +201,46 @@ class AsistenciaService {
 	@Transactional
     def asistenciaCierreAnual(CalendarioDet calendario, Empleado empleado){
 
-    	println "Validando Existencia para"+ empleado.nombre
-    	
-    	
 		def asistencia =Asistencia.find(
 				"from Asistencia a where a.empleado=? and a.calendarioDet=?"
 				,[empleado,calendario])
 	
-		if(asistencia.diasTrabajados){
+		if(asistencia && asistencia.diasTrabajados){
 			return asistencia
 		}
-	
-		def periodo=asistencia.periodo
-		List dias=periodo.getListaDeDias()
-		
-		dias.each{ date->
 
-				println "Evaluando : "+date
+			if(asistencia){
+				def periodo=asistencia.periodo
+	
 					asistencia.partidas.findAll(){det->
-						println "det  "+det+"  -  "+ det.tipo
-						if(det.tipo=='FALTA'){	
-							
-						if(periodo.diaSemana(date)==6){
-									/*det.entrada1=java.sql.Time.valueOf('09:00:00');
-									det.salida1=java.sql.Time.valueOf('14:00:00');
-									det.manual=true*/
 						
-					//}else{
+						if(det.tipo=='FALTA'){	
+						
+
+						if(periodo.obtenerDiaSemana(det.fecha)==7){
+									det.entrada1=java.sql.Time.valueOf('09:00:00');
+									det.salida1=java.sql.Time.valueOf('14:00:00');
+									det.manual=true
+						
+					}else{
 									det.entrada1=java.sql.Time.valueOf('09:00:00');
 									det.salida1=java.sql.Time.valueOf('14:00:00');
 									det.entrada2=java.sql.Time.valueOf('15:00:00');
 									det.salida2=java.sql.Time.valueOf('18:30:00');
-									//det.manual=true
-					//}
+									det.manual=true
+					}
 							
 						}
 						
 					}	
 					
-		    	}
+		    	
 		    asistencia.save failOnError:true,flush:true
+		    actualizarAsistencia(asistencia)
+
+			}
+	
+		
 	}	
 	def boolean validarEmpleado(Empleado empleado,CalendarioDet calendarioDet,Asistencia asistencia){
 		

@@ -72,8 +72,7 @@ class NominaPorEmpleadoService {
 	}
 	@Transactional
 	def actualizarFirmaRecibo(Long id,firma){
-		println "Actualizando firma de recibido"
-
+	
 		NominaPorEmpleado ne=NominaPorEmpleado.get(id)
 
 		if(firma){

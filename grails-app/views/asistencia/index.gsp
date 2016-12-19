@@ -77,6 +77,14 @@
 								 Depurar
 							</g:link>
 						</li>
+						<li>
+							<g:link action="cierreAnual" class="" 
+								onclick="return confirm('Realizar cierre anual para (${tipo} ${calendarioDet?.folio})?');" 
+								id="${calendarioDet.id}"
+								params="[tipo:tipo]">
+								 CierreAnual
+							</g:link>
+						</li>
 					</ul>
 					
 				</div>
