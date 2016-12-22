@@ -26,6 +26,13 @@
 	                	<lx:backButton class="btn btn-default btn-outline btn-sm" label="Calendarios"/>
 	                	<lx:editButton class="btn btn-default btn-outline btn-sm" id="${calendarioInstance.id}"/>
 	                	<lx:deleteButton bean="${calendarioInstance}"/>
+						<g:link class='btn btn-outline btn-default'type="button" action="generarPeriodosCalendario" id="${calendarioInstance.id}" onclick="return confirm('Generar Periodos para calendario');">Crear Periodos
+							<span class="glyphicon glyphicon-calendar"></span>
+						</g:link>
+					
+					
+				
+
 	              	</lx:iboxFooter>
 					
 				</lx:ibox>
