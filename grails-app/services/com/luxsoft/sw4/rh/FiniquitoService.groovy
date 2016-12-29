@@ -2,14 +2,72 @@ package com.luxsoft.sw4.rh
 
 import grails.transaction.Transactional
 import com.luxsoft.sw4.*
+import java.math.*
+import com.luxsoft.sw4.rh.tablas.ZonaEconomica
 
 @Transactional
 class FiniquitoService {
+
+        def inicializarFiniquito(Finiquito finiquitoInstance){
+            Periodo p = Periodo.getPeriodoAnual(finiquitoInstance.baja.fecha.toYear())
+            def de = p.fechaFinal - p.fechaInicial + 1    
+            def dte = finiquitoInstance.baja.fecha - p.fechaInicial + 1 
+
+            finiquitoInstance.with {
+            empleado = finiquitoInstance?.baja?.empleado
+            alta = finiquitoInstance?.empleado?.alta
+            antiguedad = (finiquitoInstance.baja.fecha - finiquitoInstance.empleado.alta) + 1
+            diasDelEjercicio = de
+            diasTrabajadoEjercicio = dte
+            anosTrabajados = (((finiquitoInstance.baja.fecha - finiquitoInstance.empleado.alta) + 1)/365).setScale(0,RoundingMode.UP).intValue()
+            salario = finiquitoInstance.empleado.salario.salarioDiario
+            salarioVariable = finiquitoInstance.empleado.salario.salarioVariable
+            salarioDiarioIntegrado = finiquitoInstance.empleado.salario.salarioDiarioIntegrado            
+            }
+            return finiquitoInstance
+        }
+
+        def registrarVacaciones(Finiquito finiquito){ 
+            ControlDeVacaciones cv = ControlDeVacaciones.where {empleado == finiquito.empleado && ejercicio == Periodo.obtenerYear(finiquito.empleado.baja.fecha)}.find()
+            ZonaEconomica smg = ZonaEconomica.where {ejercicio == Periodo.obtenerYear(finiquito.empleado.baja.fecha) && clave == 'A'}.find()
+            finiquito.with{
+                vacacionesEjercicio = cv.diasVacaciones
+                vacacionesAplicadas = cv.diasTomados + cv.diasPagados?:0
+                vacacionesAnteriores = cv.diasTrasladados
+                primaVacacional = 0.25                            
+                def primVacExAcu = cv.acumuladoExcento
+                diasTrabajadoParaVacaciones = (finiquito.baja.fecha - cv.aniversario ) 
+            if(finiquito.diasTrabajadoParaVacaciones < 0 )
+                diasTrabajadoParaVacaciones = 0             
+            def vacacionesFiniquito = finiquito.vacacionesEjercicio + finiquito.vacacionesAnteriores - finiquito.vacacionesAplicadas  
+            def sd = !finiquito.salario ? finiquito.salarioVariable : finiquito.salario
+            println("salario diario : "+sd+" Vacaciones Finiquito : "+vacacionesFiniquito)
+            vacaciones = ((sd * vacacionesFiniquito) + ((sd * finiquito.vacacionesEjercicio / finiquito.diasDelEjercicio) * finiquito.diasTrabajadoParaVacaciones))
+            def pv = finiquito.vacaciones * finiquito.primaVacacional
+            def topeEx = smg.salario * 15
+            primaVacacionalExenta = (primVacExAcu <= topeEx ? (primVacExAcu + pv < topeEx ? pv : topeEx - primVacExAcu) : 0.0)
+            primaVacacionalGravada = pv - finiquito.primaVacacionalExenta
+            }
+            return finiquito
+        }
+
+        def registrarAguinaldoFiniquito(Finiquito finiquitoInstance){
+            finiquitoInstance.with {          
+            diasAguinaldo = 15            
+            factorLiquidacion =( (finiquitoInstance.vacacionesEjercicio * finiquitoInstance.primaVacacional) + diasAguinaldo ) / finiquitoInstance.diasDelEjercicio 
+        //  factorLiquidacion = MonedaUtils.round(factorLiquidacion,4) + 1
+        //  salarioDiarioIntegradoLiq = salario  * factorLiquidacion            
+        //  diasTrabajadoEjercicio = finiquito.baja.fecha - p.fechaInicial + 1
+            diasParaAguinaldo = finiquitoInstance.diasTrabajadoEjercicio + 31            
+            }
+            return finiquitoInstance
+        }
+
  /*		def sd = 0.0
      	def de = 0 
      	def dte = 0
 
-
+    
     def calcular(def ejercicio, Finiquito finiquito) {
     	Empleado e = finiquito.empleado
     	Periodo p = Periodo.getPeriodoAnual(finiquito.baja.fecha.toYear())
@@ -23,12 +81,12 @@ class FiniquitoService {
     	finiquito.diasTrabajadoEjercicio = dte
 
     	finiquito.with {
-    	//	salario = e.salario.salarioDiario
+    		salario = e.salario.salarioDiario
     		salarioDiarioIntegrado = e.salario.salarioDiarioIntegrado
     		antiguedad = finiquito.baja.fecha - finiquito.empleado.alta + 1
     		diasAguinaldo = 15
     		primaVacacional = 0.25
-    	//	diasDelEjercicio = p.fechaFinal - p.fechaInicial + 1
+    		diasDelEjercicio = p.fechaFinal - p.fechaInicial + 1
     		
 
     		factorLiquidacion =( (vacacionesEjercicio * primaVacacional) + diasAguinaldo ) / diasDelEjercicio 

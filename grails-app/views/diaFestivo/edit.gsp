@@ -18,7 +18,13 @@
 		<f:field property="fecha"  />
 		<f:field property="descripcion" widget-class="form-control" />
 		<f:field property="parcial" widget-class="form-control" />
-		<f:field property="salida" widget-class="form-control" />
+		<f:field property="salida" widget-class="form-control" >
+		<input class="time " 
+			type="text" 
+			name="salida" 
+			value="${diaFestivoInstance.salida}"  />
+
+			</f:field>
 	</f:with>
 </content>
 	

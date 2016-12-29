@@ -2,11 +2,16 @@ package com.luxsoft.sw4.rh
 
 import grails.plugin.springsecurity.annotation.Secured
 import grails.transaction.Transactional
+import org.codehaus.groovy.grails.plugins.jasper.JasperExportFormat
+import org.codehaus.groovy.grails.plugins.jasper.JasperReportDef
 
 
 @Secured(['ROLE_ADMIN','RH_USER'])
 @Transactional(readOnly = true)
 class DiaFestivoController {
+
+	def jasperService
+
 
     def index(Integer max) {
 		params.max = Math.min(max ?: 100, 500)
@@ -81,4 +86,23 @@ class DiaFestivoController {
 			'*'{ render status: NOT_FOUND }
 		}
 	}
+
+	def reporte(){
+       			
+       			println session.ejercicio
+                def repParams=[:]
+                repParams['EJERCICIO']=session.ejercicio
+                 def reportDef=new JasperReportDef(
+                    name:'CalendarioAnualDiasFestivos'
+                    ,fileFormat:JasperExportFormat.PDF_FORMAT
+                    ,parameters:repParams
+                    )
+                
+        
+
+    ByteArrayOutputStream  pdfStream=jasperService.generateReport(reportDef)
+        def fileName="CalendarioDiasFestivos.pdf"
+        render(file: pdfStream.toByteArray(), contentType: 'application/pdf',fileName:fileName)
+
+    }
 }

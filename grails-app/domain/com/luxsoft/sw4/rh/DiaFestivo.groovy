@@ -1,5 +1,6 @@
 package com.luxsoft.sw4.rh
 
+import org.grails.databinding.BindingFormat
 
 
 class DiaFestivo {
@@ -8,6 +9,7 @@ class DiaFestivo {
 	Date fecha
 	String descripcion
 	boolean parcial=false
+	@BindingFormat('HH:mm')
 	Date salida
 
 	
