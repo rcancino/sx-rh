@@ -40,8 +40,8 @@ class CalendarioService {
 			quincenas<<q1
 			quincenas<<q2
             
-          def q1Asistencia=new Periodo(q1.fechaInicial-2,q1.fechaFinal-2)
-          def q2Asistencia=new Periodo(q2.fechaInicial-2,q2.fechaFinal-2)
+          def q1Asistencia=new Periodo(q1.fechaInicial-3,q1.fechaFinal-3)
+          def q2Asistencia=new Periodo(q2.fechaInicial-3,q2.fechaFinal-3)
            
             if(q1.fechaInicial==periodoAnual.fechaInicial){
 
@@ -68,6 +68,7 @@ class CalendarioService {
 			def quincena=quincenas[i]
             def fechaDePago=quincenas[i].fechaFinal-2
             def month=Periodo.obtenerMes(quincenas[i].fechaInicial)+1
+            def mesNombre=Periodo.obtenerMesNombre(month)
             def bimestre=(month/2).setScale(0,RoundingMode.UP).intValue()
             
 			def calendarioDet=CalendarioDet.findAllByCalendarioAndFolio(calendario,folio)
@@ -78,7 +79,7 @@ class CalendarioService {
                     fin:quincenas[i].fechaFinal,
                     fechaDePago:fechaDePago,
                    	bimestre:bimestre,
-                    mes:month,
+                    mes:mesNombre,
                     asistencia:new Periodo(quincenasAsistencia[i].fechaInicial,quincenasAsistencia[i].fechaFinal)       
                     )
           			calendario.addToPeriodos(partida)
@@ -189,6 +190,8 @@ class CalendarioService {
 			cuatrimestre=(mes/4).setScale(0,RoundingMode.UP).intValue()
 
 			semestre=(mes/6).setScale(0,RoundingMode.UP).intValue()
+
+			def mesNombre=Periodo.obtenerMesNombre(mes)
         
         	def fechaDePago=semanas[i].fechaFinal-2
         	folio=i+1
@@ -200,7 +203,7 @@ class CalendarioService {
                     fin:semanas[i].fechaFinal,
                     fechaDePago:fechaDePago,
                     bimestre:bimestre,
-                    mes:mes,
+                    mes:mesNombre,
                     asistencia:new Periodo(semanasAsistencia[i].fechaInicial,semanasAsistencia[i].fechaFinal)       
                     )
           			calendario.addToPeriodos(partida)

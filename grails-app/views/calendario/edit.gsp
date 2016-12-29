@@ -28,7 +28,9 @@
                         	<button type="submit" class="btn btn-primary btn-outline btn-sm">
 		      					<i class="fa fa-floppy-save"></i> Salvar
 		      				</button>
-                        	
+                        	<g:link class='btn btn-outline btn-default'type="button" action="generarPeriodosCalendario" id="${calendarioInstance.id}" onclick="return confirm('Generar Periodos para calendario');">Crear Periodos
+							<span class="glyphicon glyphicon-calendar"></span>
+						</g:link>
                         </lx:iboxFooter>
 					</g:form>
 				</lx:ibox>

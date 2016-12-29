@@ -29,9 +29,19 @@
 						<g:link class='btn btn-outline btn-default'type="button" action="generarPeriodosCalendario" id="${calendarioInstance.id}" onclick="return confirm('Generar Periodos para calendario');">Crear Periodos
 							<span class="glyphicon glyphicon-calendar"></span>
 						</g:link>
-					
-					
-				
+					<div class="btn-group">
+						<button type="button" name="reporte"
+	                     class="btn btn-primary btn-outline dropdown-toggle" data-toggle="dropdown"  id="${calendarioInstance.id}"
+	                     role="menu">
+	                     Reportes <span class="caret"></span>
+	             		</button>
+	           			<ul class="dropdown-menu">
+			                <li>
+								<g:link action="reporte" id="${calendarioInstance.id}"> Calendario Anual</g:link>
+								
+							</li>
+			             </ul>
+					</div>
 
 	              	</lx:iboxFooter>
 					

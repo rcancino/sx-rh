@@ -6,12 +6,15 @@ import com.luxsoft.sw4.Periodo;
 
 import grails.transaction.Transactional
 import static org.springframework.http.HttpStatus.*
+import org.codehaus.groovy.grails.plugins.jasper.JasperExportFormat
+import org.codehaus.groovy.grails.plugins.jasper.JasperReportDef
 
 @Secured(["hasAnyRole('ROLE_ADMIN','RH_USER')"])
 @Transactional(readOnly = true)
 class CalendarioController {
 	
 	def calendarioService
+	def jasperService
 
     def index(Integer max) { 
 		params.max = 500
@@ -125,7 +128,7 @@ class CalendarioController {
 
 		calendarioService.generarPeriodosCalendario(calendarioInstance)
 
-		respond calendarioInstance, view:'show'
+		redirect action:'show',params:[id:calendarioInstance.id]
 	}
 
 	
@@ -138,4 +141,26 @@ class CalendarioController {
 			'*'{ render status: NOT_FOUND }
 		}
 	}
+
+def reporte(){
+       			
+       			def calendario=Calendario.get(params.id)
+                def repParams=[:]
+                repParams['ID']=params.id
+                 def reportDef=new JasperReportDef(
+                    name:'CalendarioAnualNomina'
+                    ,fileFormat:JasperExportFormat.PDF_FORMAT
+                    ,parameters:repParams
+                    )
+                
+        
+
+    ByteArrayOutputStream  pdfStream=jasperService.generateReport(reportDef)
+        def fileName="Calendario.pdf"
+        render(file: pdfStream.toByteArray(), contentType: 'application/pdf',fileName:fileName)
+
+    }
+
+
+
 }

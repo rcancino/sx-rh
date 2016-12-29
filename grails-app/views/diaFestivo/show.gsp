@@ -21,7 +21,9 @@
 				<f:display property="fecha"  />
 				<f:display property="descripcion" widget-class="form-control" />
 				<f:display property="parcial" widget-class="form-control" />
-				<f:display property="salida" widget-class="form-control" />
+				<f:display property="salida" text-class="form-control">
+					<g:formatDate date="${diaFestivoInstance.salida}" format="HH:mm"/>
+				</f:display>
 			</f:with>
 			
 		</content>
