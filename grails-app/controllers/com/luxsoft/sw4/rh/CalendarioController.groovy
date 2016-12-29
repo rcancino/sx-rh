@@ -119,6 +119,15 @@ class CalendarioController {
 		respond calendarioInstance, view:'show'
 		
 	}
+
+	@Transactional
+	def generarPeriodosCalendario(Calendario calendarioInstance){
+
+		calendarioService.generarPeriodosCalendario(calendarioInstance)
+
+		respond calendarioInstance, view:'show'
+	}
+
 	
 	protected void notFound() {
 		request.withFormat {

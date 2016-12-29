@@ -41,6 +41,7 @@
 					</g:link>
 					
 				</td>
+				
 			</tr>
 		</g:each>
 	</tbody>
