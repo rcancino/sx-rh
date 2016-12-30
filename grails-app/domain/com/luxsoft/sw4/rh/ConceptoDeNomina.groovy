@@ -10,6 +10,8 @@ class ConceptoDeNomina {
 	String descripcion
 	String tipo
 	Integer claveSat
+	String catalogoSat
+	String catalogoSatClave
 	Boolean general=false
 	String clase  
 	Boolean importeExcento=false
@@ -24,6 +26,8 @@ class ConceptoDeNomina {
 		//clase inList:['COMPENSACIONES','','','','']
 		clase maxSize:30
 		importeExcento nullable:true
+		catalogoSat nullable:true, maxSize:30
+		catalogoSatClave nullable:true, maxSize:3
     }
 
     String toString(){
