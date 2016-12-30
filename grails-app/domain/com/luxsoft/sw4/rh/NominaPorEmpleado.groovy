@@ -7,7 +7,7 @@ import groovy.transform.ToString
 import java.math.RoundingMode;
 
 @EqualsAndHashCode(includes='empleado,nomina')
-@ToString(includePackage=false,includeNames=true,excludes='dateCreated,lastUpdated')
+@ToString(includePackage=false,includeNames=true,includes='id,empleado')
 class NominaPorEmpleado {
 
 	
