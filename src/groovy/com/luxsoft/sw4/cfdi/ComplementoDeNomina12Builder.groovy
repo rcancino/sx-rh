@@ -15,7 +15,9 @@ import com.luxsoft.sw4.cfdi.CFDIUtils
 import com.luxsoft.sw4.cfdi.Cfdi
 import com.luxsoft.sw4.cfdi.CfdiException
 import com.luxsoft.sw4.cfdi.Folio
-import com.luxsoft.sw4.rh.NominaPorEmpleado;
+import com.luxsoft.sw4.rh.NominaPorEmpleado
+import com.luxsoft.sw4.rh.Empleado
+import com.luxsoft.sw4.Empresa
 
 import mx.gob.sat.cfd.x3.ComprobanteDocument
 import mx.gob.sat.cfd.x3.ComprobanteDocument.Comprobante
@@ -47,57 +49,75 @@ import mx.gob.sat.sitioInternet.cfd.catalogos.nomina.CTipoPercepcion
 class ComplementoDeNomina12Builder {
 
 	def generarComplemento(def empresa, def nominaEmpleado, def comprobante){
-		println 'A pagar: ' + nominaEmpleado.nomina.pago
-		def empleado = nominaEmpleado.empleado
-		//Complemento nomina
+		
+
+		Nomina nomina = buildNomina(nominaEmpleado)
+		
+		registrarEmisor nomina, empresa
+
+		registrarReceptor nomina, nominaEmpleado
+		
+		registrarPercepciones(nomina, nominaEmpleado)
+
+		//registrarDeducciones(nomina, nominaEmpleado)
+		
+        registrarComplemento(comprobante, nomina)
+	}
+
+	def buildNomina(NominaPorEmpleado nominaEmpleado){
 		NominaDocument nominaDocto=NominaDocument.Factory.newInstance()
 		Nomina nomina=nominaDocto.addNewNomina()
-		nomina.with {
-			version = '1.2'
-			tipoNomina = CTipoNomina.O
-			def diasTrabajados=0
-			def faltas=0
-			if(nominaEmpleado.asistencia){
-				if(!nominaEmpleado.empleado.controlDeAsistencia){
-					diasTrabajados = nominaEmpleado.diasTrabajados + nominaEmpleado.vacaciones - (nominaEmpleado.asistencia.faltasManuales+(nominaEmpleado.asistencia.faltasManuales * 0.167)+ nominaEmpleado.incapacidades)
-				}else{
-					if(nominaEmpleado.empleado.alta<=nominaEmpleado.asistencia.calendarioDet.inicio){
-					  diasTrabajados=nominaEmpleado.diasTrabajados+nominaEmpleado.vacaciones				 
-				  	}else{
-				  		diasTrabajados=nominaEmpleado.diasTrabajados+nominaEmpleado.vacaciones+nominaEmpleado.asistencia.paternidad 
-				  	}
-				}		
-     		}
-			def diasLab=new BigDecimal(diasTrabajados).setScale(3, RoundingMode.HALF_EVEN)
-			setNumDiasPagados(diasLab)
-		}
+		nomina.version = '1.2'
+		nomina.tipoNomina = CTipoNomina.O
+		nomina.setNumDiasPagados(calcularDiasPagados(nominaEmpleado))
 		nomina.fechaPago = toISO8601(nominaEmpleado.nomina.pago)
 		nomina.fechaInicialPago = toISO8601(nominaEmpleado.nomina.periodo.fechaInicial)
 		nomina.fechaFinalPago = toISO8601(nominaEmpleado.nomina.periodo.fechaFinal)
-		
+		return nomina
+	}
+
+	int calcularDiasPagados(NominaPorEmpleado nominaEmpleado){
+		def diasTrabajados=0
+		def faltas=0
+		if(nominaEmpleado.asistencia){
+			if(!nominaEmpleado.empleado.controlDeAsistencia){
+				diasTrabajados = nominaEmpleado.diasTrabajados + nominaEmpleado.vacaciones - (nominaEmpleado.asistencia.faltasManuales+(nominaEmpleado.asistencia.faltasManuales * 0.167)+ nominaEmpleado.incapacidades)
+			}else{
+				if(nominaEmpleado.empleado.alta<=nominaEmpleado.asistencia.calendarioDet.inicio){
+				  diasTrabajados=nominaEmpleado.diasTrabajados+nominaEmpleado.vacaciones				 
+			  	}else{
+			  		diasTrabajados=nominaEmpleado.diasTrabajados+nominaEmpleado.vacaciones+nominaEmpleado.asistencia.paternidad 
+			  	}
+			}		
+ 		}
+		def diasLab=new BigDecimal(diasTrabajados).setScale(3, RoundingMode.HALF_EVEN)
+		return diasLab
+	}
+
+	def registrarEmisor(Nomina nomina, Empresa empresa) {
 		Emisor emisor = nomina.addNewEmisor()
 		emisor.setRegistroPatronal(empresa.registroPatronal)
+	}
 
+	def registrarReceptor(Nomina nomina, NominaPorEmpleado nominaEmpleado){
+		Empleado empleado = nominaEmpleado.empleado
 		Nomina.Receptor receptor = nomina.addNewReceptor()
-        receptor.with{
-        	curp = empleado.curp
-        	numSeguridadSocial = empleado.seguridadSocial.numero
-            antigüedad = "P${nominaEmpleado.antiguedad}W"
-            tipoRegimen = CTipoRegimen.Enum.forString(empleado.perfil.regimenContratacion.clave)
-            numEmpleado = empleado.perfil.numeroDeTrabajador
-            setDepartamento(empleado.perfil.departamento.clave)
-            puesto = empleado.perfil.puesto?.clave
-            
-        }
+        receptor.curp = empleado.curp
+    	receptor.numSeguridadSocial = empleado.seguridadSocial.numero.replace('-','')
+        receptor.antigüedad = "P${nominaEmpleado.antiguedad}W"
+        receptor.tipoRegimen = CTipoRegimen.Enum.forString(empleado.perfil.regimenContratacion.clave)
+        receptor.numEmpleado = empleado.perfil.numeroDeTrabajador
+        receptor.setDepartamento(empleado.perfil.departamento.clave)
+        receptor.puesto = empleado.perfil.puesto?.clave
         receptor.setFechaInicioRelLaboral(toISO8601(empleado.alta))
         receptor.setTipoContrato(CTipoContrato.X_01)  // AJUSTAR EN LA APLICACION
         receptor.setTipoJornada(CTipoJornada.X_01)  /// AJUSTAR LA APLICACION
         receptor.setSindicalizado(Nomina.Receptor.Sindicalizado.NO)  // AJUSTAR EN LA APLICACION
         receptor.setClaveEntFed(CEstado.DIF) 
+        
         if(empleado.perfil?.riesgoPuesto?.clave){
         	receptor.setRiesgoPuesto(CRiesgoPuesto.Enum.forInt(empleado.perfil?.riesgoPuesto?.clave))
         }
-        
         
         if(nominaEmpleado.nomina.periodicidad == 'QUINCENAL')
         	receptor.setPeriodicidadPago(CPeriodicidadPago.X_04)
@@ -109,26 +129,36 @@ class ComplementoDeNomina12Builder {
         }
 		receptor.setSalarioBaseCotApor(nominaEmpleado.salarioDiarioBase)
 		receptor.setSalarioDiarioIntegrado(nominaEmpleado.salarioDiarioIntegrado)
+	}
 
-		
+	def registrarPercepciones(Nomina nomina, NominaPorEmpleado nominaEmpleado){
 		// Percepciones
 		Percepciones per=nomina.addNewPercepciones()
+		def percepciones = nominaEmpleado.conceptos.findAll{it.concepto.tipo == 'PERCEPCION'}
+		
+		per.totalSueldos = percepciones.sum 0, {
+		    def clave = it.concepto.claveSat.toString().padLeft(3,'0')
+		    if(!OTRAS_PERCEPCIONES.contains(clave) ){
+		       return it.importeGravado + it.importeExcento
+		    }
+		    return 0
+		}
 		per.totalGravado=nominaEmpleado.percepcionesGravadas
 		per.totalExento=nominaEmpleado.percepcionesExcentas
-		nominaEmpleado.conceptos.each{
-			if(it.concepto.tipo=='PERCEPCION') {
-			  Percepcion pp=per.addNewPercepcion()
-			  //pp.setTipoPercepcion()
-			  pp.setTipoPercepcion(CTipoPercepcion.Enum.forString(StringUtils.leftPad(it.concepto.claveSat.toString(), 3, '0')))
-			  pp.setClave(it.concepto.clave)
-			  pp.setConcepto(it.concepto.descripcion)
-			  pp.setImporteGravado(it.importeGravado)
-			  pp.setImporteExento(it.importeExcento)
-			}
-		  }
-		
+		percepciones.each{
+			Percepcion pp=per.addNewPercepcion()
+		  	def clave = it.concepto.claveSat.toString().padLeft(3,'0')
+		  	pp.setTipoPercepcion(CTipoPercepcion.Enum.forString(clave))
+		  	pp.setClave(it.concepto.clave)
+		  	pp.setConcepto(it.concepto.descripcion)
+		  	pp.setImporteGravado(it.importeGravado)
+		  	pp.setImporteExento(it.importeExcento)
+		}
+	}
+
+	def registrarDeducciones(Nomina nomina, NominaPorEmpleado nominaEmpleado){
 		//Deducciones
-		/*
+		
 		if(nominaEmpleado.deducciones){
 			Deducciones ded=nomina.addNewDeducciones()
 			ded.totalGravado=nominaEmpleado.deduccionesGravadas
@@ -145,9 +175,10 @@ class ComplementoDeNomina12Builder {
 			  }
 			}
 		}
-		*/
-		
-        Complemento complemento=comprobante.addNewComplemento()
+	}
+
+	def registrarComplemento(Comprobante comprobante, Nomina nomina){
+		Complemento complemento=comprobante.addNewComplemento()
         def cursor=complemento.newCursor()
         cursor.toEndToken()
         def cn=nomina.newCursor()
@@ -163,4 +194,15 @@ class ComplementoDeNomina12Builder {
 		xmlDate.setStringValue(df.format(c.getTime()))
 		return xmlDate.getCalendarValue()
 	}
+
+	/**
+	 *  Claves de percepciones no acumulables a sueldos y salarios
+	 */
+	static OTRAS_PERCEPCIONES = [
+		'022', // Prima por antiguedad
+    	'023', // Pagos por separacion
+		'025', // Indemnizaciones
+		'039', // Jubilaciones, pensiones o haberes de retiro en una exhibicion
+		'044'  // Jubilaciones, pensiones o haberes de retiro en parcialidades
+	]
 }
