@@ -44,7 +44,8 @@ class ProcesadorDePrestamosPersonales {
 			log.info 'Deducciones calculadas: '+deducciones
 			log.info 'Percepcion maxima calculada: '+retMaxima
 			*/
-			def salarioMinimo=ZonaEconomica.valores.find(){it.clave='A'}.salario
+			//def salarioMinimo=ZonaEconomica.valores.find(){it.clave='A'}.salario
+			def salarioMinimo=ZonaEconomica.findByClave('A').salario
 			//def retMaxima=( (ne.salarioDiarioBase-salarioMinimo)*(ne.diasDelPeriodo-ne.incapacidades-ne.faltas) )*0.3
 			def diasNetos=ne.diasDelPeriodo-ne.incapacidades-ne.faltas
 			def retMaxima=percepciones-deducciones-(salarioMinimo*diasNetos)

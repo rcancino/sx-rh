@@ -85,6 +85,14 @@
 								 CierreAnual
 							</g:link>
 						</li>
+						<li>
+							<g:link action="ajusteCierre" class="" 
+								onclick="return confirm('Realizar ajuste para Cierre Asistencia para (${tipo} ${calendarioDet?.folio})?');" 
+								id="${calendarioDet.id}"
+								params="[tipo:tipo]">
+								 Ajuste Cierre Anual
+							</g:link>
+						</li>
 					</ul>
 					
 				</div>
