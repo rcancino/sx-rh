@@ -47,16 +47,23 @@ class FiniquitoController {
             return
         }
 
-        finiquitoInstance.empleado = finiquitoInstance?.baja?.empleado
-        finiquitoInstance.alta = finiquitoInstance?.empleado?.alta
+
+
+        
+        finiquitoInstance = finiquitoService.inicializarFiniquito(finiquitoInstance)
+        finiquitoInstance = finiquitoService.registrarVacaciones(finiquitoInstance)
+        finiquitoInstance = finiquitoService.registrarAguinaldoFiniquito(finiquitoInstance)
+
+
         finiquitoInstance.validate()
         if (finiquitoInstance.hasErrors()) {
             respond finiquitoInstance.errors, view:'create', model:[bajas:getBajas()]
             return
         }
-
+        
         finiquitoInstance.save flush:true
         //finiquitoInstance = finiquitoService.calcular(session.ejercicio,finiquitoService)
+        //finiquitoInstance = finiquitoService.inicializarFiniquito(finiquitoInstance)
 
         request.withFormat {
             form multipartForm {

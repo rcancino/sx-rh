@@ -169,7 +169,7 @@ class SalarioService {
 			def fin=res.get(0)[1]
 			log.info "Periodo: $inicio al $fin"
 			
-			def zona=ZonaEconomica.findByClave('A')
+			def zona=ZonaEconomica.findByClaveAndEjercicio('A',bimestre==6 ? ejercicio+1 : ejercicio)
 		
 			def query=sqlPorBimestre
 				.replaceAll('@FECHA_INI',inicio.format('yyyy/MM/dd'))

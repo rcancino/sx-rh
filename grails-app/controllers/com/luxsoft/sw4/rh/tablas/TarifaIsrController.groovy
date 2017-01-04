@@ -20,4 +20,30 @@ class TarifaIsrController {
     	flash.message="Tarifa eliminada "+tarifa.id
     	redirect action:'index'
     }
+
+    def trasladarTabla(){
+        def ejercicio=session.ejercicio
+        def ejercicioAnt=ejercicio-1
+         def found=TarifaIsr.findAllByEjercicio(ejercicio)
+        def tablaIsr=TarifaIsr.findAllByEjercicio(ejercicioAnt).each{
+           
+            if(!found){
+                println "Tarifa: "+it
+                TarifaIsr  tarifa=new TarifaIsr(
+                    ejercicio:ejercicio,
+                    tipo:"MENSUAL",
+                    limiteInferior:it.limiteInferior,
+                    limiteSuperior:it.limiteSuperior,
+                    cuotaFija:it.cuotaFija,
+                    porcentaje:it.porcentaje
+                )
+                
+                tarifa.save failOnError:true, flush:true
+            }else{
+                println "Tabla ya trasladada"
+            }
+        }
+
+        redirect action:'index'
+    }
 }

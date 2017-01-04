@@ -18,7 +18,7 @@ class InfonavitService {
 		log.info "Periodo base $periodo  Dias del periodo: $diasDelBimestre"
 		
 	//	def salarioMinimo=ZonaEconomica.valores.find(){it.clave='A'}.salario
-	def zona=ZonaEconomica.findByClave('A')
+	def zona=ZonaEconomica.findByClaveAndEjercicio('A',ejercicio)
 
 		log.info 'Generando registro de InfonavitDet '
 		def	det=new InfonavitDet(
@@ -79,7 +79,7 @@ class InfonavitService {
 		def det=InfonavitDet.find{infonavit==infonavit && ejercicio==ejercicio && bimestre==bimestre}
 
 		//def salarioMinimo=ZonaEconomica.valores.find(){it.clave='A'}.salario
-		def zona=ZonaEconomica.findByClave('A')
+		def zona=ZonaEconomica.findByClaveAndEjercicio('A',ejercicio)
 
 		if(det==null){
 			log.info 'Generando registro de InfonavitDet '

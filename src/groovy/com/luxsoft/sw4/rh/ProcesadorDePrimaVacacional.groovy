@@ -47,7 +47,7 @@ class ProcesadorDePrimaVacacional {
 				salarioDiario=ne.empleado.salario.salarioVariable
 			}
 			
-			def sm=ZonaEconomica.findByClave('A').salario
+			def sm=ZonaEconomica.findByClaveAndEjercicio('A',ne.nomina.ejercicio).salario
 			def diasSalarioMinimo=15
 			def topeSalarial=sm*diasSalarioMinimo
 			
@@ -91,7 +91,7 @@ class ProcesadorDePrimaVacacional {
 			//def acumulado=vacaciones?.control?.acumuladoExcento
 			def salarioDiario=ne.salarioDiarioBase
 			
-			def sm=ZonaEconomica.findByClave('A').salario
+			def sm=ZonaEconomica.findByClaveAndEjercicio('A',det.nomina.ejercicio).salario
 			def diasSalarioMinimo=15
 			def topeSalarial=sm*diasSalarioMinimo
 			

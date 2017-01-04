@@ -8,6 +8,14 @@
 	<content tag="header">
 			Tabla de tarifas ISR
 	</content>
+
+	<content tag="operaciones">
+		<li>
+			<g:link action="trasladarTabla" >
+				<span class="glyphicon glyphicon-plus"></span> Trasladar Tabla
+			</g:link>
+		</li>
+	</content>
 	<content tag="grid">
 		
 		<table id="grid" class=" table table-striped table-bordered table-condensed">

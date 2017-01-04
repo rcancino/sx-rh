@@ -29,8 +29,6 @@ class CalendarioService {
 		def quincenas=[]
 		def quincenasAsistencia=[]
 		
-		
-		
 
 		for(Periodo mes:periodos) {
             
@@ -59,14 +57,13 @@ class CalendarioService {
          
 
 		}
-
-		
+	
 
 		def folio=1
 		
 		for(int i=0;i<quincenas.size();i++){
 			def quincena=quincenas[i]
-            def fechaDePago=quincenas[i].fechaFinal-2
+            def fechaDePago=quincenas[i].fechaFinal-1
             def month=Periodo.obtenerMes(quincenas[i].fechaInicial)+1
             def mesNombre=Periodo.obtenerMesNombre(month)
             def bimestre=(month/2).setScale(0,RoundingMode.UP).intValue()
@@ -193,7 +190,7 @@ class CalendarioService {
 
 			def mesNombre=Periodo.obtenerMesNombre(mes)
         
-        	def fechaDePago=semanas[i].fechaFinal-2
+        	def fechaDePago=semanas[i].fechaFinal-1
         	folio=i+1
                def calendarioDet=CalendarioDet.findAllByCalendarioAndFolio(calendario,folio)
                 if(!calendarioDet){

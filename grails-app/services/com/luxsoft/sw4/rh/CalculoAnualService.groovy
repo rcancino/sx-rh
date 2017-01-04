@@ -299,6 +299,8 @@ class CalculoAnualService {
 			def impuestoDet=ne.conceptos.find(){ 
 				it.concepto.clave=='D002'
 			}
+
+
 			if(impuestoDet){
 				def importeExcento=0.0
 				def concepto=ConceptoDeNomina.findByClave('P033')
@@ -319,6 +321,8 @@ class CalculoAnualService {
 			}
 		}
 		ne.actualizar()
+
+		//ne.save flush:true,failOnError:true
 	}
 
 

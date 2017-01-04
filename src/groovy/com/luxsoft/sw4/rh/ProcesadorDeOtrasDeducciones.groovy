@@ -42,7 +42,7 @@ class ProcesadorDeOtrasDeducciones {
 			def percepciones=getPercepciones(ne)
 			def deducciones=getRetencionesPrecedentes(ne)
 			
-			def salarioMinimo=ZonaEconomica.valores.find(){it.clave='A'}.salario
+			def salarioMinimo=ZonaEconomica.findByClaveAndEjercicio('A',ne.nomina.ejercicio).salario
 
 			def diasNetos=ne.diasDelPeriodo-ne.incapacidades-ne.faltas
 			def retMaxima=percepciones-deducciones-(salarioMinimo*diasNetos)
@@ -171,7 +171,7 @@ class ProcesadorDeOtrasDeducciones {
 	def getModel(NominaPorEmpleadoDet det) {
 		def ne=det.parent
 		def prestamo=buscarOtraDeduccion(ne)
-		def salarioMinimo=ZonaEconomica.valores.find(){it.clave='A'}.salario
+		def salarioMinimo=ZonaEconomica.findByClaveAndEjercicio("A",det.nomina.ejercicio).salario
 		//def retMaxima=( (ne.salarioDiarioBase-salarioMinimo)*ne.diasTrabajados )*0.3
 		def retMaxima=( (ne.salarioDiarioBase-salarioMinimo)*(ne.diasDelPeriodo-ne.incapacidades-ne.faltas) )*0.3
 		

@@ -8,9 +8,10 @@
 				<tr>
 					<th>Nombre</th>
 					<th>Ubicación</th>
-					<g:if test="${editable == true}">
+				<%--	<g:if test="${editable == true}">
 						<th></th>
 					</g:if>
+				--%>
 				</tr>
 			</thead>
 			<tbody>
@@ -23,7 +24,7 @@
 							
 						</td>
 						<td>${row.empleado.perfil.ubicacion.clave}</td>
-						
+				<%--
 						<g:if test="${editable == true}">
 							<td>
 								<g:link onclick="confirm('Eliminar vacaciones para el empleado');"
@@ -32,7 +33,7 @@
 								</g:link>
 							</td>
 						</g:if>
-						
+					--%>	
 					</tr>
 				</g:each>
 			</tbody>

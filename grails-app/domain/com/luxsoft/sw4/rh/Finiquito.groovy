@@ -127,6 +127,9 @@ class Finiquito {
 
 	BigDecimal subsidioAcumuladoMes=0.0
 
+	Boolean liq = false
+
+	Boolean sdiOpcion = false 
 		
 	Date dateCreated
 	
@@ -140,6 +143,7 @@ class Finiquito {
 		diasDelEjercicio nullable:true
 		//comentario nullable:true
 		anosTrabajados nullable: true
+		factorLiquidacion scale:4
     }
 
     static mapping = {

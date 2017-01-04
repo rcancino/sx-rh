@@ -52,13 +52,18 @@ class FiniquitoService {
         }
 
         def registrarAguinaldoFiniquito(Finiquito finiquitoInstance){
+            ZonaEconomica smg = ZonaEconomica.where {ejercicio == Periodo.obtenerYear(finiquitoInstance.empleado.baja.fecha) && clave == 'A'}.find()
             finiquitoInstance.with {          
             diasAguinaldo = 15            
-            factorLiquidacion =( (finiquitoInstance.vacacionesEjercicio * finiquitoInstance.primaVacacional) + diasAguinaldo ) / finiquitoInstance.diasDelEjercicio 
-        //  factorLiquidacion = MonedaUtils.round(factorLiquidacion,4) + 1
-        //  salarioDiarioIntegradoLiq = salario  * factorLiquidacion            
-        //  diasTrabajadoEjercicio = finiquito.baja.fecha - p.fechaInicial + 1
-            diasParaAguinaldo = finiquitoInstance.diasTrabajadoEjercicio + 31            
+            factorLiquidacion = ( ( (finiquitoInstance.vacacionesEjercicio * finiquitoInstance.primaVacacional) + diasAguinaldo ) / finiquitoInstance.diasDelEjercicio)
+            factorLiquidacion = MonedaUtils.round(factorLiquidacion,4) + 1
+            salarioDiarioIntegradoLiq = salario  * finiquitoInstance.factorLiquidacion        
+            diasParaAguinaldo = finiquitoInstance.diasTrabajadoEjercicio + 31   
+            def aguinaldo = salario * (diasAguinaldo / diasDelEjercicio) * diasParaAguinaldo
+                println("Res Agndo : "+Aguinaldo)
+            def topeEx = smg.salario * 30
+            aguinaldoExento = aguinaldo > topeEx ? topeEx : aguinaldo
+            aguinaldoGravable = aguinaldo - aguinaldoExento
             }
             return finiquitoInstance
         }

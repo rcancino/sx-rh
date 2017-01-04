@@ -19,7 +19,7 @@ class IMMSFormula {
 		def empleado=nominaEmpleado.empleado
 		
 		//def salarioMinimo=ZonaEconomica.valores.find(){it.clave='A'}.salario
-		def salarioMinimo=ZonaEconomica.findByClave('A').salario
+		def salarioMinimo=ZonaEconomica.findByClaveAndEjercicio('A',nominaEmpleado.nomina.ejercicio).salario
 		def sdi=empleado.salario.salarioDiarioIntegrado
 		def diasTrabajados=nominaEmpleado.nomina.getDiasPagados()
 		

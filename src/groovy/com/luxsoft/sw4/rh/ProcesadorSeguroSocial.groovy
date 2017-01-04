@@ -27,7 +27,7 @@ class ProcesadorSeguroSocial {
 	
 		
 		//def salarioMinimo=ZonaEconomica.valores.find(){it.clave='A'}.salario
-		def salarioMinimo=ZonaEconomica.findByClave('A').salario
+		def salarioMinimo=ZonaEconomica.findByClaveAndEjercicio('A',nominaPorEmpleado.nomina.ejercicio).salario
 			
 		log.debug 'Salario minimo: '+salarioMinimo
 		def empleado=nominaPorEmpleado.empleado
@@ -141,7 +141,7 @@ class ProcesadorSeguroSocial {
 
 		///////
 		//def salarioMinimo=ZonaEconomica.valores.find(){it.clave='A'}.salario
-		def salarioMinimo=ZonaEconomica.findByClave('A').salario
+		def salarioMinimo=ZonaEconomica.findByClaveAndEjercicio('A',det.nomina.ejercicio).salario
 		log.debug 'Salario minimo: '+salarioMinimo
 		model.salarioMinimo=salarioMinimo
 

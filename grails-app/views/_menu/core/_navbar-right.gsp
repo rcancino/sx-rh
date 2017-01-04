@@ -1,7 +1,7 @@
 <ul class="nav navbar-top-links navbar-right">
     <li>
         <g:link controller="home">
-            <span class="m-r-sm text-muted welcome-message">SX-RH (${session?.empresa?.nombre})
+            <span class="m-r-sm text-muted welcome-message">SX-RH (${session?.empresa?.nombre}) Ejercicio: ${session?.ejercicio}
         </span>
         </g:link>
         

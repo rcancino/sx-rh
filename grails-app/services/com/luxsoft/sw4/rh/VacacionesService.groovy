@@ -77,6 +77,8 @@ class VacacionesService {
 	}
 
 	def actualizarControl(ControlDeVacaciones control){
+
+		 println "Actualizando el control:  "+control
 		def vacaciones=Vacaciones.findAllByControl(control)
 		def pagados=vacaciones.sum 0,{it.diasPagados}
 		def normales=vacaciones.sum 0,{it.dias.size()}

@@ -264,7 +264,7 @@ class PtuService {
     }
 
     def calcularImpuestos(Ptu ptu){
-        def zona=ZonaEconomica.findByClave('A')
+        def zona=ZonaEconomica.findByClaveAndEjercicio('A',ptu.ejercicio)
         ptu.salarioMinimoGeneral=zona.salario
         ptu.topeSmg=ptu.salarioMinimoGeneral*15
         ptu.partidas.each{
@@ -307,7 +307,7 @@ class PtuService {
     }
 
     def calcularImpuestos(PtuDet it){
-        def zona=ZonaEconomica.findByClave('A')
+        def zona=ZonaEconomica.findByClaveAndEjercicio('A',it.ptu.ejercicio)
         def ptu=it.ptu
         ptu.salarioMinimoGeneral=zona.salario
         ptu.topeSmg=ptu.salarioMinimoGeneral*15
