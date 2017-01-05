@@ -4,6 +4,7 @@ import com.luxsoft.sw4.*
 import com.luxsoft.sw4.rh.*
 
 import java.math.*
+import com.luxsoft.sw4.rh.tablas.ZonaEconomica
 
 /**
  * Clase temporal para calcular la retencion del seguro social

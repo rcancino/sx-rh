@@ -9,7 +9,7 @@ class SubsidioEmpleoController {
 
     def index(){
     	params.max = 200
-		def list=SubsidioEmpleo.findAll("from SubsidioEmpleo t order by t.ejercicio desc,t.desde asc",[],params)
+		def list=SubsidioEmpleo.findAll("from SubsidioEmpleo t where t.ejercicio=? order by t.ejercicio desc,t.desde asc",[session.ejercicio],params)
     	[subsidioEmpleoInstanceList:list,subsidioEmpleoInstanceCount:SubsidioEmpleo.count()]
     }
 

@@ -7,6 +7,7 @@ import groovy.lang.Binding
 
 import grails.plugin.springsecurity.annotation.Secured;
 import grails.transaction.Transactional;
+import com.luxsoft.sw4.rh.tablas.ZonaEconomica
 
 @Secured(["hasAnyRole('ROLE_ADMIN','RH_USER')"])
 class ProcesadorDeNominaController {

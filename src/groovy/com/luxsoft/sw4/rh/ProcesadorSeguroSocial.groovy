@@ -3,6 +3,7 @@ package com.luxsoft.sw4.rh
 import org.apache.commons.logging.LogFactory
 import com.luxsoft.sw4.rh.imss.*
 import java.math.*
+import com.luxsoft.sw4.rh.tablas.ZonaEconomica
 
 class ProcesadorSeguroSocial {
 	
@@ -27,6 +28,7 @@ class ProcesadorSeguroSocial {
 	
 		
 		//def salarioMinimo=ZonaEconomica.valores.find(){it.clave='A'}.salario
+		println "Es aqui"
 		def salarioMinimo=ZonaEconomica.findByClaveAndEjercicio('A',nominaPorEmpleado.nomina.ejercicio).salario
 			
 		log.debug 'Salario minimo: '+salarioMinimo
@@ -141,6 +143,8 @@ class ProcesadorSeguroSocial {
 
 		///////
 		//def salarioMinimo=ZonaEconomica.valores.find(){it.clave='A'}.salario
+	
+		
 		def salarioMinimo=ZonaEconomica.findByClaveAndEjercicio('A',det.nomina.ejercicio).salario
 		log.debug 'Salario minimo: '+salarioMinimo
 		model.salarioMinimo=salarioMinimo

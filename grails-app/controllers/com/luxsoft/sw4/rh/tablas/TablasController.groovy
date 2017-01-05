@@ -21,6 +21,10 @@ class TablasController {
 	def subsidio(){
 		[tabla:'subsidio',subsidioEmpleoInstanceList:SubsidioEmpleo.list()]
 	}
+
+	def zonaEconomica(){
+		[tabla:'zonaEconomica',zonaEconomicaList:ZonaEconomica.list()]
+	}
 	
 	
 }
