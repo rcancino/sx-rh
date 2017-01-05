@@ -13,7 +13,7 @@ class PercepcionesBuilder {
 		
 		// Percepciones
 		Percepciones per=nomina.addNewPercepciones()
-		def percepciones = nominaEmpleado.conceptos.findAll{it.concepto.tipo == 'PERCEPCION'}
+		def percepciones = nominaEmpleado.conceptos.findAll{it.concepto.catalogoSat == 'c_TipoPercepcion'}
 		
 		per.totalSueldos = percepciones.sum 0, {
 		    def clave = it.concepto.claveSat.toString().padLeft(3,'0')
@@ -26,7 +26,8 @@ class PercepcionesBuilder {
 		per.totalExento=nominaEmpleado.percepcionesExcentas
 		percepciones.each{
 			Percepcion pp=per.addNewPercepcion()
-		  	def clave = it.concepto.claveSat.toString().padLeft(3,'0')
+		  	//def clave = it.concepto.claveSat.toString().padLeft(3,'0')
+		  	def clave = it.concepto.catalogoSatClave
 		  	pp.setTipoPercepcion(CTipoPercepcion.Enum.forString(clave))
 		  	pp.setClave(it.concepto.clave)  // Debe ser la clave que se usa en contabilidad que sea la que se usa en contabilidad
 		  	pp.setConcepto(it.concepto.descripcion)

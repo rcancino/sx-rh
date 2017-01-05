@@ -42,96 +42,29 @@ import com.edicom.ediwinws.cfdi.client.CfdiClient
 import org.bouncycastle.util.encoders.Base64
 import com.edicom.ediwinws.service.cfdi.CancelaResponse
 
-@Transactional
+//@Transactional
 class CfdiService {
 	
 	def cfdiSellador
 	
 	def cfdiTimbrador
 
+	def cfdiBuilder 
+
     
 	
 	Cfdi generarComprobante(def nominaEmpleadoId) {
 		
-		def fecha=new Date()
-		//def fecha=Date.parse('dd/MM/yyy hh:mm:ss','30/06/2014 19:'+new Date().format('mm:ss'))
 		def nominaEmpleado=NominaPorEmpleado.get(nominaEmpleadoId)
-		assert nominaEmpleado,'No existe la nomina empleado: '+nominaEmpleadoId
+		assert nominaEmpleado,'No existe la nomina empleado: ' + nominaEmpleadoId
 		assert nominaEmpleado.cfdi==null,'Ya esta timbrada la nomina para el empleado: '+nominaEmpleado
+
+		ComprobanteDocument document = cfdiBuilder.build(nominaEmpleado)
+		Comprobante comprobante = document.getComprobante()
 		
-		def empresa=nominaEmpleado.nomina.empresa
-		def empleado=nominaEmpleado.empleado
 		Folio folio=Folio.findOrSaveWhere(empresa:empresa,serie:'NOMINA_CFDI')
-		ComprobanteDocument document=ComprobanteDocument.Factory.newInstance()
-		Comprobante comprobante=document.addNewComprobante()
-		CFDIUtils.depurar(document)
-		
-        comprobante.serie='NOMINA_CFDI'
 		comprobante.folio=folio.next().toString()
-		comprobante.setVersion("3.2")
-		comprobante.setFecha(CFDIUtils.toXmlDate(fecha).getCalendarValue())
-		comprobante.setFormaDePago("PAGO EN UNA SOLA EXHIBICION")
-		comprobante.setMetodoDePago(nominaEmpleado.nomina.formaDePago.equals('CHEQUE')?'02':'03')
-		comprobante.setMoneda(Currency.getInstance(new Locale("es","mx")).currencyCode)
-		comprobante.setTipoCambio("1.0")
-		
-		comprobante.setTipoDeComprobante(TipoDeComprobante.EGRESO)
-		comprobante.setLugarExpedicion(empresa.direccion.pais)
-		comprobante.setNoCertificado(empresa.numeroDeCertificado)
-		byte[] encodedCert=Base64.encode(empresa.getCertificado().getEncoded())
-		comprobante.setCertificado(new String(encodedCert))
-		
-		Emisor emisor=CFDIUtils.registrarEmisor(comprobante, empresa)
-		Receptor receptor=CFDIUtils.registrarReceptor(comprobante, nominaEmpleado.empleado)
-		
-        //Conceptos
-		Conceptos conceptos=comprobante.addNewConceptos()
-		Concepto c=conceptos.addNewConcepto();
-		c.setCantidad(1);
-		c.setUnidad("Servicio");
-		c.setNoIdentificacion('CARGO');
-		c.setDescripcion('Pago de Nomina');
-		c.setValorUnitario(nominaEmpleado.percepciones);
-		c.setImporte(nominaEmpleado.percepciones);
-		
-		generarComplemento(empresa, nominaEmpleado, comprobante) 
-		
-		// Importes
-		comprobante.setSubTotal(nominaEmpleado.percepciones)
-		comprobante.setDescuento(nominaEmpleado.conceptos.sum {
-			def vv=0.0
-			if(it.concepto.tipo=='DEDUCCION' && it.concepto.claveSat!=2) {
-			  vv+=it.importeGravado+it.importeExcento
-			}
-			return vv
-		})
-		comprobante.setMotivoDescuento("Deducciones nómina")
-		
-        // Total
-		def retenciones=nominaEmpleado.conceptos.sum {
-			def vv=0.0
-			if(it.concepto.tipo=='DEDUCCION' && it.concepto.claveSat==2) {
-			  vv+=it.importeGravado+it.importeExcento
-			}
-			return vv
-		}
-		if(retenciones==null) 
-			retenciones=0.0
-		if(comprobante.descuento==null)
-			comprobante.descuento=0.0
-		if(comprobante.subTotal==null)
-			comprobante.subTotal=0.0
-		comprobante.setTotal(comprobante.subTotal-comprobante.descuento-retenciones)
-		
-		// Impuestos
-		Impuestos impuestos=comprobante.addNewImpuestos()
-		impuestos.setTotalImpuestosRetenidos(retenciones)
-		
-		Retenciones retNod=impuestos.addNewRetenciones()
-		Retencion ret=retNod.addNewRetencion()
-		ret.importe=retenciones
-		ret.impuesto=Impuesto.ISR
-		
+		//comprobante.setFecha(CFDIUtils.toXmlDate(fecha).getCalendarValue())
 		comprobante.sello=cfdiSellador.sellar(empresa.privateKey,document)
 		
 		XmlOptions options = new XmlOptions()
@@ -145,8 +78,8 @@ class CfdiService {
     	document.save(os, options)
 		validarDocumento(document)
 
-		def cfdi=new Cfdi(comprobante)
-		cfdi.xml=os.toByteArray()
+		def cfdi = new Cfdi(comprobante)
+		cfdi.xml = os.toByteArray()
 		cfdi.setXmlName("$cfdi.receptorRfc-$cfdi.serie-$cfdi.folio"+".xml")
 		
 		
@@ -154,8 +87,6 @@ class CfdiService {
 		//nominaEmpleado.cfdi=cfdi
 		//println cfdi.xmlName
 		return cfdi
-        //return cfdi
-		
 	}
 
 	def generarComplemento(def empresa, def nominaEmpleado, def comprobante){

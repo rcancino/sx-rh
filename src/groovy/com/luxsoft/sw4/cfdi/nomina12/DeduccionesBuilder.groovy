@@ -25,7 +25,7 @@ class DeduccionesBuilder {
 			def clave = it.concepto.claveSat.toString().padLeft(3,'0')
 			dd.setTipoDeduccion(CTipoDeduccion.Enum.forString(clave))
 			dd.setClave(it.concepto.clave)
-			dd.setConcepto(it.concepto.descripcion)
+			dd.setConcepto(it.concepto.descripcion.replace('.',','))
 			dd.setImporte(it.total)
 		}
 		return ded

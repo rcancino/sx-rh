@@ -29,6 +29,8 @@ import com.luxsoft.sw4.rh.RevisionAguinaldoExport
 
 import com.luxsoft.sw4.rh.ExportadorDim
 
+import com.luxsoft.sw4.cfdi.nomina12.*
+
 
 // Place your Spring DSL code here
 beans = {
@@ -133,5 +135,13 @@ beans = {
 	revisionAguinaldoExport(RevisionAguinaldoExport){
 		dataSource: ref('dataSource')
 	}
+
+	/** Complemento de nomina 1.2 para CFDI */
+
+	cfdiBuilder(CfdiBuilder){}
+
+	
+
+
 	
 }

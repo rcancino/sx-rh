@@ -13,10 +13,12 @@
 			<f:with bean="${entity}">
 				<f:field property="clave" widget-class="form-control"/>
 				<f:field property="descripcion" widget-class="form-control" />
-				<f:field property="claveSat" widget-class="form-control" />
 				<f:field property="tipo" widget-class="form-control" />
 				<f:field property="clase" widget-class="form-control" />
 				<f:field property="general" widget-class="form-control" />
+				<f:field property="claveSat" widget-class="form-control" />
+				<f:field property="catalogoSat" widget-class="form-control" />
+				<f:field property="catalogoSatClave" widget-class="form-control" />
 			</f:with>
 			
 		</content>

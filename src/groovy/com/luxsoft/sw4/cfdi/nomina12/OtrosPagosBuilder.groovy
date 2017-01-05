@@ -28,13 +28,16 @@ class OtrosPagosBuilder {
         		subsidioAlEmpleo.setSubsidioCausado(it.total)
 		  	}
 		  	if(clave == '004') {
-		  		Nomina.OtrosPagos.OtroPago.CompensacionSaldosAFavor compensacionSaldosAFavor  = otroPago.addNewCompensacionSaldosAFavor()
-		  		compensacionSaldosAFavor.setAño( (short) ( nominaEmpleado.nomina.ejercicio - 1 ))
-		  		CalculoAnual ca = CalculoAnual.where {ejercicio == 2016 && empleado == nominaEmpleado.empleado}.find()
+		  		def eje = 2016
+		  		CalculoAnual ca = CalculoAnual.where {ejercicio == eje && empleado == nominaEmpleado.empleado}.find()
 		  		assert ca, 'Debe existir el calculo anual para poder usar el concepto 004'
+		  		Nomina.OtrosPagos.OtroPago.CompensacionSaldosAFavor compensacionSaldosAFavor  = otroPago.addNewCompensacionSaldosAFavor()
+		  		compensacionSaldosAFavor.setAño((short)eje)
         		compensacionSaldosAFavor.setSaldoAFavor(ca.resultado)
         		def remanente = ca.resultado - ca.aplicado - it.total
-        		assert remanente >=0 , 'El remanente no es correcto'
+        		//assert remanente >=0 , 'El remanente no es correcto'
+        		if(remanente < 0)
+        			remanente = 0
         		compensacionSaldosAFavor.setRemanenteSalFav(remanente)
 		  	}
 		}
