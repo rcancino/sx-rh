@@ -18,6 +18,7 @@ class SubsidioEmpleo {
     }
 	
 	
+	
 	static void cargaInicial(def ejercicio){
 		SubsidioEmpleo.findOrSaveWhere(ejercicio:ejercicio,desde:0.01,hasta:1768.96,subsidio:407.02)
 		SubsidioEmpleo.findOrSaveWhere(ejercicio:ejercicio,desde:1768.97,hasta:2653.38,subsidio:406.83)
@@ -32,7 +33,6 @@ class SubsidioEmpleo {
 		SubsidioEmpleo.findOrSaveWhere(ejercicio:ejercicio,desde:7382.34,hasta:250000000.00,subsidio:0.0)
 		
 	}
-
 
 	static def obtenerTabla(def diasDelPeriodo,def ejercicio,def diasMes){
 		//def diasMes=30.4

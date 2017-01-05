@@ -62,6 +62,8 @@ class AsistenciaDet {
 	String tipo
 	
 	Boolean manual=false
+
+	Boolean cierreAnual=false
 	
 	Boolean cancelarIncentivo=false
 	

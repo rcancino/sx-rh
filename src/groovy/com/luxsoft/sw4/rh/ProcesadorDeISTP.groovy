@@ -55,6 +55,7 @@ class ProcesadorDeISTP {
 			.find(){(percepciones>it.limiteInferior && percepciones<=it.limiteSuperior)}
 		assert tarifa,"No encontro TarifaIsr para los parametros: Dias: ${diasTrabajados} Perc:${percepciones} Empleado: ${nominaEmpleado.empleado}"
 		//def subsidio=Subsidio.obtenerTabla(diasTrabajados).find(){(percepciones>it.desde && percepciones<=it.hasta)}
+		//def subsidio=SubsidioEmpleo.obtenerTabla(diasTrabajados,ejercicio,dias)
 		def subsidio=SubsidioEmpleo.obtenerTabla(diasTrabajados,ejercicio,dias)
 			.find(){(percepciones>it.desde && percepciones<=it.hasta)}
 		assert subsidio,'No existe registro en tabla de subsidio para el empleo'

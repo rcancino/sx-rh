@@ -38,7 +38,9 @@ class CalculoSdiService {
 		def fin=res.get(0)[1]
 		//println 'Res: '+res
 		//println 'Inicio: '+inicio+ 'Fin: '+fin+ ' Tipo: '+stipo+ '  Ejercicio: '+ejercicio+' bBimestre: '+bimestre
-		def zona=ZonaEconomica.findByClave('A')
+		def zona=ZonaEconomica.findByClaveAndEjercicio('A',bimestre==6 ? ejercicio+1 : ejercicio)
+
+		println "******************"+zona
 		
 		//log.info "Calculo SDI para $m.empleado $ejercicio  bimestre $bimestre tipo $tipo ${inicio.format('dd/MM/yyyy')} a ${fin.format('dd/MM/yyyy')}"
 

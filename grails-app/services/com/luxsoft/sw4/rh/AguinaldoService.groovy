@@ -165,7 +165,7 @@ class AguinaldoService {
     }
 	
 	def registrarCalculo(Aguinaldo aguinaldo){
-		def zona=ZonaEconomica.findByClave('A')
+		def zona=ZonaEconomica.findByClaveAndEjercicio('A',aguinaldo.ejercicio)
 		def topeSalarial=30*zona.salario
 		def aguinaldoExcento=aguinaldo.aguinaldo<topeSalarial?aguinaldo.aguinaldo:topeSalarial
 		def aguinaldoGravable=aguinaldo.aguinaldo-aguinaldoExcento

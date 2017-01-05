@@ -183,7 +183,8 @@ nominaEmpleado.actualizar()
 	import com.luxsoft.sw4.rh.imss.*
 	import java.math.*
 
-	def salarioMinimo=ZonaEconomica.valores.find(){it.clave='A'}.salario
+	//def salarioMinimo=ZonaEconomica.valores.find(){it.clave='A'}.salario
+	def salarioMinimo=ZonaEconomica.findByClaveAndEjercicio('A',nominaEmpleado.nomina.ejercicio).salario
 
 	println 'Salario Minimo------------------------------'+salarioMinimo
 

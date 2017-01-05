@@ -44,7 +44,8 @@ class ProcesadorDePrestamosPersonales {
 			log.info 'Deducciones calculadas: '+deducciones
 			log.info 'Percepcion maxima calculada: '+retMaxima
 			*/
-			def salarioMinimo=ZonaEconomica.valores.find(){it.clave='A'}.salario
+			//def salarioMinimo=ZonaEconomica.valores.find(){it.clave='A'}.salario
+			def salarioMinimo=ZonaEconomica.findByClaveAndEjercicio('A',ne.nomina.ejercicio).salario
 			//def retMaxima=( (ne.salarioDiarioBase-salarioMinimo)*(ne.diasDelPeriodo-ne.incapacidades-ne.faltas) )*0.3
 			def diasNetos=ne.diasDelPeriodo-ne.incapacidades-ne.faltas
 			def retMaxima=percepciones-deducciones-(salarioMinimo*diasNetos)
@@ -115,7 +116,8 @@ class ProcesadorDePrestamosPersonales {
 	def getModel(NominaPorEmpleadoDet det) {
 		def ne=det.parent
 		def prestamo=buscarPrestamo(ne)
-		def salarioMinimo=ZonaEconomica.valores.find(){it.clave='A'}.salario
+		//def salarioMinimo=ZonaEconomica.valores.find(){it.clave='A'}.salario
+		def salarioMinimo=ZonaEconomica.findByClaveAndEjercicio("A",det.nomina.ejercicio).salario
 		def retMaxima=( (ne.salarioDiarioBase-salarioMinimo)*(ne.diasDelPeriodo-ne.incapacidades-ne.faltas) )*0.3
 		def otrasDeducciones=ne.conceptos.find {it.concepto.clave=="D005"}
 		def model=[prestamo:prestamo

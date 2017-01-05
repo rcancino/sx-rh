@@ -19,4 +19,30 @@ class SubsidioEmpleoController {
     	flash.message="Subsidio eliminado "+subsidio.id
     	redirect action:'index'
     }
+
+ def trasladarTabla(){
+        def ejercicio=session.ejercicio
+        def ejercicioAnt=ejercicio-1
+         def found=SubsidioEmpleo.findAllByEjercicio(ejercicio)
+        def tablaIsr=SubsidioEmpleo.findAllByEjercicio(ejercicioAnt).each{
+           
+            if(!found){
+                println "Tarifa: "+it
+                SubsidioEmpleo  tarifa=new SubsidioEmpleo(
+                desde:it.desde,
+                hasta:it.hasta,
+                subsidio:it.subsidio,
+                ejercicio:ejercicio
+                )
+                
+              
+             tarifa.save failOnError:true, flush:true
+            }else{
+                println "Tabla ya trasladada"
+            }
+        }
+             redirect action:'index'
+       
+    }
+
 }

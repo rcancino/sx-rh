@@ -13,6 +13,8 @@ import org.codehaus.groovy.grails.web.json.JSONArray
 @Transactional(readOnly = true)
 class VacacionesGrupoController {
 
+    
+
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
@@ -132,13 +134,20 @@ class VacacionesGrupoController {
             vacaciones.calendarioDet = grupo.calendarioDet
             periodo.each { fecha ->
                 vacaciones.dias.add(fecha)
+               
+   
             }
+           
             grupo.addToPartidas(vacaciones)
+            
         }
         grupo = grupo.save failOnError:true, flush:true
+        actualizarControlGrupo(grupo)
         dataToRender.operacionId=grupo.id        
         render dataToRender as JSON
     }
+
+   
 
     @Transactional
     def eleiminarVacaciones(VacacionesGrupo grupo){
@@ -151,10 +160,28 @@ class VacacionesGrupoController {
 
         log.info('Eliminando vacaciones del grupo ' + grupo)
         def res = grupo.removeFromPartidas(v)
-        v.delete flush:true
+        
         log.info('Eliminado:  ' + res )
         grupo = grupo.save failOnError:true, flush:true
+        actualizarControlGrupo(grupo)
         redirect action:'edit', id:grupo.id
+    }
+
+    @Transactional
+    def actualizarControlGrupo(VacacionesGrupo grupo){
+
+        grupo.partidas.each{
+             actualizarControl(it.control)
+        }
+    }
+
+    @Transactional
+   def actualizarControl(ControlDeVacaciones control){
+
+        println "Actualizando el control de vacaciones para"+control+" de :  " +control.empleado
+        def vacaciones=Vacaciones.findAllByControl(control)
+            control.diasTomados=vacaciones.sum 0,{it.dias.size()}      
+            control.save failOnError:true, flush:true
     }
 
     protected void notFound() {

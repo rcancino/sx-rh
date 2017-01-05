@@ -181,6 +181,53 @@ class AsistenciaService {
 		return asistencia
 	}
 
+	
+
+    @Transactional
+    def ajusteCierre(CalendarioDet calendarioDet){
+
+		def tipo=calendarioDet.calendario.tipo=='SEMANA'?'SEMANAL':'QUINCENAL'
+		
+		def empleados=Empleado.findAll(
+			"from Empleado e where e.salario.periodicidad=? order by e.perfil.ubicacion.clave,e.apellidoPaterno asc",[tipo])
+		
+		
+		empleados.each{ empleado ->
+			ajusteCierre(calendarioDet,empleado)
+		}
+    }
+
+    @Transactional
+    def ajusteCierre(CalendarioDet calendarioDet,Empleado empleado){
+    		def asistencia =Asistencia.find(
+				"from Asistencia a where a.empleado=? and a.calendarioDet=?"
+				,[empleado,calendarioDet])
+	
+		if(asistencia && asistencia.diasTrabajados){
+			return asistencia
+		}
+
+			if(asistencia){
+				
+	
+					asistencia.partidas.findAll(){det->
+						
+						if(det.manual && det.cierreAnual){	
+						log.info('Quitando manual para '+empleado.nombre)
+							det.manual=false
+							
+						}
+						
+					}	
+					
+		    	
+		    asistencia.save failOnError:true,flush:true
+		    actualizarAsistencia(asistencia)
+
+			}
+    }
+
+
 	@Transactional
     def asistenciaCierreAnual(CalendarioDet calendarioDet){
 
@@ -197,7 +244,6 @@ class AsistenciaService {
 		}
 
     }
-
 	@Transactional
     def asistenciaCierreAnual(CalendarioDet calendario, Empleado empleado){
 
@@ -221,6 +267,7 @@ class AsistenciaService {
 									det.entrada1=java.sql.Time.valueOf('09:00:00');
 									det.salida1=java.sql.Time.valueOf('14:00:00');
 									det.manual=true
+									det.cierreAnual=true
 						
 					}else{
 									det.entrada1=java.sql.Time.valueOf('09:00:00');
@@ -228,6 +275,7 @@ class AsistenciaService {
 									det.entrada2=java.sql.Time.valueOf('15:00:00');
 									det.salida2=java.sql.Time.valueOf('18:30:00');
 									det.manual=true
+									det.cierreAnual=true
 					}
 							
 						}

@@ -255,5 +255,12 @@ class AsistenciaController {
 
 		redirect action:'index'
 	}
+
+	def ajusteCierre(CalendarioDet det){
+
+		asistenciaService.ajusteCierre(det)
+
+		redirect action:'index'
+	}
 	
 }
