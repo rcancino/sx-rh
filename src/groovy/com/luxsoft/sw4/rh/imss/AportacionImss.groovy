@@ -1,5 +1,7 @@
 package com.luxsoft.sw4.rh.imss
 
+import com.luxsoft.sw4.rh.tablas.ZonaEconomica
+
 class AportacionImss {
 	
 	String clave

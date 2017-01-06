@@ -10,7 +10,7 @@ class TarifaIsrController {
 
     def index(){
     	params.max = 20
-		def list=TarifaIsr.findAll("from TarifaIsr t order by t.ejercicio desc,t.limiteInferior asc",[],params)
+		def list=TarifaIsr.findAll("from TarifaIsr t where t.ejercicio=? order by t.ejercicio desc,t.limiteInferior asc",[session.ejercicio],params)
     	[tarifaIsrInstanceList:list,tarifaIsrInstanceCount:TarifaIsr.count()]
     }
 

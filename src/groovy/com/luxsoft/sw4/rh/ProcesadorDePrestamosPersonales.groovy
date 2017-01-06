@@ -6,6 +6,8 @@ import org.apache.commons.logging.LogFactory
 
 import com.luxsoft.sw4.rh.imss.*
 
+import com.luxsoft.sw4.rh.tablas.ZonaEconomica
+
 class ProcesadorDePrestamosPersonales {
 	
 	def conceptoClave='D004'

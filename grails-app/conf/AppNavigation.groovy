@@ -39,6 +39,7 @@ navigation={
 				tarifaIsr()
 				subsidio()
 				factorDeIntegracion()
+				zonaEconomica(titleText:'Salario Minimo')
 			}
 		}
 		operaciones(){
