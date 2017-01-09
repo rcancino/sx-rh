@@ -74,9 +74,9 @@ class EmpleadoRestController {
 	def calcularSdiNuevo() {
 		
 		def empleadoId=params.empleadoId
-		def salarioNuevo=params.salarioNuevo as BigDecimal
-		
+		def salarioNuevo=params.salarioNuevo as BigDecimal	
 		def periodicidad=params.periodicidad
+		
 		def fecha=new Date()
 		Empleado e=Empleado.get(empleadoId)
 		def sdi=0.0

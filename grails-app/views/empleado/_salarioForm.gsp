@@ -5,7 +5,7 @@
 	<div class="col-md-6">
 		<fieldset ${!edit?'disabled=""':''}>
 			<f:with bean="empleadoInstance">
-				<f:field input-id="periodicidadField" property="salario.periodicidad" widget-class="form-control" wrapper="bootstrap3"/>	
+				<f:field widget-id="periodicidadField" property="salario.periodicidad" widget-class="form-control" wrapper="bootstrap3"/>	
 				<g:if test="${empleadoInstance?.salario?.salarioDiario}">
 					<f:field property="salario.salarioDiario" 
 						widget-id="salarioNuevo" 
