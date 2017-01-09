@@ -95,15 +95,20 @@ class CfdiBuilder {
 		c.setCantidad(1);
 		c.setUnidad("ACT");
 		c.setDescripcion('Pago de nómina');
-		c.setValorUnitario(complementoNomina.totalPercepciones + complementoNomina.totalOtrosPagos);
-		c.setImporte(complementoNomina.totalPercepciones + complementoNomina.totalOtrosPagos);
+		def totalPercepciones = complementoNomina.totalPercepciones?:0.0
+		def totalOtrosPagos = complementoNomina.totalOtrosPagos?:0.0
+		c.setValorUnitario(totalPercepciones + totalOtrosPagos);
+		c.setImporte(totalPercepciones + totalOtrosPagos);
 		return this
 	}
 
 	private registrarTotales(Comprobante comprobante, def complementoNomina){
-		comprobante.setSubTotal(complementoNomina.totalPercepciones + complementoNomina.totalOtrosPagos)
-		comprobante.setDescuento(complementoNomina.totalDeducciones)
-        comprobante.setTotal(complementoNomina.totalPercepciones + complementoNomina.totalOtrosPagos - complementoNomina.totalDeducciones)
+		def totalPercepciones = complementoNomina.totalPercepciones?:0.0
+		def totalOtrosPagos = complementoNomina.totalOtrosPagos?:0.0
+		def totalDeducciones = complementoNomina.totalDeducciones?:0.0
+		comprobante.setSubTotal(totalPercepciones + totalOtrosPagos)
+		comprobante.setDescuento(totalDeducciones)
+        comprobante.setTotal(totalPercepciones + totalOtrosPagos - totalDeducciones)
         return this
 	}
 	

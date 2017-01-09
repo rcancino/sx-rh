@@ -5,6 +5,7 @@ import com.luxsoft.sw4.Empresa;
 import com.luxsoft.sw4.Periodo
 
 import grails.transaction.Transactional
+import grails.transaction.NotTransactional
 import grails.validation.Validateable
 import groovy.transform.ToString
 import grails.plugin.springsecurity.annotation.Secured
@@ -12,12 +13,15 @@ import grails.plugin.springsecurity.annotation.Secured
 import org.grails.databinding.BindingFormat
 
 import com.luxsoft.sw4.rh.acu.IsptMensual
+import org.apache.commons.lang.exception.ExceptionUtils
 
 //@Transactional(readOnly = true)
 @Secured(["hasAnyRole('ROLE_ADMIN','RH_USER')"])
 class NominaController {
 
 	def nominaService
+
+	def cfdiService
     //static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 	def importarNominaService
 	
@@ -133,18 +137,49 @@ class NominaController {
             "from Empleado e where e.status ='ALTA' and e.salario.periodicidad=? and e.id not in(select ne.empleado.id from NominaPorEmpleado ne where ne.nomina.id=?) "
             ,[periodicidad,nominaId])
     }
+
+    @Transactional
+    def generarCfdis(Nomina nomina) {
+    	nomina.partidas.each { ne ->
+    		if(!ne.cfdi){
+    			try {
+    				cfdiService.generarCfdi(ne)
+    				nominaService.actualizarSaldos(ne)
+    			}
+    			catch(Exception e) {
+    				String msg="Error generando CFDI para nomina de ${ne.empleado} id: $ne.id  " + ExceptionUtils.getMessage(e)
+    				flash.mesage= msg
+    				throw new RuntimeException(msg)
+    				return
+    			}
+    		}
+    	}
+    	//nomina.status='CERRADA'
+		nomina = nomina.save flush:true
+		//nominaService.actualizarSaldos(nomina)
+		flash.message = "Comprobantes fiscales generados exitosamente "
+		redirect action:'show',params:[id:nomina.id]
+    }
 	
+	@NotTransactional
 	def timbrar(Nomina nominaInstance) {
-		if(nominaInstance==null){
-			notFound()
-			return
+		def errores = []
+		def pendientes = nominaInstance.partidas.findAll{ it?.cfdi?.uuid == null}
+
+		pendientes.each{ ne ->
+			try {
+				cfdiService.timbrar(ne)
+			}
+			catch(Exception e) {
+				errores << " Error timbrando ${ne.empleado}"
+			}
 		}
-		nominaInstance.partidas.each{
-			nominaService.timbrar(it.id)
+
+		if(errores) {
+			flash.message = errores.join(',')
+		} else {
+			flash.message=" Nomina de ${nomina.id} timbrara exitosamente"
 		}
-		nominaInstance.status='CERRADA'
-		nominaInstance=nominaInstance.save flush:true
-		nominaService.actualizarSaldos(nominaInstance)
 		redirect action:'show',params:[id:nominaInstance.id]
 	}
 	

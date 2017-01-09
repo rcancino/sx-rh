@@ -22,6 +22,7 @@ import mx.gob.sat.sitioInternet.cfd.catalogos.nomina.CTipoContrato
 import mx.gob.sat.sitioInternet.cfd.catalogos.nomina.CRiesgoPuesto
 import mx.gob.sat.sitioInternet.cfd.catalogos.nomina.CPeriodicidadPago
 import mx.gob.sat.sitioInternet.cfd.catalogos.nomina.CTipoPercepcion
+import mx.gob.sat.sitioInternet.cfd.catalogos.nomina.CBanco
 
 import mx.gob.sat.nomina12.NominaDocument
 import mx.gob.sat.nomina12.NominaDocument.Nomina
@@ -127,8 +128,8 @@ class ComplementoBuilder {
         else
         	receptor.setPeriodicidadPago(CPeriodicidadPago.X_02)
         if(empleado?.salario?.banco?.clave){
-			receptor.setBanco(empleado.salario.banco.clave)
-			//receptor.setCuentaBancaria('')
+        	def bancoClave = empleado?.salario.banco.clave.toString().padLeft(3,'0')
+			receptor.setBanco(CBanco.Enum.forString(bancoClave))
         }
 		receptor.setSalarioBaseCotApor(nominaEmpleado.salarioDiarioBase)
 		receptor.setSalarioDiarioIntegrado(nominaEmpleado.salarioDiarioIntegrado)

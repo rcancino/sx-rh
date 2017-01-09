@@ -22,6 +22,13 @@ class NominaService {
 	def otraDeduccionService
 	
 	def calculoAnualService
+
+	@Transactional
+	def save(Nomina nomina) {
+		def xmlPendiente = nomina.partidas.find{it.cfdi==null}
+		nomina.status = xmlPendiente == null ? 'CERRADA' : 'PENDIENTE'
+		nomina.save failOnError: true, flush:true
+	}
 	
 	@Transactional
 	def eliminarNomina(Long id){

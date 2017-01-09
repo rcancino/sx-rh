@@ -6,14 +6,26 @@
 	<title>Nomina</title>
 </head>
 <body>
-
+	
+	<g:set var="pendientesDeTimbrado" value="${nominaInstance.partidas.count{it?.cfdi?.uuid == null}}" scope="request" />
+	
 	<div class="row wrapper border-bottom white-bg page-heading">
 	    <div class="col-lg-10">
 	    	<g:link action="index" id="${nominaInstance.id}" params="[periodicidad:nominaInstance.periodicidad]">
 	    		<h2>Nómina: ${nominaInstance.folio} ${nominaInstance.periodicidad}  
 	    			<small> ${nominaInstance.formaDePago }  (${nominaInstance.periodo}) ${nominaInstance.tipo}</small>
 	    		</h2>
+	    		%{-- <g:if test= "${nominaInstance.status == 'CERRADA'}">
+	    			
+	    		</g:if> --}%
 	    	</g:link>
+	    	<g:if test="${nominaInstance.status == 'CERRADA'}">
+	    		<small><span class='label label-warning' >NOMINA CERRADA</small>
+	    		<g:if test ="${nominaInstance.partidas.count{it.cfdi.uuid == null} > 0 }">
+	    			Con ${pendientesDeTimbrado} registros pendientes de timbrado
+	    		</g:if>
+	    	</g:if>
+
 	        <g:if test="${flash.message}">
 	            <small><span class="label label-warning ">${flash.message}</span></small>
 	        </g:if> 
@@ -80,8 +92,13 @@
 						</g:link> 
 					</li>
 					<li>
+						<g:link action="generarCfdis" id="${nominaInstance.id}" onclick="return confirm('Generar cfdi's (XML)  toda la nomina?');"> 
+							 Generar CFDI's
+						</g:link> 
+					</li>
+					<li>
 						<g:link action="timbrar" id="${nominaInstance.id}" onclick="return confirm('Timbrar toda la nomina?');"> 
-							 Timbrar
+							 Timbrar CFDI's
 						</g:link> 
 					</li>
 					<li>

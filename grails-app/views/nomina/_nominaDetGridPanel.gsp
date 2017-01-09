@@ -8,7 +8,8 @@
 			<th><g:message code="Empleado.percepciones.label" default="Percepciones" encodeAs="html"/></th>
 			<th><g:message code="Empleado.deducciones.label" default="Deducciones" encodeAs="html"/></th>
 			<th><g:message code="Empleado.deducciones.total" default="Total" encodeAs="html"/></th>
-			<th><g:message code="Empleado.deducciones.total" default="CFDI" encodeAs="html"/></th>
+			<th>XML</th>
+			<th>UUID</th>
 			<th><g:message code="Empleado.deducciones.total" default="R F" encodeAs="html"/></th>
 			
 		</tr>
@@ -33,7 +34,15 @@
 				<td class="text-right"><g:formatNumber number="${row?.percepciones}" format="#,###,###.##"/></td>
 				<td class="text-right"><g:formatNumber number="${row?.deducciones}" format="#,###,###.##"/></td>
 				<td class="text-right"><g:formatNumber number="${row?.total}" format="#,###,###.##"/></td>
-				<td><g:if test="${row.cfdi}">
+				<td>
+					<g:if test="${row.cfdi}">
+						<g:link controller="nominaPorEmpleado" action="mostrarXml" id="${row.cfdi.id}">
+							${row?.cfdi?.folio}
+						</g:link>	
+					</g:if>
+					
+				</td>
+				<td><g:if test="${row?.cfdi?.uuid}">
 						<g:jasperReport
 							controller="reciboDeNomina"
 							action="impresionDirecta"
@@ -52,10 +61,9 @@
 				</td>
 				<td>
 					<g:form class="form-inline" role="form" 
-					controller="nominaPorEmpleado" 
-					action="actualizarFirmaRecibo" id="${row.id}">
+						controller="nominaPorEmpleado" 
+						action="actualizarFirmaRecibo" id="${row.id}">
 						<g:checkBox name="reciboFirmado" value="${row.reciboFirmado}"/>
-						<button type="submit" class="btn btn-default">
 						<span class="glyphicon glyphicon-ok"></span> 
 					</button>
 					</g:form>
