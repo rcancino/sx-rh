@@ -128,11 +128,25 @@
 				    <div class="list-group">
 
 				    	<g:if test="${!nominaPorEmpleadoInstance.cfdi}">
+							
+							<g:link class="list-group-item" action="generarCfdi" id="${nominaPorEmpleadoInstance.id}" >
+								<i class="fa fa-file-excel-o"></i> Generar CFDI
+							</g:link>
+							%{-- <g:link class="list-group-item" action="timbrar" id="${nominaPorEmpleadoInstance.id}" >
+								<span class="glyphicon glyphicon-screenshot"></span> Timbrar
+							</g:link> --}%
+						</g:if>
 
+						<g:if test="${nominaPorEmpleadoInstance.cfdi && !nominaPorEmpleadoInstance.cfdi.uuid}">
 							<g:link class="list-group-item" action="timbrar" id="${nominaPorEmpleadoInstance.id}" >
 								<span class="glyphicon glyphicon-screenshot"></span> Timbrar
 							</g:link>
 						</g:if>
+						%{-- <g:else >
+							<g:link class="list-group-item" action="timbrar" id="${nominaPorEmpleadoInstance.id}" >
+								<span class="glyphicon glyphicon-screenshot"></span> Timbrar
+							</g:link>
+						</g:else> --}%
 						
 						<g:link class="list-group-item" 
 							controller="reciboDeNomina" 
@@ -141,6 +155,19 @@
 						</g:link>							
 						
 						<g:if test="${nominaPorEmpleadoInstance.cfdi}">
+												
+						    <g:link class="list-group-item" action="mostrarXml"  id="${nominaPorEmpleadoInstance.cfdi.id}">
+							   <span class="glyphicon glyphicon-eye-open"></span> Mostrar XML
+						    </g:link>
+
+						    <g:link class="list-group-item" action="descargarXml"  id="${nominaPorEmpleadoInstance.cfdi.id}">
+							    <span class="glyphicon glyphicon-download"></span> Descargar XML
+						    </g:link>
+						
+							
+						</g:if>
+
+						<g:if test="${nominaPorEmpleadoInstance.cfdi && nominaPorEmpleadoInstance.cfdi.uuid}">
 							<g:jasperReport
 									controller="reciboDeNomina"
 								action="impresionDirecta"
@@ -154,17 +181,11 @@
 							<span class="glyphicon glyphicon-ban-circle"></span> Cancelar
 						    </g:link>
 							
-							<g:link class="list-group-item" action="descargarXml"  id="${nominaPorEmpleadoInstance.cfdi.id}">
-							    <span class="glyphicon glyphicon-download"></span> Descargar XML
-						    </g:link>
-												
-						    <g:link class="list-group-item" action="mostrarXml"  id="${nominaPorEmpleadoInstance.cfdi.id}">
-							   <span class="glyphicon glyphicon-eye-open"></span> Mostrar
-						    </g:link>
+							
 						
-						<a: href="#" class="list-group-item">
-							<span class="glyphicon glyphicon-envelope"></span> Enviar mail
-						</a:>
+							<a: href="#" class="list-group-item">
+								<span class="glyphicon glyphicon-envelope"></span> Enviar mail
+							</a:>
 						</g:if>
 						
 						</div>

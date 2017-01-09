@@ -27,7 +27,9 @@ class PercepcionesBuilder {
 		percepciones.each{
 			Percepcion pp=per.addNewPercepcion()
 		  	//def clave = it.concepto.claveSat.toString().padLeft(3,'0')
+		  	
 		  	def clave = it.concepto.catalogoSatClave
+		  	
 		  	pp.setTipoPercepcion(CTipoPercepcion.Enum.forString(clave))
 		  	pp.setClave(it.concepto.clave)  // Debe ser la clave que se usa en contabilidad que sea la que se usa en contabilidad
 		  	pp.setConcepto(it.concepto.descripcion)
@@ -36,5 +38,6 @@ class PercepcionesBuilder {
 		}
 		return per
 	}
+
 
 }

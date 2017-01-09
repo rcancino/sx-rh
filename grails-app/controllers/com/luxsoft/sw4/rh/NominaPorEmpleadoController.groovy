@@ -21,6 +21,8 @@ class NominaPorEmpleadoController {
 	def ajusteIsr
 
 	def calculoAnualService
+
+	def cfdiService
 	
 
     def index() { }
@@ -150,15 +152,17 @@ class NominaPorEmpleadoController {
 			'*'{ render status: NOT_FOUND }
 		}
 	}
+
+	def generarCfdi(NominaPorEmpleado ne) {
+		def cfdi = cfdiService.generarCfdi(ne)
+		flash.message = "Cfdi ${cfdi.id} generado para nomina por empleado: ${ne.id} "
+		redirect action:'edit', id: ne.id
+	}
 	
-	def timbrar(Long id){
-		def ne=NominaPorEmpleado.get(id)
-		if(!ne){
-			flash.message="No existe la nomina por empleado "+id
-			redirect action:'edit',params:[id:id]
-		}
-		ne=nominaService.timbrar(ne)
-		redirect action:'edit',params:[id:ne.id]
+	def timbrar(NominaPorEmpleado ne){
+		cfdiService.timbrar(ne)
+		flash.message=" Nomina de empleado ${ne.empleado} timbrara exitosamente"
+		redirect action:'edit', id: ne.id
 	}
 	
 	

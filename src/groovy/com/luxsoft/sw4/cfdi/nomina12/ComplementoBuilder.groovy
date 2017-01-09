@@ -36,6 +36,8 @@ class ComplementoBuilder {
 
 	Nomina build(NominaPorEmpleado nominaEmpleado){
 
+		validar(nominaEmpleado)
+
 		NominaDocument nominaDocto=NominaDocument.Factory.newInstance()
 		Nomina nomina=nominaDocto.addNewNomina()
 		nomina.version = '1.2'
@@ -130,6 +132,14 @@ class ComplementoBuilder {
         }
 		receptor.setSalarioBaseCotApor(nominaEmpleado.salarioDiarioBase)
 		receptor.setSalarioDiarioIntegrado(nominaEmpleado.salarioDiarioIntegrado)
+	}
+
+
+	private validar(NominaPorEmpleado ne){
+		ne.conceptos.each {
+			assert it.concepto.catalogoSat, "No esta registrado el CatalogoSat para el concepto de nomina ${it}"
+			assert it.concepto.catalogoSatClave, "No esta registrado la clave SAT  para el concepto de nomina ${it}"
+		}
 	}
 
 	

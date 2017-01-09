@@ -201,16 +201,16 @@ class NominaService {
 	}
 	
 	def timbrar(NominaPorEmpleado ne) {
-		if(ne.cfdi==null && ne.getPercepciones()>0){
-			log.info 'Timbrando Ne id:'+ne.id
-			try{
-				cfdiService.generarComprobante(ne.id)
-			}catch(Exception ex){
-				ex.printStackTrace()
-				log.error ex
-			}
-			return ne
-		}
+		// if(ne.cfdi==null && ne.getPercepciones()>0){
+		// 	log.info 'Timbrando Ne id:'+ne.id
+		// 	try{
+		// 		cfdiService.generarComprobante(ne.id)
+		// 	}catch(Exception ex){
+		// 		ex.printStackTrace()
+		// 		log.error ex
+		// 	}
+		// 	return ne
+		// }
 	}
 	
 	def timbrarNomina(Long nominaId) {
@@ -536,6 +536,13 @@ class NominaService {
 			}
 			
 		}
+	}
+
+	def actualizarSaldos(NominaPorEmpleado ne) {
+		actualizarOtrasDeducciones(ne)
+		actualizarPrestamo(ne)
+		actualizarCalculoAnual(ne)
+		actualizarVacaciones(ne)
 	}
 	
 	def cancelarSaldos(Nomina nomina){
