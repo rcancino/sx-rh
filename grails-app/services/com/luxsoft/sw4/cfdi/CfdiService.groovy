@@ -77,7 +77,7 @@ class CfdiService {
 	Cfdi timbrar(NominaPorEmpleado ne) {
 		assert ne.cfdi , "No se ha generado archivo XML para timbrar la nomina ${ne.id} de ${ne.empleado} "
 		assert ne.cfdi.uuid == null , "La nomina ${ne.id} de ${ne.empleado} ya esta timbrada UUID: ${ne.cfdi.uuid}"
-		cfdi = cfdiTimbrador.timbrar(ne.cfdi,"PAP830101CR3", "yqjvqfofb")
+		def cfdi = cfdiTimbrador.timbrar(ne.cfdi,"PAP830101CR3", "yqjvqfofb")
 		return cfdi
 	}
 	

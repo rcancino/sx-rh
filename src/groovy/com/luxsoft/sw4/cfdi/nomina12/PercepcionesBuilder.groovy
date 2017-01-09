@@ -22,8 +22,8 @@ class PercepcionesBuilder {
 		    }
 		    return 0
 		}
-		per.totalGravado=nominaEmpleado.percepcionesGravadas
-		per.totalExento=nominaEmpleado.percepcionesExcentas
+		per.totalGravado = percepciones.sum 0, {it.importeGravado}
+		per.totalExento = percepciones.sum 0, {it.importeExcento}
 		percepciones.each{
 			Percepcion pp=per.addNewPercepcion()
 		  	//def clave = it.concepto.claveSat.toString().padLeft(3,'0')

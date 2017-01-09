@@ -64,7 +64,7 @@ class CfdiBuilder {
 		comprobante.setFormaDePago("PAGO EN UNA SOLA EXHIBICION")
 		comprobante.setMetodoDePago('NA')
 		comprobante.setMoneda(Currency.getInstance(new Locale("es","mx")).currencyCode)
-		comprobante.setTipoCambio("1.0")
+		comprobante.setTipoCambio("1")
 		comprobante.setTipoDeComprobante(TipoDeComprobante.EGRESO)
 		comprobante.setLugarExpedicion(empresa.direccion.codigoPostal)
 		comprobante.setNoCertificado(empresa.numeroDeCertificado)
@@ -94,7 +94,7 @@ class CfdiBuilder {
 		Concepto c=conceptos.addNewConcepto();
 		c.setCantidad(1);
 		c.setUnidad("ACT");
-		c.setDescripcion('Pago de Nomina');
+		c.setDescripcion('Pago de nómina');
 		c.setValorUnitario(complementoNomina.totalPercepciones + complementoNomina.totalOtrosPagos);
 		c.setImporte(complementoNomina.totalPercepciones + complementoNomina.totalOtrosPagos);
 		return this
