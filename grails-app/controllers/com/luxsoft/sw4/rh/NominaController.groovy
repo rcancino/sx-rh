@@ -155,7 +155,8 @@ class NominaController {
     		}
     	}
     	//nomina.status='CERRADA'
-		nomina = nomina.save flush:true
+    	nomina = nominaService.save(nomina)
+		//nomina = nomina.save flush:true
 		//nominaService.actualizarSaldos(nomina)
 		flash.message = "Comprobantes fiscales generados exitosamente "
 		redirect action:'show',params:[id:nomina.id]
