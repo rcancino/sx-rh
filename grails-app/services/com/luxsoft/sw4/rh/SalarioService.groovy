@@ -143,6 +143,8 @@ class SalarioService {
 	@NotTransactional
 	def calcularSalarioDiarioIntegradoNuevo(Empleado empleado,def salarioNuevo,String periodicidad){
 		
+
+		println periodicidad
 		log.info 'Calculando salario diari integrado para: '+empleado+ '  Salario nuevo: '+salarioNuevo+ ' Tipo: '+periodicidad
 		def tipoFactor=periodicidad=="SEMANAL"?" F.SEM_FACTOR ":" F.QNA_FACTOR"
 		def query=sdiPorEmpleadoNuevo
