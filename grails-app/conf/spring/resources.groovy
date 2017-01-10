@@ -140,6 +140,7 @@ beans = {
 
 	cfdiBuilder(CfdiBuilder){}
 
+	nominaPrintService(NominaPrintService){}
 	
 
 
