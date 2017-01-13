@@ -223,6 +223,20 @@ class CoreTagLib {
 
     }
 
+    /**
+     * Html Div decorado para contenido
+     *
+     * @attrs animated  Animar el div al presentarlo
+     * @attrs animatedType  Tipo de anima
+     */
+    def wrapper = { attrs, body ->
+        def animated = attrs.animated ? 'animated' : ''
+        def animatedType = attrs.animatedType ?: 'fadeInRight'
+        out << "<div class=\"row wrapper wrapper-content white-bg ${animated} ${animatedType}\" >"
+        out << body()
+        out << "</div>"
+    }
+
     def warningLabel = {
         if(flash.message) {
             out << " <small><span class='label label-warning' >${flash.message}</span></small> "

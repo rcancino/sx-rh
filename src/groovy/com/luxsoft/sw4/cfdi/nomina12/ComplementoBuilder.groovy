@@ -131,6 +131,7 @@ class ComplementoBuilder {
         	def bancoClave = empleado?.salario.banco.clave.toString().padLeft(3,'0')
 			receptor.setBanco(CBanco.Enum.forString(bancoClave))
         }
+        receptor.cuentaBancaria=new BigInteger(empleado?.salario.clabe?:salario.numeroDeCuenta)
 		receptor.setSalarioBaseCotApor(nominaEmpleado.salarioDiarioBase)
 		receptor.setSalarioDiarioIntegrado(nominaEmpleado.salarioDiarioIntegrado)
 	}

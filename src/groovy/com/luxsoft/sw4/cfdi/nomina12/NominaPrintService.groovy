@@ -119,11 +119,11 @@ class NominaPrintService {
 			def otrosPagos=nomina.otrosPagos.otroPagoArray
 			otrosPagos.each{ cc->
 				def res=[
-					'GRUPO':cc.tipoPercepcion.toString(),
+					'GRUPO':cc.tipoOtroPago.toString(),
 					'CLAVE':cc.clave,
 					'DESCRIPCION':cc.concepto,
-					'IMPORTE_GRAVADO':cc.importeGravado,
-					'IMPORTE_EXENTO':cc.importeExento,
+					'IMPORTE_GRAVADO':cc.importe,
+					'IMPORTE_EXENTO':cc.importe,
 					'CONCEPTO':'P'
 				 ]
 				modelData<<res

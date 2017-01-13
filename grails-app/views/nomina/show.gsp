@@ -7,7 +7,8 @@
 </head>
 <body>
 	
-	<g:set var="pendientesDeTimbrado" value="${nominaInstance.partidas.count{it?.cfdi?.uuid == null}}" scope="request" />
+	<g:set var="pendientesDeTimbrado" 
+		value="${nominaInstance.partidas.count{ (it?.cfdi?.uuid == null) && it.total>0.0}}" scope="request" />
 	
 	<div class="row wrapper border-bottom white-bg page-heading">
 	    <div class="col-lg-10">
@@ -21,7 +22,7 @@
 	    	</g:link>
 	    	<g:if test="${nominaInstance.status == 'CERRADA'}">
 	    		<small><span class='label label-warning' >NOMINA CERRADA</small>
-	    		<g:if test ="${nominaInstance.partidas.count{it.cfdi.uuid == null} > 0 }">
+	    		<g:if test ="${nominaInstance.partidas.count{it?.cfdi?.uuid == null} > 0 }">
 	    			Con ${pendientesDeTimbrado} registros pendientes de timbrado
 	    		</g:if>
 	    	</g:if>

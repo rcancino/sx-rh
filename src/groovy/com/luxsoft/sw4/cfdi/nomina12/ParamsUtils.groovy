@@ -25,8 +25,8 @@ class ParamsUtils {
 		Emisor emisor=comprobante.getEmisor();
 		parametros.put("EMISOR_NOMBRE", 	emisor.getNombre())
 		parametros.put("EMISOR_RFC", 		emisor.getRfc())
-		parametros.put("EMISOR_DIRECCION", 'ND')
-		parametros.put("EXPEDIDO_DIRECCION", 'ND')
+		parametros.put("EMISOR_DIRECCION", comprobante.lugarExpedicion)
+		parametros.put("EXPEDIDO_DIRECCION", comprobante.lugarExpedicion)
 		parametros.put("REGIMEN",comprobante.getEmisor().getRegimenFiscalArray(0).regimen)
 		parametros.put("METODO_DE_PAGO", 		comprobante.getMetodoDePago())
 		
@@ -57,7 +57,8 @@ class ParamsUtils {
 		parametros['FECHA_INICIAL']=nomina.fechaInicialPago?.format("yyyy-MM-dd")
 		parametros['FECHA_FINAL']=nomina.fechaFinalPago?.format("yyyy-MM-dd")
 		
-		parametros['CLABE']=nomina.receptor.cuentaBancaria
+		parametros['CLABE']=nomina.receptor.cuentaBancaria?.toString()
+		parametros['BANCO'] = nomina.receptor.banco?.toString()
 		parametros['TOTAL']=comprobante.getTotal() //as String
 		parametros['COMENTARIO_NOM']='Nómina'
 		def img=QRCodeUtils.generarQR(comprobante)
