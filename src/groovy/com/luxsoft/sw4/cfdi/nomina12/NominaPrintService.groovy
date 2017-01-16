@@ -67,6 +67,35 @@ class NominaPrintService {
 		return pdfStream
 	}
 
+	def generarReportDef(Cfdi cfdi, def params = []){
+		NominaPorEmpleado ne = NominaPorEmpleado.get(cfdi.folio)
+		Comprobante comprobante=cfdi.comprobante
+		Nomina nomina = getComplemento(cfdi)
+		def modelData = []
+		registrarDeducciones(nomina, modelData)
+		registrarPercepciones(nomina, modelData)
+		registrarOtrosPagos(nomina, modelData)
+
+		modelData.sort{
+			it.clave
+		}
+
+		def repParams = ParamsUtils.getParametros(cfdi.comprobante, nomina, ne)
+		params.FECHA = comprobante.fecha.getTime().format("yyyy-MM-dd'T'HH:mm:ss")
+		params << repParams
+
+		params['RECIBO_NOMINA']=ne.id as String
+		params[PdfExporterConfiguration.PROPERTY_PDF_JAVASCRIPT]="this.print();"
+
+		def reportDef=new JasperReportDef(
+			name: 'NominaDigitalCFDI'
+			,fileFormat: JasperExportFormat.PDF_FORMAT
+			,reportData: modelData,
+			,parameters: params
+			)
+		return reportDef
+	}
+
 
 	Nomina getComplemento(Cfdi cfdi){
 		def complemento=cfdi.comprobante.getComplemento()

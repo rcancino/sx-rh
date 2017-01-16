@@ -127,11 +127,13 @@ class ComplementoBuilder {
         	receptor.setPeriodicidadPago(CPeriodicidadPago.X_04)
         else
         	receptor.setPeriodicidadPago(CPeriodicidadPago.X_02)
-        if(empleado?.salario?.banco?.clave){
+        if(empleado?.salario?.banco?.clave && nominaEmpleado.nomina.formaDePago == 'TRANSFERENCIA'){
         	def bancoClave = empleado?.salario.banco.clave.toString().padLeft(3,'0')
 			receptor.setBanco(CBanco.Enum.forString(bancoClave))
         }
-        receptor.cuentaBancaria=new BigInteger(empleado?.salario.clabe?:salario.numeroDeCuenta)
+        if( nominaEmpleado.nomina.formaDePago == 'TRANSFERENCIA' && (empleado.salario.clabe || empleado.salario.numeroDeCuenta)){
+        	receptor.cuentaBancaria=new BigInteger(empleado?.salario.clabe?:empleado.salario.numeroDeCuenta)	
+        }
 		receptor.setSalarioBaseCotApor(nominaEmpleado.salarioDiarioBase)
 		receptor.setSalarioDiarioIntegrado(nominaEmpleado.salarioDiarioIntegrado)
 	}

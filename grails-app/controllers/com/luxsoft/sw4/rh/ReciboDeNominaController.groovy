@@ -132,52 +132,9 @@ class ReciboDeNominaController {
 	def imprimirCfdis(Nomina n){
 		def reportes=[]
 		n.partidas.sort{it.orden}.each{ nominaPorEmpleado->
-			
+
 			if(nominaPorEmpleado.cfdi){
-				def cfdi=nominaPorEmpleado.cfdi
-				Comprobante comprobante=cfdi.comprobante
-				ComplementoNomina complemento=new ComplementoNomina(comprobante)
-				mx.gob.sat.nomina.NominaDocument.Nomina nomina=complemento.nomina
-				def deducciones=nomina?.deducciones?.deduccionArray
-				def modelData=deducciones.collect { cc ->
-					def res=[
-						'GRUPO':cc.tipoDeduccion,
-						'CLAVE':cc.clave,
-						'DESCRIPCION':cc.concepto,
-						'IMPORTE_GRAVADO':cc.importeGravado,
-						'IMPORTE_EXENTO':cc.importeExento,
-						'CONCEPTO':'D'
-					 ]
-					return res
-				}
-				def percepciones=nomina.percepciones.percepcionArray
-				percepciones.each{ cc->
-					def res=[
-						'GRUPO':cc.tipoPercepcion,
-						'CLAVE':cc.clave,
-						'DESCRIPCION':cc.concepto,
-						'IMPORTE_GRAVADO':cc.importeGravado,
-						'IMPORTE_EXENTO':cc.importeExento,
-						'CONCEPTO':'P'
-					 ]
-					modelData<<res
-				}
-				modelData.sort{
-					it.clave
-				}
-				
-				def repParams=CfdiPrintUtils.resolverParametros2(comprobante,complemento.nomina,nominaPorEmpleado)
-				//params<<repParams
-				repParams.FECHA=comprobante.fecha.getTime().format("yyyy-MM-dd'T'HH:mm:ss")
-				repParams['RECIBO_NOMINA']=nominaPorEmpleado.id as String
-				
-				def reportDef=new JasperReportDef(
-					name:'NominaDigitalCFDI'
-					,fileFormat:JasperExportFormat.PDF_FORMAT
-					,reportData:modelData,
-					,parameters:repParams
-					)
-				reportes.add(reportDef)
+				reportes.add(nominaPrintService.generarReportDef(nominaPorEmpleado.cfdi, params))
 			}
 		}
 		ByteArrayOutputStream  pdfStream=jasperService.generateReport(reportes)

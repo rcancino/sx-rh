@@ -28,6 +28,11 @@
 							<f:display property="empleado" widget-class="form-control" wrapper="bootstrap3"/>
 							<f:display property="baja.fecha" widget-class="form-control" label="Baja" wrapper="bootstrap3"/>
 							<f:field property="diasPorPagar" widget-class="form-control" wrapper="bootstrap3"/>
+                            <f:field property="comisiones" widget-class="form-control" wrapper="bootstrap3"/>
+                            <f:field property="incentivo" widget-class="form-control" wrapper="bootstrap3"/>
+                            <f:field property="compensacion" widget-class="form-control" wrapper="bootstrap3"/>
+                            <f:field property="bonoDeProductividad" widget-class="form-control" wrapper="bootstrap3"/>
+                            <f:field property="permisoPorPaternidad" widget-class="form-control" wrapper="bootstrap3"/>
                             <f:field property="sdiOpcion" widget-class="form-control" wrapper="bootstrap3"/>
 						</f:with>
                     </div>
@@ -62,6 +67,10 @@
 			<div class="col-md-6">
 				<g:render template="propiedadesPanel"/>
 			</div>
+
+            <div class="col-md-8 col-md-offset-2" >
+                <g:render template="partidasPanel"/>
+            </div>
 		</lx:wrapper>
 	
 		<g:render template="deleteFiniquitoDialog"></g:render>

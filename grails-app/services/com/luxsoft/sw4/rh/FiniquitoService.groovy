@@ -5,6 +5,7 @@ import com.luxsoft.sw4.*
 import java.math.*
 import com.luxsoft.sw4.rh.tablas.ZonaEconomica
 import com.luxsoft.sw4.rh.finiquito.*
+import com.luxsoft.sw4.rh.ConceptoDeNomina
 
 @Transactional
 class FiniquitoService {
@@ -14,11 +15,25 @@ class FiniquitoService {
         inicializarFiniquito finiquito
         registrarVacaciones finiquito
         registrarAguinaldoFiniquito finiquito
+        registrarDeduccionImss finiquito
         
         // Aplicamos reglas para la Indeminzacion
         new IndeminzacionBuilder().build(finiquito)
+
+        new PercepcionBuilder().build(finiquito)
+
+        finiquito.totalExento = finiquito.primaVacacionalExenta + finiquito.aguinaldoExento + finiquito.indemnizacionExenta + finiquito.primaDeAntiguedadExenta + finiquito.primaDominicalExenta + finiquito.compensacionSAF + finiquito.subsEmpPagado
+
+
+        finiquito.totalGravado = finiquito.sueldo + finiquito.comisiones + finiquito.vacaciones + finiquito.primaVacacionalGravada + finiquito.incentivo + finiquito.aguinaldoGravable + finiquito.indemnizacionGravada + finiquito.primaDeAntiguedadGravada + finiquito.primaDominicalGravada + finiquito.compensacion + finiquito.bonoDeProductividad + finiquito.permisoPorPaternidad
+
+
+        finiquito.percepcionTotal = finiquito.totalExento + finiquito.totalGravado
+
         
         registrarDeduccionImss finiquito
+
+        finiquito.addToPartidas(tipo: 'PERCEPCION', importeGravado:finiquito.aguinaldoGravable , importeExcento: finiquito.aguinaldoExento, concepto: ConceptoDeNomina.get(14))
         
         finiquito.save failOnError:true
         
@@ -153,6 +168,8 @@ class FiniquitoService {
         
         def inf=0
         aporacionAsegurado+=inf
+
+        return finiquito
     }
 
 

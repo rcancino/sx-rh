@@ -88,8 +88,8 @@ class Finiquito {
 	BigDecimal subsEmpPagado=0.0
 	
 	BigDecimal subsEmpAplicado=0.0
-	
-	BigDecimal ingresoTotal=0.0
+
+	BigDecimal percepcionTotal=0.0
 
 	BigDecimal imss=0.0
 	
@@ -112,6 +112,8 @@ class Finiquito {
 	BigDecimal totalGravado=0.0
 	
 	BigDecimal totalExento=0.0
+
+	BigDecimal deduccionTotal = 0.0 
 	
 	BigDecimal total=0.0
 
@@ -130,6 +132,16 @@ class Finiquito {
 	Boolean liq = false
 
 	Boolean sdiOpcion = false 
+
+	BigDecimal smg = 0.0
+
+	BigDecimal montoIntereses = 0.0
+
+    BigDecimal tasaInteres = 0.0
+
+
+    List partidas = []
+
 		
 	Date dateCreated
 	
@@ -151,6 +163,8 @@ class Finiquito {
 		// fechaFinal type:'date'
 	}
 
+	static hasMany = [partidas: FiniquitoDet]
+	
 	
 
     String toString(){

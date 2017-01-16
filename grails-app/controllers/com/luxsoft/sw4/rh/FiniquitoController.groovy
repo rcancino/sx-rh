@@ -58,7 +58,9 @@ class FiniquitoController {
     @Transactional
     def update(Finiquito finiquitoInstance) {
 
-        println finiquitoInstance
+        println "Actualizando el Finiquito:  -"+finiquitoInstance
+
+        println finiquitoInstance.comisiones
 
         if (finiquitoInstance == null) {
             notFound()

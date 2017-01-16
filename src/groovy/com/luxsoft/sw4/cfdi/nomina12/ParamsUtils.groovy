@@ -58,7 +58,7 @@ class ParamsUtils {
 		parametros['FECHA_FINAL']=nomina.fechaFinalPago?.format("yyyy-MM-dd")
 		
 		parametros['CLABE']=nomina.receptor.cuentaBancaria?.toString()
-		parametros['BANCO'] = nomina.receptor.banco?.toString()
+		parametros['BANCO'] = nominaPorEmpleado.nomina.formaDePago == 'TRANSFERENCIA'? nomina.receptor.banco?.toString() : ''
 		parametros['TOTAL']=comprobante.getTotal() //as String
 		parametros['COMENTARIO_NOM']='Nómina'
 		def img=QRCodeUtils.generarQR(comprobante)
@@ -73,7 +73,7 @@ class ParamsUtils {
 		parametros['SALARIO_DIARIO_BASE']=nomina.receptor.salarioBaseCotApor as String
 		parametros['SALARIO_DIARIO_INTEGRADO']=nomina.receptor.salarioDiarioIntegrado as String
 		
-		parametros['TIPO_NOMINA']=nominaPorEmpleado.nomina.tipo.toString()
+		parametros['TIPO_NOMINA']=nomina.tipoNomina.toString()
 		parametros['SUCURSAL']=nominaPorEmpleado.empleado.perfil.ubicacion.clave
 		parametros['PUESTO']=nomina.receptor.puesto
 		parametros['DEPARTAMENTO']=nomina.receptor.departamento
