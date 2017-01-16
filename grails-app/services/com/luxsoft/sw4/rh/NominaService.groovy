@@ -52,32 +52,7 @@ class NominaService {
 		nomina.delete()
 	}
 	
-	/*@Transactional
-	def generarAguinaldo(Long calendarioDetId,String formaDePago){
-		log.info 'Generando nomina de aguinaldo'
-		def calendarioDet=CalendarioDet.get(calendarioDetId)
-		def periodicidad=calendarioDet.calendario.tipo=='SEMANA'?'SEMANAL':'QUINCENAL'
-		Empresa empresa=Empresa.first()
-		def nomina=Nomina.find{calendarioDet==calendarioDet && tipo==tipo && formaDePago==formaDePago}
-		if(nomina){
-			throw new NominaException(message:'Nomina ya generada calendario: '+calendarioDet)
-		}
-		nomina=new Nomina(tipo:'AGUINALDO',
-			periodicidad:periodicidad,
-			folio:calendarioDet.folio,
-			status:"PENDIENTE",
-			periodo:periodo,
-			calendarioDet:calendarioDet,
-			ejercicio:calendarioDet.calendario.ejercicio)
-		nomina.pago=calendarioDet.fechaDePago
-		nomina.diaDePago=calendarioDet.fechaDePago.format('EEEE')
-		nomina.formaDePago=formaDePago
-		nomina.empresa=empresa
-		nomina.total=0.0
-		generarPartidas nomina
-		nomina.save(failOnError:true)
-		return nomina
-	}*/
+	
 
 	@Transactional
 	def generar(Long calendarioDetId,String tipo,String formaDePago,String periodicidad){
@@ -789,6 +764,58 @@ class NominaService {
 			}
 			
 		}
+		return nomina
+	}
+
+	def actualizarFiniquito(Nomina nomina){
+		assert nomina.tipo == 'FINIQUITO', "No es nomina de tipo finiquito"
+		def found = nomina.partidas.find {it.cfdi}.find()
+		assert !found, "La nómina ya tiene por lo menos un cfdi generado: ${found.id} "
+
+		def existentes = Finiquito.findAll("from Finiquito f where f.nominaPorEmpleado.nomina = ?", [nomina])
+		existentes.each { finiquito ->
+			finiquito.nominaPorEmpleado = null
+			finiquito.save flush:true
+		}
+		nomina.partidas.clear()
+		nomina.status = 'PENDIENTE'
+		nomina.save flush:true
+
+		def finiquitos = Finiquito.findAll (
+				"from Finiquito a where a.nominaPorEmpleado = null and a.empleado.salario.periodicidad=?  "
+				,[nomina.periodicidad])
+
+		int orden = 1;
+		finiquitos.each {
+			log.info('Generando finiquito para: ' + it.empleado)
+			def empleado=it.empleado
+			def ne=new NominaPorEmpleado(
+			empleado:empleado,
+			ubicacion:empleado.perfil.ubicacion,
+			antiguedadEnSemanas:0,
+			nomina:nomina,
+			vacaciones:0,
+			fraccionDescanso:0,
+			orden: orden
+			)
+			ne.antiguedadEnSemanas = ne.getAntiguedad()
+			ne.salarioDiarioBase = empleado.salario.salarioDiario
+			ne.salarioDiarioIntegrado = empleado.salario.salarioDiarioIntegrado
+			it.partidas.each { det ->
+				log.info( "Agregando:  ${det.tipo} ${det.concepto}" )
+				def d2=new NominaPorEmpleadoDet(concepto:det.concepto
+						,importeGravado:det.importeGravado
+						,importeExcento:det.importeExcento
+						,comentario:'PENDIENTE')
+				ne.addToConceptos(d2)
+			}
+			nomina.addToPartidas(ne)
+			it.nominaPorEmpleado = ne
+		}
+
+		nomina.save failOnError:true, flush:true
+		log.info(' Partidas AS: ' + nomina.partidas.size())
+		//ordenar(nomina)
 		return nomina
 	}
 	

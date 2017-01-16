@@ -96,6 +96,12 @@ class NominaController {
 			redirect action:'show',params:[id:id]
 			return
 		}
+		if(nomina.tipo == 'FINIQUITO') {
+			nominaService.actualizarFiniquito(nomina)
+			flash.message="Nomina de FINIQUITO actualizada"
+			redirect action:'show',params:[id:id]
+			return
+		}
 		nomina.partidas.each{
 			def ajuste=IsptMensual.find("from IsptMensual i where i.nominaPorEmpleado.id=?",[it.id])
 			if(ajuste){

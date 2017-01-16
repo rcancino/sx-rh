@@ -4,6 +4,7 @@
 			<th>Folio</th>
 			<th>Empleado</th>
 			<th>Ubicación</th>
+			<th>Tipo</th>
 			<th>Modificado</th> 
 		</tr>
 	</thead>
@@ -17,6 +18,7 @@
 				</td>
 				<td>${fieldValue(bean:row,field:"empleado")}</td>
 				<td>${fieldValue(bean:row,field:"empleado.perfil.ubicacion.clave")}</td>
+				<td>${fieldValue(bean:row,field:"empleado.salario.periodicidad")}</td>
 				<td><g:formatDate date="${row.lastUpdated}" format="dd/MM/yyyy  HH:mm"/></td>
 				
 			</tr>

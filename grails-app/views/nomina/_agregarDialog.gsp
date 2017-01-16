@@ -16,7 +16,7 @@
     					<div class="col-sm-9">
     						<g:select id="tipoField" class="form-control "  
 								name="tipo" 
-								from="${['GENERAL','ESPECIAL','AGUINALDO','PTU']}" 
+								from="${['GENERAL','ESPECIAL','AGUINALDO','PTU','FINIQUITO']}" 
 								/>
     					</div>
   					</div>
@@ -72,7 +72,7 @@
 <script type="text/javascript">
 	$(function(){
 		$("#calendarioDetField").autocomplete({
-			source:'<g:createLink controller="calendarioDet" action="getCalendariosAsJSON"/>',
+			source:'<g:createLink controller="calendarioDet" action="getCalendariosDisponibles"/>',
 			minLength:1,
 			select:function(e,ui){
 				$("#calendarioFieldId").val(ui.item.id);

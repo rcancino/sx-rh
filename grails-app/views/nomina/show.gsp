@@ -3,7 +3,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Nomina</title>
+	<title>Nomina (${nominaInstance.id})</title>
 </head>
 <body>
 	
@@ -14,7 +14,7 @@
 	    <div class="col-lg-10">
 	    	<g:link action="index" id="${nominaInstance.id}" params="[periodicidad:nominaInstance.periodicidad]">
 	    		<h2>Nómina: ${nominaInstance.folio} ${nominaInstance.periodicidad}  
-	    			<small> ${nominaInstance.formaDePago }  (${nominaInstance.periodo}) ${nominaInstance.tipo}</small>
+	    			<small> ${nominaInstance.formaDePago }  (${nominaInstance.periodo}) ${nominaInstance.tipo} (${nominaInstance.status})</small>
 	    		</h2>
 	    		%{-- <g:if test= "${nominaInstance.status == 'CERRADA'}">
 	    			
