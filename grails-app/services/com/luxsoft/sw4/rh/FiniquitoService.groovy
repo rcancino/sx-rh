@@ -38,8 +38,30 @@ class FiniquitoService {
         
         registrarDeduccionImss finiquito
 
-        finiquito.addToPartidas(tipo: 'PERCEPCION', importeGravado:finiquito.aguinaldoGravable , importeExcento: finiquito.aguinaldoExento, concepto: ConceptoDeNomina.get(14))
         
+        finiquito.addToPartidas(tipo: 'PERCEPCION', importeGravado:finiquito.sueldo, importeExcento:0, concepto: ConceptoDeNomina.get(13));
+        finiquito.addToPartidas(tipo: 'PERCEPCION', importeGravado:finiquito.vacaciones, importeExcento:0, concepto: ConceptoDeNomina.get(37));        
+
+        finiquito.addToPartidas(tipo: 'PERCEPCION', importeGravado:finiquito.primaVacacionalGravada, importeExcento:finiquito.primaVacacionalExenta, concepto: ConceptoDeNomina.get(36));
+        finiquito.addToPartidas(tipo: 'PERCEPCION', importeGravado:finiquito.aguinaldoGravable, importeExcento:finiquito.aguinaldoExento, concepto: ConceptoDeNomina.get(14));
+        finiquito.addToPartidas(tipo: 'PERCEPCION', importeGravado:finiquito.indemnizacionGravada, importeExcento:finiquito.indemnizacionExenta, concepto: ConceptoDeNomina.get(40));
+        finiquito.addToPartidas(tipo: 'PERCEPCION', importeGravado:finiquito.primaDeAntiguedadGravada, importeExcento:finiquito.primaDeAntiguedadExenta, concepto: ConceptoDeNomina.get(38));
+        finiquito.addToPartidas(tipo: 'PERCEPCION', importeGravado:finiquito.primaDominicalGravada, importeExcento:finiquito.primaDominicalExenta, concepto: ConceptoDeNomina.get(42));
+
+        finiquito.addToPartidas(tipo: 'DEDUCCION', importeGravado:0, importeExcento:finiquito.imss, concepto: ConceptoDeNomina.get(1));
+        finiquito.addToPartidas(tipo: 'DEDUCCION', importeGravado:0, importeExcento:finiquito.isr, concepto: ConceptoDeNomina.get(2));
+        finiquito.addToPartidas(tipo: 'PERCEPCION', importeGravado:0, importeExcento:finiquito.subsEmpPagado, concepto: ConceptoDeNomina.get(33));
+        finiquito.addToPartidas(tipo: 'PERCEPCION', importeGravado:0, importeExcento:finiquito.compensacionSAF, concepto: ConceptoDeNomina.get(47));        
+
+        if (finiquito.pensionAlimenticia)        
+        finiquito.addToPartidas(tipo: 'DEDUCCION', importeGravado:0, importeExcento:finiquito.pensionAlimenticia, concepto: ConceptoDeNomina.get(7));
+        
+        if (finiquito.prestamo)        
+        finiquito.addToPartidas(tipo: 'DEDUCCION', importeGravado:0, importeExcento:finiquito.prestamo, concepto: ConceptoDeNomina.get(4));
+        
+        if (finiquito.otrasDeducciones)        
+        finiquito.addToPartidas(tipo: 'DEDUCCION', importeGravado:0, importeExcento:finiquito.otrasDeducciones, concepto: ConceptoDeNomina.get(5));
+
         new ImpuestoBuilder().build(finiquito)
 
         finiquito.save failOnError:true
