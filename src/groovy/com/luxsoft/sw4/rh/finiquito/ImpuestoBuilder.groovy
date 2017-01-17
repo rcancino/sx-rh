@@ -21,7 +21,7 @@ class ImpuestoBuilder {
 
 		def concepto = ConceptoDeNomina.findByClave('D002')
 
-		def percepciones = finiquito.partidas.sum 0.0, { it.tipo == 'PERCEPCION' ? it.importeGravado: 0.0 }
+		def percepciones = finiquito.totalGravado
 
 		def retardoPermiso = 0 //nominaEmpleado.conceptos.find{it.concepto.clave=='D012'}
 
@@ -51,13 +51,11 @@ class ImpuestoBuilder {
 		
 		def dias = 30
 
-		def tarifa = TarifaIsr.obtenerTabla(ejercicio, 'MENSUAL', diasTrabajados, dias).find(){
-			(percepciones > it.limiteInferior && percepciones <= it.limiteSuperior)
-		}
+		def tarifa = TarifaIsr.buscar(ejercicio, 'MENSUAL', percepciones)
+
 		assert tarifa,"No encontro TarifaIsr para los parametros: Dias: ${diasTrabajados} Perc:${percepciones} Empleado: ${nominaEmpleado.empleado}"
 
-		def subsidio = SubsidioEmpleo.obtenerTabla(diasTrabajados,ejercicio,dias)
-			.find(){(percepciones > it.desde && percepciones <= it.hasta)}
+		def subsidio = SubsidioEmpleo.buscar(ejercicio, percepciones)
 		assert subsidio,'No existe registro en tabla de subsidio para el empleo'
 		
 		log.info 'Subsidio localizado: ' + subsidio

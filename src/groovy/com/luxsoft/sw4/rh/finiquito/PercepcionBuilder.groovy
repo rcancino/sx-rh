@@ -13,11 +13,13 @@ class PercepcionBuilder {
 		
 		finiquito.with{
 
-    	  	  sueldo = salario * diasPorPagar
+    	  	sueldo = salario * diasPorPagar
 
-			  primaDominicalExenta = salario > smg.salario ? smg.salario : salario 
-			
-			  primaDominicalGravada = salario - primaDominicalExenta
+    	  	def diasPrimaDominical = 0
+    	  	  
+			primaDominicalExenta = salario * diasPrimaDominical > smg.salario * diasPrimaDominical ? smg.salario * diasPrimaDominical : salario * diasPrimaDominical
+						  
+	  		primaDominicalGravada = (salario * diasPrimaDominical) - primaDominicalExenta
 
 			  compensacionSAF = 0.0
 			

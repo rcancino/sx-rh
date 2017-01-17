@@ -41,7 +41,7 @@ class IndeminzacionBuilder {
 
             indemnizacionExenta = totalIndemnizacion > (smg.salario * anosTrabajados * 90) ?  (smg.salario * anosTrabajados * 90) : totalIndemnizacion
     
-            indemnizacionGravada = totalIndemnizacion - indemnizacionExenta 
+            indemnizacionGravada = totalIndemnizacion - indemnizacionExenta - primaDeAntiguedadExenta
     
             primaDeAntiguedadExenta = indemnizacionPrimaDeAntiguedad
     
