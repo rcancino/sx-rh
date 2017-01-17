@@ -12,20 +12,14 @@ class FiniquitoDet {
 	BigDecimal importeGravado=0.00
 
 	BigDecimal importeExcento=0.00
-	
-	//CalendarioDet calendarioDet
-	
-	//NominaPorEmpleadoDet nominaPorEmpleadoDet
-	
-	//String comentario
+
+	Boolean manual = false
 	
 	
 	static belongsTo = [finiquito: Finiquito]	
 
     static constraints = {
 		tipo inList:['PERCEPCION','DEDUCCION']
-		//nominaPorEmpleadoDet nullable:true
-		//comentario nullable:true,maxSize:250
     }
 }
 

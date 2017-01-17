@@ -28,6 +28,10 @@ class NominaPorEmpleadoService {
 			aguinaldo.nominaPorEmpleado=null
 			//aguinaldo.save flush:true
 		}
+		if( nomina.tipo == 'FINIQUITO') {
+			def finiquito = Finiquito.findByNominaPorEmpleado(ne)
+			finiquito.nominaPorEmpleado = null
+		}
 		nomina.removeFromPartidas(ne)
 		nomina.save flush:true		
 		return nomina

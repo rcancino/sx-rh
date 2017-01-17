@@ -50,9 +50,7 @@ class TarifaIsr {
 				)
 			res.add(val)
 		}
-		res.each{
-			println it
-		}
+		
 		return res
 	}
 	

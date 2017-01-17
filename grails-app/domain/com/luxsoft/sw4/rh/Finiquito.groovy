@@ -159,9 +159,9 @@ class Finiquito {
     }
 
     static mapping = {
-		// fechaInicial type:'date'
-		// fechaFinal type:'date'
+		partidas cascade: "all-delete-orphan"
 	}
+
 
 	static hasMany = [partidas: FiniquitoDet]
 	

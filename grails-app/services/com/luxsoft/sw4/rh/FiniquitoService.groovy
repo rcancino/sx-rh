@@ -11,7 +11,12 @@ import com.luxsoft.sw4.rh.ConceptoDeNomina
 class FiniquitoService {
 
     def save(Finiquito finiquito){
-        
+
+        if(finiquito.partidas) {
+            finiquito.partidas.clear()
+            finiquito.save flush:true
+        }
+
         inicializarFiniquito finiquito
         registrarVacaciones finiquito
         registrarAguinaldoFiniquito finiquito
@@ -35,6 +40,8 @@ class FiniquitoService {
 
         finiquito.addToPartidas(tipo: 'PERCEPCION', importeGravado:finiquito.aguinaldoGravable , importeExcento: finiquito.aguinaldoExento, concepto: ConceptoDeNomina.get(14))
         
+        new ImpuestoBuilder().build(finiquito)
+
         finiquito.save failOnError:true
         
         return finiquito

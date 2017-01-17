@@ -28,18 +28,18 @@
 							<f:display property="empleado" widget-class="form-control" wrapper="bootstrap3"/>
 							<f:display property="baja.fecha" widget-class="form-control" label="Baja" wrapper="bootstrap3"/>
 							<f:field property="diasPorPagar" widget-class="form-control" wrapper="bootstrap3"/>
-                            <f:field property="comisiones" widget-class="form-control" wrapper="bootstrap3"/>
-                            <f:field property="incentivo" widget-class="form-control" wrapper="bootstrap3"/>
-                            <f:field property="compensacion" widget-class="form-control" wrapper="bootstrap3"/>
-                            <f:field property="bonoDeProductividad" widget-class="form-control" wrapper="bootstrap3"/>
-                            <f:field property="permisoPorPaternidad" widget-class="form-control" wrapper="bootstrap3"/>
+                            <f:field property="montoIntereses" widget-class="form-control" wrapper="bootstrap3"/>
+                            <f:field property="tasaInteres" widget-class="form-control" wrapper="bootstrap3"/>
                             <f:field property="sdiOpcion" widget-class="form-control" wrapper="bootstrap3"/>
+                            <f:field property="liq" widget-class="form-control" wrapper="bootstrap3"/>
 						</f:with>
                     </div>
                     <lx:iboxFooter>
                     	<div class="btn-group">
                             <lx:backButton/>
-                            
+                            <g:link class="btn btn-success btn-outline" controller="finiquitoDet" action="create" id="${finiquitoInstance.id}">
+                                <i class="fa fa-plus"></i> Agregar 
+                            </g:link>
                             <g:if test="${editable}">
                                 <button id="saveBtn" class="btn btn-primary ">
                                     <i class="fa fa-floppy-o"></i> Actualizar
@@ -57,11 +57,15 @@
                                 </a> 
 
                             </g:if>
+                            <g:link  action="imprimir" class="btn btn-default btn-outline" id="${entity.id}" >
+                                <i class="fa fa-print"></i> Imprimir
+                            </g:link> 
                                     
                         </div>
                     </lx:iboxFooter>
                 </g:form>	
                 </lx:ibox>
+                <g:render template="partidasPanel"/>
 			</div>
 
 			<div class="col-md-6">
@@ -69,7 +73,7 @@
 			</div>
 
             <div class="col-md-8 col-md-offset-2" >
-                <g:render template="partidasPanel"/>
+                
             </div>
 		</lx:wrapper>
 	

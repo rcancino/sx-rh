@@ -8,6 +8,7 @@ import com.luxsoft.sw4.rh.*
 class PercepcionBuilder {
 
 	def build(Finiquito finiquito){
+		
 		ZonaEconomica smg = ZonaEconomica.where {ejercicio == Periodo.obtenerYear(finiquito.empleado.baja.fecha) && clave == 'A'}.find()
 		
 		finiquito.with{
