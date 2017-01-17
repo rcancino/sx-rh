@@ -10,11 +10,17 @@ import com.luxsoft.sw4.rh.ConceptoDeNomina
 @Transactional
 class FiniquitoService {
 
+    def actualizarImpuestos(Finiquito finiquito){
+        // Actualizar impuesto
+        new ImpuestoBuilder().build(finiquito)
+    }
+
     def save(Finiquito finiquito){
 
-        if(finiquito.partidas) {
-            finiquito.partidas.clear()
-            finiquito.save flush:true
+        
+        def automaticas = finiquito.partidas.findAll {!it.manual }
+        automaticas.each { item ->
+            finiquito.removeFromPartidas(item)
         }
 
         inicializarFiniquito finiquito
@@ -62,8 +68,8 @@ class FiniquitoService {
         if (finiquito.otrasDeducciones)        
         finiquito.addToPartidas(tipo: 'DEDUCCION', importeGravado:0, importeExcento:finiquito.otrasDeducciones, concepto: ConceptoDeNomina.get(5));
 
-        new ImpuestoBuilder().build(finiquito)
-
+        
+        actualizarImpuestos(finiquito)
         finiquito.save failOnError:true
         
         return finiquito

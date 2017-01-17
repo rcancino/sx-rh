@@ -185,6 +185,7 @@ log4j.main = {
         off 'com.luxsoft.sw4.rh.ProcesadorDePensionAlimenticia'
         off 'com.luxsoft.sw4.rh.ProcesadorDeOtrasDeducciones'
         info 'com.luxsoft.sw4.rh.procesadores.AjusteIsr'
+        info 'com.luxsoft.sw4.rh.finiquito'
         off 'com.luxsoft.sw4.rh.ExportadorDim'
         debug 'com.luxsoft.sw4.rh.procesadores.ProcesadorDeChecadasFaltantes'
 

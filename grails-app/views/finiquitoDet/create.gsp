@@ -27,8 +27,8 @@
 			<g:hiddenField name="finiquito" value="${finiquito.id}"></g:hiddenField>
 			<f:field property="tipo" widget-class="form-control"/>
 			<f:field property="concepto" widget-class="form-control"/>
-			<f:field property="importeGravado" widget="number" widget-class="form-control"/>
-			<f:field property="importeExcento" widget="number" widget-class="form-control"/>
+			<f:field property="importeGravado" widget="numeric" widget-class="form-control"/>
+			<f:field property="importeExcento" widget="numeric" widget-class="form-control"/>
 			
 		</f:with>
 

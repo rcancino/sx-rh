@@ -19,9 +19,20 @@ class ImpuestoBuilder {
 
 	def build(Finiquito finiquito){
 
+		// Quitar las existentes.....
+		def delete = finiquito.partidas.findAll {it.concepto.clave == 'D001' || it.concepto.clave == 'P021'}
+		delete.each {
+			finiquito.removeFromPartidas(it)
+		}
+
 		def concepto = ConceptoDeNomina.findByClave('D002')
 
-		def percepciones = finiquito.totalGravado
+		def percepciones = finiquito.partidas.sum 0.0, {
+			if(it.tipo == 'PERCEPCION'){
+				return it.importeGravado
+			}
+			return 0.0
+		}
 
 		def retardoPermiso = 0 //nominaEmpleado.conceptos.find{it.concepto.clave=='D012'}
 
@@ -38,18 +49,6 @@ class ImpuestoBuilder {
 			return
 		
 		def ejercicio = finiquito.baja.fecha.toYear()
-		
-		/*
-		def calDet = nominaEmpleado.nomina.calendarioDet
-
-		def dias = calDet.calendario.periodos.sum 0,{
-			if(it.mes==calDet.mes){
-				(it.fin-it.inicio)+1
-			}else 0
-		}
-		*/
-		
-		def dias = 30
 
 		def tarifa = TarifaIsr.buscar(ejercicio, 'MENSUAL', percepciones)
 
@@ -58,7 +57,7 @@ class ImpuestoBuilder {
 		def subsidio = SubsidioEmpleo.buscar(ejercicio, percepciones)
 		assert subsidio,'No existe registro en tabla de subsidio para el empleo'
 		
-		log.info 'Subsidio localizado: ' + subsidio
+		
 
 		def importeGravado = percepciones - tarifa.limiteInferior
 		importeGravado *= tarifa.porcentaje
@@ -69,16 +68,15 @@ class ImpuestoBuilder {
 		def sub = importeGravado - subsidio.subsidio
 
 		FiniquitoDet det = new FiniquitoDet()
-
 		if(sub < 0){
 			concepto=ConceptoDeNomina.findByClave('P021')
 		}
-		det.tipo = 'DEDUCCION'
+		det.tipo = concepto.tipo
 		det.concepto = concepto
 		det.importeGravado = 0.0
 		det.importeExcento = sub.abs()
 		finiquito.addToPartidas(det)
-
+		log.info (" Impuest calculado: ${sub.abs()} Percepciones: ${percepciones} TarifaIsr: ${tarifa.limiteInferior} Subsidio: ${subsidio.subsidio}")
         return finiquito
 	}
 }

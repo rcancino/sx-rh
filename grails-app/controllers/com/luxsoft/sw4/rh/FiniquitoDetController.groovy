@@ -14,6 +14,8 @@ class FiniquitoDetController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "GET"]
 
+    def finiquitoService
+
     def index(Integer max) {
         params.max = Math.min(max ?: 40, 100)
         respond FiniquitoDet.list(params), model:[finiquitoDetInstanceCount: FiniquitoDet.count()]
@@ -42,7 +44,7 @@ class FiniquitoDetController {
         }
         finiquitoDetInstance.manual = true
         finiquito.addToPartidas(finiquitoDetInstance)
-        finiquito.save failOnError:true, flush:true
+        finiquito = finiquitoService.save(finiquito)
         flash.message = "Partida registrada"
         redirect controller: 'finiquito', action:'show', id: finiquito.id
         
@@ -57,7 +59,7 @@ class FiniquitoDetController {
         }
         def finiquito = finiquitoDetInstance.finiquito
         finiquito.removeFromPartidas(finiquitoDetInstance)
-        finiquito.save failOnError:true, flush:true
+        finiquito = finiquitoService.save(finiquito)
 
         flash.message = "Partida eliminada ${finiquitoDetInstance.id}"
         redirect controller: 'finiquito', action:'show', id: finiquito.id
