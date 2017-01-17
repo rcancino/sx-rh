@@ -61,11 +61,12 @@
 				</td>
 				<td>
 					<g:form class="form-inline" role="form" 
-						controller="nominaPorEmpleado" 
-						action="actualizarFirmaRecibo" id="${row.id}">
+					controller="nominaPorEmpleado" 
+					action="actualizarFirmaRecibo" id="${row.id}">
 						<g:checkBox name="reciboFirmado" value="${row.reciboFirmado}"/>
-						<span class="glyphicon glyphicon-ok"></span> 
-					</button>
+						<button type="submit" class="btn btn-default">
+							<span class="glyphicon glyphicon-ok"></span> 
+						</button>
 					</g:form>
 				</td>
 				
