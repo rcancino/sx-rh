@@ -34,10 +34,12 @@ class ProcesadorDeIncentivo {
 
 			switch(tipo) {
 				case 'SEMANAL':
+					concepto = ConceptoDeNomina.findByClave('P009')
 					importeGravado=calcularImporteSemanal(ne,incentivo)
 						
 					break
 				case 'QUINCENAL':
+					concepto = ConceptoDeNomina.findByClave('P009')
 					importeGravado=calcularImporteQuincenal(ne,incentivo)
 					break
 				case 'MENSUAL':

@@ -27,7 +27,7 @@ import com.luxsoft.sw4.cfdi.Cfdi
 
 class NominaPrintService {
 
-	def imprimir(Cfdi cfdi, def params = []){
+	def imprimir(Cfdi cfdi, def params = [:]){
 		NominaPorEmpleado ne = NominaPorEmpleado.get(cfdi.folio)
 		Comprobante comprobante=cfdi.comprobante
 		Nomina nomina = getComplemento(cfdi)
@@ -67,8 +67,8 @@ class NominaPrintService {
 		return pdfStream
 	}
 
-	def generarReportDef(Cfdi cfdi, def params = []){
-		NominaPorEmpleado ne = NominaPorEmpleado.get(cfdi.folio)
+	def generarReportDef(NominaPorEmpleado ne, def params = [:]){
+		Cfdi cfdi = ne.cfdi
 		Comprobante comprobante=cfdi.comprobante
 		Nomina nomina = getComplemento(cfdi)
 		def modelData = []
@@ -81,7 +81,7 @@ class NominaPrintService {
 		}
 
 		def repParams = ParamsUtils.getParametros(cfdi.comprobante, nomina, ne)
-		params.FECHA = comprobante.fecha.getTime().format("yyyy-MM-dd'T'HH:mm:ss")
+		//params.FECHA = '10-10-2017' //comprobante.fecha.getTime().format("yyyy-MM-dd'T'HH:mm:ss")
 		params << repParams
 
 		params['RECIBO_NOMINA']=ne.id as String
@@ -93,6 +93,7 @@ class NominaPrintService {
 			,reportData: modelData,
 			,parameters: params
 			)
+		log.info( "Reporte Def generado: ${ne.empleado}")
 		return reportDef
 	}
 

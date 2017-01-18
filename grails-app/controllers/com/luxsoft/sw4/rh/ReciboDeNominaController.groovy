@@ -120,9 +120,9 @@ class ReciboDeNominaController {
 			it.clave
 		}
 		
-		def repParams=CfdiPrintUtils.resolverParametros(comprobante,complemento.nomina,nominaPorEmpleado)
-		params<<repParams
-		params.FECHA=comprobante.fecha.getTime().format("yyyy-MM-dd'T'HH:mm:ss")
+		def repParams = CfdiPrintUtils.resolverParametros(comprobante,complemento.nomina,nominaPorEmpleado)
+		params << repParams
+		params.FECHA = comprobante.fecha.getTime().format("yyyy-MM-dd'T'HH:mm:ss")
 		params['RECIBO_NOMINA']=nominaPorEmpleado.id
 		params[PdfExporterConfiguration.PROPERTY_PDF_JAVASCRIPT]="this.print();"
 		chain(controller:'jasper',action:'index',model:[data:modelData],params:params)
@@ -130,15 +130,15 @@ class ReciboDeNominaController {
 	}
 	
 	def imprimirCfdis(Nomina n){
-		def reportes=[]
-		n.partidas.sort{it.orden}.each{ nominaPorEmpleado->
+		def reportes = []
+		n.partidas.each{ nominaPorEmpleado->
 
 			if(nominaPorEmpleado.cfdi){
-				reportes.add(nominaPrintService.generarReportDef(nominaPorEmpleado.cfdi, params))
+				reportes << nominaPrintService.generarReportDef(nominaPorEmpleado)
 			}
 		}
-		ByteArrayOutputStream  pdfStream=jasperService.generateReport(reportes)
-		//FileUtils.writeByteArrayToFile(new File("c:/pruebas/testReport2.pdf"), jasperService.generateReport(reportes).toByteArray())
+
+		ByteArrayOutputStream  pdfStream = jasperService.generateReport(reportes)
 		def fileName="nomina_${n.ejercicio}_${n.periodicidad}_${n.folio}.pdf"
 		render(file: pdfStream.toByteArray(), contentType: 'application/pdf',fileName:fileName)
 	}
