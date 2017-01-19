@@ -5,7 +5,7 @@
 			<th>Concepto</th>
 			<th>Importe G</th>
 			<th>Importe E</th>
-			 <g:if test="${finiquitoInstance.nominaPorEmpleado == null}">
+			 <g:if test="${finiquitoInstance.neLiquidacion == null}">
 			 	<th>E</th>
 			 </g:if>
 		</tr>
@@ -18,7 +18,7 @@
 			<td>${row.importeGravado}</td>
 			<td>${row.importeExcento}</td>
 			<td>
-				<g:if test="${finiquitoInstance.nominaPorEmpleado == null && row.manual}" >
+				<g:if test="${finiquitoInstance.neLiquidacion == null && row.manual}" >
 			 	
 			 		<g:link controller="finiquitoDet" action="delete" id="${row.id}" onclick="return confirm('Eliminar registro?');">
 			 			<i class="fa fa-trash"></i>

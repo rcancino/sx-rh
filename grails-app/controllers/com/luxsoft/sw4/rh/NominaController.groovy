@@ -96,9 +96,9 @@ class NominaController {
 			redirect action:'show',params:[id:id]
 			return
 		}
-		if(nomina.tipo == 'FINIQUITO') {
-			nominaService.actualizarFiniquito(nomina)
-			flash.message="Nomina de FINIQUITO actualizada"
+		if(nomina.tipo == 'LIQUIDACION') {
+			nominaService.actualizarLiquidacion(nomina)
+			flash.message="Nomina de LIQUIDACION actualizada"
 			redirect action:'show',params:[id:id]
 			return
 		}

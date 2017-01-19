@@ -767,8 +767,8 @@ class NominaService {
 		return nomina
 	}
 
-	def actualizarFiniquito(Nomina nomina){
-		assert nomina.tipo == 'FINIQUITO', "No es nomina de tipo finiquito"
+	def actualizarLiquidacion(Nomina nomina){
+		assert nomina.tipo == 'LIQUIDACION', "No es nomina de tipo liquidacion"
 		def found = nomina.partidas.find {it.cfdi}.find()
 		assert !found, "La nómina ya tiene por lo menos un cfdi generado: ${found.id} "
 
@@ -782,12 +782,12 @@ class NominaService {
 		nomina.save flush:true
 
 		def finiquitos = Finiquito.findAll (
-				"from Finiquito a where a.nominaPorEmpleado = null and a.empleado.salario.periodicidad=?  "
+				"from Finiquito a where a.neLiquidacion = null and a.empleado.salario.periodicidad=?  "
 				,[nomina.periodicidad])
 
 		int orden = 1;
 		finiquitos.each {
-			log.info('Generando finiquito para: ' + it.empleado)
+			log.info('Generando liquidacion para: ' + it.empleado)
 			def empleado=it.empleado
 			def ne=new NominaPorEmpleado(
 			empleado:empleado,

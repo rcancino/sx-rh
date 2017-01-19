@@ -11,7 +11,8 @@ class Finiquito {
 
 	BajaDeEmpleado baja	
 
-	NominaPorEmpleado nominaPorEmpleado
+	NominaPorEmpleado neFiniquito
+	NominaPorEmpleado neLiquidacion
 
 	Date alta
 
@@ -151,7 +152,8 @@ class Finiquito {
     static constraints = {
 		empleado unique:true
 		baja uniqut:true
-		nominaPorEmpleado nullable:true
+		neFiniquito nullable:true
+		neLiquidacion nullable:true
 		diasDelEjercicio nullable:true
 		//comentario nullable:true
 		anosTrabajados nullable: true
