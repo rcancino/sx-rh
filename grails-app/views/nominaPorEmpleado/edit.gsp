@@ -72,6 +72,13 @@
 							id="${nominaPorEmpleadoInstance.id}">
 						<span class="glyphicon glyphicon-refresh"></span> Re-Calcular
 					</g:link>
+
+					<g:link class="list-group-item"
+							action="asignarFiniquito"
+							id="${nominaPorEmpleadoInstance.id}" 
+							onclick="return confirm('Asignar como finiquito?');">
+						 ${nominaPorEmpleadoInstance.finiquito ? 'Actualizar finiquito': 'Asignar Finiquito'}
+					</g:link>
 					
 					
 					<g:link class="list-group-item" action="delete" onClick="return confirm('Eliminar registro de nómina?');"
@@ -225,12 +232,21 @@
 							<td><lx:moneyFormat number="${nominaPorEmpleadoInstance?.subsidioEmpleoAplicado}"/></td>
 							<td>Total</td>
 							<td><lx:moneyFormat number="${nominaPorEmpleadoInstance?.total}"/></td>
+							
+						</tr>
+						<tr>
+							
 						</tr>
 						<tr>
 							<td>Antigüedad</td>
 							<td><g:formatNumber number="${nominaPorEmpleadoInstance?.antiguedadEnSemanas}" format="###" /></td>
-							<td></td>
-							<td></td>
+							<%--
+							<g:if test="${nominaPorEmpleadoInstance.finiquito}">
+								
+							</g:if>
+							--%>
+							<td>Finiquito</td>
+							<td>${nominaPorEmpleadoInstance.finiquito}</td>
 						</tr>
 						
 					</tbody>

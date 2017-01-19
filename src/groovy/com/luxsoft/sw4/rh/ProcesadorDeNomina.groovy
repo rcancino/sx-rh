@@ -16,8 +16,6 @@ class ProcesadorDeNomina {
 	def procesar(NominaPorEmpleado ne) {
 		
 		reglas.each{ p ->
-
-			println p.class
 			try {
 				if(ne.asistencia){
 					p.procesar(ne)

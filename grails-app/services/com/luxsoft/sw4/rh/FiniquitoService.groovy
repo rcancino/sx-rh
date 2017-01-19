@@ -203,6 +203,8 @@ class FiniquitoService {
         
         def inf=0
         aporacionAsegurado+=inf
+        
+        finiquito.imss = aporacionAsegurado
 
         return finiquito
     }

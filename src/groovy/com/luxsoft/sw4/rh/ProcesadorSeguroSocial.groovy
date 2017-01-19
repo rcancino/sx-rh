@@ -28,7 +28,7 @@ class ProcesadorSeguroSocial {
 	
 		
 		//def salarioMinimo=ZonaEconomica.valores.find(){it.clave='A'}.salario
-		println "Es aqui"
+		
 		def salarioMinimo=ZonaEconomica.findByClaveAndEjercicio('A',nominaPorEmpleado.nomina.ejercicio).salario
 			
 		log.debug 'Salario minimo: '+salarioMinimo
@@ -45,17 +45,21 @@ class ProcesadorSeguroSocial {
 		faltas=faltas+(faltas*factorDescanso)
 		log.debug "Faltas $nominaPorEmpleado.faltas  FactorDescanso: $factorDescanso"
 		
+		def diasTrabajados = nominaPorEmpleado.diasTrabajados
 		
-		def diasTrabajados=nominaPorEmpleado.diasTrabajados+(nominaPorEmpleado.fraccionDescanso as BigDecimal)
+		if( nominaPorEmpleado.finiquito == false){
+			diasTrabajados=nominaPorEmpleado.diasTrabajados
+			+(nominaPorEmpleado.fraccionDescanso as BigDecimal)
 			diasTrabajados+=nominaPorEmpleado.vacaciones+nominaPorEmpleado.asistencia.paternidad
-		def diasDelPeriodo=nominaPorEmpleado.diasDelPeriodo-nominaPorEmpleado.incapacidades
-		if(nominaPorEmpleado.asistencia.diasTrabajados>0 && (nominaPorEmpleado.empleado.controlDeAsistencia) ){
-			diasDelPeriodo=nominaPorEmpleado.asistencia.diasTrabajados		
-			
 		}
-		log.debug 'Dias trabajados: '+diasTrabajados+ ' Vacaciones: '+nominaPorEmpleado.vacaciones
-		log.debug 'Dias del periodo: '+diasDelPeriodo
-	
+		
+		def diasDelPeriodo = nominaPorEmpleado.diasDelPeriodo - nominaPorEmpleado.incapacidades
+		
+		if( nominaPorEmpleado?.asistencia?.diasTrabajados>0 && (nominaPorEmpleado.empleado?.controlDeAsistencia) ){
+			diasDelPeriodo = nominaPorEmpleado.asistencia.diasTrabajados	
+		}
+
+		
 		def prima=0.5 //Numer magico por el momento
 	
 		def aporacionAsegurado=0.0

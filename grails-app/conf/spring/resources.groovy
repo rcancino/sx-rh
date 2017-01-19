@@ -143,6 +143,16 @@ beans = {
 	nominaPrintService(NominaPrintService){}
 	
 
+	procesadorDeNominaFiniquito(ProcesadorDeNomina){
+		reglas=[
+			ref('procesadorSeguroSocial'),
+			ref('procesadorDeISTP'),
+			ref('procesadorDeAjusteISPT'),
+			ref('prcoesadorDePensionAlimenticia'),
+			ref('procesadorDeOtrasDeducciones'),
+			ref('procesadorDePrestamosPersonales')
+			]
+	}
 
 	
 }

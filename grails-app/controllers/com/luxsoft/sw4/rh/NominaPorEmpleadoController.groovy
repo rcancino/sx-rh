@@ -128,10 +128,16 @@ class NominaPorEmpleadoController {
 		
 	}
 
+	def asignarFiniquito(NominaPorEmpleado ne){
+		if(ne.finiquito)
+			ne = nominaPorEmpleadoService.actualizarFiniquito(ne)
+		else
+			ne = nominaPorEmpleadoService.asignarFiniquito(ne)
+		flash.message = "Finiquito"
+		redirect action: 'edit', id: ne.id
+	}
+
 	def actualizarFirmaRecibo(Long id){
-
-		println params.reciboFirmado
-
 		def ne=nominaPorEmpleadoService.actualizarFirmaRecibo(id,params.reciboFirmado)
 		redirect controller:'nomina',action:'show',params:[id:ne.nomina.id]
 			return
