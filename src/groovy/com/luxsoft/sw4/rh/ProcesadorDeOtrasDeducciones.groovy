@@ -26,7 +26,7 @@ class ProcesadorDeOtrasDeducciones {
 		def deduccion=buscarOtraDeduccion(ne)
 		if(deduccion) {
 
-			if( ne.finiquito == false) {
+			if( ne.finiquito == false && !ne.nomina.tipo == 'LIQUIDACION') {
 				log.debug "Aplicando decucccon para otras deducciones  vigente: ${deduccion.id}"
 
 				def percepciones=getPercepciones(ne)

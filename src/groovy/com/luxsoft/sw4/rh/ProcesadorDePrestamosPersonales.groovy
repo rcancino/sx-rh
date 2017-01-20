@@ -27,7 +27,7 @@ class ProcesadorDePrestamosPersonales {
 		def prestamo = buscarPrestamo(ne)
 		if(prestamo) {
 
-			if(ne.finiquito == false) {
+			if(ne.finiquito == false && !ne.nomina.tipo == 'LIQUIDACION') {
 				log.info "Aplicando decucccon para prestamo vigente: ${prestamo}"
 				
 				def percepciones=getPercepciones(ne)
