@@ -51,12 +51,12 @@ class ProcesadorDePrestamosPersonales {
 				
 				if(retMaxima){
 					def saldo=prestamo.saldo
-					def importeExcento=retMaxima<=saldo?retMaxima:saldo
+					def importeExcento = retMaxima <= saldo ? retMaxima: saldo
 					//Localizar el concepto
-					def neDet=new NominaPorEmpleadoDet(concepto:concepto,importeGravado:0.0,importeExcento:0.0,comentario:'PENDIENTE')
+					def neDet = new NominaPorEmpleadoDet(concepto:concepto,importeGravado:0.0,importeExcento:0.0,comentario:'PENDIENTE')
 					log.info "Deduccion calculada de: ${importeExcento}"
-					neDet.importeGravado=0
-					neDet.importeExcento=importeExcento.setScale(2,RoundingMode.HALF_EVEN)
+					neDet.importeGravado = 0
+					neDet.importeExcento = importeExcento.setScale(2,RoundingMode.HALF_EVEN)
 					ne.addToConceptos(neDet)
 					ne.actualizar()
 				}	
@@ -70,6 +70,9 @@ class ProcesadorDePrestamosPersonales {
 				
 				if(otrasDeducciones) {
 					disponible -= otrasDeducciones.getTotal()
+				}
+				if(ne.nomina.tipo == 'LIQUIDACION'){
+					disponible -= getAbonoPorFiniquito(ne)
 				}
 
 				def importe = disponible < saldo ? disponible : saldo
@@ -142,25 +145,6 @@ class ProcesadorDePrestamosPersonales {
 			,otras:otrasDeducciones?.total
 			,total:det.getTotal()
 			]
-		/*
-		def deducciones=[]
-		["D002","D001","D013","D007","D006","D012"].each{ clave->
-			def c=ne.conceptos.find {it.concepto.clave==clave}
-			if(c){
-				//deducciones+=c.getTotal()
-				deducciones.add(c)
-			}
-		}
-		def otrasDeducciones=ne.conceptos.find {it.concepto.clave=="D005"}
-		if(otrasDeducciones){
-			deducciones.add(otrasDeducciones)
-		}
-		model.deducciones=deducciones
-		
-		def abono=ne.conceptos.find {it.concepto.clave=="D004"}
-		
-		model.total=abono.getTotal()
-		*/
 		return model
 	}
 	
@@ -182,6 +166,15 @@ class ProcesadorDePrestamosPersonales {
 			return 0.0
 		}
 		return importe
+	}
+
+	private BigDecimal getAbonoPorFiniquito(NominaPorEmpleado ne) {
+		def finiquito = Finiquito.where {neLiquidacion == ne }.find()
+		assert finiquito, 'No existe el finiquito para esta liquidacion'
+		assert finiquito.neFiniquito, 'No existe la nomina de finiquito para esta liquidacion'
+		def abono = finiquito.neFiniquito.conceptos.find {clave == 'D004'}.find()
+		assert abono , 'No se registro la deduccion por prestamo en el finiquito'
+ 		return abono.importeExcento
 	}
 
 }
