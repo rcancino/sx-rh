@@ -5,6 +5,7 @@
 			<th>Concepto</th>
 			<th>Importe G</th>
 			<th>Importe E</th>
+			<th>Tpo</th>
 			 <g:if test="${finiquitoInstance.neLiquidacion == null}">
 			 	<th>E</th>
 			 </g:if>
@@ -17,6 +18,7 @@
 			<td>${row.concepto} ${row.manual ? '(M)' : '(A)'}</td>
 			<td>${row.importeGravado}</td>
 			<td>${row.importeExcento}</td>
+			<td>${row.finiquito ? 'F' : 'L'}</td>
 			<td>
 				<g:if test="${finiquitoInstance.neLiquidacion == null && row.manual}" >
 			 	

@@ -137,10 +137,17 @@ class NominaPorEmpleadoController {
 		redirect action: 'edit', id: ne.id
 	}
 
+	def actualizarLiquidacion( NominaPorEmpleado ne ){
+		ne = nominaPorEmpleadoService.actualizarLiquidacion(ne)
+		redirect action: 'edit', id: ne.id
+		return
+		
+	}
+
 	def actualizarFirmaRecibo(Long id){
 		def ne=nominaPorEmpleadoService.actualizarFirmaRecibo(id,params.reciboFirmado)
 		redirect controller:'nomina',action:'show',params:[id:ne.nomina.id]
-			return
+		return
 	}
 	
 	def depurar(NominaPorEmpleado ne){

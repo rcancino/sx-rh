@@ -14,6 +14,8 @@ class FiniquitoDet {
 	BigDecimal importeExcento=0.00
 
 	Boolean manual = false
+
+	Boolean finiquito = true
 	
 	
 	static belongsTo = [finiquito: Finiquito]	

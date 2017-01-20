@@ -97,7 +97,7 @@ class NominaController {
 			return
 		}
 		if(nomina.tipo == 'LIQUIDACION') {
-			nominaService.actualizarLiquidacion(nomina)
+			nominaService.registrarLiquidacion(nomina)
 			flash.message="Nomina de LIQUIDACION actualizada"
 			redirect action:'show',params:[id:id]
 			return

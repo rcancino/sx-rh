@@ -767,12 +767,12 @@ class NominaService {
 		return nomina
 	}
 
-	def actualizarLiquidacion(Nomina nomina){
+	def registrarLiquidacion(Nomina nomina){
 		assert nomina.tipo == 'LIQUIDACION', "No es nomina de tipo liquidacion"
 		def found = nomina.partidas.find {it.cfdi}.find()
 		assert !found, "La nómina ya tiene por lo menos un cfdi generado: ${found.id} "
 
-		def existentes = Finiquito.findAll("from Finiquito f where f.nominaPorEmpleado.nomina = ?", [nomina])
+		def existentes = Finiquito.findAll("from Finiquito f where f.neLiquidacion.nomina = ?", [nomina])
 		existentes.each { finiquito ->
 			finiquito.nominaPorEmpleado = null
 			finiquito.save flush:true
@@ -798,19 +798,28 @@ class NominaService {
 			fraccionDescanso:0,
 			orden: orden
 			)
+			
+			
+			/*
 			ne.antiguedadEnSemanas = ne.getAntiguedad()
 			ne.salarioDiarioBase = empleado.salario.salarioDiario
 			ne.salarioDiarioIntegrado = empleado.salario.salarioDiarioIntegrado
+			 
 			it.partidas.each { det ->
-				log.info( "Agregando:  ${det.tipo} ${det.concepto}" )
-				def d2=new NominaPorEmpleadoDet(concepto:det.concepto
-						,importeGravado:det.importeGravado
-						,importeExcento:det.importeExcento
-						,comentario:'PENDIENTE')
-				ne.addToConceptos(d2)
+				if(det.finiquito == true){
+					log.info( "Agregando:  ${det.tipo} ${det.concepto}" )
+					def d2=new NominaPorEmpleadoDet(concepto:det.concepto
+							,importeGravado:det.importeGravado
+							,importeExcento:det.importeExcento
+							,comentario:'PENDIENTE')
+					ne.addToConceptos(d2)
+				}
+				
 			}
+			*/
 			nomina.addToPartidas(ne)
-			it.nominaPorEmpleado = ne
+			it.neLiquidacion = ne
+			
 		}
 
 		nomina.save failOnError:true, flush:true
@@ -818,6 +827,7 @@ class NominaService {
 		//ordenar(nomina)
 		return nomina
 	}
+
 	
 }
 
