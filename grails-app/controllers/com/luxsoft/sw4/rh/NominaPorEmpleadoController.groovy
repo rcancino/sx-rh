@@ -246,17 +246,20 @@ class NominaPorEmpleadoController {
 	
 	@Transactional
 	def ajusteMensualIsr(NominaPorEmpleado ne){
-		
-		
 		def found=IsptMensual.findByNominaPorEmpleado(ne)
+		
 		if(!found){
 			ajusteIsr.ajusteMensual(ne)
-			nominaPorEmpleadoService.actualizarNominaPorEmpleado(ne.id)
+			if(ne.nomina.tipo == 'LIQUIDACION'){
+				ne = nominaPorEmpleadoService.actualizarLiquidacion(ne)
+			} else if(ne.finiquido){
+				ne = nominaPorEmpleadoService.actualizarFiniquito(ne)
+			}else {
+				nominaPorEmpleadoService.actualizarNominaPorEmpleado(ne.id)
+			}
 		}else{
-			
 			flash.message="Nomina ya ajustada para ISTP mensual"
 		}
-		
 		redirect action:'edit',params:[id:ne.id]
 	}
 	
@@ -265,8 +268,14 @@ class NominaPorEmpleadoController {
 		def found=IsptMensual.findByNominaPorEmpleado(ne)
 		if(found){
 			found.delete flush:true
+			if(ne.nomina.tipo == 'LIQUIDACION'){
+				ne = nominaPorEmpleadoService.actualizarLiquidacion(ne)
+			} else if(ne.finiquido){
+				ne = nominaPorEmpleadoService.actualizarFiniquito(ne)
+			}else {
+				nominaPorEmpleadoService.actualizarNominaPorEmpleado(ne.id)
+			}
 			
-			nominaPorEmpleadoService.actualizarNominaPorEmpleado(ne.id)
 			flash.message="Ajuste mensual ISTP eliminado"
 		}
 		redirect action:'edit',params:[id:ne.id]
@@ -314,17 +323,10 @@ class NominaPorEmpleadoController {
 	}
 	
 	def descargarXml(Cfdi cfdi){
-	
-	//	log.info 'Descargando archivo xml: '+cfdi
-		//log.info 'Index action....'
-		//def file=new
-		//render(contentType: "text/xml", encoding: "UTF-8",file)
-		
 		response.setContentType("application/octet-stream")
 		response.setHeader("Content-disposition", "filename=${cfdi.uuid}")
 		response.outputStream << cfdi.xml
 		return
-		
 	}
 
 	def mostrarXml(Cfdi cfdi){
