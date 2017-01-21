@@ -72,7 +72,9 @@ class ProcesadorDePrestamosPersonales {
 					disponible -= otrasDeducciones.getTotal()
 				}
 				if(ne.nomina.tipo == 'LIQUIDACION'){
-					disponible -= getAbonoPorFiniquito(ne)
+					def abono = getAbonoPorFiniquito(ne)
+					println 'Abono por finiquito localizado: ' + abono
+					saldo -= abono
 				}
 
 				def importe = disponible < saldo ? disponible : saldo
@@ -172,9 +174,9 @@ class ProcesadorDePrestamosPersonales {
 		def finiquito = Finiquito.where {neLiquidacion == ne }.find()
 		assert finiquito, 'No existe el finiquito para esta liquidacion'
 		assert finiquito.neFiniquito, 'No existe la nomina de finiquito para esta liquidacion'
-		def abono = finiquito.neFiniquito.conceptos.find {clave == 'D004'}.find()
-		assert abono , 'No se registro la deduccion por prestamo en el finiquito'
- 		return abono.importeExcento
+		def abono = finiquito.neFiniquito.conceptos.find {it.concepto.clave == 'D004'}.find() 
+		//assert abono , 'No se registro la deduccion por prestamo en el finiquito'
+ 		return abono ? abono.importeExcento : 0.0
 	}
 
 }

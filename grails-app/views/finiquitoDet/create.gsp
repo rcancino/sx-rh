@@ -29,6 +29,7 @@
 			<f:field property="concepto" widget-class="form-control"/>
 			<f:field property="importeGravado" widget="numeric" widget-class="form-control"/>
 			<f:field property="importeExcento" widget="numeric" widget-class="form-control"/>
+			<f:field property="liquidacion" widget-class="form-control"/>
 			
 		</f:with>
 

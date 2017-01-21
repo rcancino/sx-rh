@@ -140,7 +140,7 @@ class NominaPorEmpleadoService {
 				if(d2.total>0)
 					ne.addToConceptos(d2)
 		}
-		finiquito.partidas.findAll {it.concepto.tipo == 'DEDUCCION'}.each{ det->
+		finiquito.partidas.findAll {it.concepto.tipo == 'DEDUCCION' && !it.liquidacion}.each{ det->
 			def d2 = new NominaPorEmpleadoDet(concepto:det.concepto
 					,importeGravado:det.importeGravado
 					,importeExcento:det.importeExcento
@@ -180,10 +180,20 @@ class NominaPorEmpleadoService {
 		assert finiquito, "No se ha asignado el  finiquito para ${ne.empleado}"
 		
 		def percepciones = finiquito.partidas.findAll {
-			it.concepto.tipo == 'PERCEPCION' &&  !it.finiquito
+			it.concepto.tipo == 'PERCEPCION' &&  it.liquidacion
 		}
+
+		def deducciones = finiquito.partidas.findAll {
+			it.concepto.tipo == 'DEDUCCION' && it.liquidacion
+		}
+		percepciones << deducciones
+		
 		ne.diasTrabajados = finiquito.diasPorPagar
 		ne.diasDelPeriodo = finiquito.diasPorPagar
+		ne.salarioDiarioBase = finiquito.salario
+		ne.salarioDiarioIntegrado = finiquito.salarioDiarioIntegrado
+		ne.antiguedadEnSemanas = finiquito.antiguedad
+
 		percepciones.each { det ->
 			log.info( "Agregando:  ${det.tipo} ${det.concepto}" )
 				def d2 = new NominaPorEmpleadoDet(concepto:det.concepto

@@ -70,7 +70,12 @@ class ProcesadorDeOtrasDeducciones {
 				def percepciones = getPercepciones(ne)
 				def deducciones = getRetencionesPrecedentesFiniquito(ne)
 				def saldo = deduccion.saldo
-				def disponible = percepciones - deducciones 
+				def disponible = percepciones - deducciones
+				
+				if(ne.nomina.tipo == 'LIQUIDACION'){
+					def abono = getAbonoPorFiniquito(ne)
+					saldo -= abono
+				}
 
 				def importe = disponible < saldo ? disponible : saldo
 				def neDet=new NominaPorEmpleadoDet(
@@ -190,6 +195,15 @@ class ProcesadorDeOtrasDeducciones {
 			return 0.0
 		}
 		return importe
+	}
+
+	private BigDecimal getAbonoPorFiniquito(NominaPorEmpleado ne) {
+		def finiquito = Finiquito.where {neLiquidacion == ne }.find()
+		assert finiquito, 'No existe el finiquito para esta liquidacion'
+		assert finiquito.neFiniquito, 'No existe la nomina de finiquito para esta liquidacion'
+		def abono = finiquito.neFiniquito.conceptos.find {it.concepto.clave == 'D005'}.find() 
+		//assert abono , 'No se registro la deduccion por otras en el finiquito'
+ 		return abono ? abono.importeExcento : 0.0
 	}
 
 }

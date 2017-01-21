@@ -50,9 +50,9 @@ class FiniquitoService {
 
         finiquito.addToPartidas(tipo: 'PERCEPCION', importeGravado:finiquito.primaVacacionalGravada, importeExcento:finiquito.primaVacacionalExenta, concepto: ConceptoDeNomina.get(36));
         finiquito.addToPartidas(tipo: 'PERCEPCION', importeGravado:finiquito.aguinaldoGravable, importeExcento:finiquito.aguinaldoExento, concepto: ConceptoDeNomina.get(14));
-        finiquito.addToPartidas(tipo: 'PERCEPCION', importeGravado:finiquito.indemnizacionGravada, importeExcento:finiquito.indemnizacionExenta, concepto: ConceptoDeNomina.get(40), finiquito: false);
+        finiquito.addToPartidas(tipo: 'PERCEPCION', importeGravado:finiquito.indemnizacionGravada, importeExcento:finiquito.indemnizacionExenta, concepto: ConceptoDeNomina.get(40), liquidacion: true);
         
-        finiquito.addToPartidas(tipo: 'PERCEPCION', importeGravado:finiquito.primaDeAntiguedadGravada, importeExcento:finiquito.primaDeAntiguedadExenta, concepto: ConceptoDeNomina.get(38), finiquito: false);
+        finiquito.addToPartidas(tipo: 'PERCEPCION', importeGravado:finiquito.primaDeAntiguedadGravada, importeExcento:finiquito.primaDeAntiguedadExenta, concepto: ConceptoDeNomina.get(38), liquidacion: true);
         finiquito.addToPartidas(tipo: 'PERCEPCION', importeGravado:finiquito.primaDominicalGravada, importeExcento:finiquito.primaDominicalExenta, concepto: ConceptoDeNomina.get(42));
 
         finiquito.addToPartidas(tipo: 'DEDUCCION', importeGravado:0, importeExcento:finiquito.imss, concepto: ConceptoDeNomina.get(1));

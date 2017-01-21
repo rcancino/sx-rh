@@ -131,7 +131,7 @@ class ReciboDeNominaController {
 	
 	def imprimirCfdis(Nomina n){
 		def reportes = []
-		n.partidas.each{ nominaPorEmpleado->
+		n.partidas.sort{it.orden}.each{ nominaPorEmpleado->
 
 			if(nominaPorEmpleado.cfdi){
 				reportes << nominaPrintService.generarReportDef(nominaPorEmpleado)

@@ -18,7 +18,7 @@
 			<td>${row.concepto} ${row.manual ? '(M)' : '(A)'}</td>
 			<td>${row.importeGravado}</td>
 			<td>${row.importeExcento}</td>
-			<td>${row.finiquito ? 'F' : 'L'}</td>
+			<td>${row.liquidacion ? 'L' : 'F'}</td>
 			<td>
 				<g:if test="${finiquitoInstance.neLiquidacion == null && row.manual}" >
 			 	

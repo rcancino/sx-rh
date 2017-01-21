@@ -15,7 +15,7 @@ class FiniquitoDet {
 
 	Boolean manual = false
 
-	Boolean finiquito = true
+	Boolean liquidacion = false
 	
 	
 	static belongsTo = [finiquito: Finiquito]	
