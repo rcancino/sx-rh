@@ -252,7 +252,7 @@ class NominaPorEmpleadoController {
 			ajusteIsr.ajusteMensual(ne)
 			if(ne.nomina.tipo == 'LIQUIDACION'){
 				ne = nominaPorEmpleadoService.actualizarLiquidacion(ne)
-			} else if(ne.finiquido){
+			} else if(ne.finiquito){
 				ne = nominaPorEmpleadoService.actualizarFiniquito(ne)
 			}else {
 				nominaPorEmpleadoService.actualizarNominaPorEmpleado(ne.id)
@@ -270,7 +270,7 @@ class NominaPorEmpleadoController {
 			found.delete flush:true
 			if(ne.nomina.tipo == 'LIQUIDACION'){
 				ne = nominaPorEmpleadoService.actualizarLiquidacion(ne)
-			} else if(ne.finiquido){
+			} else if(ne.finiquito){
 				ne = nominaPorEmpleadoService.actualizarFiniquito(ne)
 			}else {
 				nominaPorEmpleadoService.actualizarNominaPorEmpleado(ne.id)
