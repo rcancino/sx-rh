@@ -104,8 +104,10 @@ class FiniquitoService {
                 vacacionesAnteriores = cv.diasTrasladados
                 primaVacacional = 0.25                            
                 def primVacExAcu = cv.acumuladoExcento
-                diasTrabajadoParaVacaciones = (finiquito.baja.fecha - cv.aniversario ) 
-            if(finiquito.diasTrabajadoParaVacaciones < 0 )
+                def aniversarioAnterior = cv.aniversario - 366 + 1
+                diasTrabajadoParaVacaciones = 
+                (finiquito.baja.fecha - cv.aniversario ) < 0 ? finiquito.baja.fecha - aniversarioAnterior : finiquito.baja.fecha - cv.aniversario
+            if(finiquito.diasTrabajadoParaVacaciones.abs() < 0 )
                 diasTrabajadoParaVacaciones = 0             
             def vacacionesFiniquito = finiquito.vacacionesEjercicio + finiquito.vacacionesAnteriores - finiquito.vacacionesAplicadas  
             def sd = !finiquito.salario ? finiquito.salarioVariable : finiquito.salario

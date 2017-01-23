@@ -186,8 +186,9 @@ class NominaPorEmpleadoService {
 		def deducciones = finiquito.partidas.findAll {
 			it.concepto.tipo == 'DEDUCCION' && it.liquidacion
 		}
-		percepciones << deducciones
-		
+		if (deducciones)
+			percepciones << deducciones
+
 		ne.diasTrabajados = finiquito.diasPorPagar
 		ne.diasDelPeriodo = finiquito.diasPorPagar
 		ne.salarioDiarioBase = finiquito.salario
