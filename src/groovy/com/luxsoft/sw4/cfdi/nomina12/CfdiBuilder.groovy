@@ -23,6 +23,7 @@ class CfdiBuilder {
 	PercepcionesBuilder percepcionesBuilder = new PercepcionesBuilder()
 	OtrosPagosBuilder otrosPagosBuilder = new OtrosPagosBuilder()
 	DeduccionesBuilder deduccionesBuilder = new DeduccionesBuilder()
+	SeparacionIndeminzacionBuilder indeminzacionBuilder = new SeparacionIndeminzacionBuilder()
 	
 
 	
@@ -39,6 +40,7 @@ class CfdiBuilder {
 
 		def complementoNomina = complementoBuilder.build(nominaEmpleado)
 		percepcionesBuilder.build(complementoNomina, nominaEmpleado)
+		indeminzacionBuilder.build(complementoNomina, nominaEmpleado)
 		otrosPagosBuilder.build(complementoNomina, nominaEmpleado)
 		deduccionesBuilder.build(complementoNomina, nominaEmpleado)
 		
@@ -47,6 +49,7 @@ class CfdiBuilder {
 		registrarReceptor(comprobante, empleado)
 		registrarConceptos(comprobante, complementoNomina)
 		registrarTotales(comprobante, complementoNomina)
+
 		
 		// Impuestos
 		comprobante.addNewImpuestos()
