@@ -46,7 +46,9 @@ class SeparacionIndeminzacionBuilder {
 			def ingresoAcumulable = ingresoGravadoPorIndeminacion > ultimoSueldoMensualOrdinario ? ultimoSueldoMensualOrdinario : ingresoGravadoPorIndeminacion
 			def ingresoNoAcumulable = ingresoGravadoPorIndeminacion - ultimoSueldoMensualOrdinario
 
-			SeparacionIndemnizacion separacion = percepciones.addNewSeparacionIndemnizacion()
+			
+			
+			SeparacionIndemnizacion separacion = nomina.percepciones.addNewSeparacionIndemnizacion()
 			separacion.setUltimoSueldoMensOrd(finiquito.sueldo)
         	separacion.setIngresoAcumulable(ingresoAcumulable)
         	separacion.setIngresoNoAcumulable(ingresoNoAcumulable )

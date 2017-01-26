@@ -15,26 +15,31 @@ class PercepcionesBuilder {
 		Percepciones per=nomina.addNewPercepciones()
 		def percepciones = nominaEmpleado.conceptos.findAll{it.concepto.catalogoSat == 'c_TipoPercepcion'}
 		
-		per.totalSueldos = percepciones.sum 0, {
+		per.totalSueldos = percepciones.sum 0.0, {
 		    def clave = it.concepto.claveSat.toString().padLeft(3,'0')
 		    if(NominaUtils.isSueldos(clave) ){
 		       return it.importeGravado + it.importeExcento
 		    }
-		    return 0
+		    return 0.0
+		    //return it.importeGravado + it.importeExcento
 		}
 
-		per.totalGravado = percepciones.sum 0, {
+		per.totalGravado = percepciones.sum 0.0, {
 			def clave = it.concepto.claveSat.toString().padLeft(3,'0')
-			if(NominaUtils.isSueldos(clave) ){
+			/*if(NominaUtils.isSueldos(clave) ){
 				return it.importeGravado
 			}
+			return 0.0*/
+			return it.importeGravado
 		}
 
-		per.totalExento = percepciones.sum 0, {
+		per.totalExento = percepciones.sum 0.0, {
 			def clave = it.concepto.claveSat.toString().padLeft(3,'0')
-			if(NominaUtils.isSueldos(clave) ){
+			/*if(NominaUtils.isSueldos(clave) ){
 				return it.importeExcento
 			}
+			return 0.0*/
+			return it.importeExcento
 			
 		}
 		percepciones.each{
@@ -48,6 +53,9 @@ class PercepcionesBuilder {
 		  	pp.setConcepto(it.concepto.descripcion)
 		  	pp.setImporteGravado(it.importeGravado)
 		  	pp.setImporteExento(it.importeExcento)
+		}
+		if( nominaEmpleado.nomina.tipo == 'LIQUIDACION' ) {
+			per.totalSeparacionIndemnizacion = per.totalGravado + per.totalExento
 		}
 		return per
 	}

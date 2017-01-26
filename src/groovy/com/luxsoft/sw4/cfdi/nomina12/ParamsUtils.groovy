@@ -77,6 +77,7 @@ class ParamsUtils {
 		parametros['SUCURSAL']=nominaPorEmpleado.empleado.perfil.ubicacion.clave
 		parametros['PUESTO']=nomina.receptor.puesto
 		parametros['DEPARTAMENTO']=nomina.receptor.departamento
+		parametros['FECHA']= comprobante.fecha.getTime().format("yyyy-MM-dd'T'HH:mm:ss")
 
 		if(nominaPorEmpleado.asistencia){
 			def diasTrabajados=0

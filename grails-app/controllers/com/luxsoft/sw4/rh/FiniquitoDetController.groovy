@@ -57,7 +57,14 @@ class FiniquitoDetController {
             notFound()
             return
         }
+
         def finiquito = finiquitoDetInstance.finiquito
+
+        if(finiquito.neLiquidacion || finiquito.neFiniquito){
+            flash.message = "No se puede eliminar ya que se esta usando en nominas"
+            redirect controller: 'finiquito', action:'show', id: finiquito.id
+            return 
+        }
         finiquito.removeFromPartidas(finiquitoDetInstance)
         finiquito = finiquitoService.save(finiquito)
 

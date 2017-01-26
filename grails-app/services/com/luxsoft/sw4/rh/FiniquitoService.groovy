@@ -112,7 +112,8 @@ class FiniquitoService {
             def vacacionesFiniquito = finiquito.vacacionesEjercicio + finiquito.vacacionesAnteriores - finiquito.vacacionesAplicadas  
             def sd = !finiquito.salario ? finiquito.salarioVariable : finiquito.salario
             println("salario diario : "+sd+" Vacaciones Finiquito : "+vacacionesFiniquito)
-            vacaciones = ((sd * vacacionesFiniquito) + ((sd * finiquito.vacacionesEjercicio / finiquito.diasDelEjercicio) * finiquito.diasTrabajadoParaVacaciones))
+            //vacaciones = ( (sd * vacacionesFiniquito) + ((sd * finiquito.vacacionesEjercicio / finiquito.diasDelEjercicio) * finiquito.diasTrabajadoParaVacaciones))
+            vacaciones = (  ((sd * vacacionesFiniquito / finiquito.diasDelEjercicio) * finiquito.diasTrabajadoParaVacaciones))
             def pv = finiquito.vacaciones * finiquito.primaVacacional
             def topeEx = smg.salario * 15
             primaVacacionalExenta = (primVacExAcu <= topeEx ? (primVacExAcu + pv < topeEx ? pv : topeEx - primVacExAcu) : 0.0)

@@ -10,32 +10,19 @@
 		<title>Finiquito: ${entity.empleado}</title>
 	</head>
 	<body>
-		<lx:header>
-			<h2>Finiquito: ${entity.empleado}</h2>
-			<lx:warningLabel/>
-		</lx:header>
-
+        <g:set var="empleado" value="${finiquitoInstance.empleado}" scope="request"/>
 		<lx:wrapper>
+            <g:render template="encabezado" bean="${empleado}"></g:render>
+            
+
 			<div class="col-md-6">
 				<lx:ibox>
-					<lx:iboxTitle title="Propiedades"></lx:iboxTitle>
+					<lx:warningLabel/>
+
 				<g:form name="updateForm" action="update" class="form-horizontal" method="PUT">
-					<g:hiddenField name="id" value="${entity.id}"/>
-                    <g:hiddenField name="version" value="${entity.version}"/> 
-                    <div class="ibox-content">
-                        <lx:errorsHeader bean="${entity}"/>
-                        <f:with bean="${entity}">
-							<f:display property="empleado" widget-class="form-control" wrapper="bootstrap3"/>
-							<f:display property="baja.fecha" widget-class="form-control" label="Baja" wrapper="bootstrap3"/>
-							<f:field property="diasPorPagar" widget-class="form-control" wrapper="bootstrap3"/>
-                            <f:field property="montoIntereses" widget-class="form-control" wrapper="bootstrap3"/>
-                            <f:field property="tasaInteres" widget-class="form-control" wrapper="bootstrap3"/>
-                            <f:field property="sdiOpcion" widget-class="form-control" wrapper="bootstrap3"/>
-                            <f:field property="liq" widget-class="form-control" wrapper="bootstrap3"/>
-						</f:with>
-                    </div>
-                    <lx:iboxFooter>
-                    	<div class="btn-group">
+
+                  <lx:header>
+                        <div class="btn-group">
                             <lx:backButton/>
                             <g:link class="btn btn-success btn-outline" controller="finiquitoDet" action="create" id="${finiquitoInstance.id}">
                                 <i class="fa fa-plus"></i> Agregar 
@@ -50,10 +37,10 @@
                             </g:if>
                             <g:if test="${delete}">
                                 <a href="" class="btn btn-danger " 
-                                	data-toggle="modal" 
-                                	data-target="#deleteDialog">
-                                	<i class="fa fa-trash">
-                                	</i> Eliminar
+                                    data-toggle="modal" 
+                                    data-target="#deleteDialog">
+                                    <i class="fa fa-trash">
+                                    </i> Eliminar
                                 </a> 
 
                             </g:if>
@@ -62,7 +49,20 @@
                             </g:link> 
                                     
                         </div>
-                    </lx:iboxFooter>
+                    </lx:header>
+					<g:hiddenField name="id" value="${entity.id}"/>
+                    <g:hiddenField name="version" value="${entity.version}"/> 
+                    <div class="ibox-content">
+                        <lx:errorsHeader bean="${entity}"/>
+                        <f:with bean="${entity}">
+							<f:field property="diasPorPagar" widget-class="form-control" wrapper="bootstrap3"/>
+                            <f:field property="montoIntereses" widget-class="form-control" wrapper="bootstrap3"/>
+                            <f:field property="tasaInteres" widget-class="form-control" wrapper="bootstrap3"/>
+                            <%-- Temporalmente deshabilitado hasta que el usuario solicite la activacion del calculo de finiquito usando estas opciones  --%>
+                       <%--     <f:field property="sdiOpcion" widget-class="form-control" wrapper="bootstrap3"/>
+                            <f:field property="liq" widget-class="form-control" wrapper="bootstrap3"/> --%>
+						</f:with>
+                    </div>
                 </g:form>	
                 </lx:ibox>
                 <g:render template="partidasPanel"/>

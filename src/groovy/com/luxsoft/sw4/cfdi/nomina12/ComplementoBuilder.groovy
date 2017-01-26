@@ -43,6 +43,9 @@ class ComplementoBuilder {
 		Nomina nomina=nominaDocto.addNewNomina()
 		nomina.version = '1.2'
 		nomina.tipoNomina = CTipoNomina.O
+		if(nominaEmpleado.nomina.tipo == 'PTU'|| nominaEmpleado.nomina.tipo == 'AGUINALDO' || nominaEmpleado.nomina.tipo == 'LIQUIDACION'){
+			nomina.tipoNomina = CTipoNomina.E
+		}
 		nomina.setNumDiasPagados(calcularDiasPagados(nominaEmpleado))
 		nomina.fechaPago = NominaUtils.toISO8601(nominaEmpleado.nomina.pago)
 		nomina.fechaInicialPago = NominaUtils.toISO8601(nominaEmpleado.nomina.periodo.fechaInicial)
@@ -79,7 +82,7 @@ class ComplementoBuilder {
 		return nomina
 	}
 
-	private int calcularDiasPagados(NominaPorEmpleado nominaEmpleado){
+	private BigDecimal calcularDiasPagados(NominaPorEmpleado nominaEmpleado){
 		def diasTrabajados=0
 		def faltas=0
 		if(nominaEmpleado.asistencia){
@@ -94,6 +97,7 @@ class ComplementoBuilder {
 			}		
  		}
 		def diasLab=new BigDecimal(diasTrabajados).setScale(3, RoundingMode.HALF_EVEN)
+		if(diasLab<=0) diasLab = 1
 		return diasLab
 	}
 
@@ -108,6 +112,10 @@ class ComplementoBuilder {
         receptor.curp = empleado.curp
     	receptor.numSeguridadSocial = empleado.seguridadSocial.numero.replace('-','')
         receptor.antigüedad = "P${nominaEmpleado.antiguedad}W"
+        if(nominaEmpleado.antiguedad <= 0){
+        	def diasLab=new BigDecimal(nominaEmpleado.diasTrabajados).setScale(0, RoundingMode.HALF_EVEN)
+        	receptor.antigüedad = "P${diasLab}D"
+        }
         def tr = empleado.perfil.regimenContratacion.clave.toString().padLeft(2,'0')
         receptor.tipoRegimen = CTipoRegimen.Enum.forString(tr) // TODOS LOS EMPLEADOS DEBEN TENER TIPO REGIMEN
         receptor.numEmpleado = empleado.perfil.numeroDeTrabajador
@@ -127,6 +135,9 @@ class ComplementoBuilder {
         	receptor.setPeriodicidadPago(CPeriodicidadPago.X_04)
         else
         	receptor.setPeriodicidadPago(CPeriodicidadPago.X_02)
+        if(nominaEmpleado.nomina.tipo == 'LIQUIDACION' || nominaEmpleado.nomina.tipo == 'PTU' || nominaEmpleado.nomina.tipo == 'AGUINALDO' ){
+        	receptor.setPeriodicidadPago(CPeriodicidadPago.X_99)
+        }
         if(empleado?.salario?.banco?.clave && nominaEmpleado.nomina.formaDePago == 'TRANSFERENCIA'){
         	def bancoClave = empleado?.salario.banco.clave.toString().padLeft(3,'0')
 			receptor.setBanco(CBanco.Enum.forString(bancoClave))
