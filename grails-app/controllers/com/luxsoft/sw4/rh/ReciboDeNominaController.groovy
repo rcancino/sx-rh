@@ -36,6 +36,8 @@ class ReciboDeNominaController {
 	
 	def jasperService
 
+	def nominaPrintService
+
     def index(long nominaId) {
 		
 		params.periodicidad=params.periodicidad?:'QUINCENAL'
@@ -68,6 +70,13 @@ class ReciboDeNominaController {
 		
 	}
 	
+	def impresionDirecta(Cfdi cfdi) {
+		
+		ByteArrayOutputStream  pdfStream = nominaPrintService.imprimir(cfdi, params)
+		def fileName="cfdi_${cfdi.folio}_${cfdi.receptor}.pdf"
+		render(file: pdfStream.toByteArray(), contentType: 'application/pdf',fileName:fileName)
+	}
+
 	def imprimirCfdi() {
 		//println 'Imprimiendo CFDI: '+params.id
 		def cfdi=Cfdi.findById(params.id)
@@ -111,138 +120,25 @@ class ReciboDeNominaController {
 			it.clave
 		}
 		
-		def repParams=CfdiPrintUtils.resolverParametros(comprobante,complemento.nomina,nominaPorEmpleado)
-		params<<repParams
-		params.FECHA=comprobante.fecha.getTime().format("yyyy-MM-dd'T'HH:mm:ss")
-		//params['SALARIO_DIARIO_BASE']=nominaPorEmpleado.salarioDiarioBase
-		//params['SALARIO_DIARIO_INTEGRADO']=nominaPorEmpleado.salarioDiarioIntegrado
+		def repParams = CfdiPrintUtils.resolverParametros(comprobante,complemento.nomina,nominaPorEmpleado)
+		params << repParams
+		params.FECHA = comprobante.fecha.getTime().format("yyyy-MM-dd'T'HH:mm:ss")
 		params['RECIBO_NOMINA']=nominaPorEmpleado.id
 		params[PdfExporterConfiguration.PROPERTY_PDF_JAVASCRIPT]="this.print();"
-		//println 'Parametros enviados: '+params
 		chain(controller:'jasper',action:'index',model:[data:modelData],params:params)
-		//chain(controller:'jasper',action:'index',params:params)
-	}
-	
-	def impresionDirecta() {
 		
-		def cfdi=Cfdi.findById(params.id)
-		if(cfdi==null){
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'cfdiInstance.label', default: 'Cfdi'), params.id])
-			redirect action: "show", params:[id:id]
-		}
-		NominaPorEmpleado nominaPorEmpleado=NominaPorEmpleado.findByCfdi(cfdi)
-		Comprobante comprobante=cfdi.comprobante
-		ComplementoNomina complemento=new ComplementoNomina(comprobante)
-		mx.gob.sat.nomina.NominaDocument.Nomina nomina=complemento.nomina
-		
-		def deducciones=nomina?.deducciones?.deduccionArray
-		def modelData=deducciones.collect { cc ->
-			def res=[
-				'GRUPO':cc.tipoDeduccion,
-				'CLAVE':cc.clave,
-				'DESCRIPCION':cc.concepto,
-				'IMPORTE_GRAVADO':cc.importeGravado,
-				'IMPORTE_EXENTO':cc.importeExento,
-				'CONCEPTO':'D'
-			 ]
-			return res
-		}
-		def percepciones=nomina.percepciones.percepcionArray
-		percepciones.each{ cc->
-			def res=[
-				'GRUPO':cc.tipoPercepcion,
-				'CLAVE':cc.clave,
-				'DESCRIPCION':cc.concepto,
-				'IMPORTE_GRAVADO':cc.importeGravado,
-				'IMPORTE_EXENTO':cc.importeExento,
-				'CONCEPTO':'P'
-			 ]
-			modelData<<res
-		}
-		
-		modelData.sort{
-			it.clave
-		}
-		
-		def repParams=CfdiPrintUtils.resolverParametros2(comprobante,complemento.nomina,nominaPorEmpleado)
-		params<<repParams
-		params.FECHA=comprobante.fecha.getTime().format("yyyy-MM-dd'T'HH:mm:ss")
-		//params['SALARIO_DIARIO_INTEGRADO']=nominaPorEmpleado.salarioDiarioIntegrado as String
-		params['RECIBO_NOMINA']=nominaPorEmpleado.id as String
-		params[PdfExporterConfiguration.PROPERTY_PDF_JAVASCRIPT]="this.print();"
-		def reportDef=new JasperReportDef(
-			name:'NominaDigitalCFDI'
-			,fileFormat:JasperExportFormat.PDF_FORMAT
-			,reportData:modelData,
-			,parameters:params
-			)
-		Resource resource = reportDef.getReport()
-		JRBeanCollectionDataSource jrBeanCollectionDataSource = new JRBeanCollectionDataSource(reportDef.reportData)
-		JasperPrint print= JasperFillManager.fillReport(JasperCompileManager.compileReport(resource.inputStream)
-			, reportDef.parameters
-			, jrBeanCollectionDataSource)
-		ByteArrayOutputStream  pdfStream = new ByteArrayOutputStream();
-		JRPdfExporter exporter = new JRPdfExporter();
-		exporter.setParameter(JRExporterParameter.JASPER_PRINT, print);
-		exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, pdfStream); // your output goes here
-		//exporter.setParameter(JRPdfExporterParameter.PDF_JAVASCRIPT, "this.print();");
-		exporter.exportReport();
-		render(file: pdfStream.toByteArray(), contentType: 'application/pdf')
 	}
 	
 	def imprimirCfdis(Nomina n){
-		def reportes=[]
+		def reportes = []
 		n.partidas.sort{it.orden}.each{ nominaPorEmpleado->
-			
+
 			if(nominaPorEmpleado.cfdi){
-				def cfdi=nominaPorEmpleado.cfdi
-				Comprobante comprobante=cfdi.comprobante
-				ComplementoNomina complemento=new ComplementoNomina(comprobante)
-				mx.gob.sat.nomina.NominaDocument.Nomina nomina=complemento.nomina
-				def deducciones=nomina?.deducciones?.deduccionArray
-				def modelData=deducciones.collect { cc ->
-					def res=[
-						'GRUPO':cc.tipoDeduccion,
-						'CLAVE':cc.clave,
-						'DESCRIPCION':cc.concepto,
-						'IMPORTE_GRAVADO':cc.importeGravado,
-						'IMPORTE_EXENTO':cc.importeExento,
-						'CONCEPTO':'D'
-					 ]
-					return res
-				}
-				def percepciones=nomina.percepciones.percepcionArray
-				percepciones.each{ cc->
-					def res=[
-						'GRUPO':cc.tipoPercepcion,
-						'CLAVE':cc.clave,
-						'DESCRIPCION':cc.concepto,
-						'IMPORTE_GRAVADO':cc.importeGravado,
-						'IMPORTE_EXENTO':cc.importeExento,
-						'CONCEPTO':'P'
-					 ]
-					modelData<<res
-				}
-				modelData.sort{
-					it.clave
-				}
-				
-				def repParams=CfdiPrintUtils.resolverParametros2(comprobante,complemento.nomina,nominaPorEmpleado)
-				//params<<repParams
-				repParams.FECHA=comprobante.fecha.getTime().format("yyyy-MM-dd'T'HH:mm:ss")
-				repParams['RECIBO_NOMINA']=nominaPorEmpleado.id as String
-				
-				def reportDef=new JasperReportDef(
-					name:'NominaDigitalCFDI'
-					,fileFormat:JasperExportFormat.PDF_FORMAT
-					,reportData:modelData,
-					,parameters:repParams
-					)
-				reportes.add(reportDef)
+				reportes << nominaPrintService.generarReportDef(nominaPorEmpleado)
 			}
 		}
-		ByteArrayOutputStream  pdfStream=jasperService.generateReport(reportes)
-		//FileUtils.writeByteArrayToFile(new File("c:/pruebas/testReport2.pdf"), jasperService.generateReport(reportes).toByteArray())
+
+		ByteArrayOutputStream  pdfStream = jasperService.generateReport(reportes)
 		def fileName="nomina_${n.ejercicio}_${n.periodicidad}_${n.folio}.pdf"
 		render(file: pdfStream.toByteArray(), contentType: 'application/pdf',fileName:fileName)
 	}
@@ -262,19 +158,7 @@ class ReciboDeNominaController {
 		repParams['DEPARTAMENTO']=empleado.perfil.departamento.clave
 		repParams['SALARIO_DIARIO_BASE']=ne.salarioDiarioBase as String
 		repParams['SALARIO_DIARIO_INTEGRADO']=ne.salarioDiarioIntegrado as String
-		/*
-		if(ne?.asistencia?.diasTrabajados>0){
-			repParams['DIAS_TRABAJADOS']=(com.luxsoft.sw4.MonedaUtils.round(ne.asistencia.diasTrabajados)) as String
-		}else{
-			repParams['DIAS_TRABAJADOS']=(com.luxsoft.sw4.MonedaUtils.round(ne.diasDelPeriodo)) as String
-		}
-		
-		def faltas=(com.luxsoft.sw4.MonedaUtils.round(ne.faltas+ne.incapacidades)) as String
-		repParams['FALTAS']=faltas
-		*/
-
 		repParams['SUB_EMPLEO_APLIC']=ne.subsidioEmpleoAplicado //as String
-
 		repParams['FECHA_INGRESO_LABORAL']=empleado.alta.format("yyyy-MM-dd")
 		repParams['NFISCAL']=ne.id as String
 		repParams['FECHA_INICIAL']=n.periodo.fechaInicial?.format("yyyy-MM-dd")
@@ -306,8 +190,6 @@ class ReciboDeNominaController {
 			    }
 			}		
 		}
-		
-		//println "-Dias trabajados"+diasTrabajados+"--------"+nominaPorEmpleado.id
 		repParams['FALTAS']=com.luxsoft.sw4.MonedaUtils.round(faltas,2) as String
 		repParams['DIAS_TRABAJADOS']=com.luxsoft.sw4.MonedaUtils.round(diasTrabajados,2) as String
 		

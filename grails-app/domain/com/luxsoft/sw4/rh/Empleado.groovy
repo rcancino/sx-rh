@@ -75,7 +75,13 @@ class Empleado  implements Serializable{
 	}
 	
     String toString(){
-    	return "${apellidoPaterno?:''} ${apellidoMaterno?:''} $nombres "
+
+    	if(!apellidoPaterno){
+    		return "${apellidoMaterno?:''} $nombres "
+    	}else{
+    		return "${apellidoPaterno?:''} ${apellidoMaterno?:''} $nombres "	
+    	}
+    	
     }
 	
 }

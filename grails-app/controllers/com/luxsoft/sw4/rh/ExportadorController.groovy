@@ -108,26 +108,61 @@ class ExportadorController {
 				def importeAbonos =formato.format(importeInd).padLeft(16,"0");
 				def decimalAbono=formatoDec.format(it.total-importeInd).replace('.','').padRight(2,"0")
 				def importeAbono= importeAbonos+""+decimalAbono
-				def tipoCtaInd="03"
-				if(it.empleado.id==280 || it.empleado.id==260 ||  it.empleado.id==245 || it.empleado.id==271)
-				 	tipoCtaInd="01"
-				def claveSucInd="0270"
-				
-				if(it.empleado.id==260 )
-					claveSucInd="0269"
-				
-				if(it.empleado.id==245 )
-					claveSucInd="0515"
 
-				if(it.empleado.id==246 ){
-					claveSucInd="0269"
+				def tipoCtaInd="03"
+				def numCtaInd=it.empleado.salario.clabe.padLeft(20,"0")
+				def claveSucInd="0270"
+
+				/*Lic Rafa*/
+				if(it.empleado.id==280){
+					
+				 	tipoCtaInd="01"
+					claveSucInd="0270"	
+					numCtaInd="4157579"
+					numCtaInd=numCtaInd.padLeft(20,"0")								 	
+				}
+				
+				
+				/*Sra Consuelo*/
+				if(it.empleado.id==260 ){
+					
 					tipoCtaInd="01"
+					claveSucInd="0269"
+					numCtaInd="7850719"
+					numCtaInd=numCtaInd.padLeft(20,"0")
 				}
 
-				if(it.empleado.id==271 )
+				/*Monica*/
+				if(it.empleado.id==245 ){
+					
+					tipoCtaInd="01"
+					claveSucInd="0515"
+					numCtaInd="7176309"
+					numCtaInd=numCtaInd.padLeft(20,"0")
+				}
+
+				/*JASS*/
+				if(it.empleado.id==246 ){
+					
+					claveSucInd="0269"
+					tipoCtaInd="01"
+					numCtaInd="7876149"
+					numCtaInd=numCtaInd.padLeft(20,"0")
+				}
+
+				/*Contador*/
+				if(it.empleado.id==271 ){
+
 					claveSucInd="7002"
+					tipoCtaInd="01"	
+					numCtaInd="309774"
+					numCtaInd=numCtaInd.padLeft(20,"0")
+
+				}
+
+
 				
-				def numCtaInd=it.empleado.salario.clabe.padLeft(20,"0")
+				
 				def referencia="0000000001".padRight(40)
 				def beneficiario=it.empleado.nombre.replace("Ñ","N").padRight(55)
 				def blanco1=StringUtils.leftPad("",40)

@@ -58,6 +58,12 @@
                         
                     </div>
                 </div>
+                <g:if test="${g.pageProperty(name:'page.infoPanel')}">
+                    <div class="col-lg-4">
+                        <g:pageProperty name="page.infoPanel"/>
+                    </div>
+                </g:if>
+                
             </div>
         </div>
              

@@ -9,7 +9,7 @@
 
 	<lx:header>
 		<h3>Nómina de : ${nominaPorEmpleadoInstance?.empleado}
-	    		<small>${nominaPorEmpleadoInstance?.ubicacion}  (${nominaPorEmpleadoInstance?.nomina?.periodo})  Días:${nominaPorEmpleadoInstance?.nomina?.diasPagados}</small>
+	    		<small>${nominaPorEmpleadoInstance?.ubicacion}  (${nominaPorEmpleadoInstance?.nomina?.periodo})  Días:${nominaPorEmpleadoInstance?.nomina?.diasPagados} ${nominaPorEmpleadoInstance.nomina.tipo}</small>
 	    </h3>
 		<g:if test="${nominaPorEmpleadoInstance.cfdi}">
 			<p><small>UUID: ${nominaPorEmpleadoInstance.cfdi.uuid}  
@@ -73,6 +73,27 @@
 						<span class="glyphicon glyphicon-refresh"></span> Re-Calcular
 					</g:link>
 					
+					<g:if test = "${nominaPorEmpleadoInstance.nomina.tipo == 'LIQUIDACION'}">
+						<g:link class="list-group-item"
+								action="actualizarLiquidacion"
+								id="${nominaPorEmpleadoInstance.id}" 
+								onclick="return confirm('Actualizar liquidación');">
+							 Actualizar liquidación
+						</g:link>
+					</g:if>
+
+					<g:else>
+						<g:link class="list-group-item"
+								action="asignarFiniquito"
+								id="${nominaPorEmpleadoInstance.id}" 
+								onclick="return confirm('Asignar como finiquito?');">
+							 ${nominaPorEmpleadoInstance.finiquito ? 'Actualizar finiquito': 'Asignar Finiquito'}
+						</g:link>
+					</g:else>
+
+					
+					
+					
 					
 					<g:link class="list-group-item" action="delete" onClick="return confirm('Eliminar registro de nómina?');"
 						id="${nominaPorEmpleadoInstance.id }" >
@@ -128,11 +149,25 @@
 				    <div class="list-group">
 
 				    	<g:if test="${!nominaPorEmpleadoInstance.cfdi}">
+							
+							<g:link class="list-group-item" action="generarCfdi" id="${nominaPorEmpleadoInstance.id}" >
+								<i class="fa fa-file-excel-o"></i> Generar CFDI
+							</g:link>
+							%{-- <g:link class="list-group-item" action="timbrar" id="${nominaPorEmpleadoInstance.id}" >
+								<span class="glyphicon glyphicon-screenshot"></span> Timbrar
+							</g:link> --}%
+						</g:if>
 
+						<g:if test="${nominaPorEmpleadoInstance.cfdi && !nominaPorEmpleadoInstance.cfdi.uuid}">
 							<g:link class="list-group-item" action="timbrar" id="${nominaPorEmpleadoInstance.id}" >
 								<span class="glyphicon glyphicon-screenshot"></span> Timbrar
 							</g:link>
 						</g:if>
+						%{-- <g:else >
+							<g:link class="list-group-item" action="timbrar" id="${nominaPorEmpleadoInstance.id}" >
+								<span class="glyphicon glyphicon-screenshot"></span> Timbrar
+							</g:link>
+						</g:else> --}%
 						
 						<g:link class="list-group-item" 
 							controller="reciboDeNomina" 
@@ -141,6 +176,19 @@
 						</g:link>							
 						
 						<g:if test="${nominaPorEmpleadoInstance.cfdi}">
+												
+						    <g:link class="list-group-item" action="mostrarXml"  id="${nominaPorEmpleadoInstance.cfdi.id}">
+							   <span class="glyphicon glyphicon-eye-open"></span> Mostrar XML
+						    </g:link>
+
+						    <g:link class="list-group-item" action="descargarXml"  id="${nominaPorEmpleadoInstance.cfdi.id}">
+							    <span class="glyphicon glyphicon-download"></span> Descargar XML
+						    </g:link>
+						
+							
+						</g:if>
+
+						<g:if test="${nominaPorEmpleadoInstance.cfdi && nominaPorEmpleadoInstance.cfdi.uuid}">
 							<g:jasperReport
 									controller="reciboDeNomina"
 								action="impresionDirecta"
@@ -154,17 +202,11 @@
 							<span class="glyphicon glyphicon-ban-circle"></span> Cancelar
 						    </g:link>
 							
-							<g:link class="list-group-item" action="descargarXml"  id="${nominaPorEmpleadoInstance.cfdi.id}">
-							    <span class="glyphicon glyphicon-download"></span> Descargar XML
-						    </g:link>
-												
-						    <g:link class="list-group-item" action="mostrarXml"  id="${nominaPorEmpleadoInstance.cfdi.id}">
-							   <span class="glyphicon glyphicon-eye-open"></span> Mostrar
-						    </g:link>
+							
 						
-						<a: href="#" class="list-group-item">
-							<span class="glyphicon glyphicon-envelope"></span> Enviar mail
-						</a:>
+							<a: href="#" class="list-group-item">
+								<span class="glyphicon glyphicon-envelope"></span> Enviar mail
+							</a:>
 						</g:if>
 						
 						</div>
@@ -204,12 +246,21 @@
 							<td><lx:moneyFormat number="${nominaPorEmpleadoInstance?.subsidioEmpleoAplicado}"/></td>
 							<td>Total</td>
 							<td><lx:moneyFormat number="${nominaPorEmpleadoInstance?.total}"/></td>
+							
+						</tr>
+						<tr>
+							
 						</tr>
 						<tr>
 							<td>Antigüedad</td>
 							<td><g:formatNumber number="${nominaPorEmpleadoInstance?.antiguedadEnSemanas}" format="###" /></td>
-							<td></td>
-							<td></td>
+							<%--
+							<g:if test="${nominaPorEmpleadoInstance.finiquito}">
+								
+							</g:if>
+							--%>
+							<td>Finiquito</td>
+							<td>${nominaPorEmpleadoInstance.finiquito}</td>
 						</tr>
 						
 					</tbody>

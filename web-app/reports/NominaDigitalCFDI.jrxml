@@ -233,7 +233,7 @@
 					<bottomPen lineWidth="0.5" lineStyle="Solid"/>
 					<rightPen lineWidth="0.5" lineStyle="Solid"/>
 </box>
-					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None">
+					<textElement textAlignment="Center" verticalAlignment="Top" rotation="None">
 						<font fontName="Arial" pdfFontName="Helvetica" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$P{EMISOR_DIRECCION}]]></textFieldExpression>
@@ -379,7 +379,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font pdfFontName="Times-Roman" size="7"/>
 					</textElement>
-				<text><![CDATA[CONDICIONES DE PAGO]]></text>
+				<text><![CDATA[FORMA DE PAGO]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
@@ -750,7 +750,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font pdfFontName="Times-Roman" size="7"/>
 					</textElement>
-				<text><![CDATA[DIRECCION]]></text>
+				<text><![CDATA[EXPEDIDO EN]]></text>
 				</staticText>
 				<staticText>
 					<reportElement

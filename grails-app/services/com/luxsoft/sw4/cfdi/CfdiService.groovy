@@ -1,46 +1,28 @@
 package com.luxsoft.sw4.cfdi
 
-import java.math.RoundingMode;
-import java.util.List;
+import java.math.RoundingMode
+import grails.transaction.Transactional
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.xmlbeans.XmlCursor;
+import org.apache.xmlbeans.XmlCursor
 import org.apache.xmlbeans.XmlObject
 import org.apache.xmlbeans.XmlOptions
 import org.apache.xmlbeans.XmlValidationError
-import org.bouncycastle.util.encoders.Base64
 
 import com.luxsoft.sw4.cfdi.CFDIUtils
 import com.luxsoft.sw4.cfdi.Cfdi
 import com.luxsoft.sw4.cfdi.CfdiException
 import com.luxsoft.sw4.cfdi.Folio
-import com.luxsoft.sw4.rh.NominaPorEmpleado;
+import com.luxsoft.sw4.rh.NominaPorEmpleado
+import com.luxsoft.sw4.cfdi.nomina12.NominaUtils
 
 import mx.gob.sat.cfd.x3.ComprobanteDocument
 import mx.gob.sat.cfd.x3.ComprobanteDocument.Comprobante
-import mx.gob.sat.cfd.x3.ComprobanteDocument.Comprobante.Complemento
-import mx.gob.sat.cfd.x3.ComprobanteDocument.Comprobante.Conceptos
-import mx.gob.sat.cfd.x3.ComprobanteDocument.Comprobante.Conceptos.Concepto
-import mx.gob.sat.cfd.x3.ComprobanteDocument.Comprobante.Emisor
-import mx.gob.sat.cfd.x3.ComprobanteDocument.Comprobante.Impuestos;
-import mx.gob.sat.cfd.x3.ComprobanteDocument.Comprobante.Impuestos.Retenciones;
-import mx.gob.sat.cfd.x3.ComprobanteDocument.Comprobante.Impuestos.Retenciones.Retencion;
-import mx.gob.sat.cfd.x3.ComprobanteDocument.Comprobante.Impuestos.Retenciones.Retencion.Impuesto;
-import mx.gob.sat.cfd.x3.ComprobanteDocument.Comprobante.Receptor
-import mx.gob.sat.cfd.x3.ComprobanteDocument.Comprobante.TipoDeComprobante
-import mx.gob.sat.nomina.NominaDocument
-import mx.gob.sat.nomina.NominaDocument.Nomina
-import mx.gob.sat.nomina.NominaDocument.Nomina.Deducciones
-import mx.gob.sat.nomina.NominaDocument.Nomina.Deducciones.Deduccion
-import mx.gob.sat.nomina.NominaDocument.Nomina.Incapacidades
-import mx.gob.sat.nomina.NominaDocument.Nomina.Incapacidades.Incapacidad
-import mx.gob.sat.nomina.NominaDocument.Nomina.Percepciones
-import mx.gob.sat.nomina.NominaDocument.Nomina.Percepciones.Percepcion
-import grails.transaction.Transactional
 
 import com.edicom.ediwinws.cfdi.client.CfdiClient
-import org.bouncycastle.util.encoders.Base64
 import com.edicom.ediwinws.service.cfdi.CancelaResponse
+
+import org.bouncycastle.util.encoders.Base64
+
 
 @Transactional
 class CfdiService {
@@ -48,217 +30,56 @@ class CfdiService {
 	def cfdiSellador
 	
 	def cfdiTimbrador
-	
-	Cfdi generarComprobante(def nominaEmpleadoId) {
-		
-		def fecha=new Date()
-		//def fecha=Date.parse('dd/MM/yyy hh:mm:ss','30/06/2014 19:'+new Date().format('mm:ss'))
-		def nominaEmpleado=NominaPorEmpleado.get(nominaEmpleadoId)
-		assert nominaEmpleado,'No existe la nomina empleado: '+nominaEmpleadoId
-		assert nominaEmpleado.cfdi==null,'Ya esta timbrada la nomina para el empleado: '+nominaEmpleado
-		
-		def empresa=nominaEmpleado.nomina.empresa
-		def empleado=nominaEmpleado.empleado
-		Folio folio=Folio.findOrSaveWhere(empresa:empresa,serie:'NOMINA_CFDI')
-		ComprobanteDocument document=ComprobanteDocument.Factory.newInstance()
-		Comprobante comprobante=document.addNewComprobante()
-		CFDIUtils.depurar(document)
-		  comprobante.serie='NOMINA_CFDI'
-		  comprobante.folio=folio.next().toString()
-		  comprobante.setVersion("3.2")
-		  comprobante.setFecha(CFDIUtils.toXmlDate(fecha).getCalendarValue())
-		  comprobante.setFormaDePago("PAGO EN UNA SOLA EXHIBICION")
-		  comprobante.setMetodoDePago(nominaEmpleado.nomina.formaDePago.equals('CHEQUE')?'02':'03')
-		  comprobante.setMoneda(Currency.getInstance(new Locale("es","mx")).currencyCode)
-		  comprobante.setTipoCambio("1.0")
-		
-		comprobante.setTipoDeComprobante(TipoDeComprobante.EGRESO)
-		comprobante.setLugarExpedicion(empresa.direccion.pais)
-		comprobante.setNoCertificado(empresa.numeroDeCertificado)
-		byte[] encodedCert=Base64.encode(empresa.getCertificado().getEncoded())
-		comprobante.setCertificado(new String(encodedCert))
-		  //comprobante.addNewEmisor()
-		Emisor emisor=CFDIUtils.registrarEmisor(comprobante, empresa)
-		Receptor receptor=CFDIUtils.registrarReceptor(comprobante, nominaEmpleado.empleado)
-		
-		
-		
-	  
-		//Conceptos
-		Conceptos conceptos=comprobante.addNewConceptos()
-		  Concepto c=conceptos.addNewConcepto();
-		  c.setCantidad(1);
-		  c.setUnidad("Servicio");
-		  c.setNoIdentificacion('CARGO');
-		  c.setDescripcion('Pago de Nomina');
-		  c.setValorUnitario(nominaEmpleado.percepciones);
-		  c.setImporte(nominaEmpleado.percepciones);
-		
-		//Complemento nomina
-		NominaDocument nominaDocto=NominaDocument.Factory.newInstance()
-		Nomina nomina=nominaDocto.addNewNomina()
-		
-		 nomina.version="1.1"
-		  
-		  nomina.with{
-			registroPatronal=empresa.registroPatronal
-			numEmpleado=empleado.perfil.numeroDeTrabajador
-			CURP=empleado.curp
-			tipoRegimen=empleado.perfil.regimenContratacion.clave
-			numSeguridadSocial=empleado.seguridadSocial.numero
-			setAntiguedad(nominaEmpleado.antiguedad)
-			setFechaInicioRelLaboral(CFDIUtils.toXmlDate(empleado.alta).getCalendarValue())
-			setFechaPago(CFDIUtils.toXmlDate(nominaEmpleado.nomina.pago).getCalendarValue())
-			setFechaInicialPago(CFDIUtils.toXmlDate(nominaEmpleado.nomina.periodo.fechaInicial).getCalendarValue())
-			setFechaFinalPago(CFDIUtils.toXmlDate(nominaEmpleado.nomina.periodo.fechaFinal).getCalendarValue())			
-			
-			//setNumDiasPagados(nominaEmpleado.nomina.diasPagados as BigDecimal)
-		/*	if(nominaEmpleado?.asistencia?.diasTrabajados>0){
-				setNumDiasPagados((nominaEmpleado.asistencia.diasTrabajados+ nominaEmpleado.vacaciones) as BigDecimal)
-			}else{
-				setNumDiasPagados(nominaEmpleado.diasDelPeriodo as BigDecimal)
-			}	*/		
-			
-			def diasTrabajados=0
-			def faltas=0
-			
-			if(nominaEmpleado.asistencia){
-				if(!nominaEmpleado.empleado.controlDeAsistencia){
-					diasTrabajados= nominaEmpleado.diasTrabajados+nominaEmpleado.vacaciones-(nominaEmpleado.asistencia.faltasManuales+(nominaEmpleado.asistencia.faltasManuales*0.167)+ nominaEmpleado.incapacidades)
-				}else{
-					if(nominaEmpleado.empleado.alta<=nominaEmpleado.asistencia.calendarioDet.inicio){
-					  //diasTrabajados=nominaEmpleado.diasDelPeriodo-(nominaEmpleado.faltas+ nominaEmpleado.fraccionDescanso + nominaEmpleado.incapacidades)
-					  diasTrabajados=nominaEmpleado.diasTrabajados+nominaEmpleado.vacaciones				 
-				  	}else{
-				  		diasTrabajados=nominaEmpleado.diasTrabajados+nominaEmpleado.vacaciones+nominaEmpleado.asistencia.paternidad //-(nominaEmpleado.asistencia.faltasManuales+nominaEmpleado.incapacidades)
-				  	}
-				}		
-     		}
-			 def diasLab=new BigDecimal(diasTrabajados).setScale(6, RoundingMode.HALF_EVEN)
-			setNumDiasPagados(diasLab)
-			
-			setDepartamento(empleado.perfil.departamento.clave)
-			//setBanco(empleado.salario.banco?.clave)
-			setTipoJornada(empleado.perfil.jornada)
-			tipoContrato=empleado.perfil.tipoDeContrato
-			setPeriodicidadPago(empleado.salario.periodicidad)
-			setRiesgoPuesto(empleado.perfil?.riesgoPuesto?.clave)
-			setSalarioBaseCotApor(nominaEmpleado.salarioDiarioBase)
-			setSalarioDiarioIntegrado(nominaEmpleado.salarioDiarioIntegrado)
-			puesto=empleado.perfil.puesto?.clave
-			//
-			if(empleado?.salario?.banco?.clave)
-				//banco=empleado.salario.banco.clave
-				setBanco(empleado.salario.banco.clave)
-				
-			//setBanco(?:null)
-		  }
-		// Percepciones
-		Percepciones per=nomina.addNewPercepciones()
-		per.totalGravado=nominaEmpleado.percepcionesGravadas
-		per.totalExento=nominaEmpleado.percepcionesExcentas
-		nominaEmpleado.conceptos.each{
-			if(it.concepto.tipo=='PERCEPCION') {
-			  Percepcion pp=per.addNewPercepcion()
-			  pp.setTipoPercepcion(StringUtils.leftPad(it.concepto.claveSat.toString(), 3, '0'))
-			  pp.setClave(it.concepto.clave)
-			  pp.setConcepto(it.concepto.descripcion)
-			  pp.setImporteGravado(it.importeGravado)
-			  pp.setImporteExento(it.importeExcento)
-			}
-		  }
-		
-		//Deducciones
-		if(nominaEmpleado.deducciones){
-			Deducciones ded=nomina.addNewDeducciones()
-			ded.totalGravado=nominaEmpleado.deduccionesGravadas
-			ded.totalExento=nominaEmpleado.totalExcento
-			
-			nominaEmpleado.conceptos.each{
-			  if(it.concepto.tipo=='DEDUCCION') {
-				Deduccion dd=ded.addNewDeduccion()
-				dd.setTipoDeduccion(StringUtils.leftPad(it.concepto.claveSat.toString(), 3, '0'))
-				dd.setClave(it.concepto.clave)
-				dd.setConcepto(it.concepto.descripcion)
-				dd.setImporteGravado(it.importeGravado)
-				dd.setImporteExento(it.importeExcento)
-			  }
-			}
-		} 
-		
-		
-		Complemento complemento=comprobante.addNewComplemento()
-		def cursor=complemento.newCursor()
-		cursor.toEndToken()
-		def cn=nomina.newCursor()
-		cn.moveXml(cursor)
-		
-		
-		
-		//Importes
-		comprobante.setSubTotal(nominaEmpleado.percepciones)
-		comprobante.setDescuento(nominaEmpleado.conceptos.sum {
-			def vv=0.0
-			if(it.concepto.tipo=='DEDUCCION' && it.concepto.claveSat!=2) {
-			  vv+=it.importeGravado+it.importeExcento
-			}
-			return vv
-		})
-		comprobante.setMotivoDescuento("Deducciones nómina")
-		//Calculamos el total
-		def retenciones=nominaEmpleado.conceptos.sum {
-			def vv=0.0
-			if(it.concepto.tipo=='DEDUCCION' && it.concepto.claveSat==2) {
-			  vv+=it.importeGravado+it.importeExcento
-			}
-			return vv
-		}
-		if(retenciones==null) 
-			retenciones=0.0
-		if(comprobante.descuento==null)
-			comprobante.descuento=0.0
-		if(comprobante.subTotal==null)
-			comprobante.subTotal=0.0
-		comprobante.setTotal(comprobante.subTotal-comprobante.descuento-retenciones)
-		//Impuestos
-		Impuestos impuestos=comprobante.addNewImpuestos()
-		impuestos.setTotalImpuestosRetenidos(retenciones)
-		
-		Retenciones retNod=impuestos.addNewRetenciones()
-		Retencion ret=retNod.addNewRetencion()
-		ret.importe=retenciones
-		ret.impuesto=Impuesto.ISR
-		
-		comprobante.sello=cfdiSellador.sellar(empresa.privateKey,document)
-		
-		 XmlOptions options = new XmlOptions()
-		  options.setCharacterEncoding("UTF-8")
-		  options.put( XmlOptions.SAVE_INNER )
-		  options.put( XmlOptions.SAVE_PRETTY_PRINT )
-		  options.put( XmlOptions.SAVE_AGGRESSIVE_NAMESPACES )
-		  options.put( XmlOptions.SAVE_USE_DEFAULT_NAMESPACE )
-		  options.put(XmlOptions.SAVE_NAMESPACES_FIRST)
-		  ByteArrayOutputStream os=new ByteArrayOutputStream()
-		  document.save(os, options)
-	  
-		
-		
-		def cfdi=new Cfdi(comprobante)
-		cfdi.xml=os.toByteArray()
-		cfdi.setXmlName("$cfdi.receptorRfc-$cfdi.serie-$cfdi.folio"+".xml")
-		
-		validarDocumento(document)
-		
-		
-		cfdi=cfdiTimbrador.timbrar(cfdi,"PAP830101CR3", "yqjvqfofb")
-		
-		nominaEmpleado.cfdi=cfdi
-		//println cfdi.xmlName
+
+	def cfdiBuilder 
+
+	Cfdi generarCfdi(NominaPorEmpleado ne) {
+
+		assert !ne.cfdi , "NominaPorEmpleado ${ne.id} ya tiene  gnerado un CFDI"
+
+		ComprobanteDocument document = generarXml(ne)
+		Comprobante comprobante = document.getComprobante()
+
+		def cfdi = new Cfdi(comprobante)
+		salvarXml(cfdi, document)
+
+		cfdi.save failOnError:true, flush:true
+		ne.cfdi = cfdi
+		ne.save()
 		return cfdi
-		
 	}
 
-    
+	Cfdi regenerarCfdi(NominaPorEmpleado ne){
+		if(ne.cfdi == null) return generarCfdi(ne)
+		assert !ne.cfdi.uuid, "NominaPorEmpleado ${ne.id} ya timbrada: ${ne.cfdi.uuid}"
+		ne.cfdi.delete flush:true
+		return generarCfdi(ne);
+	}
+
+	ComprobanteDocument generarXml(NominaPorEmpleado ne){
+		ComprobanteDocument document = cfdiBuilder.build(ne)
+		Comprobante comprobante = document.getComprobante()
+		comprobante.folio = ne.id.toString()
+		comprobante.serie = 'NOMINA12'
+		comprobante.sello=cfdiSellador.sellar(ne.nomina.empresa.privateKey,document)
+		return document
+	}
+
+	Cfdi salvarXml(Cfdi cfdi, ComprobanteDocument document){
+
+		ByteArrayOutputStream os=new ByteArrayOutputStream()
+    	document.save(os, NominaUtils.getXmlOptions())
+    	cfdi.xml = os.toByteArray()
+		cfdi.setXmlName("$cfdi.receptorRfc-$cfdi.serie-$cfdi.folio"+".xml")
+		return cfdi;
+	}
+
+	Cfdi timbrar(NominaPorEmpleado ne) {
+		assert ne.cfdi , "No se ha generado archivo XML para timbrar la nomina ${ne.id} de ${ne.empleado} "
+		assert ne.cfdi.uuid == null , "La nomina ${ne.id} de ${ne.empleado} ya esta timbrada UUID: ${ne.cfdi.uuid}"
+		def cfdi = cfdiTimbrador.timbrar(ne.cfdi,"PAP830101CR3", "yqjvqfofb")
+		return cfdi
+	}
 	
 	void validarDocumento(ComprobanteDocument document) {
 		List<XmlValidationError> errores=findErrors(document);
@@ -272,24 +93,22 @@ class CfdiService {
 	}
 	
 	List findErrors(final XmlObject node){
+		println 'Validando....' + node
 		final XmlOptions options=new XmlOptions();
 		final List errors=new ArrayList();
 		options.setErrorListener(errors);
 		node.validate(options);
-		return errors;
-		
+		return errors
 	}
-
 
 	@Transactional
 	def CancelacionDeCfdi cancelar(Cfdi cfdi,String comentario){
 
 		CancelacionDeCfdi cancel=new CancelacionDeCfdi()
 		cancel.cfdi=cfdi
-		
 
 		def empresa=Empresa.first()
-		//byte[] pfxData=empresa.certificadoDigitalPfx
+		
 		byte[] pfxData=empresa.certificadoDigitalPfx //grailsApplication.mainContext.getResource("/WEB-INF/sat/gasoc.pfx").file.readBytes()
 		String[] uuids=[cfdi.uuid]
 		def client=new CfdiClient()
@@ -301,11 +120,9 @@ class CfdiService {
 				, pfxData
 				, empresa.passwordPfx);
 		String msg=res.getText()
-		println 'Message: '+ new String(msg)
+		log.info('Message: ' + new String(msg))
 		//cancel.message=Base64.decode(msg)
 		String aka=res.getAck()
-		//println 'Aka:'+aka
-
 		cancel.aka=Base64.decode(aka.getBytes())
 		cancel.save failOnError:true
 

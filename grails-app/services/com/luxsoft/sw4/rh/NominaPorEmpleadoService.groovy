@@ -14,6 +14,10 @@ class NominaPorEmpleadoService {
 	def static CONCEPTOS_BASICOS=['P001','D001','D002']
 	
 	def procesadorDeNomina
+
+	def procesadorDeNominaFiniquito
+
+	def procesadorDeNominaLiquidacion
 	
 	//def prestamoService
 	
@@ -27,6 +31,13 @@ class NominaPorEmpleadoService {
 			def aguinaldo=Aguinaldo.findByNominaPorEmpleado(ne)
 			aguinaldo.nominaPorEmpleado=null
 			//aguinaldo.save flush:true
+		}
+		if( nomina.tipo == 'LIQUIDACION') {
+			def finiquito = Finiquito.where {neFiniquito == ne || neLiquidacion == ne }.find()
+			if(finiquito) {
+				finiquito.neFiniquito = null
+				finiquito.neLiquidacion = null
+			}
 		}
 		nomina.removeFromPartidas(ne)
 		nomina.save flush:true		
@@ -105,6 +116,106 @@ class NominaPorEmpleadoService {
 		togo.each{det->
 			ne.removeFromConceptos(det)
 		}
+		return ne
+	}
+
+	@Transactional
+	def actualizarFiniquito(NominaPorEmpleado ne) {
+		ne.conceptos.clear()
+
+		def INVALIDAS = ['P028','P026']
+		def finiquito = Finiquito.where {neFiniquito == ne}.find()
+		assert finiquito, "No se ha asignado el  finiquito para ${ne.empleado}"
+		
+		ne.diasTrabajados = finiquito.diasPorPagar
+		ne.diasDelPeriodo=ne.nomina.getDiasPagados()
+
+		def percepciones = finiquito.partidas.findAll {
+			it.concepto.tipo == 'PERCEPCION' &&  !INVALIDAS.contains(it.concepto.clave)
+		}.sort {it.manual}
+
+		percepciones.each { det ->
+			log.info( "Agregando:  ${det.tipo} ${det.concepto}" )
+				def d2 = new NominaPorEmpleadoDet(concepto:det.concepto
+						,importeGravado:det.importeGravado
+						,importeExcento:det.importeExcento
+						,comentario:'PENDIENTE')
+				if(d2.total>0)
+					ne.addToConceptos(d2)
+		}
+
+		procesadorDeNominaFiniquito.reglas.each {
+			it.procesar(ne)
+		}
+
+		finiquito.partidas.findAll {it.concepto.tipo == 'DEDUCCION' && !it.liquidacion}.each{ det->
+			def d2 = new NominaPorEmpleadoDet(concepto:det.concepto
+					,importeGravado:det.importeGravado
+					,importeExcento:det.importeExcento
+					,comentario:'PENDIENTE')
+			if(d2.total>0)
+				ne.addToConceptos(d2)
+		}
+
+		
+		ne.save failOnError:true, flush:true
+		return ne
+	}
+
+	@Transactional
+	def asignarFiniquito(NominaPorEmpleado ne) {
+		def finiquito = Finiquito.where {
+			empleado == ne.empleado && neFiniquito == null
+		}.find()
+
+		println "----------  "+finiquito.empleado+"-----"+finiquito.id
+
+		assert finiquito, "No se ha registrado el finiquito para ${ne.empleado}"
+		
+		
+		ne.finiquito = true
+		finiquito.neFiniquito = ne
+		
+		finiquito.save flush: true
+		ne.save flush: true
+		return ne
+	}
+
+	@Transactional
+	def actualizarLiquidacion(NominaPorEmpleado ne){
+		ne.conceptos.clear()
+		def finiquito = Finiquito.where {neLiquidacion == ne}.find()
+		assert finiquito, "No se ha asignado el  finiquito para ${ne.empleado}"
+		
+		def percepciones = finiquito.partidas.findAll {
+			it.concepto.tipo == 'PERCEPCION' &&  it.liquidacion
+		}
+
+		def deducciones = finiquito.partidas.findAll {
+			it.concepto.tipo == 'DEDUCCION' && it.liquidacion
+		}
+		if (deducciones)
+			percepciones << deducciones
+
+		ne.diasTrabajados = finiquito.diasPorPagar
+		ne.diasDelPeriodo = finiquito.diasPorPagar
+		ne.salarioDiarioBase = finiquito.salario
+		ne.salarioDiarioIntegrado = finiquito.salarioDiarioIntegrado
+		ne.antiguedadEnSemanas = finiquito.antiguedad
+
+		percepciones.each { det ->
+			log.info( "Agregando:  ${det.tipo} ${det.concepto}" )
+				def d2 = new NominaPorEmpleadoDet(concepto:det.concepto
+						,importeGravado:det.importeGravado
+						,importeExcento:det.importeExcento
+						,comentario:'PENDIENTE')
+				if(d2.total>0)
+					ne.addToConceptos(d2)
+		}
+		procesadorDeNominaLiquidacion.reglas.each {
+			it.procesar(ne)
+		}
+		ne.save failOnError:true, flush:true
 		return ne
 	}
 	

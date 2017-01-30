@@ -22,6 +22,13 @@ class NominaService {
 	def otraDeduccionService
 	
 	def calculoAnualService
+
+	@Transactional
+	def save(Nomina nomina) {
+		def xmlPendiente = nomina.partidas.find{it.cfdi==null}
+		nomina.status = xmlPendiente == null ? 'CERRADA' : 'PENDIENTE'
+		nomina.save failOnError: true, flush:true
+	}
 	
 	@Transactional
 	def eliminarNomina(Long id){
@@ -45,32 +52,7 @@ class NominaService {
 		nomina.delete()
 	}
 	
-	/*@Transactional
-	def generarAguinaldo(Long calendarioDetId,String formaDePago){
-		log.info 'Generando nomina de aguinaldo'
-		def calendarioDet=CalendarioDet.get(calendarioDetId)
-		def periodicidad=calendarioDet.calendario.tipo=='SEMANA'?'SEMANAL':'QUINCENAL'
-		Empresa empresa=Empresa.first()
-		def nomina=Nomina.find{calendarioDet==calendarioDet && tipo==tipo && formaDePago==formaDePago}
-		if(nomina){
-			throw new NominaException(message:'Nomina ya generada calendario: '+calendarioDet)
-		}
-		nomina=new Nomina(tipo:'AGUINALDO',
-			periodicidad:periodicidad,
-			folio:calendarioDet.folio,
-			status:"PENDIENTE",
-			periodo:periodo,
-			calendarioDet:calendarioDet,
-			ejercicio:calendarioDet.calendario.ejercicio)
-		nomina.pago=calendarioDet.fechaDePago
-		nomina.diaDePago=calendarioDet.fechaDePago.format('EEEE')
-		nomina.formaDePago=formaDePago
-		nomina.empresa=empresa
-		nomina.total=0.0
-		generarPartidas nomina
-		nomina.save(failOnError:true)
-		return nomina
-	}*/
+	
 
 	@Transactional
 	def generar(Long calendarioDetId,String tipo,String formaDePago,String periodicidad){
@@ -201,16 +183,16 @@ class NominaService {
 	}
 	
 	def timbrar(NominaPorEmpleado ne) {
-		if(ne.cfdi==null && ne.getPercepciones()>0){
-			log.info 'Timbrando Ne id:'+ne.id
-			try{
-				cfdiService.generarComprobante(ne.id)
-			}catch(Exception ex){
-				ex.printStackTrace()
-				log.error ex
-			}
-			return ne
-		}
+		// if(ne.cfdi==null && ne.getPercepciones()>0){
+		// 	log.info 'Timbrando Ne id:'+ne.id
+		// 	try{
+		// 		cfdiService.generarComprobante(ne.id)
+		// 	}catch(Exception ex){
+		// 		ex.printStackTrace()
+		// 		log.error ex
+		// 	}
+		// 	return ne
+		// }
 	}
 	
 	def timbrarNomina(Long nominaId) {
@@ -537,6 +519,13 @@ class NominaService {
 			
 		}
 	}
+
+	def actualizarSaldos(NominaPorEmpleado ne) {
+		actualizarOtrasDeducciones(ne)
+		actualizarPrestamo(ne)
+		actualizarCalculoAnual(ne)
+		actualizarVacaciones(ne)
+	}
 	
 	def cancelarSaldos(Nomina nomina){
 		nomina.partidas.each{ne->
@@ -777,6 +766,68 @@ class NominaService {
 		}
 		return nomina
 	}
+
+	def registrarLiquidacion(Nomina nomina){
+		assert nomina.tipo == 'LIQUIDACION', "No es nomina de tipo liquidacion"
+		def found = nomina.partidas.find {it.cfdi}.find()
+		assert !found, "La nómina ya tiene por lo menos un cfdi generado: ${found.id} "
+
+		def existentes = Finiquito.findAll("from Finiquito f where f.neLiquidacion.nomina = ?", [nomina])
+		existentes.each { finiquito ->
+			finiquito.nominaPorEmpleado = null
+			finiquito.save flush:true
+		}
+		nomina.partidas.clear()
+		nomina.status = 'PENDIENTE'
+		nomina.save flush:true
+
+		def finiquitos = Finiquito.findAll (
+				"from Finiquito a where a.neLiquidacion = null and a.empleado.salario.periodicidad=?  "
+				,[nomina.periodicidad])
+
+		int orden = 1;
+		finiquitos.each {
+			log.info('Generando liquidacion para: ' + it.empleado)
+			def empleado=it.empleado
+			def ne=new NominaPorEmpleado(
+			empleado:empleado,
+			ubicacion:empleado.perfil.ubicacion,
+			antiguedadEnSemanas:0,
+			nomina:nomina,
+			vacaciones:0,
+			fraccionDescanso:0,
+			orden: orden
+			)
+			
+			
+			/*
+			ne.antiguedadEnSemanas = ne.getAntiguedad()
+			ne.salarioDiarioBase = empleado.salario.salarioDiario
+			ne.salarioDiarioIntegrado = empleado.salario.salarioDiarioIntegrado
+			 
+			it.partidas.each { det ->
+				if(det.finiquito == true){
+					log.info( "Agregando:  ${det.tipo} ${det.concepto}" )
+					def d2=new NominaPorEmpleadoDet(concepto:det.concepto
+							,importeGravado:det.importeGravado
+							,importeExcento:det.importeExcento
+							,comentario:'PENDIENTE')
+					ne.addToConceptos(d2)
+				}
+				
+			}
+			*/
+			nomina.addToPartidas(ne)
+			it.neLiquidacion = ne
+			
+		}
+
+		nomina.save failOnError:true, flush:true
+		log.info(' Partidas AS: ' + nomina.partidas.size())
+		//ordenar(nomina)
+		return nomina
+	}
+
 	
 }
 

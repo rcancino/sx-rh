@@ -46,9 +46,7 @@ class SubsidioEmpleo {
 				)
 			res.add(val)
 		}
-		res.each{
-			println it
-		}
+		
 		return res
 	}
 	

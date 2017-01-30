@@ -177,7 +177,7 @@ log4j.main = {
         off 'com.luxsoft.sw4.rh.ProcesadorDeSueldo'
         off 'com.luxsoft.sw4.rh.procesadores.ProcesadorDeChecadas'
         off 'com.luxsoft.sw4.rh.procesadores.AjusteMensualISR'
-        off 'com.luxsoft.sw4.rh.ProcesadorSeguroSocial'
+        debug 'com.luxsoft.sw4.rh.ProcesadorSeguroSocial'
         off 'com.luxsoft.sw4.rh.ProcesadorDeISTP'
         off 'com.luxsoft.sw4.rh.ProcesadorDeVacaciones'
         off 'com.luxsoft.sw4.rh.ProcesadorDePrestamosPersonales'
@@ -185,6 +185,7 @@ log4j.main = {
         off 'com.luxsoft.sw4.rh.ProcesadorDePensionAlimenticia'
         off 'com.luxsoft.sw4.rh.ProcesadorDeOtrasDeducciones'
         info 'com.luxsoft.sw4.rh.procesadores.AjusteIsr'
+        info 'com.luxsoft.sw4.rh.finiquito'
         off 'com.luxsoft.sw4.rh.ExportadorDim'
         debug 'com.luxsoft.sw4.rh.procesadores.ProcesadorDeChecadasFaltantes'
 

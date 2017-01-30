@@ -21,6 +21,8 @@ class NominaPorEmpleadoController {
 	def ajusteIsr
 
 	def calculoAnualService
+
+	def cfdiService
 	
 
     def index() { }
@@ -126,13 +128,26 @@ class NominaPorEmpleadoController {
 		
 	}
 
+	def asignarFiniquito(NominaPorEmpleado ne){
+		if(ne.finiquito)
+			ne = nominaPorEmpleadoService.actualizarFiniquito(ne)
+		else
+			ne = nominaPorEmpleadoService.asignarFiniquito(ne)
+		flash.message = "Finiquito"
+		redirect action: 'edit', id: ne.id
+	}
+
+	def actualizarLiquidacion( NominaPorEmpleado ne ){
+		ne = nominaPorEmpleadoService.actualizarLiquidacion(ne)
+		redirect action: 'edit', id: ne.id
+		return
+		
+	}
+
 	def actualizarFirmaRecibo(Long id){
-
-		println params.reciboFirmado
-
 		def ne=nominaPorEmpleadoService.actualizarFirmaRecibo(id,params.reciboFirmado)
 		redirect controller:'nomina',action:'show',params:[id:ne.nomina.id]
-			return
+		return
 	}
 	
 	def depurar(NominaPorEmpleado ne){
@@ -150,22 +165,24 @@ class NominaPorEmpleadoController {
 			'*'{ render status: NOT_FOUND }
 		}
 	}
+
+	def generarCfdi(NominaPorEmpleado ne) {
+		def cfdi = cfdiService.generarCfdi(ne)
+		nominaService.actualizarSaldos(ne)
+		flash.message = "Cfdi ${cfdi.id} generado para nomina por empleado: ${ne.id} "
+		redirect action:'edit', id: ne.id
+	}
 	
-	def timbrar(Long id){
-		def ne=NominaPorEmpleado.get(id)
-		if(!ne){
-			flash.message="No existe la nomina por empleado "+id
-			redirect action:'edit',params:[id:id]
-		}
-		ne=nominaService.timbrar(ne)
-		redirect action:'edit',params:[id:ne.id]
+	def timbrar(NominaPorEmpleado ne){
+		cfdiService.timbrar(ne)
+		flash.message=" Nomina de empleado ${ne.empleado} timbrara exitosamente"
+		redirect action:'edit', id: ne.id
 	}
 	
 	
 	def informacionDeConcepto(Long id) {
-		
+		println "Informacion de concepto ${id}"
 		def  neDet=NominaPorEmpleadoDet.get(id)
-		//println 'Localizando informacion para el calculo del concepto: '+neDet.concepto
 		def ruleModel=conceptoDeNominaRuleResolver.getModel(neDet.concepto)
 
 		if(ruleModel) {
@@ -228,17 +245,20 @@ class NominaPorEmpleadoController {
 	
 	@Transactional
 	def ajusteMensualIsr(NominaPorEmpleado ne){
-		
-		
 		def found=IsptMensual.findByNominaPorEmpleado(ne)
+		
 		if(!found){
 			ajusteIsr.ajusteMensual(ne)
-			nominaPorEmpleadoService.actualizarNominaPorEmpleado(ne.id)
+			if(ne.nomina.tipo == 'LIQUIDACION'){
+				ne = nominaPorEmpleadoService.actualizarLiquidacion(ne)
+			} else if(ne.finiquito){
+				ne = nominaPorEmpleadoService.actualizarFiniquito(ne)
+			}else {
+				nominaPorEmpleadoService.actualizarNominaPorEmpleado(ne.id)
+			}
 		}else{
-			
 			flash.message="Nomina ya ajustada para ISTP mensual"
 		}
-		
 		redirect action:'edit',params:[id:ne.id]
 	}
 	
@@ -247,8 +267,14 @@ class NominaPorEmpleadoController {
 		def found=IsptMensual.findByNominaPorEmpleado(ne)
 		if(found){
 			found.delete flush:true
+			if(ne.nomina.tipo == 'LIQUIDACION'){
+				ne = nominaPorEmpleadoService.actualizarLiquidacion(ne)
+			} else if(ne.finiquito){
+				ne = nominaPorEmpleadoService.actualizarFiniquito(ne)
+			}else {
+				nominaPorEmpleadoService.actualizarNominaPorEmpleado(ne.id)
+			}
 			
-			nominaPorEmpleadoService.actualizarNominaPorEmpleado(ne.id)
 			flash.message="Ajuste mensual ISTP eliminado"
 		}
 		redirect action:'edit',params:[id:ne.id]
@@ -296,17 +322,10 @@ class NominaPorEmpleadoController {
 	}
 	
 	def descargarXml(Cfdi cfdi){
-	
-	//	log.info 'Descargando archivo xml: '+cfdi
-		//log.info 'Index action....'
-		//def file=new
-		//render(contentType: "text/xml", encoding: "UTF-8",file)
-		
 		response.setContentType("application/octet-stream")
 		response.setHeader("Content-disposition", "filename=${cfdi.uuid}")
 		response.outputStream << cfdi.xml
 		return
-		
 	}
 
 	def mostrarXml(Cfdi cfdi){

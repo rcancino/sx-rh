@@ -11,7 +11,8 @@ class Finiquito {
 
 	BajaDeEmpleado baja	
 
-	NominaPorEmpleado nominaPorEmpleado
+	NominaPorEmpleado neFiniquito
+	NominaPorEmpleado neLiquidacion
 
 	Date alta
 
@@ -88,8 +89,8 @@ class Finiquito {
 	BigDecimal subsEmpPagado=0.0
 	
 	BigDecimal subsEmpAplicado=0.0
-	
-	BigDecimal ingresoTotal=0.0
+
+	BigDecimal percepcionTotal=0.0
 
 	BigDecimal imss=0.0
 	
@@ -112,6 +113,8 @@ class Finiquito {
 	BigDecimal totalGravado=0.0
 	
 	BigDecimal totalExento=0.0
+
+	BigDecimal deduccionTotal = 0.0 
 	
 	BigDecimal total=0.0
 
@@ -130,6 +133,16 @@ class Finiquito {
 	Boolean liq = false
 
 	Boolean sdiOpcion = false 
+
+	BigDecimal smg = 0.0
+
+	BigDecimal montoIntereses = 0.0
+
+    BigDecimal tasaInteres = 0.0
+
+
+    List partidas = []
+
 		
 	Date dateCreated
 	
@@ -139,7 +152,8 @@ class Finiquito {
     static constraints = {
 		empleado unique:true
 		baja uniqut:true
-		nominaPorEmpleado nullable:true
+		neFiniquito nullable:true
+		neLiquidacion nullable:true
 		diasDelEjercicio nullable:true
 		//comentario nullable:true
 		anosTrabajados nullable: true
@@ -147,10 +161,12 @@ class Finiquito {
     }
 
     static mapping = {
-		// fechaInicial type:'date'
-		// fechaFinal type:'date'
+		partidas cascade: "all-delete-orphan"
 	}
 
+
+	static hasMany = [partidas: FiniquitoDet]
+	
 	
 
     String toString(){

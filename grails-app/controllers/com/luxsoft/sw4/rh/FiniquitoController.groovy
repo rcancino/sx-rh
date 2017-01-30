@@ -46,32 +46,9 @@ class FiniquitoController {
             notFound()
             return
         }
-
-
-
-        
-        finiquitoInstance = finiquitoService.inicializarFiniquito(finiquitoInstance)
-        finiquitoInstance = finiquitoService.registrarVacaciones(finiquitoInstance)
-        finiquitoInstance = finiquitoService.registrarAguinaldoFiniquito(finiquitoInstance)
-
-
-        finiquitoInstance.validate()
-        if (finiquitoInstance.hasErrors()) {
-            respond finiquitoInstance.errors, view:'create', model:[bajas:getBajas()]
-            return
-        }
-        
-        finiquitoInstance.save flush:true
-        //finiquitoInstance = finiquitoService.calcular(session.ejercicio,finiquitoService)
-        //finiquitoInstance = finiquitoService.inicializarFiniquito(finiquitoInstance)
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = "Finiquito para $finiquitoInstance.empleado generado exitosamente"
-                redirect finiquitoInstance
-            }
-            '*' { respond finiquitoInstance, [status: CREATED] }
-        }
+        finiquitoInstance = finiquitoService.save(finiquitoInstance)
+        flash.message = "Finiquito ${finiquitoInstance.id} generado"
+        redirect finiquitoInstance
     }
 
     def edit(Finiquito finiquitoInstance) {
@@ -80,25 +57,23 @@ class FiniquitoController {
 
     @Transactional
     def update(Finiquito finiquitoInstance) {
+
+        println "Actualizando el Finiquito:  -"+finiquitoInstance
+
+        println finiquitoInstance.comisiones
+
         if (finiquitoInstance == null) {
             notFound()
             return
         }
-
         if (finiquitoInstance.hasErrors()) {
             respond finiquitoInstance.errors, view:'edit'
             return
         }
 
-        finiquitoInstance.save flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'Finiquito.label', default: 'Finiquito'), finiquitoInstance.id])
-                redirect finiquitoInstance
-            }
-            '*'{ respond finiquitoInstance, [status: OK] }
-        }
+        finiquitoInstance = finiquitoService.save(finiquitoInstance)
+        flash.message = "Finiquito ${finiquitoInstance.id} actualizado"
+        redirect finiquitoInstance
     }
 
     @Transactional
@@ -109,15 +84,9 @@ class FiniquitoController {
             return
         }
 
-        finiquitoInstance.delete flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'Finiquito.label', default: 'Finiquito'), finiquitoInstance.id])
-                redirect action:"index", method:"GET"
-            }
-            '*'{ render status: NO_CONTENT }
-        }
+        finiquitoService.eliminar(finiquitoInstance)
+        flash.message = " Finiquito eliminado ${finiquitoInstance.id}"
+        redirect action: 'index'
     }
 
     protected void notFound() {

@@ -24,6 +24,7 @@
 				</td>
 				<td>
 					${fieldValue(bean:it,field:"concepto.descripcion")}
+					%{-- <p class="hidden-md"><small>Cat: ${it.concepto.catalogoSat} Clave: ${it.concepto.catalogoSatClave}</small></p> --}%
 				</td>
 				<td class="text-right"><g:formatNumber number="${it.importeGravado}" format="#,###,###.##" minFractionDigits="2"/></td>
 				<td class="text-right"><g:formatNumber number="${it.importeExcento}" format="#,###,###.##" minFractionDigits="2"/></td>

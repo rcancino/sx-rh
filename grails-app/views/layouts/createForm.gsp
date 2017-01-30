@@ -37,7 +37,13 @@
                                     <button id="saveBtn" class="btn btn-primary ">
                                         <i class="fa fa-floppy-o"></i> Salvar
                                     </button>
-                                    <lx:backButton id="${entity.id}" />
+                                    <g:if test="${g.pageProperty(name:'page.backButton')}">
+                                        <g:pageProperty name="page.backButton"/>
+                                    </g:if>
+                                    <g:else>
+                                        <lx:backButton id="${entity.id}" />
+                                    </g:else>
+                                    
                                 </div>
                             </div>
                         </g:form>

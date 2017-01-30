@@ -26,8 +26,11 @@ import com.luxsoft.sw4.rh.procesadores.*
 import com.luxsoft.sw4.rh.ProcesadorDePercepcionGenerica
 import com.luxsoft.sw4.rh.ProcesadorDeDeduccionGenerica
 import com.luxsoft.sw4.rh.RevisionAguinaldoExport
+import com.luxsoft.sw4.rh.ProcesadorSeguroSocialFiniquito
 
 import com.luxsoft.sw4.rh.ExportadorDim
+
+import com.luxsoft.sw4.cfdi.nomina12.*
 
 
 // Place your Spring DSL code here
@@ -109,6 +112,7 @@ beans = {
 
 	procesadorDeISTP(ProcesadorDeISTP){}
 	procesadorSeguroSocial(ProcesadorSeguroSocial){}
+	procesadorSeguroSocialFiniquito(ProcesadorSeguroSocialFiniquito){}
 	procesadorDeIncentivo(ProcesadorDeIncentivo){}
 	procesadorDeVacaciones(ProcesadorDeVacaciones){}
 	procesadorDePrimaVacacional(ProcesadorDePrimaVacacional){}
@@ -133,5 +137,34 @@ beans = {
 	revisionAguinaldoExport(RevisionAguinaldoExport){
 		dataSource: ref('dataSource')
 	}
+
+	/** Complemento de nomina 1.2 para CFDI */
+
+	cfdiBuilder(CfdiBuilder){}
+
+	nominaPrintService(NominaPrintService){}
+	
+
+	procesadorDeNominaFiniquito(ProcesadorDeNomina){
+		reglas=[
+			ref('procesadorSeguroSocialFiniquito'),
+			ref('procesadorDeISTP'),
+			ref('procesadorDeAjusteISPT'),
+			ref('prcoesadorDePensionAlimenticia'),
+			ref('procesadorDeOtrasDeducciones'),
+			ref('procesadorDePrestamosPersonales')
+			]
+	}
+
+	procesadorDeNominaLiquidacion(ProcesadorDeNomina){
+		reglas=[
+			ref('procesadorDeISTP'),
+			ref('procesadorDeAjusteISPT'),
+			ref('prcoesadorDePensionAlimenticia'),
+			ref('procesadorDeOtrasDeducciones'),
+			ref('procesadorDePrestamosPersonales')
+			]
+	}
+
 	
 }
