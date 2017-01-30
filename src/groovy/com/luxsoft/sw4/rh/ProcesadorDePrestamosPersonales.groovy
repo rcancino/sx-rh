@@ -27,7 +27,9 @@ class ProcesadorDePrestamosPersonales {
 		def prestamo = buscarPrestamo(ne)
 		if(prestamo) {
 
-			if(ne.finiquito == false && !ne.nomina.tipo == 'LIQUIDACION') {
+
+
+			if(ne.finiquito == false  && ne.nomina.tipo != 'LIQUIDACION') {
 				log.info "Aplicando decucccon para prestamo vigente: ${prestamo}"
 				
 				def percepciones=getPercepciones(ne)
@@ -37,6 +39,7 @@ class ProcesadorDePrestamosPersonales {
 				
 				def diasNetos=ne.diasDelPeriodo-ne.incapacidades-ne.faltas
 				def retMaxima=percepciones-deducciones-(salarioMinimo*diasNetos)
+				
 				retMaxima*=0.3
 				
 				def otrasDeducciones=ne.conceptos.find {it.concepto.clave=="D005"}
@@ -46,12 +49,17 @@ class ProcesadorDePrestamosPersonales {
 						retMaxima=0
 				}
 				if(prestamo.importeFijo>0){
+					
 					retMaxima=prestamo.importeFijo
 				}
 				
 				if(retMaxima){
+
+					
 					def saldo=prestamo.saldo
 					def importeExcento = retMaxima <= saldo ? retMaxima: saldo
+
+					
 					//Localizar el concepto
 					def neDet = new NominaPorEmpleadoDet(concepto:concepto,importeGravado:0.0,importeExcento:0.0,comentario:'PENDIENTE')
 					log.info "Deduccion calculada de: ${importeExcento}"
@@ -62,6 +70,7 @@ class ProcesadorDePrestamosPersonales {
 				}	
 			} else {
 
+				println "Se vino por aca"
 				def percepciones = getPercepciones(ne)
 				def deducciones = getRetencionesPrecedentesFiniquito(ne)
 				def saldo = prestamo.saldo

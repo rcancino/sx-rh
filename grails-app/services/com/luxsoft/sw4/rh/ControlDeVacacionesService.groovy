@@ -30,8 +30,10 @@ class ControlDeVacacionesService {
 			antiguedadDias:fecha-empleado.alta,
 			antiguedadYears:0,
 			diasVacaciones:0,
-			diasTomados:0,
-			aniversario:empleado.alta+365)
+			diasTomados:0)
+		Calendar c = Calendar.getInstance()
+		c.setTime(empleado.alta)
+		c.set(Calendar.YEAR,ejercicio)
 		ca.save failOnError:true
 
 		return ca

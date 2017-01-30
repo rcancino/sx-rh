@@ -185,7 +185,7 @@ class NominaController {
 		if(errores) {
 			flash.message = errores.join(',')
 		} else {
-			flash.message=" Nomina de ${nomina.id} timbrara exitosamente"
+			flash.message=" Nomina de ${nominaInstance.id} timbrara exitosamente"
 		}
 		redirect action:'show',params:[id:nominaInstance.id]
 	}

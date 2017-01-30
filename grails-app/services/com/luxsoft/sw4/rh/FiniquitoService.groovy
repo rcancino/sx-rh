@@ -12,7 +12,7 @@ class FiniquitoService {
 
     def actualizarImpuestos(Finiquito finiquito){
         // Actualizar impuesto
-        new ImpuestoBuilder().build(finiquito)
+        //new ImpuestoBuilder().build(finiquito)
     }
 
     def save(Finiquito finiquito){
@@ -26,7 +26,7 @@ class FiniquitoService {
         inicializarFiniquito finiquito
         registrarVacaciones finiquito
         registrarAguinaldoFiniquito finiquito
-        registrarDeduccionImss finiquito
+        //registrarDeduccionImss finiquito
         
         // Aplicamos reglas para la Indeminzacion
         new IndeminzacionBuilder().build(finiquito)
@@ -55,10 +55,10 @@ class FiniquitoService {
         finiquito.addToPartidas(tipo: 'PERCEPCION', importeGravado:finiquito.primaDeAntiguedadGravada, importeExcento:finiquito.primaDeAntiguedadExenta, concepto: ConceptoDeNomina.get(38), liquidacion: true);
         finiquito.addToPartidas(tipo: 'PERCEPCION', importeGravado:finiquito.primaDominicalGravada, importeExcento:finiquito.primaDominicalExenta, concepto: ConceptoDeNomina.get(42));
 
-        finiquito.addToPartidas(tipo: 'DEDUCCION', importeGravado:0, importeExcento:finiquito.imss, concepto: ConceptoDeNomina.get(1));
-        finiquito.addToPartidas(tipo: 'DEDUCCION', importeGravado:0, importeExcento:finiquito.isr, concepto: ConceptoDeNomina.get(2));
-        finiquito.addToPartidas(tipo: 'PERCEPCION', importeGravado:0, importeExcento:finiquito.subsEmpPagado, concepto: ConceptoDeNomina.get(33));
-        finiquito.addToPartidas(tipo: 'PERCEPCION', importeGravado:0, importeExcento:finiquito.compensacionSAF, concepto: ConceptoDeNomina.get(47));        
+        //finiquito.addToPartidas(tipo: 'DEDUCCION', importeGravado:0, importeExcento:finiquito.imss, concepto: ConceptoDeNomina.get(1));
+        //finiquito.addToPartidas(tipo: 'DEDUCCION', importeGravado:0, importeExcento:finiquito.isr, concepto: ConceptoDeNomina.get(2));
+        //finiquito.addToPartidas(tipo: 'PERCEPCION', importeGravado:0, importeExcento:finiquito.subsEmpPagado, concepto: ConceptoDeNomina.get(33));
+        //finiquito.addToPartidas(tipo: 'PERCEPCION', importeGravado:0, importeExcento:finiquito.compensacionSAF, concepto: ConceptoDeNomina.get(47));        
 
         if (finiquito.pensionAlimenticia)        
         finiquito.addToPartidas(tipo: 'DEDUCCION', importeGravado:0, importeExcento:finiquito.pensionAlimenticia, concepto: ConceptoDeNomina.get(7));
@@ -107,17 +107,26 @@ class FiniquitoService {
                 def aniversarioAnterior = cv.aniversario - 366 + 1
                 diasTrabajadoParaVacaciones = 
                 (finiquito.baja.fecha - cv.aniversario ) < 0 ? finiquito.baja.fecha - aniversarioAnterior : finiquito.baja.fecha - cv.aniversario
-            if(finiquito.diasTrabajadoParaVacaciones.abs() < 0 )
-                diasTrabajadoParaVacaciones = 0             
-            def vacacionesFiniquito = finiquito.vacacionesEjercicio + finiquito.vacacionesAnteriores - finiquito.vacacionesAplicadas  
-            def sd = !finiquito.salario ? finiquito.salarioVariable : finiquito.salario
-            println("salario diario : "+sd+" Vacaciones Finiquito : "+vacacionesFiniquito)
-            //vacaciones = ( (sd * vacacionesFiniquito) + ((sd * finiquito.vacacionesEjercicio / finiquito.diasDelEjercicio) * finiquito.diasTrabajadoParaVacaciones))
-            vacaciones = (  ((sd * vacacionesFiniquito / finiquito.diasDelEjercicio) * finiquito.diasTrabajadoParaVacaciones))
-            def pv = finiquito.vacaciones * finiquito.primaVacacional
-            def topeEx = smg.salario * 15
-            primaVacacionalExenta = (primVacExAcu <= topeEx ? (primVacExAcu + pv < topeEx ? pv : topeEx - primVacExAcu) : 0.0)
-            primaVacacionalGravada = pv - finiquito.primaVacacionalExenta
+
+                if(finiquito.diasTrabajadoParaVacaciones.abs() < 0 )
+                    diasTrabajadoParaVacaciones = 0             
+                def vacacionesFiniquito = finiquito.vacacionesEjercicio + finiquito.vacacionesAnteriores - finiquito.vacacionesAplicadas  
+                def sd = !finiquito.salario ? finiquito.salarioVariable : finiquito.salario
+            
+                if(vacacionesAnteriores < 0 ){
+                    def porcentajeDiasVac = diasTrabajadoParaVacaciones * 100 / diasDelEjercicio
+                    def diasPonderados = vacacionesEjercicio * porcentajeDiasVac / 100
+                    vacacionesFiniquito = vacacionesAnteriores.abs() <  diasPonderados ? ( diasPonderados - vacacionesAnteriores.abs()) : 0
+                    vacaciones = sd * vacacionesFiniquito
+
+                } else {
+                    vacaciones = (  ((sd * vacacionesFiniquito / diasDelEjercicio) * diasTrabajadoParaVacaciones))
+                }
+                
+                def pv = vacaciones * primaVacacional
+                def topeEx = smg.salario * 15
+                primaVacacionalExenta = (primVacExAcu <= topeEx ? (primVacExAcu + pv < topeEx ? pv : topeEx - primVacExAcu) : 0.0)
+                primaVacacionalGravada = pv - finiquito.primaVacacionalExenta
             }
             return finiquito
     }

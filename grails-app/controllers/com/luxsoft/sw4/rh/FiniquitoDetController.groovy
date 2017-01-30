@@ -60,8 +60,8 @@ class FiniquitoDetController {
 
         def finiquito = finiquitoDetInstance.finiquito
 
-        if(finiquito.neLiquidacion || finiquito.neFiniquito){
-            flash.message = "No se puede eliminar ya que se esta usando en nominas"
+        if(finiquito?.neLiquidacion?.cfdi || finiquito?.neFiniquito?.cfdi){
+            flash.message = "No se puede eliminar ya la nomina de finiquito o liquidacion ha sido timbrada"
             redirect controller: 'finiquito', action:'show', id: finiquito.id
             return 
         }

@@ -18,7 +18,7 @@ class RevisionNominaExport {
 			,ne.id as idNe,ne.salario_diario_base,ne.salario_diario_integrado,ne.dias_trabajados,ne.vacaciones as dias_vac,ne.incapacidades,ne.faltas,ne.fraccion_descanso
 			,max(case when c.clave='P001' THEN NED.importe_gravado ELSE 0 END)  AS SUELDO
 			,max(case when c.clave='P029' THEN NED.importe_gravado ELSE 0 END)  AS COMISIONES
-			,max(case when c.clave='P010' THEN NED.importe_gravado ELSE 0 END)  AS INCENTIVO
+			,max(case when c.clave=(case when n.periodicidad='SEMANAL' then 'P010' else 'P009' end) THEN NED.importe_gravado ELSE 0 END)  AS INCENTIVO
 			,max(case when c.clave='P025' THEN NED.importe_gravado ELSE 0 END)  AS VACACIONES
 			,max(case when c.clave='P031' THEN NED.importe_gravado ELSE 0 END)  AS VACACIONES_P
 			,max(case when c.clave='P024' THEN NED.importe_excento ELSE 0 END)  AS PRIMA_VAC_E

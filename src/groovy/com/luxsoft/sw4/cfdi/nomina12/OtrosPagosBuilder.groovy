@@ -21,7 +21,7 @@ class OtrosPagosBuilder {
 		  	def clave = it.concepto.catalogoSatClave
 		  	otroPago.setTipoOtroPago(CTipoOtroPago.Enum.forString(clave))
 		  	otroPago.setClave(it.concepto.clave)  // Debe ser la clave que se usa en contabilidad que sea la que se usa en contabilidad
-		  	otroPago.setConcepto(it.concepto.descripcion)
+		  	otroPago.setConcepto(it.concepto.descripcion.replace('.',','))
 		  	otroPago.setImporte(it.total)
 		  	if(clave == '002'){
 		  		Nomina.OtrosPagos.OtroPago.SubsidioAlEmpleo subsidioAlEmpleo = otroPago.addNewSubsidioAlEmpleo()
