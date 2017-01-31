@@ -77,7 +77,7 @@ class FiniquitoService {
     }
 
     def inicializarFiniquito(Finiquito finiquito){
-        Periodo p = Periodo.getPeriodoAnual(finiquito.baja.fecha.toYear())
+        Periodo p = Periodo.getPeriodoAnual(new Date().toYear())
         def de = p.fechaFinal - p.fechaInicial + 1    
         def dte = finiquito.baja.fecha - p.fechaInicial + 1 
 
@@ -106,7 +106,7 @@ class FiniquitoService {
                 def primVacExAcu = cv.acumuladoExcento
                 def aniversarioAnterior = cv.aniversario - 366 + 1
                 diasTrabajadoParaVacaciones = 
-                (finiquito.baja.fecha - cv.aniversario ) < 0 ? finiquito.baja.fecha - aniversarioAnterior : finiquito.baja.fecha - cv.aniversario
+                (finiquito.baja.fecha - cv.aniversario ) < 0 ? finiquito.baja.fecha - aniversarioAnterior + 1 : finiquito.baja.fecha - cv.aniversario + 1
 
                 if(finiquito.diasTrabajadoParaVacaciones.abs() < 0 )
                     diasTrabajadoParaVacaciones = 0             
@@ -134,19 +134,32 @@ class FiniquitoService {
     def registrarAguinaldoFiniquito(Finiquito finiquito){
             ZonaEconomica smg = ZonaEconomica.where {ejercicio == Periodo.obtenerYear(finiquito.empleado.baja.fecha) && clave == 'A'}.find()
             finiquito.with {          
-            diasAguinaldo = 15            
-            factorLiquidacion = ( ( (finiquito.vacacionesEjercicio * finiquito.primaVacacional) + diasAguinaldo ) / finiquito.diasDelEjercicio)
-            factorLiquidacion = MonedaUtils.round(factorLiquidacion,4) + 1
-            salarioDiarioIntegradoLiq = salario  * finiquito.factorLiquidacion        
-            diasParaAguinaldo = finiquito.diasTrabajadoEjercicio + 31   
-            def aguinaldo = salario * (diasAguinaldo / diasDelEjercicio) * diasParaAguinaldo
-                println("Res Agndo : "+Aguinaldo)
-            def topeEx = smg.salario * 30
-            aguinaldoExento = aguinaldo > topeEx ? topeEx : aguinaldo
-            aguinaldoGravable = aguinaldo - aguinaldoExento
+                diasAguinaldo = 15            
+                factorLiquidacion = ( ( (finiquito.vacacionesEjercicio * finiquito.primaVacacional) + diasAguinaldo ) / finiquito.diasDelEjercicio)
+                factorLiquidacion = MonedaUtils.round(factorLiquidacion,4) + 1
+                salarioDiarioIntegradoLiq = salario  * finiquito.factorLiquidacion        
+                def diasAguinaldoDiciembre =  31
+                if( (empleado.alta.isSameMonth(baja.fecha)) && (empleado.alta.toMonth() == 12) ) {
+                    println('Mes: '+ empleado.alta.toMonth())
+                    diasAguinaldoDiciembre =  baja.fecha - empleado.alta + 1
+                    println('diasAguinaldoDiciembre: '+ diasAguinaldoDiciembre)
+                    diasParaAguinaldo = diasAguinaldoDiciembre
+                } else {
+                    diasParaAguinaldo = diasTrabajadoEjercicio + diasAguinaldoDiciembre
+                }
+                
+                println('diasParaAguinaldo: '+ diasParaAguinaldo)
+                
+
+                def aguinaldo = salario * (diasAguinaldo / diasDelEjercicio) * diasParaAguinaldo
+                def topeEx = smg.salario * 30
+                aguinaldoExento = aguinaldo > topeEx ? topeEx : aguinaldo
+                aguinaldoGravable = aguinaldo - aguinaldoExento
             }
             return finiquito
     }
+
+
 
     
 

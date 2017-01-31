@@ -889,7 +889,7 @@ def generarDim(EjercicioCommand command){
 temp.with {
 	def p="|"
  	Periodo periodo=new Periodo()
-	def ejercicio=2015
+	def ejercicio = command.ejercicio
     SimpleDateFormat df= new SimpleDateFormat("dd/MM/yyyy")
     def formato = new DecimalFormat("#####")
   
@@ -1168,7 +1168,7 @@ def dimPagosPorSeparacion(){
 }
 
 
-def generarDimPagosPorSeparacion(){
+def generarDimPagosPorSeparacion(EjercicioCommand command){
 		println "Generando Layout DIM Sueldos y Salarios"
 
 		def temp = File.createTempFile('temp', '.txt')
@@ -1176,7 +1176,7 @@ def generarDimPagosPorSeparacion(){
 	temp.with {
 		def p="|"
  Periodo periodo=new Periodo()
-	def ejercicio=2015
+	def ejercicio=command.ejercicio
     SimpleDateFormat df= new SimpleDateFormat("dd/MM/yyyy")
     def formato = new DecimalFormat("#####")
   
