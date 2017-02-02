@@ -1100,9 +1100,13 @@ temp.with {
      		pagosOtrosExc=0
      		OtrosIngreGra=(calculo.incentivo+calculo.bonoDeProductividad+calculo.bonoPorDesempeno+calculo.compensacion+calculo.bono+calculo.bonoAntiguedad).setScale(0, RoundingMode.HALF_EVEN)
     		otrosIngreExc=0
-     		sumaIngreSalGra=calculo.totalGravado.setScale(0, RoundingMode.HALF_EVEN)
+     		sumaIngreSalGra=(calculo.totalGravado - calculo.retardos).setScale(0, RoundingMode.HALF_EVEN)
      		sumaIngreSalExc=calculo.totalExento.setScale(0, RoundingMode.HALF_EVEN)
-     		impuestoRet=calculo.ISR.setScale(0, RoundingMode.HALF_EVEN)
+
+//     		impuestoRet=calculo.ISR.setScale(0, RoundingMode.HALF_EVEN)
+
+			impuestoRet=(calculo.ISR-calculo.compensacionSAF-calculo.devISPT-calculo.devISPTAnt).setScale(0, RoundingMode.HALF_EVEN)
+
      		impuestoRetOtros=0
      		//saf=calculo.resultado.setScale(0, RoundingMode.HALF_EVEN)>0 ? calculo.resultado.setScale(0, RoundingMode.HALF_EVEN) :0
      		saf=calculo.calculoAnual? calculo.resultado.setScale(0, RoundingMode.HALF_EVEN) :0
@@ -1117,7 +1121,7 @@ temp.with {
      		totalIngresosPrestPrevSocial=0
      		ingresosExcPrestPrevSocial=0
   
-     		sumaSueldos=calculo.total.setScale(0, RoundingMode.HALF_EVEN)
+     		sumaSueldos=(calculo.total - calculo.retardos).setScale(0, RoundingMode.HALF_EVEN)
      		impuestoLocalIngresos=0
     		subsEmpleoTrab=calculo.subsEmpPagado.setScale(0, RoundingMode.HALF_EVEN)
     
@@ -1469,10 +1473,12 @@ def empleados=CalculoAnual.findAll("from CalculoAnual c where c.ejercicio=?  ",[
      pagosOtrosExc=0
      otrosIngreGra=(calculo.incentivo+calculo.bonoDeProductividad+calculo.bonoPorDesempeno+calculo.compensacion+calculo.bono+calculo.bonoAntiguedad).setScale(0, RoundingMode.HALF_EVEN)
      otrosIngreExc=0
-     sumaIngreSalGra=calculo.totalGravado.setScale(0, RoundingMode.HALF_EVEN)
+     sumaIngreSalGra=(calculo.totalGravado - calculo.retardos).setScale(0, RoundingMode.HALF_EVEN)
      sumaIngreSalExc=calculo.totalExento.setScale(0, RoundingMode.HALF_EVEN)
      /*Se resta ISR de bajas de ISR de Sueldo de bajas*/
-     impuestoRet=(calculo.ISR.setScale(0, RoundingMode.HALF_EVEN))-impuestoRetenido
+     // impuestoRet=(calculo.ISR.setScale(0, RoundingMode.HALF_EVEN))-impuestoRetenido
+     impuestoRet=(calculo.ISR-calculo.compensacionSAF-calculo.devISPT-calculo.devISPTAnt).setScale(0, RoundingMode.HALF_EVEN)
+
      impuestoRetOtros=0
      //saf=calculo.resultado.setScale(0, RoundingMode.HALF_EVEN)>0 ? calculo.resultado.setScale(0, RoundingMode.HALF_EVEN) :0
      saf=0
