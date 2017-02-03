@@ -180,6 +180,27 @@ class CalculoAnualService {
 			}
 			
 		}
+
+
+			def  calendarioQ=Calendario.findByEjercicioAndComentarioAndTipo(anual.ejercicio,'NOMINA','QUINCENA')
+			def  calendarioS=Calendario.findByEjercicioAndComentarioAndTipo(anual.ejercicio,'NOMINA','SEMANA')
+
+			def ultimaQ=calendarioQ.periodos.get(calendarioQ.periodos.size()-1)
+			def ultimaS=calendarioS.periodos.get(calendarioS.periodos.size()-1)
+
+			def ultimoCalendario=anual.empleado.salario.periodicidad=='QUINCENAL'?ultimaQ:ultimaS
+
+			def compAntSAF=0
+
+			def comASAF=NominaPorEmpleadoDet.findAll("from NominaPorEmpleadoDet det where det.parent.nomina.ejercicio=? and det.parent.nomina.calendarioDet!=? and det.parent.empleado=? and det.concepto.id=?",[anual.ejercicio,ultimoCalendario,anual.empleado,47L]).each{
+				 compAntSAF+=it.importeExcento
+			}
+
+			def compen=NominaPorEmpleadoDet.find("from NominaPorEmpleadoDet det where det.parent.nomina.calendarioDet=? and det.parent.empleado=? and det.concepto.id=?",[ultimoCalendario,anual.empleado,47L])
+
+			anual.devISPTAnt= compAntSAF?:0 
+			anual.compensacionSAF= compen?.importeExcento?:0   
+
 		def subEmpAplic=0.0
 		
 		def nominasEmpleado=NominaPorEmpleado.findAll("from NominaPorEmpleado n where empleado=? and n.nomina.ejercicio=? "+

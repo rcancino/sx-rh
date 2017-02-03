@@ -1098,8 +1098,17 @@ temp.with {
      		becasExc=0
      		pagosOtrosGra=0
      		pagosOtrosExc=0
-     		OtrosIngreGra=(calculo.incentivo+calculo.bonoDeProductividad+calculo.bonoPorDesempeno+calculo.compensacion+calculo.bono+calculo.bonoAntiguedad).setScale(0, RoundingMode.HALF_EVEN)
+     		OtrosIngreGra=(calculo.incentivo+calculo.bonoDeProductividad+calculo.bonoPorDesempeno+calculo.compensacion+calculo.bono+calculo.bonoAntiguedad+calculo.gratificacion).setScale(0, RoundingMode.HALF_EVEN)
     		otrosIngreExc=0
+
+    		if(session.empresa.rfc=='OAG100209GN8'){     		
+    			OtrosIngreGra=(calculo.incentivo+calculo.bonoDeProductividad+calculo.bonoPorDesempeno+calculo.compensacion+calculo.bono+calculo.bonoAntiguedad+calculo.gratificacion + calculo.ptuGravada).setScale(0, RoundingMode.HALF_EVEN)
+    			otrosIngreExc=calculo.ptuExenta.setScale(0, RoundingMode.HALF_EVEN)
+    			ptuGra=0
+     			ptuExc=0
+
+    		}
+
      		sumaIngreSalGra=(calculo.totalGravado - calculo.retardos).setScale(0, RoundingMode.HALF_EVEN)
      		sumaIngreSalExc=calculo.totalExento.setScale(0, RoundingMode.HALF_EVEN)
 
@@ -1352,7 +1361,12 @@ def empleados=CalculoAnual.findAll("from CalculoAnual c where c.ejercicio=?  ",[
       if(nominaIndemnizacion ){
       	
         println "Generando Layout para "+ calculo.empleado
+
+      if(yearAlta==ejercicio){
+    	 mesIni=(periodo.obtenerMes(calculo.empleado.alta)+1).toString().padLeft(2,"0") 
+    	} 
       
+
        	mesFin=(periodo.obtenerMes(bajaFecha)+1).toString().padLeft(2,"0") 
       
       //INDEMNIZACIONES
@@ -1471,13 +1485,23 @@ def empleados=CalculoAnual.findAll("from CalculoAnual c where c.ejercicio=?  ",[
      becasExc=0
      pagosOtrosGra=0
      pagosOtrosExc=0
-     otrosIngreGra=(calculo.incentivo+calculo.bonoDeProductividad+calculo.bonoPorDesempeno+calculo.compensacion+calculo.bono+calculo.bonoAntiguedad).setScale(0, RoundingMode.HALF_EVEN)
+     otrosIngreGra=(calculo.incentivo+calculo.bonoDeProductividad+calculo.bonoPorDesempeno+calculo.compensacion+calculo.bono+calculo.bonoAntiguedad+calculo.gratificacion).setScale(0, RoundingMode.HALF_EVEN)
      otrosIngreExc=0
+
+
+     if(session.empresa.rfc=='OAG100209GN8'){     		
+    			OtrosIngreGra=(calculo.incentivo+calculo.bonoDeProductividad+calculo.bonoPorDesempeno+calculo.compensacion+calculo.bono+calculo.bonoAntiguedad+calculo.gratificacion + calculo.ptuGravada).setScale(0, RoundingMode.HALF_EVEN)
+    			otrosIngreExc=calculo.ptuExenta.setScale(0, RoundingMode.HALF_EVEN)
+    			ptuGra=0
+     			ptuExc=0
+    		}
+
+
      sumaIngreSalGra=(calculo.totalGravado - calculo.retardos).setScale(0, RoundingMode.HALF_EVEN)
      sumaIngreSalExc=calculo.totalExento.setScale(0, RoundingMode.HALF_EVEN)
      /*Se resta ISR de bajas de ISR de Sueldo de bajas*/
-     // impuestoRet=(calculo.ISR.setScale(0, RoundingMode.HALF_EVEN))-impuestoRetenido
-     impuestoRet=(calculo.ISR-calculo.compensacionSAF-calculo.devISPT-calculo.devISPTAnt).setScale(0, RoundingMode.HALF_EVEN)
+      impuestoRet=(calculo.ISR-calculo.compensacionSAF-calculo.devISPT-calculo.devISPTAnt-impuestoRetenido).setScale(0, RoundingMode.HALF_EVEN)
+     //impuestoRet=(calculo.ISR-calculo.compensacionSAF-calculo.devISPT-calculo.devISPTAnt).setScale(0, RoundingMode.HALF_EVEN)
 
      impuestoRetOtros=0
      //saf=calculo.resultado.setScale(0, RoundingMode.HALF_EVEN)>0 ? calculo.resultado.setScale(0, RoundingMode.HALF_EVEN) :0
@@ -1493,7 +1517,7 @@ def empleados=CalculoAnual.findAll("from CalculoAnual c where c.ejercicio=?  ",[
      totalIngresosPrestPrevSocial=0
      ingresosExcPrestPrevSocial=0
   
-     sumaSueldos=calculo.total.setScale(0, RoundingMode.HALF_EVEN)
+     sumaSueldos=(calculo.total - calculo.retardos) .setScale(0, RoundingMode.HALF_EVEN)
      impuestoLocalIngresos=0
      subsEmpleoTrab=calculo.subsEmpPagado.setScale(0, RoundingMode.HALF_EVEN)
       
