@@ -7,6 +7,7 @@ class ZonaEconomica {
 	String clave
 	BigDecimal salario = 0
 	Integer ejercicio
+	BigDecimal uma = 0
 	
 	String toString(){
 		return "$clave: $salario"
