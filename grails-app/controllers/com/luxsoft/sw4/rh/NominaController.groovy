@@ -102,19 +102,21 @@ class NominaController {
 			redirect action:'show',params:[id:id]
 			return
 		}
-		nomina.partidas.each{
-			def ajuste=IsptMensual.find("from IsptMensual i where i.nominaPorEmpleado.id=?",[it.id])
-			if(ajuste){
-				flash.message="Nomina con ajuste mensual ISPT (NO SE PUEDE RECALCULAR)"
-				redirect action:'show',params:[id:id]
-				return
-			}else{
-				def ne=nominaPorEmpleadoService.actualizarNominaPorEmpleado(it.id)
-				//if(!ne.cfdi){
-					nominaPorEmpleadoService.depurarNominaPorEmpleado(ne.id)
-				//	}else{ println "La Nomina Por Empleado ya fue timbrada"}
-				
+		for(it in nomina.partidas){
+			if(it.finiquito){
+				log.info "Finiquito detectado para ${it.empleado}"
+				continue
 			}
+			def ajuste = IsptMensual.find("from IsptMensual i where i.nominaPorEmpleado.id=?",[it.id])
+			if(ajuste) {
+				log.info "Ajuste menusal detectado para ${it.empleado}"
+				continue
+			}
+			
+			def ne = nominaPorEmpleadoService.actualizarNominaPorEmpleado(it.id)
+			nominaPorEmpleadoService.depurarNominaPorEmpleado(ne.id)
+				
+			log.debug "Nomina actualizara para: ${ne.empleado}"
 		}
 		nominaService.depurar(id)
 		flash.message="Actualizacion exitosa"
