@@ -3,10 +3,15 @@ package com.luxsoft.sw4.rh.asimilados
 import grails.transaction.Transactional
 
 import com.luxsoft.sw4.rh.Nomina
+import com.luxsoft.sw4.rh.NominaPorEmpleado
+import com.luxsoft.sw4.rh.ConceptoDeNomina
+import com.luxsoft.sw4.rh.NominaPorEmpleadoDet
 import com.luxsoft.sw4.rh.CalendarioDet
+import com.luxsoft.sw4.rh.Empleado
 import com.luxsoft.sw4.Empresa
 import com.luxsoft.sw4.Periodo
 import com.luxsoft.sw4.rh.NominaException
+import com.luxsoft.sw4.rh.ProcesadorDeISTPMensual
 
 @Transactional
 class NominaAsimiladosService {
@@ -49,6 +54,49 @@ class NominaAsimiladosService {
 		return nomina
 		
 	}
+
+	@Transactional
+	def agregarNominaPorAsimilado(Nomina nomina, Empleado empleado, BigDecimal importe) {
+		NominaPorEmpleado ne=new NominaPorEmpleado(
+			empleado:empleado,
+			ubicacion:empleado?.perfil?.ubicacion,
+			antiguedadEnSemanas:0,
+			nomina:nomina,
+			vacaciones:0,
+			fraccionDescanso:0,
+			orden:1
+		)
+		ne.antiguedadEnSemanas=ne.getAntiguedad()
+		actualizarNominaPorAsimilado(ne, importe)
+
+		nomina.addToPartidas(ne)
+		nomina.save failOnError: true, flush: true
+	}
+
+	@Transactional
+	def actualizarNominaPorAsimilado(NominaPorEmpleado ne){
+		actualizarNominaPorAsimilado(ne, ne.getPercepciones())
+	}
+
+	@Transactional
+	def actualizarNominaPorAsimilado(NominaPorEmpleado ne, BigDecimal percepcion){
+		ne.conceptos.clear()
+
+		// Percepcion
+		ConceptoDeNomina concepto = ConceptoDeNomina.where {clave=='P036'}.find()
+		def nominaPorEmpleadoDet=new NominaPorEmpleadoDet(
+			concepto:concepto,
+			importeGravado: percepcion,
+			importeExcento:0.0,
+			comentario:'PENDIENTE')
+		ne.addToConceptos(nominaPorEmpleadoDet)
+
+		// Deducciones
+		new ProcesadorDeISTPMensual().procesar(ne)
+		ne.save()
+		return ne
+	}
+
 
 	private String getPeriodicidad(CalendarioDet calendarioDet){
 		//tipo inList:['SEMANA','QUINCENA','MES','CATORCENA','BIMESTRE','ESPECIAL']

@@ -77,13 +77,13 @@
 				<ul class="dropdown-menu">
 					
 					<li>
-						<g:link  action="agregarNominaPorEmpleado" id="${nominaInstance.id}"> 
+						<g:link  action="createNominaPorEmpleado" id="${nominaInstance.id}"> 
 							<span class="glyphicon glyphicon-plus"></span> Agregar
 						</g:link> 
 					</li>	
 					
 					<li>
-						<g:link action="delete" id="${nominaInstance.id}" onclick="return confirm('Eliminar toda la nomina?');"> 
+						<g:link action="eliminarNominaPorAsimilado" id="${nominaInstance.id}" onclick="return confirm('Eliminar toda la nomina?');"> 
 							<span class="glyphicon glyphicon-trash"></span> Eliminar
 						</g:link> 
 					</li>

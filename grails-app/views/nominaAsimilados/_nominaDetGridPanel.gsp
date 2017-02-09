@@ -16,17 +16,17 @@
 	</thead>
 	<tbody>
 		
-		<g:each in="${partidasList?.sort{it.orden}}" var="row">
+		<g:each in="${nominaInstance.partidas?.sort{it.orden}}" var="row">
 			<tr>
 				<td>${fieldValue(bean:row,field:"orden")}</td>
 				<td>
-					<g:link controller="nominaPorEmpleado" action="edit" id="${row.id}">
+					<g:link  action="nominaPorAsimiladoEdit" id="${row.id}">
 						${fieldValue(bean:row,field:"empleado.clave")}
 					</g:link>
 				</td>
 				
 				<td>
-					<g:link controller="nominaPorEmpleado" action="edit" id="${row.id}">
+					<g:link action="nominaPorAsimiladoEdit" id="${row.id}">
 						${fieldValue(bean:row,field:"empleado.nombre")}
 					</g:link>
 				</td>
