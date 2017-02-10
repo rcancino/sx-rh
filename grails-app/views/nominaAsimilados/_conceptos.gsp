@@ -23,8 +23,12 @@
 					${fieldValue(bean:it,field:"concepto.clave")}
 				</td>
 				<td>
-					${fieldValue(bean:it,field:"concepto.descripcion")}
-					%{-- <p class="hidden-md"><small>Cat: ${it.concepto.catalogoSat} Clave: ${it.concepto.catalogoSatClave}</small></p> --}%
+					${fieldValue(bean:it,field:"concepto.descripcion")} 
+					<g:if test="${param == 'PERCEPCION'}">
+						${it.parent.nomina.calendarioDet.mes.toUpperCase()} ${it.parent.nomina.ejercicio}
+
+					</g:if>
+					
 				</td>
 				<td class="text-right"><g:formatNumber number="${it.importeGravado}" format="#,###,###.##" minFractionDigits="2"/></td>
 				<td class="text-right"><g:formatNumber number="${it.importeExcento}" format="#,###,###.##" minFractionDigits="2"/></td>

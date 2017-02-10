@@ -1,5 +1,5 @@
 <g:set var="controllers" 
-    value="${['nominaAsimilados']}" />
+    value="${['nominaAsimilados','asimilado']}" />
 <li class="${controllers.contains(webRequest.controllerName)?'active':''}">
     <a href="#">
     	<i class="fa fa-exchange"></i> 
@@ -8,6 +8,12 @@
     </a>
     <ul class="nav nav-second-level collapse">
         
+        <li class="${webRequest.controllerName=='asimilado' ?'active':''}">
+            <g:link controller="asimilado" action="index">
+                <span class="nav-label">Asimilados</span> 
+                <span class="fa fa-angle-right pull-right"></span>
+            </g:link>
+        </li>
         
         <li class="${webRequest.controllerName=='nominaAsimilados' ?'active':''}">
             <g:link controller="nominaAsimilados">

@@ -178,7 +178,7 @@
 				<div class="col-md-6">
 					<div class="panel panel-default">
 						<div class="panel-heading">Precepciones</div>
-						<g:render template="/nominaPorEmpleado/conceptos" model="[param:'PERCEPCION']"/>
+						<g:render template="conceptos" model="[param:'PERCEPCION']"/>
 					</div>
 
 				</div>

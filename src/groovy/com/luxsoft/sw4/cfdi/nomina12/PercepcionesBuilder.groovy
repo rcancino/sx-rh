@@ -51,6 +51,10 @@ class PercepcionesBuilder {
 		  	pp.setTipoPercepcion(CTipoPercepcion.Enum.forString(clave))
 		  	pp.setClave(it.concepto.clave)  // Debe ser la clave que se usa en contabilidad que sea la que se usa en contabilidad
 		  	pp.setConcepto(it.concepto.descripcion)
+		  	if(nominaEmpleado.nomina.tipo == 'ASIMILADOS' && it.concepto.clave == 'P036'){
+		  		String d = "${it.concepto.descripcion} ${nominaEmpleado.nomina.calendarioDet.mes.toUpperCase()} ${it.parent.nomina.ejercicio}"
+		  		pp.setConcepto(d)
+		  	}
 		  	pp.setImporteGravado(it.importeGravado)
 		  	pp.setImporteExento(it.importeExcento)
 		}
