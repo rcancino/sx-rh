@@ -139,6 +139,8 @@ class NominaAsimiladosController {
 	
 		render(text: cfdi.comprobanteDocument.xmlText(), contentType: "text/xml", encoding: "UTF-8")
 	}
+
+	
 }
 
 import groovy.transform.ToString
