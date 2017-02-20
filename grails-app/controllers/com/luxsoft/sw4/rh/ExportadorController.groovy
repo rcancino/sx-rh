@@ -1490,7 +1490,7 @@ def empleados=CalculoAnual.findAll("from CalculoAnual c where c.ejercicio=?  ",[
 
 
      if(session.empresa.rfc=='OAG100209GN8'){     		
-    			OtrosIngreGra=(calculo.incentivo+calculo.bonoDeProductividad+calculo.bonoPorDesempeno+calculo.compensacion+calculo.bono+calculo.bonoAntiguedad+calculo.gratificacion + calculo.ptuGravada).setScale(0, RoundingMode.HALF_EVEN)
+    			otrosIngreGra=(calculo.incentivo+calculo.bonoDeProductividad+calculo.bonoPorDesempeno+calculo.compensacion+calculo.bono+calculo.bonoAntiguedad+calculo.gratificacion + calculo.ptuGravada).setScale(0, RoundingMode.HALF_EVEN)
     			otrosIngreExc=calculo.ptuExenta.setScale(0, RoundingMode.HALF_EVEN)
     			ptuGra=0
      			ptuExc=0

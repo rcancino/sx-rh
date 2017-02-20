@@ -43,15 +43,23 @@ class ComplementoBuilder {
 		Nomina nomina=nominaDocto.addNewNomina()
 		nomina.version = '1.2'
 		nomina.tipoNomina = CTipoNomina.O
-		if(nominaEmpleado.nomina.tipo == 'PTU'|| nominaEmpleado.nomina.tipo == 'AGUINALDO' || nominaEmpleado.nomina.tipo == 'LIQUIDACION'){
+		if(nominaEmpleado.nomina.tipo == 'PTU'|| nominaEmpleado.nomina.tipo == 'AGUINALDO' || nominaEmpleado.nomina.tipo == 'LIQUIDACION' || nominaEmpleado.nomina.tipo == 'ASIMILADOS'){
 			nomina.tipoNomina = CTipoNomina.E
 		}
 		nomina.setNumDiasPagados(calcularDiasPagados(nominaEmpleado))
 		nomina.fechaPago = NominaUtils.toISO8601(nominaEmpleado.nomina.pago)
 		nomina.fechaInicialPago = NominaUtils.toISO8601(nominaEmpleado.nomina.periodo.fechaInicial)
 		nomina.fechaFinalPago = NominaUtils.toISO8601(nominaEmpleado.nomina.periodo.fechaFinal)
-		registrarEmisor(nomina, nominaEmpleado.nomina.empresa)
-		registrarReceptor(nomina, nominaEmpleado)
+		if(nominaEmpleado.nomina.tipo == 'ASIMILADOS'){
+			
+			registrarReceptorAsimilado(nomina, nominaEmpleado)
+
+		} else {
+			// El caso nomral de nominas 
+			registrarEmisor(nomina, nominaEmpleado.nomina.empresa)
+			registrarReceptor(nomina, nominaEmpleado)
+		}
+		
 		def totalPercepciones = nominaEmpleado.conceptos.sum 0, { 
 			if(it.concepto.catalogoSat == 'c_TipoPercepcion') 
 				return it.total 
@@ -142,11 +150,56 @@ class ComplementoBuilder {
         	def bancoClave = empleado?.salario.banco.clave.toString().padLeft(3,'0')
 			receptor.setBanco(CBanco.Enum.forString(bancoClave))
         }
-        if( nominaEmpleado.nomina.formaDePago == 'TRANSFERENCIA' && (empleado.salario.clabe || empleado.salario.numeroDeCuenta)){
-        	receptor.cuentaBancaria=new BigInteger(empleado?.salario.clabe?:empleado.salario.numeroDeCuenta)	
+        if( nominaEmpleado.nomina.formaDePago == 'TRANSFERENCIA'){
+
+        	if(empleado.salario.clabe){
+
+        		receptor.cuentaBancaria = empleado.salario.clabe
+        		receptor.banco = null
+
+        	} else {
+
+        		receptor.cuentaBancaria = empleado.salario.cuentaBancaria
+        	}
+
+        	//receptor.cuentaBancaria = new BigInteger(empleado?.salario.clabe?:empleado.salario.numeroDeCuenta)
+        	//receptor.cuentaBancaria = empleado?.salario.clabe?:empleado.salario.numeroDeCuenta
+        		
         }
 		receptor.setSalarioBaseCotApor(nominaEmpleado.salarioDiarioBase)
 		receptor.setSalarioDiarioIntegrado(nominaEmpleado.salarioDiarioIntegrado)
+	}
+
+	def registrarReceptorAsimilado(Nomina nomina, NominaPorEmpleado nominaEmpleado){
+		
+		def empleado = nominaEmpleado.empleado
+
+		Nomina.Receptor receptor = nomina.addNewReceptor()
+        receptor.curp = empleado.curp
+        receptor.setTipoContrato(CTipoContrato.X_99)  
+        receptor.tipoRegimen = CTipoRegimen.Enum.forString('09') 
+        receptor.numEmpleado = empleado.id.toString()
+        receptor.setPeriodicidadPago(CPeriodicidadPago.X_99)
+        
+        
+        if(empleado?.salario?.banco?.clave && nominaEmpleado.nomina.formaDePago == 'TRANSFERENCIA'){
+        	def bancoClave = empleado?.salario.banco.clave.toString().padLeft(3,'0')
+			receptor.setBanco(CBanco.Enum.forString(bancoClave))
+        }
+        if( nominaEmpleado.nomina.formaDePago == 'TRANSFERENCIA' ){
+        	if(empleado.salario.clabe){
+
+        		receptor.setCuentaBancaria(empleado.salario.clabe)
+        		receptor.banco = null
+
+        	} else {
+
+        		receptor.cuentaBancaria = empleado.salario.cuentaBancaria
+        	}
+        	assert receptor.cuentaBancaria, "Debe registrar una cuenta para el pago de transferencias"
+
+        }
+        receptor.setClaveEntFed(CEstado.DIF) 
 	}
 
 

@@ -67,7 +67,12 @@ class Nomina {
 			return duration.days
 		}*/
 		def duration=(periodo.fechaFinal-periodo.fechaInicial)+1
-		
+
+		if(tipo=='ASIMILADOS' && periodo.obtenerMes(periodo.fechaInicial)==1){
+			duration=30
+
+		}
+		return duration
 	}
 
 	def beforeUpdate() {

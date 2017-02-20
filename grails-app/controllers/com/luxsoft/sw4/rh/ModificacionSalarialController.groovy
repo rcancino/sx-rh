@@ -1,16 +1,11 @@
 package com.luxsoft.sw4.rh
 
-import org.codehaus.groovy.grails.plugins.jasper.JasperExportFormat;
-import org.codehaus.groovy.grails.plugins.jasper.JasperReportDef;
-
-import java.util.Map;
-
+import org.codehaus.groovy.grails.plugins.jasper.JasperExportFormat
+import org.codehaus.groovy.grails.plugins.jasper.JasperReportDef
+import java.util.Map
 import grails.plugin.springsecurity.annotation.Secured
 import grails.transaction.Transactional
-import grails.validation.Validateable;
-
-
-
+import grails.validation.Validateable
 import org.grails.databinding.BindingFormat
 import org.codehaus.groovy.grails.plugins.jasper.JasperExportFormat
 import org.codehaus.groovy.grails.plugins.jasper.JasperReportDef
@@ -25,7 +20,6 @@ class ModificacionSalarialController {
 	def jasperService
     
 	def search(ModificacionSearch command){
-		//println 'Filtrando con parametros: '+command
 		
 		def list=ModificacionSalarial.findAllWhere(empleado:command.empleado)
 		render view:'index',model:[modificacionInstanceList:list
@@ -89,9 +83,8 @@ class ModificacionSalarialController {
     def delete(Long id){
 
         def modificacion=ModificacionSalarial.get(id)
-
         def calculoSdi = modificacion.calculoSdi
-       
+     
         modificacion.calculoSdi = null
         modificacion.delete(flush:true)
         
@@ -130,11 +123,11 @@ class ModificacionSalarialController {
 
 
 
-	def modifcacionSalarialReport(EjercicioBimestreReportCommand command){
+	def modifcacionSalarialReport(IniciaReportCommand command){
 			def repParams=[:]
-			repParams['EJERCICIO']=command.ejercicio
-			repParams['BIMESTRE']=command.bimestre
+			
 			repParams['INICIA']=command.inicia
+
 			repParams.reportName='SdiModificacionSalario.pdf'
 			ByteArrayOutputStream  pdfStream=runReport(repParams)
 			render(file: pdfStream.toByteArray(), contentType: 'application/pdf'
@@ -142,9 +135,6 @@ class ModificacionSalarialController {
 		}
 
 
-	
-
-	
 	private runReport(Map repParams){
 		log.info 'Ejecutando reporte  '+repParams
 		def nombre=WordUtils.capitalize(repParams.reportName)
@@ -193,3 +183,13 @@ class EjercicioBimestreReportCommand{
 		
 	}
 }
+
+
+@Validateable
+class IniciaReportCommand{
+	
+	Date inicia
+	
+}
+
+
