@@ -121,7 +121,7 @@ class CalculoSdiService {
 				sdiNvo=found.varDia*found.factor
 			}
 			
-			def topoSalarial=25*zona.salario
+			def topoSalarial=25*zona.uma
 			found.topeSmg=topoSalarial
 			
 			if(sdiNvo>topoSalarial)
@@ -129,7 +129,7 @@ class CalculoSdiService {
 			else{
 				found.sdiNvo=sdiNvo
 			}
-			found.smg=zona.salario
+			found.smg=zona.uma
 			if(found.sdiAnterior==found.sdiNvo){
 				found.sdiInf=0.0
 			}else{

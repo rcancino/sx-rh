@@ -29,6 +29,9 @@ class Empleado  implements Serializable{
 	
 	String nombre
 	//List contactos
+	
+	Boolean asimilado = false
+	Boolean contratado  = true
 
     Date dateCreated
     Date lastUpdated

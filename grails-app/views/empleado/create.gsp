@@ -25,6 +25,8 @@
 		<f:field property="clave" widget-class="form-control" wrapper="bootstrap3"/>	
 		<f:field property="alta" widget-class="form-control" wrapper="bootstrap3"/>	
 		<f:field property="activo" widget-class="form-control" wrapper="bootstrap3"/>
+		<f:field property="asimilado" widget-class="form-control" wrapper="bootstrap3"/>
+		<f:field property="contratado" widget-class="form-control" wrapper="bootstrap3"/>
 	</f:with>
 </content>
 	

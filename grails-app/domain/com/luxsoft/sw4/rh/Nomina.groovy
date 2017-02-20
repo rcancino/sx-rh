@@ -45,7 +45,7 @@ class Nomina {
 	static transients=['diasPagados','totalCalculado']
 
     static constraints = {
-		tipo inList:['GENERAL','ESPECIAL','AGUINALDO','PTU','LIQUIDACION']
+		tipo inList:['GENERAL','ESPECIAL','AGUINALDO','PTU','LIQUIDACION','ASIMILADOS']
 		diaDePago maxSize:20
 		periodicidad inList:['SEMANAL','QUINCENAL','MENSUAL','ANUAL','ESPECIAL']
 		formaDePago inList:['CHEQUE','TRANSFERENCIA']
@@ -67,7 +67,12 @@ class Nomina {
 			return duration.days
 		}*/
 		def duration=(periodo.fechaFinal-periodo.fechaInicial)+1
-		
+
+		if(tipo=='ASIMILADOS' && periodo.obtenerMes(periodo.fechaInicial)==1){
+			duration=30
+
+		}
+		return duration
 	}
 
 	def beforeUpdate() {

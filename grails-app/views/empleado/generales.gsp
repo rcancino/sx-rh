@@ -58,6 +58,8 @@
 										<f:field property="sexo" widget-class="form-control" />	
 										<f:field property="activo" widget-class="form-control" />
 										<f:field property="controlDeAsistencia" widget-class="form-control" />
+										<f:field property="asimilado" widget-class="form-control" />
+										<f:field property="contratado" widget-class="form-control" />
 									</f:with>
 								</fieldset>
 							
@@ -73,7 +75,6 @@
 										<f:field property="clave" widget-class="form-control" widget-autocomplete="off"/>	
 										<f:field property="status" widget-class="form-control" />
 										<f:field property="alta" widget-class="form-control" />
-											
 									</f:with>
 								</fieldset>
 								

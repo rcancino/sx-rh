@@ -40,7 +40,7 @@
 FROM 
 empleado e join perfil_de_empleado p on (e.id=p.empleado_id) join turno t on (t.id=p.turno_id) join ubicacion u on (u.id=p.ubicacion_id)
  JOIN 	seguridad_social s on (s.empleado_id=e.id) JOIN incapacidad i on (i.empleado_id=e.id) 
- and (i.fecha_inicial between $P{FECHA_INICIAL} and $P{FECHA_FINAL} or i.fecha_final between $P{FECHA_INICIAL} and $P{FECHA_FINAL})
+ and (i.fecha_inicial between $P{FECHA_INICIAL} and $P{FECHA_FINAL} or i.fecha_final between $P{FECHA_INICIAL} and $P{FECHA_FINAL} or ( i.fecha_inicial < $P{FECHA_INICIAL} AND  i.fecha_final > $P{FECHA_FINAL}))
  order by e.apellido_paterno]]></queryString>
 
 	<field name="empleado" class="java.lang.String"/>

@@ -1,5 +1,5 @@
 <%@page expressionCodec="none"%>
-<%@ page import="com.luxsoft.sw4.rh.EjercicioBimestreReportCommand" %>
+<%@ page import="com.luxsoft.sw4.rh.IniciaReportCommand" %>
 
 
 <div class="modal fade" id="sdiModificacioForm" tabindex="-1">
@@ -14,13 +14,9 @@
 			  <g:form controller='modificacionSalarial' action="modifcacionSalarialReport" class="form-horizontal">
 				<fieldset>
 						<legend> Parámetros</legend>
-						<f:with bean="${new EjercicioBimestreReportCommand()}">
-							<f:field property="ejercicio"   widget-class="form-control"/>
-							<f:field property="bimestre"  widget-class="form-control"/>
-							<f:field property="inicia">
-								<input type="text" class="form-control datepicker" id="fechaField" name="inicia" 
-    							value="${g.formatDate(date:new Date(),format:'dd/MM/yyyy') }">
-							</f:field>
+						<f:with bean="${new IniciaReportCommand()}">
+							
+						<f:field property="inicia" input-class="form-control"/>
 						</f:with>
 				</fieldset>
 				<div class="form-group">

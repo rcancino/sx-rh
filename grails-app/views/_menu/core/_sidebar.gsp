@@ -52,6 +52,7 @@
     <g:render template="/_menu/operaciones"/>
     <g:render template="/_menu/asistencia"/>
     <g:render template="/_menu/procesos"/>
+    <g:render template="/_menu/asimilados"/>
     <g:render template="/_menu/reportes"/>
     <g:render template="/_menu/core/sistemas"/>
     

@@ -886,7 +886,7 @@ from 	empleado X
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
 						<font fontName="Arial" pdfFontName="Helvetica-Oblique" size="10" isBold="false" isItalic="true" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
-				<text><![CDATA[TOPE SMG]]></text>
+				<text><![CDATA[TOPE UMA]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
@@ -907,7 +907,7 @@ from 	empleado X
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
 						<font fontName="Arial" pdfFontName="Helvetica-Oblique" size="10" isBold="false" isItalic="true" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
-				<text><![CDATA[SMG]]></text>
+				<text><![CDATA[UMA]]></text>
 				</staticText>
 				<line direction="TopDown">
 					<reportElement
