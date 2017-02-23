@@ -16,25 +16,32 @@ class ProcesadorDeISTPMensual {
 		
 		def ejercicio=ne.nomina.ejercicio
 		def concepto = ConceptoDeNomina.findByClave('D002')
-		
+		def importeGravado = 0.0
 		
 		def honorarios = ne.getPercepciones()
-		def impuestoPorHonorarios = calcularImpuesto(honorarios, ejercicio)
+		if(ne.empleado.contratado){
+
+			def impuestoPorHonorarios = calcularImpuesto(honorarios, ejercicio)
 		
-		def salarioMensual = calcularSalarioMensual(ne)
-		def impuestoMensual = calcularImpuesto(salarioMensual, ejercicio)
+			def salarioMensual = calcularSalarioMensual(ne)
+			def impuestoMensual = calcularImpuesto(salarioMensual, ejercicio)
 
-		//def impuestoAcumulado = impuestoMensual + impuestoPorHonorarios
+			//def impuestoAcumulado = impuestoMensual + impuestoPorHonorarios
 
-		def ingresoTotal = salarioMensual + honorarios
-		def impuestoTotal = calcularImpuesto(ingresoTotal, ejercicio)
+			def ingresoTotal = salarioMensual + honorarios
+			def impuestoTotal = calcularImpuesto(ingresoTotal, ejercicio)
 
-		def impuestoAjustado = impuestoTotal - impuestoMensual
+			importeGravado = impuestoTotal - impuestoMensual
+
+		} else {
+			importeGravado = calcularImpuestoAsalariado(honorarios, ejercicio)
+		}
+		
 
 		def nominaPorEmpleadoDet = new NominaPorEmpleadoDet(concepto:concepto,importeGravado:0.0,importeExcento:0.0,comentario:'PENDIENTE')
 		ne.addToConceptos(nominaPorEmpleadoDet)
 		nominaPorEmpleadoDet.importeExcento = 0.0
-		nominaPorEmpleadoDet.importeGravado = impuestoAjustado.setScale(2,RoundingMode.HALF_EVEN)
+		nominaPorEmpleadoDet.importeGravado = importeGravado.setScale(2,RoundingMode.HALF_EVEN)
 		ne.actualizar()
 		
 	}
@@ -60,6 +67,19 @@ class ProcesadorDeISTPMensual {
 		importeGravado *= tarifa.porcentaje
 		importeGravado /= 100
 		importeGravado += tarifa.cuotaFija
+		importeGravado = importeGravado.setScale(2,RoundingMode.HALF_EVEN)
+		return importeGravado
+
+	}
+
+	def calcularImpuestoAsalariado(BigDecimal percepciones, Integer ejercicio){
+		if(percepciones<=0.0)
+			return 0.0
+		
+		def tarifa = TarifaIsr.where {ejercicio == ejercicio}.list([sort:'porcentaje', order: 'desc']).get(0)
+		
+		def importeGravado = percepciones * tarifa.porcentaje
+		importeGravado /= 100
 		importeGravado = importeGravado.setScale(2,RoundingMode.HALF_EVEN)
 		return importeGravado
 

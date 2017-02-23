@@ -154,12 +154,12 @@ class ComplementoBuilder {
 
         	if(empleado.salario.clabe){
 
-        		receptor.cuentaBancaria = empleado.salario.clabe
-        		receptor.banco = null
+        		//receptor.cuentaBancaria = empleado.salario.clabe
+        		//receptor.banco = null
 
         	} else {
 
-        		receptor.cuentaBancaria = empleado.salario.cuentaBancaria
+        		receptor.cuentaBancaria = new BigInteger(empleado.salario.cuentaBancaria)
         	}
 
         	//receptor.cuentaBancaria = new BigInteger(empleado?.salario.clabe?:empleado.salario.numeroDeCuenta)
@@ -189,14 +189,14 @@ class ComplementoBuilder {
         if( nominaEmpleado.nomina.formaDePago == 'TRANSFERENCIA' ){
         	if(empleado.salario.clabe){
 
-        		receptor.setCuentaBancaria(empleado.salario.clabe)
-        		receptor.banco = null
+        		//receptor.setCuentaBancaria(empleado.salario.clabe)
+        		//receptor.banco = null
 
         	} else {
 
-        		receptor.cuentaBancaria = empleado.salario.cuentaBancaria
+        		receptor.cuentaBancaria = new BigInteger(empleado.salario.cuentaBancaria)
         	}
-        	assert receptor.cuentaBancaria, "Debe registrar una cuenta para el pago de transferencias"
+        	//assert receptor.cuentaBancaria, "Debe registrar una cuenta para el pago de transferencias"
 
         }
         receptor.setClaveEntFed(CEstado.DIF) 

@@ -44,14 +44,24 @@ class ParamsUtils {
 		parametros.put("NUM_CERTIFICADO", 	comprobante.getNoCertificado())
 		parametros.put("SELLO_DIGITAL", 	comprobante.getSello())
 		parametros.put("IMP_CON_LETRA", 	ImporteALetra.aLetra(comprobante.getTotal()))
-		parametros['REGISTRO_PATRONAL'] = nomina.emisor.registroPatronal
+		if(nominaPorEmpleado.nomina.tipo!='ASIMILADOS'){
+			parametros['REGISTRO_PATRONAL'] = nomina.emisor.registroPatronal
+			parametros['RIESGO_PUESTO'] = ''+nomina.receptor.riesgoPuesto
+			parametros['TIPO_JORNADA'] = nomina.receptor.tipoJornada.toString()
+			parametros['ANTIGUEDAD'] = '' + nomina.receptor.antigüedad	
+		}else{
+			parametros['REGISTRO_PATRONAL'] = ''
+			parametros['RIESGO_PUESTO'] = ''
+			parametros['TIPO_JORNADA'] = ''
+			parametros['ANTIGUEDAD'] = ''
+		}
+		
 		parametros.put("NFISCAL", 			comprobante.getSerie()+": "+nominaPorEmpleado.nomina.folio+" - "+comprobante.getFolio())
 		
-		parametros['RIESGO_PUESTO'] = ''+nomina.receptor.riesgoPuesto
-		parametros['TIPO_JORNADA'] = nomina.receptor.tipoJornada.toString()
+		
 		
 		parametros['FECHA_INGRESO_LABORAL'] = nomina.receptor.fechaInicioRelLaboral?.format("yyyy-MM-dd")
-		parametros['ANTIGUEDAD'] = '' + nomina.receptor.antigüedad
+
 		parametros['TIPO_CONTRATO'] = nomina.receptor.tipoContrato.toString()
 		
 		parametros['FECHA_INICIAL']=nomina.fechaInicialPago?.format("yyyy-MM-dd")

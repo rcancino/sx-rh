@@ -110,7 +110,7 @@ class ExportadorController {
 				def importeAbono= importeAbonos+""+decimalAbono
 
 				def tipoCtaInd="03"
-				def numCtaInd=it.empleado.salario.clabe.padLeft(20,"0")
+				def numCtaInd=(it.empleado.salario.numeroDeCuenta?:'').padLeft(20,"0")
 				def claveSucInd="0270"
 
 				/*Lic Rafa*/

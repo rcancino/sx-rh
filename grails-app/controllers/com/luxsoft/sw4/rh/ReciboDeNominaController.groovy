@@ -148,25 +148,37 @@ class ReciboDeNominaController {
 		def empleado=ne.empleado
 		def n=ne.nomina
 		def repParams=[:]
-		repParams["NOMBRE"]=empleado.nombre
-		repParams["RFC"]=empleado.rfc
-		repParams['NUMERO_EMPLEADO']=empleado.perfil.numeroDeTrabajador
-		repParams['NUMERO_IMSS']=empleado.seguridadSocial.numero
-		repParams['CURP']=empleado.curp
-		repParams['SUCURSAL']=empleado.perfil.ubicacion.clave
-		repParams['PUESTO']=empleado.perfil.puesto.clave
-		repParams['DEPARTAMENTO']=empleado.perfil.departamento.clave
-		repParams['SALARIO_DIARIO_BASE']=ne.salarioDiarioBase as String
-		repParams['SALARIO_DIARIO_INTEGRADO']=ne.salarioDiarioIntegrado as String
-		repParams['SUB_EMPLEO_APLIC']=ne.subsidioEmpleoAplicado //as String
-		repParams['FECHA_INGRESO_LABORAL']=empleado.alta.format("yyyy-MM-dd")
-		repParams['NFISCAL']=ne.id as String
-		repParams['FECHA_INICIAL']=n.periodo.fechaInicial?.format("yyyy-MM-dd")
-		repParams['FECHA_FINAL']=n.periodo.fechaFinal?.format("yyyy-MM-dd")
-		repParams['EMISOR_NOMBRE']=Empresa.first().nombre
-		repParams['PERIOCIDAD_PAGO']=n.periodicidad
-		repParams['IMP_CON_LETRA']=com.luxsoft.sw4.cfdi.ImporteALetra.aLetra(ne.getTotal())
-		repParams['TOTAL']=ne.total //as String
+		if(ne.nomina.tipo == 'ASIMILADOS'){
+			repParams["NOMBRE"]=empleado.nombre
+			repParams["RFC"]=empleado.rfc			
+			repParams['CURP']=empleado.curp		
+			repParams['NFISCAL']=ne.id as String		
+			repParams['EMISOR_NOMBRE']=Empresa.first().nombre
+			repParams['IMP_CON_LETRA']=com.luxsoft.sw4.cfdi.ImporteALetra.aLetra(ne.getTotal())
+			repParams['TOTAL']=ne.total //as String
+		} else{
+			repParams["NOMBRE"]=empleado.nombre
+			repParams["RFC"]=empleado.rfc
+			repParams['NUMERO_EMPLEADO']=empleado.perfil.numeroDeTrabajador
+			repParams['NUMERO_IMSS']=empleado.seguridadSocial.numero
+			repParams['CURP']=empleado.curp
+			repParams['SUCURSAL']=empleado.perfil.ubicacion.clave
+			repParams['PUESTO']=empleado.perfil.puesto.clave
+			repParams['DEPARTAMENTO']=empleado.perfil.departamento.clave
+			repParams['SALARIO_DIARIO_BASE']=ne.salarioDiarioBase as String
+			repParams['SALARIO_DIARIO_INTEGRADO']=ne.salarioDiarioIntegrado as String
+			repParams['SUB_EMPLEO_APLIC']=ne.subsidioEmpleoAplicado //as String
+			repParams['FECHA_INGRESO_LABORAL']=empleado.alta.format("yyyy-MM-dd")
+			repParams['NFISCAL']=ne.id as String
+			repParams['FECHA_INICIAL']=n.periodo.fechaInicial?.format("yyyy-MM-dd")
+			repParams['FECHA_FINAL']=n.periodo.fechaFinal?.format("yyyy-MM-dd")
+			repParams['EMISOR_NOMBRE']=Empresa.first().nombre
+			repParams['PERIOCIDAD_PAGO']=n.periodicidad
+			repParams['IMP_CON_LETRA']=com.luxsoft.sw4.cfdi.ImporteALetra.aLetra(ne.getTotal())
+			repParams['TOTAL']=ne.total //as String
+
+		}
+		
 		
 		def diasTrabajados=0
 		def faltas=0

@@ -2,7 +2,7 @@
 <!-- Created with iReport - A designer for JasperReports -->
 <!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
 <jasperReport
-		 name="NominaDigitalCFDI_Res"
+		 name="NominaDigitalCFDI"
 		 columnCount="1"
 		 printOrder="Vertical"
 		 orientation="Portrait"
@@ -466,9 +466,9 @@
 					<rightPen lineWidth="0.0"/>
 </box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+						<font pdfFontName="Helvetica-Bold" size="7" isBold="true"/>
 					</textElement>
-				<text><![CDATA[MEXICO, D.F. A  ]]></text>
+				<text><![CDATA[CIUDAD DE MEX. A  ]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -663,7 +663,7 @@
 					</textElement>
 				<text><![CDATA[NOMBRE DEL EMISOR]]></text>
 				</staticText>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="10"
 						y="61"
@@ -1256,7 +1256,7 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$P{TIPO_CONTRATO}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="10"
 						y="220"
@@ -1273,7 +1273,7 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$P{METODO_DE_PAGO}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="107"
 						y="89"
@@ -1290,7 +1290,7 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$P{REGISTRO_PATRONAL}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="10"
 						y="89"
@@ -1397,7 +1397,7 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{IMPORTE_GRAVADO}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						mode="Transparent"
 						x="35"

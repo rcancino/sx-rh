@@ -152,7 +152,7 @@ class NominaPrintService {
 					'GRUPO':cc.tipoOtroPago.toString(),
 					'CLAVE':cc.clave,
 					'DESCRIPCION':cc.concepto,
-					'IMPORTE_GRAVADO':cc.importe,
+					'IMPORTE_GRAVADO':0.0,
 					'IMPORTE_EXENTO':cc.importe,
 					'CONCEPTO':'P'
 				 ]

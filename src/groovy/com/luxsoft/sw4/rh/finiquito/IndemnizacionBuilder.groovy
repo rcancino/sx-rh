@@ -13,9 +13,9 @@ class IndeminzacionBuilder {
 		
 		finiquito.with{
         
-            def montoIntereses = 10000.0  //**** Agrgar al bean  **//
+            def montoIntereses = 0.0  //**** Agrgar al bean  **//
 
-            def tasaInteres = 10.0 //**** Agrgar al bean  **//
+            def tasaInteres = 0.0 //**** Agrgar al bean  **//
 
             def dias20PorAnio = 20
 
