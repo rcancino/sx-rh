@@ -41,7 +41,7 @@ class ProcesadorDeSueldo {
 		ne.diasDelPeriodo=ne.nomina.getDiasPagados()
 		
 		if(ne.nomina.periodicidad=='QUINCENAL' && ne.nomina.folio==4 && emp.rfc.equals("PAP830101CR3")){
-			ne.diasDelPeriodo=15-ne.vacaciones
+			ne.diasDelPeriodo=15
 		}
 		ne.faltas=asistencia.faltas+asistencia.incidencias
 		/*

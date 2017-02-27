@@ -97,6 +97,7 @@ class FiniquitoService {
 
     def registrarVacaciones(Finiquito finiquito){ 
             ControlDeVacaciones cv = ControlDeVacaciones.where {empleado == finiquito.empleado && ejercicio == Periodo.obtenerYear(finiquito.empleado.baja.fecha)}.find()
+
             ZonaEconomica smg = ZonaEconomica.where {ejercicio == Periodo.obtenerYear(finiquito.empleado.baja.fecha) && clave == 'A'}.find()
             finiquito.with{
                 vacacionesEjercicio = cv.diasVacaciones

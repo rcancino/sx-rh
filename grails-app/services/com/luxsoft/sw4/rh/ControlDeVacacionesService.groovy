@@ -1,6 +1,7 @@
 package com.luxsoft.sw4.rh
 
 import grails.transaction.Transactional
+import com.luxsoft.sw4.Periodo
 
 @Transactional
 class ControlDeVacacionesService {
@@ -31,9 +32,16 @@ class ControlDeVacacionesService {
 			antiguedadYears:0,
 			diasVacaciones:0,
 			diasTomados:0)
+
+
 		Calendar c = Calendar.getInstance()
 		c.setTime(empleado.alta)
-		c.set(Calendar.YEAR,ejercicio)
+				c.set(Calendar.YEAR,ejercicio)
+		if(Periodo.obtenerYear(empleado.alta)==ejercicio){
+				c.set(Calendar.YEAR,ejercicio+1)
+		}
+		ca.aniversario=c.getTime()
+		
 		ca.save failOnError:true
 
 		return ca

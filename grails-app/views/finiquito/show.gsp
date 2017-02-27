@@ -35,6 +35,7 @@
                             <g:if test="${printable}">
                                 <lx:printButton id="${entity?.id}"/>
                             </g:if>
+
                             <g:if test="${delete}">
                                 <a href="" class="btn btn-danger " 
                                     data-toggle="modal" 
@@ -44,9 +45,22 @@
                                 </a> 
 
                             </g:if>
-                            <g:link  action="imprimir" class="btn btn-default btn-outline" id="${entity.id}" >
-                                <i class="fa fa-print"></i> Imprimir
-                            </g:link> 
+                            <div class="btn-group">
+                                    <button type="button" name="reportes"
+                                        class="btn btn-default btn-outline dropdown-toggle" data-toggle="dropdown"
+                                            role="menu">
+                                                Reportes <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <g:link action="reporte" params="[tipo:'1',finiquito:finiquitoInstance.id]"> Carta de Renuncia</g:link>
+                                            <g:link action="reporte" params="[tipo:'2',finiquito:finiquitoInstance.id]">Recibo Separacion Calculo</g:link>
+                                           <g:link action="reporte" params="[tipo:'3',finiquito:finiquitoInstance.id]">Recibo Separacion Nomina Calc</g:link>
+                                            <g:link action="reporte" params="[tipo:'4',finiquito:finiquitoInstance.id]">Recibo Separacion Empleado</g:link>    
+                                        </li>
+                                        
+                                    </ul>
+                            </div>
                                     
                         </div>
                     </lx:header>

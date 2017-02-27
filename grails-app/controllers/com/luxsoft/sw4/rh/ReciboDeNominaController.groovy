@@ -148,15 +148,16 @@ class ReciboDeNominaController {
 		def empleado=ne.empleado
 		def n=ne.nomina
 		def repParams=[:]
-		if(ne.nomina.tipo == 'ASIMILADOS'){
-			repParams["NOMBRE"]=empleado.nombre
-			repParams["RFC"]=empleado.rfc			
-			repParams['CURP']=empleado.curp		
-			repParams['NFISCAL']=ne.id as String		
-			repParams['EMISOR_NOMBRE']=Empresa.first().nombre
-			repParams['IMP_CON_LETRA']=com.luxsoft.sw4.cfdi.ImporteALetra.aLetra(ne.getTotal())
-			repParams['TOTAL']=ne.total //as String
-		} else{
+	
+			if(ne.nomina.tipo == 'ASIMILADOS'){
+					repParams["NOMBRE"]=empleado.nombre
+					repParams["RFC"]=empleado.rfc			
+					repParams['CURP']=empleado.curp		
+					repParams['NFISCAL']=ne.id as String		
+					repParams['EMISOR_NOMBRE']=Empresa.first().nombre
+					repParams['IMP_CON_LETRA']=com.luxsoft.sw4.cfdi.ImporteALetra.aLetra(ne.getTotal())
+					repParams['TOTAL']=ne.total //as String
+					}else{
 			repParams["NOMBRE"]=empleado.nombre
 			repParams["RFC"]=empleado.rfc
 			repParams['NUMERO_EMPLEADO']=empleado.perfil.numeroDeTrabajador
@@ -176,10 +177,8 @@ class ReciboDeNominaController {
 			repParams['PERIOCIDAD_PAGO']=n.periodicidad
 			repParams['IMP_CON_LETRA']=com.luxsoft.sw4.cfdi.ImporteALetra.aLetra(ne.getTotal())
 			repParams['TOTAL']=ne.total //as String
-
 		}
-		
-		
+
 		def diasTrabajados=0
 		def faltas=0
 		def nominaPorEmpleado=ne

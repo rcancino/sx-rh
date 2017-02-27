@@ -68,7 +68,10 @@ class VacacionesService {
 	
 	@grails.events.Listener(topic='VacacionesTopic')
 	def actualizarControl(Long id) {
+
+
 		def vacaciones=Vacaciones.get(id)
+
 		if(vacaciones.control){
 			actualizarControl(vacaciones.control)
 		}
@@ -80,10 +83,34 @@ class VacacionesService {
 
 		 println "Actualizando el control:  "+control
 		def vacaciones=Vacaciones.findAllByControl(control)
-		def pagados=vacaciones.sum 0,{it.diasPagados}
-		def normales=vacaciones.sum 0,{it.dias.size()}
-		control.diasTomados=normales
-		control.diasPagados=pagados
+
+			if(vacaciones){
+				def pagados=vacaciones.sum 0,{it.diasPagados}
+				def normales=vacaciones.sum 0,{it.dias.size()}
+				control.diasTomados=normales
+				control.diasPagados=pagados		
+			}else{
+				println "El empleado "+control.empleado +" No tiene vacaciones"
+					int ejercicio=control.ejercicio
+					def periodo=Periodo.getPeriodoAnual(ejercicio)
+
+			def query="""
+						SELECT MIN(F.VAC_DIAS) as diasVacaciones
+						FROM factor_de_integracion F 	
+						WHERE 
+						(FLOOR(((-(TIMESTAMPDIFF(MINUTE,DATE((CASE WHEN YEAR('@EALTA')=YEAR('@FECHA_INI') THEN '@EALTA' ELSE '@FECHA_INI' END )),'@EALTA')/60)/24)/365))+1) 
+						BETWEEN F.YEAR_DE AND F.YEAR_HASTA  """
+
+			 query=query.replaceAll('@FECHA_INI',periodo.fechaInicial.format('yyyy/MM/dd'))
+			 query=query.replaceAll('@EALTA',control.empleado.alta.format('yyyy/MM/dd'))
+			 
+			 Sql sql=new Sql(dataSource)
+			 	sql.eachRow(query){row-> 
+						control.diasVacaciones=row.diasVacaciones
+			 	}
+			}
+
+		
 		control.save failOnError:true
 	}
 
