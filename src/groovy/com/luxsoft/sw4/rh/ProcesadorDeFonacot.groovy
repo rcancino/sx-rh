@@ -6,6 +6,10 @@ import org.apache.commons.logging.LogFactory
 
 import com.luxsoft.sw4.rh.imss.*
 
+import com.luxsoft.sw4.Periodo
+
+import com.luxsoft.sw4.Mes
+
 class ProcesadorDeFonacot {
 	
 	def conceptoClave='D014'
@@ -36,7 +40,11 @@ class ProcesadorDeFonacot {
 			}
 			//def importeExcento=fonacot.retencionDiaria*(ne.diasTrabajados+ne.vacaciones)
 			//def importeExcento=fonacot.retencionDiaria*(ne.diasDelPeriodo-ne.faltas-ne.incapacidades)
-			def importeExcento=fonacot.retencionDiaria*(ne.diasDelPeriodo)
+			def mesNombre=ne.nomina.calendario.mesNombre
+			def mes=Mes.findMesByNombre(mesNombre)
+			def diasDelMes=Periodo.getPeriodoEnUnMes(mes).dias()
+			
+			def importeExcento=fonacot.retencionMensual/diasDelMes *(ne.diasDelPeriodo)
 			if(ne.asistencia.diasTrabajados==0 && ne.diasTrabajados==0){
 				importeExcento=0
 			}
