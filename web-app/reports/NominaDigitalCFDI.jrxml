@@ -92,6 +92,7 @@
 	<parameter name="TIPO" isForPrompting="true" class="java.lang.String"/>
 	<parameter name="TOTAL_1" isForPrompting="false" class="java.math.BigDecimal"/>
 	<parameter name="SUB_EMPLEO_APLIC" isForPrompting="false" class="java.math.BigDecimal"/>
+	<parameter name="ASIMILADOS" isForPrompting="false" class="java.lang.String"/>
 
 	<field name="GRUPO" class="java.lang.String"/>
 	<field name="DESCRIPCION" class="java.lang.String"/>
@@ -873,16 +874,18 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font pdfFontName="Times-Roman"/>
 					</textElement>
-				<text><![CDATA[NOMBRE DEL TRABAJADOR]]></text>
+				<text><![CDATA[NOMBRE]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
 						mode="Transparent"
 						x="210"
-						y="34"
+						y="61"
 						width="184"
 						height="13"
-						key="staticText-188"/>
+						key="staticText-188">
+							<printWhenExpression><![CDATA[new Boolean($P{ASIMILADOS}.equals("NO"))]]></printWhenExpression>
+						</reportElement>
 					<box>					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -896,10 +899,12 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="280"
-						y="47"
+						y="74"
 						width="114"
 						height="16"
-						key="textField-114"/>
+						key="textField-114">
+							<printWhenExpression><![CDATA[new Boolean($P{ASIMILADOS}.equals("NO"))]]></printWhenExpression>
+						</reportElement>
 					<box>					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -913,10 +918,12 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="210"
-						y="47"
+						y="74"
 						width="70"
 						height="16"
-						key="textField-116"/>
+						key="textField-116">
+							<printWhenExpression><![CDATA[new Boolean($P{ASIMILADOS}.equals("NO"))]]></printWhenExpression>
+						</reportElement>
 					<box>					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -931,7 +938,7 @@
 					<reportElement
 						mode="Transparent"
 						x="210"
-						y="63"
+						y="34"
 						width="184"
 						height="13"
 						key="staticText-190"/>
@@ -948,7 +955,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="291"
-						y="76"
+						y="47"
 						width="103"
 						height="14"
 						key="textField-117"/>
@@ -965,7 +972,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="210"
-						y="76"
+						y="47"
 						width="81"
 						height="14"
 						key="textField-118"/>
@@ -986,7 +993,9 @@
 						y="90"
 						width="184"
 						height="13"
-						key="staticText-191"/>
+						key="staticText-191">
+							<printWhenExpression><![CDATA[new Boolean($P{ASIMILADOS}.equals("NO"))]]></printWhenExpression>
+						</reportElement>
 					<box>					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -1003,7 +1012,9 @@
 						y="103"
 						width="98"
 						height="16"
-						key="textField-119"/>
+						key="textField-119">
+							<printWhenExpression><![CDATA[new Boolean($P{ASIMILADOS}.equals("NO"))]]></printWhenExpression>
+						</reportElement>
 					<box>					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -1020,7 +1031,9 @@
 						y="103"
 						width="86"
 						height="16"
-						key="textField-120"/>
+						key="textField-120">
+							<printWhenExpression><![CDATA[new Boolean($P{ASIMILADOS}.equals("NO"))]]></printWhenExpression>
+						</reportElement>
 					<box>					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -1038,7 +1051,9 @@
 						y="119"
 						width="184"
 						height="13"
-						key="staticText-192"/>
+						key="staticText-192">
+							<printWhenExpression><![CDATA[new Boolean($P{ASIMILADOS}.equals("NO"))]]></printWhenExpression>
+						</reportElement>
 					<box>					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -1055,7 +1070,9 @@
 						y="132"
 						width="114"
 						height="14"
-						key="textField-121"/>
+						key="textField-121">
+							<printWhenExpression><![CDATA[new Boolean($P{ASIMILADOS}.equals("NO"))]]></printWhenExpression>
+						</reportElement>
 					<box>					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -1072,7 +1089,9 @@
 						y="132"
 						width="70"
 						height="14"
-						key="textField-122"/>
+						key="textField-122">
+							<printWhenExpression><![CDATA[new Boolean($P{ASIMILADOS}.equals("NO"))]]></printWhenExpression>
+						</reportElement>
 					<box>					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -1090,7 +1109,9 @@
 						y="146"
 						width="184"
 						height="13"
-						key="staticText-193"/>
+						key="staticText-193">
+							<printWhenExpression><![CDATA[new Boolean($P{ASIMILADOS}.equals("NO"))]]></printWhenExpression>
+						</reportElement>
 					<box>					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -1107,7 +1128,9 @@
 						y="159"
 						width="147"
 						height="16"
-						key="textField-123"/>
+						key="textField-123">
+							<printWhenExpression><![CDATA[new Boolean($P{ASIMILADOS}.equals("NO"))]]></printWhenExpression>
+						</reportElement>
 					<box>					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -1124,7 +1147,9 @@
 						y="159"
 						width="37"
 						height="16"
-						key="textField-124"/>
+						key="textField-124">
+							<printWhenExpression><![CDATA[new Boolean($P{ASIMILADOS}.equals("NO"))]]></printWhenExpression>
+						</reportElement>
 					<box>					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -1142,7 +1167,9 @@
 						y="175"
 						width="184"
 						height="13"
-						key="staticText-194"/>
+						key="staticText-194">
+							<printWhenExpression><![CDATA[new Boolean($P{ASIMILADOS}.equals("NO"))]]></printWhenExpression>
+						</reportElement>
 					<box>					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -1159,7 +1186,9 @@
 						y="188"
 						width="70"
 						height="16"
-						key="textField-126"/>
+						key="textField-126">
+							<printWhenExpression><![CDATA[new Boolean($P{ASIMILADOS}.equals("NO"))]]></printWhenExpression>
+						</reportElement>
 					<box>					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -1176,7 +1205,9 @@
 						y="188"
 						width="54"
 						height="16"
-						key="textField-127"/>
+						key="textField-127">
+							<printWhenExpression><![CDATA[new Boolean($P{ASIMILADOS}.equals("NO"))]]></printWhenExpression>
+						</reportElement>
 					<box>					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -1194,7 +1225,9 @@
 						y="204"
 						width="184"
 						height="13"
-						key="staticText-195"/>
+						key="staticText-195">
+							<printWhenExpression><![CDATA[new Boolean($P{ASIMILADOS}.equals("NO"))]]></printWhenExpression>
+						</reportElement>
 					<box>					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -1211,7 +1244,9 @@
 						y="217"
 						width="92"
 						height="16"
-						key="textField-128"/>
+						key="textField-128">
+							<printWhenExpression><![CDATA[new Boolean($P{ASIMILADOS}.equals("NO"))]]></printWhenExpression>
+						</reportElement>
 					<box>					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -1228,7 +1263,9 @@
 						y="217"
 						width="92"
 						height="16"
-						key="textField-129"/>
+						key="textField-129">
+							<printWhenExpression><![CDATA[new Boolean($P{ASIMILADOS}.equals("NO"))]]></printWhenExpression>
+						</reportElement>
 					<box>					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -1245,7 +1282,9 @@
 						y="188"
 						width="60"
 						height="16"
-						key="textField-131"/>
+						key="textField-131">
+							<printWhenExpression><![CDATA[new Boolean($P{ASIMILADOS}.equals("NO"))]]></printWhenExpression>
+						</reportElement>
 					<box>					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
@@ -1850,24 +1889,6 @@
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$P{COMENTARIO_NOM}.concat("     RECIBI DE CONFORMIDAD:  Las prestaciones correspondientes al periodo que se indica arriba y que liquida totalmente hasta esta fecha mi salario normal, extra, 7° dia, salario de compensación y otras prestaciones, entiendo que las deducciones tanto legales como de caracter privado se han aplicado para cubrir los adeudos respectivos.")]]></textFieldExpression>
 				</textField>
-				<staticText>
-					<reportElement
-						x="314"
-						y="110"
-						width="260"
-						height="15"
-						key="staticText-196"/>
-					<box>					<pen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<topPen lineWidth="0.75" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false"/>
-					</textElement>
-				<text><![CDATA[FIRMA DEL TRABAJADOR]]></text>
-				</staticText>
 				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="144"
@@ -2125,6 +2146,20 @@
 					</textElement>
 				<text><![CDATA[SUB.EMPLEO APLICADO  :  ]]></text>
 				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="324"
+						y="112"
+						width="260"
+						height="15"
+						key="textField-151"/>
+					<box>					<topPen lineWidth="0.5"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{ASIMILADOS}.equals( "SI" )?"FIRMA DEL CONSEJERO":"FIRMA DEL TRABAJADOR"]]></textFieldExpression>
+				</textField>
 			</band>
 		</lastPageFooter>
 		<summary>

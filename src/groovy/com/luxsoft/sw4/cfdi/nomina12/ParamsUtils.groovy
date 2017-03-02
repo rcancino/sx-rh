@@ -49,11 +49,17 @@ class ParamsUtils {
 			parametros['RIESGO_PUESTO'] = ''+nomina.receptor.riesgoPuesto
 			parametros['TIPO_JORNADA'] = nomina.receptor.tipoJornada.toString()
 			parametros['ANTIGUEDAD'] = '' + nomina.receptor.antigüedad	
+			parametros['ASIMILADOS']='NO'
+			parametros['BANCO'] = nominaPorEmpleado.nomina.formaDePago == 'TRANSFERENCIA'? nomina.receptor.banco?.toString() : ''
+			parametros['CLABE']=nomina.receptor.cuentaBancaria?.toString()
 		}else{
 			parametros['REGISTRO_PATRONAL'] = ''
 			parametros['RIESGO_PUESTO'] = ''
 			parametros['TIPO_JORNADA'] = ''
 			parametros['ANTIGUEDAD'] = ''
+			parametros['ASIMILADOS']='SI'
+			parametros['BANCO'] = ''
+			parametros['CLABE']=''
 		}
 		
 		parametros.put("NFISCAL", 			comprobante.getSerie()+": "+nominaPorEmpleado.nomina.folio+" - "+comprobante.getFolio())
@@ -67,8 +73,8 @@ class ParamsUtils {
 		parametros['FECHA_INICIAL']=nomina.fechaInicialPago?.format("yyyy-MM-dd")
 		parametros['FECHA_FINAL']=nomina.fechaFinalPago?.format("yyyy-MM-dd")
 		
-		parametros['CLABE']=nomina.receptor.cuentaBancaria?.toString()
-		parametros['BANCO'] = nominaPorEmpleado.nomina.formaDePago == 'TRANSFERENCIA'? nomina.receptor.banco?.toString() : ''
+		
+		
 		parametros['TOTAL']=comprobante.getTotal() //as String
 		parametros['COMENTARIO_NOM']='Nómina'
 		def img=QRCodeUtils.generarQR(comprobante)

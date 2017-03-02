@@ -155,11 +155,11 @@ class ComplementoBuilder {
         	if(empleado.salario.clabe){
 
         		//receptor.cuentaBancaria = empleado.salario.clabe
-        		//receptor.banco = null
+        		receptor.banco = null
 
         	} else {
 
-        		receptor.cuentaBancaria = new BigInteger(empleado.salario.cuentaBancaria)
+        		receptor.cuentaBancaria = new BigInteger(empleado.salario.numeroDeCuenta)
         	}
 
         	//receptor.cuentaBancaria = new BigInteger(empleado?.salario.clabe?:empleado.salario.numeroDeCuenta)

@@ -140,9 +140,6 @@ def reporte(){
                 totalFiniquito=nFiniquito?nFiniquito.total:0
                 totalLiquidacion=nLiquidacion?nLiquidacion.total:0
 
-println "-------------Fin  "+totalFiniquito+"-------------------- Liq  "+totalLiquidacion
-
-
                 def monto=totalFiniquito+totalLiquidacion
                 
                 params['IMP_CON_LETRA']=  com.luxsoft.sw4.cfdi.ImporteALetra.aLetra(monto)

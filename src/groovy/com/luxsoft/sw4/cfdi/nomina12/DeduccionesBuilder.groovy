@@ -13,9 +13,17 @@ class DeduccionesBuilder {
 	def build(Nomina nomina, NominaPorEmpleado nominaEmpleado){
 		
 		def deducciones = nominaEmpleado.conceptos.findAll{it.concepto.tipo == 'DEDUCCION'}
-		Deducciones ded=nomina.addNewDeducciones()
-		ded.totalOtrasDeducciones = getTotalOtras(deducciones)
+
+		def totalOtrasDeducciones = getTotalOtras(deducciones)
 		def isr = getTotalIsr(deducciones)
+
+		if( totalOtrasDeducciones <= 0.0 && isr <= 0.0) 
+			return null
+		
+		Deducciones ded=nomina.addNewDeducciones()
+
+		ded.totalOtrasDeducciones = totalOtrasDeducciones
+		
 		if(isr){
 			ded.totalImpuestosRetenidos = isr
 		}
@@ -28,6 +36,7 @@ class DeduccionesBuilder {
 			dd.setConcepto(it.concepto.descripcion.replace('.',','))
 			dd.setImporte(it.total)
 		}
+		
 		return ded
 	}
 

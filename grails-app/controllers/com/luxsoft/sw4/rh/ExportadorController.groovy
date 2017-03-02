@@ -377,6 +377,9 @@ def generarModificacionIndividualImss(PeriodoCommand command){
 	   def filler= StringUtils.leftPad("",6)
 	   def tipoTrabajador="1"
 	   def tipoSalario="2"
+	   if(calculo.calculoSdi.variable==0){
+	   		tipoSalario="0"
+	   }
 		 if(calculo.calculoSdi.empleado.id==273 || calculo.calculoSdi.empleado.id==274)
 		 tipoSalario=1
 	   def tipoJornada=0
