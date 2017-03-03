@@ -706,10 +706,10 @@ def generarModificacionBimestralSua(EjercicioBimestreCommand command){
 }
 
 def reporteDeModificacionBimestral(){
-	[reportCommand:new EjercicioBimestreCommand()]
+	[reportCommand:new EjercicioBimestrePorTipoCommand()]
 }
 
-def reportePorBimestre(EjercicioBimestreCommand command){
+def reportePorBimestre(EjercicioBimestrePorTipoCommand command){
 	if(command==null){
 		render 'No esta bien generado el gsp para el reporte falta el bean PorEmpleadoCommand'
 	}
@@ -723,6 +723,7 @@ def reportePorBimestre(EjercicioBimestreCommand command){
 	def repParams=[:]
 	repParams['BIMESTRE']=command.bimestre
 	repParams['EJERCICIO']=command.ejercicio
+	repParams['TIPO']=command.tipo
 	repParams.reportName=params.reportName?:'FaltaNombre Del Reporte'
 	ByteArrayOutputStream  pdfStream=runReport(repParams)
 	render(file: pdfStream.toByteArray(), contentType: 'application/pdf'
