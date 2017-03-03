@@ -40,11 +40,19 @@ class ProcesadorDeFonacot {
 			}
 			//def importeExcento=fonacot.retencionDiaria*(ne.diasTrabajados+ne.vacaciones)
 			//def importeExcento=fonacot.retencionDiaria*(ne.diasDelPeriodo-ne.faltas-ne.incapacidades)
-			def mesNombre=ne.nomina.calendario.mesNombre
-			def mes=Mes.findMesByNombre(mesNombre)
-			def diasDelMes=Periodo.getPeriodoEnUnMes(mes).dias()
+			
+			def mesNombre=ne.nomina.calendarioDet.mes
+
+			def periodoMes=CalendarioDet.executeQuery("select min(c.inicio) as inicio,max(c.fin) as fin from CalendarioDet c where c.mes=? and c.calendario.ejercicio=?",[mesNombre,ne.nomina.ejercicio])
+			
+
+			def diasDelMes=(new Periodo(periodoMes[0][0],periodoMes[0][1]).dias())+1
+
+			
 			
 			def importeExcento=fonacot.retencionMensual/diasDelMes *(ne.diasDelPeriodo)
+
+			
 			if(ne.asistencia.diasTrabajados==0 && ne.diasTrabajados==0){
 				importeExcento=0
 			}
