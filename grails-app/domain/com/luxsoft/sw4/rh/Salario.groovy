@@ -17,6 +17,8 @@ class Salario implements Serializable{
 	String numeroDeCuenta
 	SatBanco banco
 
+	Boolean primaDominicalFija = false
+
     static constraints = {
 		salarioDiario()
 		salarioDiarioIntegrado()
@@ -26,6 +28,7 @@ class Salario implements Serializable{
 		periodicidad inList:['SEMANAL','QUINCENAL','MENSUAL','CATORCENAL','BIMESTRAL','UNIDAD DE OBRA','COMISION','PRECIO ALZADO']
 		banco nullable:true
 		numeroDeCuenta nullable:true
+		primaDominicalFija nullable:true
     }
 	
 	static transients=['salarioMensual']
