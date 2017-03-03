@@ -621,7 +621,7 @@ class EjercicioBimestreCommand{
 	static constraints = {
 		ejercicio inList:2015..2020
 		bimestre inList:01..06
-		tipo nullable:true
+		
 		
 	}
 	String toString(){
