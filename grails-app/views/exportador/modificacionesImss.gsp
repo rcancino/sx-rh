@@ -24,6 +24,7 @@
 				<f:with bean="${reportCommand}">
 					<f:field property="ejercicio" widget-class="form-control" wrapper="bootstrap3"/>
 					<f:field property="bimestre" widget-class="form-control" wrapper="bootstrap3"/>
+					<f:field property="tipo" widget-class="form-control" wrapper="bootstrap3"/>
 				</f:with>
 			</fieldset>
 			<div class="form-group">

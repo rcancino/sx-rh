@@ -589,15 +589,39 @@ class IncentivoMensualCommand{
 
 
 @Validateable
+class EjercicioBimestrePorTipoCommand{
+	
+	Integer ejercicio
+
+	Integer bimestre
+
+	String tipo
+	
+	static constraints = {
+		ejercicio inList:2015..2050
+		bimestre inList:01..06
+		tipo inList:['QUINCENAL','SEMANAL','MIXTO']
+		
+		
+	}
+	String toString(){
+		return "$ejercicio"
+	}
+	
+}
+
+
+@Validateable
 class EjercicioBimestreCommand{
 	
 	Integer ejercicio
 	Integer bimestre
+
 	
 	static constraints = {
 		ejercicio inList:2015..2020
 		bimestre inList:01..06
-		
+		tipo nullable:true
 		
 	}
 	String toString(){

@@ -198,11 +198,13 @@ class ExportadorController {
 	
 /** Layouts Imss */	
 	def modificacionesImss(){
-		[reportCommand:new EjercicioBimestreCommand()]
+		[reportCommand:new EjercicioBimestrePorTipoCommand()]
 	}
 	
-	def generarModificacionesImss(EjercicioBimestreCommand command){
+	def generarModificacionesImss(EjercicioBimestrePorTipoCommand command){
 		File temp = File.createTempFile("temp",".txt")
+
+
 		
 		temp.with {
 
@@ -243,8 +245,16 @@ class ExportadorController {
 		
 		def calculosSdi=CalculoSdi.findAllByEjercicioAndBimestre(command.ejercicio,command.bimestre).each{calculo ->
 		 
+		  def valido = false
+		  if(calculo.empleado.salario.periodicidad.toString() == command.tipo.toString()){
+		  	 valido = true
+		  }
+		  if(command.tipo.toString() == "MIXTO"){
+		  	 valido=true
+		  }
 		  
-		  if(calculo.sdiInf!=0.0  && calculo.tipo== 'CALCULO_SDI' ){
+
+		  if(calculo.sdiInf != 0.0  && calculo.tipo == 'CALCULO_SDI' && valido == true ){
 			  
 		   if(calculo.sdiInf!= calculo.sdiAnterior){
 			numeroDeMovs=numeroDeMovs+1
@@ -1880,3 +1890,8 @@ class NominaCommand{
 		nomina nullable:false
 	}
 }
+
+
+
+
+
