@@ -157,7 +157,7 @@ class SalarioService {
 	
 	@NotTransactional
 	def calcularSalarioDiario(int ejercicio,int bimestre){
-		println "Generando calculo SDI bimestre:$bimestre ejercicio:$ejercicio"
+		log.info "Generando calculo SDI bimestre:$bimestre ejercicio:$ejercicio"
 		def rows=[]
 		["QUINCENA","SEMANA"].each{
 			
@@ -180,13 +180,14 @@ class SalarioService {
 				.replaceAll('@TIPO', it=='SEMANA'? 'S.periodicidad=\'SEMANAL\'' : 'S.periodicidad<>\'QUINCENAL\'')
 				.replaceAll('@PERIODO',it+'L')
 									
-			println query
+			//println query
 				Sql sql=new Sql(dataSource)
 				sql.eachRow(query){ row->
 					
 					def empleado=Empleado.findById(row.id)
 					if(empleado){
 						//println 'SDI para: '+empleado
+						//log.info("Actualizando SDI para ${empleado}")
 						def found=CalculoSdi.findByEmpleadoAndEjercicioAndBimestreAndTipo(empleado,ejercicio,bimestre,'CALCULO_SDI')
 						if(!found){
 							found=new CalculoSdi(
@@ -200,88 +201,74 @@ class SalarioService {
 								).save flush:true
 						}
 						
-							found.sdiAnterior=empleado.salario.salarioDiarioIntegrado
-							found.sdbAnterior=empleado.salario.salarioDiario
-							found.sdb=empleado.salario.salarioDiario
-							found.years=( (fin-empleado.alta)/365)
-							found.dias=fin-empleado.alta+1
-							found.vacDias=row.VAC_DIAS
-							found.vacPrima=row.VAC_PRIMA
-							found.agndoDias=row.AGNDO_DIAS
-							found.factor=row.FACTOR
-							found.sdiF=found.sdb*found.factor
+						found.sdiAnterior=empleado.salario.salarioDiarioIntegrado
+						found.sdbAnterior=empleado.salario.salarioDiario
+						found.sdb=empleado.salario.salarioDiario
+						found.years=( (fin-empleado.alta)/365)
+						found.dias=fin-empleado.alta+1
+						found.vacDias=row.VAC_DIAS
+						found.vacPrima=row.VAC_PRIMA
+						found.agndoDias=row.AGNDO_DIAS
+						found.factor=row.FACTOR
+						found.sdiF=found.sdb*found.factor
 							
-							found.diasLabBim=row.DIAS_LAB_BIM
-							if((!empleado.controlDeAsistencia && empleado.salario.periodicidad=='QUINCENAL' && bimestre==1) || empleado.id==441){
-								
-								/*if(fechaFin){
-									
-								}else{
-								
-								}*/
-								found.diasLabBim=found.diasLabBim-2
-							}
+						found.diasLabBim=row.DIAS_LAB_BIM
+						if((!empleado.controlDeAsistencia && empleado.salario.periodicidad=='QUINCENAL' && bimestre==1) || empleado.id==441){
 							
+							found.diasLabBim=found.diasLabBim-2
+						}
+						found.compensacion=0.0
+						found.incentivo=0.0
+						found.bonoPorDesemp=0.0
+						found.bono=0.0
+						found.bonoPorAntiguedad=0.0
+						found.hrsExtrasDobles=0.0
+						found.hrsExtrasTriples=0.0
+						found.comisiones=0.0
+						found.primaDom=0.0
+						found.vacacionesP=0.0
+						actualizarVariables(found)
+						registrarTiempoExtraDoble(found)
+						found.with{
+							variable=compensacion+incentivo+bonoPorDesemp+hrsExtrasDobles+hrsExtrasTriples+comisiones+primaDom+vacacionesP+bono+bonoPorAntiguedad
+						}							
+						if(found.diasLabBim)
+							found.varDia=found.variable/found.diasLabBim
+						else 
+							found.varDia=0
 							
+						def sdiNvo=found.sdiF+found.varDia
+						found.sdiCalc=sdiNvo
 							
+						if(found.sdb==0.0){
+							sdiNvo=found.varDia*found.factor
+						}
 							
-							found.compensacion=0.0
-							found.incentivo=0.0
-							found.bonoPorDesemp=0.0
-							found.bono=0.0
-							found.bonoPorAntiguedad=0.0
-							found.hrsExtrasDobles=0.0
-							found.hrsExtrasTriples=0.0
-							found.comisiones=0.0
-							found.primaDom=0.0
-							found.vacacionesP=0.0
-							actualizarVariables(found)
-							registrarTiempoExtraDoble(found)
-							found.with{
-								variable=compensacion+incentivo+bonoPorDesemp+hrsExtrasDobles+hrsExtrasTriples+comisiones+primaDom+vacacionesP+bono+bonoPorAntiguedad
-							}
+						def topoSalarial=25*zona.salario
+						found.topeSmg=topoSalarial
 							
+						if(sdiNvo>topoSalarial)
+							found.sdiNvo=topoSalarial
+						else{
+							found.sdiNvo=sdiNvo
+						}
 							
-							
-							if(found.diasLabBim)
-								found.varDia=found.variable/found.diasLabBim
-							else 
-								found.varDia=0
-							
-							def sdiNvo=found.sdiF+found.varDia
-							found.sdiCalc=sdiNvo
-							
-							if(found.sdb==0.0){
-								sdiNvo=found.varDia*found.factor
-							}
-							
-							def topoSalarial=25*zona.salario
-							found.topeSmg=topoSalarial
-							
-							if(sdiNvo>topoSalarial)
-								found.sdiNvo=topoSalarial
-							else{
-								found.sdiNvo=sdiNvo
-							}
-							
-							found.smg=zona.salario
-							if(found.sdiAnterior==found.sdiNvo){
-								found.sdiInf=0.0
-							}else{
-								found.sdiInf=found.sdiNvo
-							}
-							if(empleado.alta>inicio){
-								found.diasBim=fin-empleado.alta+1
-							}else{
-								found.diasBim=fin-inicio+1
-							}
-							found.incapacidades=row.INCAPACIDADES
-							found.faltas=row.FALTAS
-							
-					
-						
+						found.smg=zona.salario
+						if(found.sdiAnterior==found.sdiNvo){
+							found.sdiInf=0.0
+						}else{
+							found.sdiInf=found.sdiNvo
+						}
+
+						if(empleado.alta>inicio){
+							found.diasBim=fin-empleado.alta+1
+						} else {
+							found.diasBim=fin-inicio+1
+						}
+						found.incapacidades=row.INCAPACIDADES
+						found.faltas=row.FALTAS
+						found.save failOnError: true , flush:true
 					}
-					
 				}
 		}
 		
@@ -289,7 +276,7 @@ class SalarioService {
 	}
 	
 	private actualizarVariables(CalculoSdi sdi){
-		
+		//log.info("Actualizando variables para ${sdi.empleado}")
 		def partidas=NominaPorEmpleadoDet
 		.findAll("from NominaPorEmpleadoDet d where d.parent.empleado=? and d.concepto.id in(19,22,24,43,41,42,44,49,50) and d.parent.nomina.ejercicio=? and d.parent.nomina.calendarioDet.bimestre=?"
 				 ,[sdi.empleado,sdi.ejercicio,sdi.bimestre])
@@ -320,8 +307,15 @@ class SalarioService {
 					sdi.comisiones+=it.importeGravado+it.importeExcento
 					break
 				case 42:
-					sdi.primaDom+=it.importeGravado+it.importeExcento
-					break
+					//sdi.primaDom+=it.importeGravado+it.importeExcento
+					//break
+					if(sdi.empleado.salario.primaDominicalFija){
+    					log.info("Salario dominical fijo para ${sdi.empleado}")
+    					sdi.primaDom = 0.0
+    				} else {
+    					sdi.primaDom += it.importeGravado + it.importeExcento
+    				}
+    				break
 				case 44:
 					sdi.vacacionesP+=it.importeGravado+it.importeExcento
 					break

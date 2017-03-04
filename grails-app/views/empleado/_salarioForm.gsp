@@ -36,6 +36,7 @@
 				<f:field property="salario.clabe" widget-class="form-control" input-autocomplete="off" label="CLABE" wrapper="bootstrap3"/>
 				<f:field property="salario.numeroDeCuenta" widget-class="form-control" input-autocomplete="off" wrapper="bootstrap3"/>	
 				<f:field property="salario.banco" widget-class="form-control" wrapper="bootstrap3"/>	
+				<f:field property="salario.primaDominicalFija" widget-class="form-control" wrapper="bootstrap3" label="Prima Dom f."/>	
 			</f:with>
 		</fieldset>
 	</div>

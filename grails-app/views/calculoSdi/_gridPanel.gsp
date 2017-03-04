@@ -23,6 +23,7 @@
 			<th>Estatus</th>
 			<th>Bono</th>
 			<th>Bono Antiguedad</th>
+			<th>P.Dom</th>
 			<%--
 			
 			
@@ -55,6 +56,7 @@
 				<td>${row.status}</td>
 				<td>${row.bono}</td>
 				<td>${row.bonoPorAntiguedad}</td>
+				<td>${row.primaDom}</td>
 				<%--
 				
 				

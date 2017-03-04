@@ -39,8 +39,6 @@ class CalculoSdiService {
 		//println 'Res: '+res
 		//println 'Inicio: '+inicio+ 'Fin: '+fin+ ' Tipo: '+stipo+ '  Ejercicio: '+ejercicio+' bBimestre: '+bimestre
 		def zona=ZonaEconomica.findByClaveAndEjercicio('A',bimestre==6 ? ejercicio+1 : ejercicio)
-
-		println "******************"+zona
 		
 		//log.info "Calculo SDI para $m.empleado $ejercicio  bimestre $bimestre tipo $tipo ${inicio.format('dd/MM/yyyy')} a ${fin.format('dd/MM/yyyy')}"
 
@@ -198,7 +196,9 @@ class CalculoSdiService {
     				sdi.comisiones+=it.importeGravado+it.importeExcento
     				break
     			case 42:
-    				sdi.primaDom+=it.importeGravado+it.importeExcento
+    				if(!sdi.empleado.salario.primaDominicalFija){
+    					sdi.primaDom+=it.importeGravado+it.importeExcento
+    				}
     				break
     			case 44:
     				sdi.vacacionesP+=it.importeGravado+it.importeExcento

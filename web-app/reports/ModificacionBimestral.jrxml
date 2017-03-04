@@ -31,21 +31,18 @@
 	</parameter>
 	<parameter name="EJERCICIO" isForPrompting="true" class="java.lang.Integer"/>
 	<parameter name="BIMESTRE" isForPrompting="true" class="java.lang.Integer"/>
+	<parameter name="TIPO" isForPrompting="true" class="java.lang.String"/>
 	<queryString><![CDATA[SELECT concat(ifnull(e.apellido_paterno,"")," ",e.apellido_materno," ",e.nombres ) as empleado,date(e.alta) as fecha_alta ,u.clave,t.descripcion AS TURNO,s.sdb,s.sdi_inf
-,s.sdi_anterior,s.sdb_anterior,s.bimestre,s.ejercicio,date_add(S.fecha_fin,INTERVAL 1 DAY) AS fecha_movi
-,l.numero
+,s.sdi_anterior,s.sdb_anterior,s.bimestre,s.ejercicio,date_add(S.fecha_fin,INTERVAL 1 DAY) AS fecha_movi,l.numero,x.periodicidad,substr(x.periodicidad,1,1) as per
 ,case when bimestre=1 then CONCAT("01/03/",cast((ejercicio) as CHAR(4))) 
       when bimestre=2 then CONCAT("01/05/",cast((ejercicio) as CHAR(4))) 
       when bimestre=3 then CONCAT("01/07/",cast((ejercicio) as CHAR(4))) 
       when bimestre=4 then CONCAT("01/09/",cast((ejercicio) as CHAR(4))) 
       when bimestre=5 then CONCAT("01/11/",cast((ejercicio) as CHAR(4))) 
-      when bimestre=6 then CONCAT("01/01/",cast((ejercicio+1) as CHAR(4))) 
-end as fecha_mov
-FROM
-empleado e join perfil_de_empleado p on (e.id=p.empleado_id) join turno t on (t.id=p.turno_id) join ubicacion u on (u.id=p.ubicacion_id)
-left join calculo_sdi s on(s.empleado_id=e.id) join seguridad_social l on (e.id=l.empleado_id)
-where bimestre=$P{BIMESTRE} and ejercicio=$P{EJERCICIO} AND S.TIPO='CALCULO_SDI'
-and s.sdi_inf<>0
+      when bimestre=6 then CONCAT("01/01/",cast((ejercicio+1) as CHAR(4)))  end as fecha_mov
+FROM empleado e join perfil_de_empleado p on (e.id=p.empleado_id) join turno t on (t.id=p.turno_id) join ubicacion u on (u.id=p.ubicacion_id)
+left join calculo_sdi s on(s.empleado_id=e.id) join seguridad_social l on (e.id=l.empleado_id)  join salario x on(x.empleado_id=e.id)
+where bimestre=$P{BIMESTRE} and ejercicio=$P{EJERCICIO} AND S.TIPO='CALCULO_SDI'  and x.periodicidad like $P{TIPO} and s.sdi_inf<>0
 ORDER BY E.APELLIDO_PATERNO]]></queryString>
 
 	<field name="empleado" class="java.lang.String"/>
@@ -60,10 +57,12 @@ ORDER BY E.APELLIDO_PATERNO]]></queryString>
 	<field name="ejercicio" class="java.lang.Integer"/>
 	<field name="fecha_movi" class="java.sql.Date"/>
 	<field name="numero" class="java.lang.String"/>
+	<field name="periodicidad" class="java.lang.String"/>
+	<field name="per" class="java.lang.String"/>
 	<field name="fecha_mov" class="java.lang.String"/>
 
 		<background>
-			<band height="49"  isSplitAllowed="true" >
+			<band height="0"  isSplitAllowed="true" >
 			</band>
 		</background>
 		<title>
@@ -71,7 +70,7 @@ ORDER BY E.APELLIDO_PATERNO]]></queryString>
 			</band>
 		</title>
 		<pageHeader>
-			<band height="65"  isSplitAllowed="true" >
+			<band height="44"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="364"
@@ -100,35 +99,35 @@ ORDER BY E.APELLIDO_PATERNO]]></queryString>
 				</textField>
 				<staticText>
 					<reportElement
-						x="447"
-						y="40"
+						x="0"
+						y="33"
 						width="53"
 						height="11"
 						key="staticText-5"/>
 					<box></box>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
+					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
-				<text><![CDATA[EJERCICIO:  ]]></text>
+				<text><![CDATA[EJERCICIO : ]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
-						x="359"
-						y="40"
-						width="63"
+						x="81"
+						y="33"
+						width="51"
 						height="11"
 						key="staticText-21"/>
 					<box></box>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
+					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
-				<text><![CDATA[BIMESTRE:  ]]></text>
+				<text><![CDATA[BIMESTRE : ]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="500"
-						y="40"
-						width="48"
+						x="53"
+						y="33"
+						width="28"
 						height="11"
 						key="textField-8"/>
 					<box></box>
@@ -139,9 +138,9 @@ ORDER BY E.APELLIDO_PATERNO]]></queryString>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="422"
-						y="40"
-						width="25"
+						x="132"
+						y="33"
+						width="20"
 						height="11"
 						key="textField-9"/>
 					<box></box>
@@ -149,6 +148,32 @@ ORDER BY E.APELLIDO_PATERNO]]></queryString>
 						<font size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{bimestre}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="417"
+						y="33"
+						width="65"
+						height="11"
+						key="staticText-33"/>
+					<box></box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+				<text><![CDATA[PERIODICIDAD :   ]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="482"
+						y="33"
+						width="66"
+						height="11"
+						key="textField-10"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{TIPO}.equals( "%" ) ? "MIXTO" : $P{TIPO}]]></textFieldExpression>
 				</textField>
 			</band>
 		</pageHeader>
@@ -167,7 +192,7 @@ ORDER BY E.APELLIDO_PATERNO]]></queryString>
 				<line direction="TopDown">
 					<reportElement
 						x="0"
-						y="23"
+						y="22"
 						width="552"
 						height="2"
 						forecolor="#666666"
@@ -177,9 +202,9 @@ ORDER BY E.APELLIDO_PATERNO]]></queryString>
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="0"
-						y="12"
-						width="174"
+						x="12"
+						y="9"
+						width="171"
 						height="11"
 						forecolor="#000000"
 						key="staticText-23"
@@ -197,8 +222,8 @@ ORDER BY E.APELLIDO_PATERNO]]></queryString>
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="174"
-						y="12"
+						x="183"
+						y="9"
 						width="58"
 						height="11"
 						forecolor="#000000"
@@ -217,8 +242,8 @@ ORDER BY E.APELLIDO_PATERNO]]></queryString>
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="232"
-						y="12"
+						x="241"
+						y="9"
 						width="44"
 						height="11"
 						forecolor="#000000"
@@ -237,8 +262,8 @@ ORDER BY E.APELLIDO_PATERNO]]></queryString>
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="276"
-						y="12"
+						x="285"
+						y="9"
 						width="44"
 						height="11"
 						forecolor="#000000"
@@ -257,8 +282,8 @@ ORDER BY E.APELLIDO_PATERNO]]></queryString>
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="320"
-						y="12"
+						x="329"
+						y="9"
 						width="44"
 						height="11"
 						forecolor="#000000"
@@ -277,8 +302,8 @@ ORDER BY E.APELLIDO_PATERNO]]></queryString>
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="364"
-						y="12"
+						x="373"
+						y="9"
 						width="44"
 						height="11"
 						forecolor="#000000"
@@ -297,8 +322,8 @@ ORDER BY E.APELLIDO_PATERNO]]></queryString>
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="408"
-						y="12"
+						x="417"
+						y="9"
 						width="50"
 						height="11"
 						forecolor="#000000"
@@ -317,8 +342,8 @@ ORDER BY E.APELLIDO_PATERNO]]></queryString>
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="458"
-						y="12"
+						x="467"
+						y="9"
 						width="81"
 						height="11"
 						forecolor="#000000"
@@ -340,9 +365,9 @@ ORDER BY E.APELLIDO_PATERNO]]></queryString>
 			<band height="14"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="0"
+						x="12"
 						y="1"
-						width="174"
+						width="171"
 						height="11"
 						key="textField"/>
 					<box></box>
@@ -353,7 +378,7 @@ ORDER BY E.APELLIDO_PATERNO]]></queryString>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="174"
+						x="183"
 						y="1"
 						width="58"
 						height="11"
@@ -366,7 +391,7 @@ ORDER BY E.APELLIDO_PATERNO]]></queryString>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="232"
+						x="241"
 						y="1"
 						width="44"
 						height="11"
@@ -379,7 +404,7 @@ ORDER BY E.APELLIDO_PATERNO]]></queryString>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="276"
+						x="285"
 						y="1"
 						width="44"
 						height="11"
@@ -392,7 +417,7 @@ ORDER BY E.APELLIDO_PATERNO]]></queryString>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="320"
+						x="329"
 						y="0"
 						width="44"
 						height="11"
@@ -405,7 +430,7 @@ ORDER BY E.APELLIDO_PATERNO]]></queryString>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="364"
+						x="373"
 						y="1"
 						width="44"
 						height="11"
@@ -418,20 +443,20 @@ ORDER BY E.APELLIDO_PATERNO]]></queryString>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="408"
+						x="417"
 						y="0"
 						width="48"
 						height="11"
 						key="textField"/>
 					<box></box>
-					<textElement>
+					<textElement textAlignment="Left">
 						<font size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{TURNO}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="456"
+						x="465"
 						y="0"
 						width="83"
 						height="11"
@@ -441,6 +466,19 @@ ORDER BY E.APELLIDO_PATERNO]]></queryString>
 						<font size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{numero}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="1"
+						width="12"
+						height="11"
+						key="textField-11"/>
+					<box></box>
+					<textElement textAlignment="Left">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{per}]]></textFieldExpression>
 				</textField>
 			</band>
 		</detail>

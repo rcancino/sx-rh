@@ -82,13 +82,15 @@ class CalculoSdiController {
 			case 'VARIABLES':
 				re='SdiBimestralVariables'
 				break;
-			
+			case 'PUNTUALIDAD':
+				re = "EmpleadosConPremioDePuntualidad"
+				break
 			break
 		}
 		if(re){
 			params.reportName=re
-			params['EJERCICIO']=session.ejercicio
-			params['BIMESTRE']=session.bimestre
+			params['EJERCICIO'] = session.ejercicio
+			params['BIMESTRE'] = session.bimestre
 			ByteArrayOutputStream  pdfStream=runReport(params)
 			render(file: pdfStream.toByteArray(), contentType: 'application/pdf',fileName:params.reportName+'.pdf')
 		}else{

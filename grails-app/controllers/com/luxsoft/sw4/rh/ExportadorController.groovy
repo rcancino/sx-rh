@@ -723,7 +723,7 @@ def reportePorBimestre(EjercicioBimestrePorTipoCommand command){
 	def repParams=[:]
 	repParams['BIMESTRE']=command.bimestre
 	repParams['EJERCICIO']=command.ejercicio
-	repParams['TIPO']=command.tipo
+	repParams['TIPO']=command.tipo.equals("MIXTO")? "%" : command.tipo
 	repParams.reportName=params.reportName?:'FaltaNombre Del Reporte'
 	ByteArrayOutputStream  pdfStream=runReport(repParams)
 	render(file: pdfStream.toByteArray(), contentType: 'application/pdf'
