@@ -30,29 +30,37 @@
 		<defaultValueExpression ><![CDATA["PAPEL S.A. DE C.V."]]></defaultValueExpression>
 	</parameter>
 	<parameter name="NomReporte" isForPrompting="false" class="java.lang.String">
-		<defaultValueExpression ><![CDATA["EMPLEADOS CON PREMIO DE PUNTUALIDAD POR BIMESTRE"]]></defaultValueExpression>
+		<defaultValueExpression ><![CDATA["EMPLEADOS CON PREMIO DE PUNTUALIDAD"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="BIMESTRE" isForPrompting="true" class="java.lang.Integer"/>
-	<parameter name="EJERCICIO" isForPrompting="true" class="java.lang.Integer"/>
-	<queryString><![CDATA[SELECT y.id ,y.numTrab ,y.clave ,y.nombre,y.total,(case when y.total=0 then 'NO OTORGADO' else 'OTORGADO' end) as pp FROM (
-SELECT E.ID,U.descripcion AS ubicacion,concat(ifnull(e.apellido_paterno,''),' ',ifnull(e.apellido_materno,''),' ',ifnull(e.nombres,'')) AS nombre,E.CLAVE,P.numero_de_trabajador as numTrab
-,ifnull((SELECT SUM(ND.importe_gravado) FROM nomina_por_empleado NE JOIN nomina_por_empleado_det ND ON (ND.parent_id=NE.ID) JOIN concepto_de_nomina C ON (C.ID=ND.concepto_id) JOIN NOMINA N ON(N.ID=NE.nomina_id) 
-JOIN calendario_det CD ON(CD.ID=N.calendario_det_id) JOIN calendario Z ON(CD.calendario_id=Z.ID) where NE.empleado_id=x.empleado_id AND Z.ejercicio=X.ejercicio AND CD.bimestre=x.bimestre AND C.ID=21),0) as total
-FROM calculo_sdi X JOIN empleado E ON (X.empleado_id=E.ID) JOIN perfil_de_empleado P ON (P.empleado_id=E.ID) JOIN ubicacion U ON  (P.ubicacion_id=U.ID) join salario s on(s.empleado_id=e.id)
-WHERE x.EJERCICIO=$P{EJERCICIO} AND X.bimestre=$P{BIMESTRE} AND s.periodicidad='QUINCENAL' AND X.TIPO='CALCULO_SDI' GROUP BY E.ID  ) AS Y]]></queryString>
+	<parameter name="ID" isForPrompting="true" class="java.lang.Long"/>
+	<queryString><![CDATA[SELECT E.id,E.clave,concat(ifnull(e.apellido_paterno,''),' ',ifnull(e.apellido_materno,''),' ',ifnull(e.nombres,'')) AS nombre,p.tipo_de_incentivo
+,n.folio,n.ejercicio,n.periodicidad,n.periodo_fecha_inicial,n.periodo_fecha_final,sum(case when c.id=21 then ND.importe_gravado else 0 end) as importe
+,(case when sum(case when c.id=21 then ND.importe_gravado else 0 end)=0 then 'NO OTORGADO' else 'OTORGADO' end) as pp
+FROM nomina_por_empleado NE 
+JOIN NOMINA N ON(N.ID=NE.nomina_id) 
+join empleado e on(e.id=ne.empleado_id) join perfil_de_empleado p on(p.empleado_id=e.id)
+LEFT JOIN nomina_por_empleado_det ND ON (ND.parent_id=NE.ID) 
+LEFT JOIN concepto_de_nomina C ON (C.ID=ND.concepto_id)
+where n.id=$P{ID} and p.tipo_de_incentivo in('QUINCENAL','SEMANAL')
+group by e.id]]></queryString>
 
 	<field name="id" class="java.lang.Long"/>
-	<field name="numTrab" class="java.lang.String"/>
 	<field name="clave" class="java.lang.String"/>
 	<field name="nombre" class="java.lang.String"/>
-	<field name="total" class="java.math.BigDecimal"/>
+	<field name="tipo_de_incentivo" class="java.lang.String"/>
+	<field name="folio" class="java.lang.Integer"/>
+	<field name="ejercicio" class="java.lang.Integer"/>
+	<field name="periodicidad" class="java.lang.String"/>
+	<field name="periodo_fecha_inicial" class="java.sql.Timestamp"/>
+	<field name="periodo_fecha_final" class="java.sql.Timestamp"/>
+	<field name="importe" class="java.math.BigDecimal"/>
 	<field name="pp" class="java.lang.String"/>
 
 	<sortField name="pp" order="Descending" />
 	<sortField name="nombre" />
 
 	<variable name="TOTAL" class="java.math.BigDecimal" resetType="Report" calculation="Sum">
-		<variableExpression><![CDATA[$F{total}]]></variableExpression>
+		<variableExpression><![CDATA[$F{importe}]]></variableExpression>
 	</variable>
 
 		<group  name="PP" >
@@ -127,7 +135,7 @@ WHERE x.EJERCICIO=$P{EJERCICIO} AND X.bimestre=$P{BIMESTRE} AND s.periodicidad='
 			</band>
 		</title>
 		<pageHeader>
-			<band height="39"  isSplitAllowed="true" >
+			<band height="59"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="364"
@@ -156,38 +164,38 @@ WHERE x.EJERCICIO=$P{EJERCICIO} AND X.bimestre=$P{BIMESTRE} AND s.periodicidad='
 				</textField>
 				<staticText>
 					<reportElement
-						x="84"
-						y="25"
-						width="51"
+						x="0"
+						y="28"
+						width="56"
 						height="14"
 						key="staticText-38"/>
 					<box>					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CCCCCC"/>
 </box>
-					<textElement textAlignment="Left" verticalAlignment="Middle">
+					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false"/>
 					</textElement>
-				<text><![CDATA[BIMESTRE :]]></text>
+				<text><![CDATA[NOMINA ID :  ]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
-						x="1"
-						y="25"
-						width="50"
+						x="0"
+						y="42"
+						width="55"
 						height="14"
 						key="staticText-39"/>
 					<box>					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CCCCCC"/>
 </box>
-					<textElement textAlignment="Left" verticalAlignment="Middle">
+					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false"/>
 					</textElement>
-				<text><![CDATA[EJERCICIO :]]></text>
+				<text><![CDATA[EJERCICIO :  ]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="51"
-						y="25"
+						x="56"
+						y="42"
 						width="33"
 						height="14"
 						key="textField-12"/>
@@ -195,12 +203,12 @@ WHERE x.EJERCICIO=$P{EJERCICIO} AND X.bimestre=$P{BIMESTRE} AND s.periodicidad='
 					<textElement verticalAlignment="Top">
 						<font size="10" isUnderline="true"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Integer"><![CDATA[$P{EJERCICIO}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{ejercicio}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="135"
-						y="25"
+						x="57"
+						y="28"
 						width="25"
 						height="14"
 						key="textField-13"/>
@@ -208,7 +216,119 @@ WHERE x.EJERCICIO=$P{EJERCICIO} AND X.bimestre=$P{BIMESTRE} AND s.periodicidad='
 					<textElement verticalAlignment="Top">
 						<font size="10" isUnderline="true"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Integer"><![CDATA[$P{BIMESTRE}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.Long"><![CDATA[$P{ID}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="358"
+						y="42"
+						width="63"
+						height="14"
+						key="staticText-41"/>
+					<box>					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CCCCCC"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[PERIODO : DEL]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="dd-MMM-yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="421"
+						y="42"
+						width="57"
+						height="14"
+						key="textField-15"/>
+					<box></box>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font size="10" isUnderline="true"/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$F{periodo_fecha_inicial}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="478"
+						y="42"
+						width="14"
+						height="14"
+						key="staticText-42"/>
+					<box>					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CCCCCC"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[AL]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="dd-MMM-yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="492"
+						y="42"
+						width="57"
+						height="14"
+						key="textField-17"/>
+					<box></box>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font size="10" isUnderline="true"/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$F{periodo_fecha_final}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="89"
+						y="42"
+						width="35"
+						height="14"
+						key="staticText-43"/>
+					<box>					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CCCCCC"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[FOLIO :  ]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="124"
+						y="42"
+						width="30"
+						height="14"
+						key="textField-18"/>
+					<box></box>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font size="10" isUnderline="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{folio}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="196"
+						y="42"
+						width="66"
+						height="14"
+						key="staticText-44"/>
+					<box>					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid" lineColor="#CCCCCC"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[PERIODICIDAD :  ]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="262"
+						y="42"
+						width="65"
+						height="14"
+						key="textField-19"/>
+					<box></box>
+					<textElement textAlignment="Left" verticalAlignment="Top">
+						<font size="10" isUnderline="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{periodicidad}]]></textFieldExpression>
 				</textField>
 			</band>
 		</pageHeader>
@@ -217,9 +337,9 @@ WHERE x.EJERCICIO=$P{EJERCICIO} AND X.bimestre=$P{BIMESTRE} AND s.periodicidad='
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="126"
+						x="130"
 						y="11"
-						width="268"
+						width="264"
 						height="11"
 						forecolor="#000000"
 						key="staticText-8"
@@ -272,7 +392,7 @@ WHERE x.EJERCICIO=$P{EJERCICIO} AND X.bimestre=$P{BIMESTRE} AND s.periodicidad='
 					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None">
 						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
-				<text><![CDATA[TOTAL ]]></text>
+				<text><![CDATA[IMPORTE]]></text>
 				</staticText>
 			</band>
 		</columnHeader>
@@ -280,7 +400,7 @@ WHERE x.EJERCICIO=$P{EJERCICIO} AND X.bimestre=$P{BIMESTRE} AND s.periodicidad='
 			<band height="13"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="150"
+						x="130"
 						y="1"
 						width="33"
 						height="11"
@@ -293,9 +413,9 @@ WHERE x.EJERCICIO=$P{EJERCICIO} AND X.bimestre=$P{BIMESTRE} AND s.periodicidad='
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="183"
+						x="163"
 						y="1"
-						width="212"
+						width="232"
 						height="11"
 						key="textField"/>
 					<box></box>
@@ -315,20 +435,7 @@ WHERE x.EJERCICIO=$P{EJERCICIO} AND X.bimestre=$P{BIMESTRE} AND s.periodicidad='
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{total}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="126"
-						y="1"
-						width="24"
-						height="11"
-						key="textField-15"/>
-					<box></box>
-					<textElement>
-						<font size="8"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{numTrab}]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{importe}]]></textFieldExpression>
 				</textField>
 			</band>
 		</detail>
@@ -572,4 +679,21 @@ WHERE x.EJERCICIO=$P{EJERCICIO} AND X.bimestre=$P{BIMESTRE} AND s.periodicidad='
 			<band height="0"  isSplitAllowed="true" >
 			</band>
 		</summary>
+		<noData>
+			<band height="173"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="113"
+						y="155"
+						width="100"
+						height="18"
+						key="textField"/>
+					<box></box>
+					<textElement>
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{NomReporte}]]></textFieldExpression>
+				</textField>
+			</band>
+		</noData>
 </jasperReport>

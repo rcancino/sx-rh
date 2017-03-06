@@ -232,11 +232,11 @@ class CalculoSdiService {
 select x.id,x.clave,x.alta
 		,(select max(f.vac_dias) from factor_de_integracion f 	where round(-(timestampdiff(minute,'@fecha_ult_modif',x.alta)/60)/24,0)+1 between f.dias_de and f.dias_hasta ) as vac_dias	
 		,(select max(f.vac_prima) from factor_de_integracion f where round(-(timestampdiff(minute,'@fecha_ult_modif',x.alta)/60)/24,0)+1 between f.dias_de and f.dias_hasta ) as vac_prima	
-		,(select max(case 	when x.id in (245,244) then (15+1) 		
+		,(select max(case 	when x.id in (245,244) then (15+2) 		
 							when x.id in(274,273) then f.cob_dias when  @tipo then f.sem_dias	else f.qna_dias end	) 
 			from factor_de_integracion f 	where f.tipo=(case when month('@fecha_fin')=12 then 2  when year(x.alta)=year('@fecha_fin') and month(x.alta)>=3 then 1 when year(x.alta)=year('@fecha_fin') then 0 else 2 end) and
 			round(-(timestampdiff(minute,'@fecha_ult_modif',x.alta)/60)/24,0)+1 between f.dias_de and f.dias_hasta 	) as agndo_dias
-		,(select max(case 	when x.id in (245,244) then 1+round((((f.vac_dias*f.vac_prima)+(15+1))/366),4) 
+		,(select max(case 	when x.id in (245,244) then 1+round((((f.vac_dias*f.vac_prima)+(15+2))/365),4) 
 							when x.id in(274,273) then f.cob_factor when  @tipo then f.sem_factor else f.qna_factor end) 		
 			from factor_de_integracion f where f.tipo=(case when month('@fecha_fin')=12 then 2  when year(x.alta)=year('@fecha_fin') and month(x.alta)>=3 then 1 when year(x.alta)=year('@fecha_fin') then 0 else 2 end) and 	
 			round((-(timestampdiff(minute,'@fecha_ult_modif',x.alta)/60)/24),0)+1 between f.dias_de and f.dias_hasta ) as factor	
@@ -261,11 +261,11 @@ String sqlPorEmpleado="""
 		select x.id,x.clave,x.alta
 		,(select max(f.vac_dias) from factor_de_integracion f 	where round(-(timestampdiff(minute,'@fecha_ult_modif',x.alta)/60)/24,0)+1 between f.dias_de and f.dias_hasta ) as vac_dias	
 		,(select max(f.vac_prima) from factor_de_integracion f where round(-(timestampdiff(minute,'@fecha_ult_modif',x.alta)/60)/24,0)+1 between f.dias_de and f.dias_hasta ) as vac_prima	
-		,(select max(case 	when x.id in (245,244) then (15+1) 		
+		,(select max(case 	when x.id in (245,244) then (15+2) 		
 							when x.id in(274,273) then f.cob_dias when  @tipo then f.sem_dias	else f.qna_dias end	) 
 			from factor_de_integracion f 	where f.tipo=(case when month('@fecha_ult_modif')=12 then 2  when year(x.alta)=year('@fecha_ult_modif') and month(x.alta)>=3 then 1 when year(x.alta)=year('@fecha_ult_modif') then 0 else 2 end) and
 			round(-(timestampdiff(minute,'@fecha_ult_modif',x.alta)/60)/24,0)+1 between f.dias_de and f.dias_hasta 	) as agndo_dias
-		,(select max(case 	when x.id in (245,244) then 1+round((((f.vac_dias*f.vac_prima)+(15+1))/366),4) 
+		,(select max(case 	when x.id in (245,244) then 1+round((((f.vac_dias*f.vac_prima)+(15+2))/365),4) 
 							when x.id in(274,273) then f.cob_factor when  @tipo then f.sem_factor else f.qna_factor end) 		
 			from factor_de_integracion f where f.tipo=(case when month('@fecha_ult_modif')=12 then 2  when year(x.alta)=year('@fecha_ult_modif') and month(x.alta)>=3 then 1 when year(x.alta)=year('@fecha_ult_modif') then 0 else 2 end) and 	
 			round((-(timestampdiff(minute,'@fecha_ult_modif',x.alta)/60)/24),0)+1 between f.dias_de and f.dias_hasta ) as factor

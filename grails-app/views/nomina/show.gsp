@@ -61,7 +61,7 @@
           						jasper="${nominaInstance.periodicidad=='QUINCENAL'?'NominaCaratulaQ':'NominaCaratulaS' }"
           						format="PDF"
           						name="Resumen">
-    							<g:hiddenField name="NOMINA" value="${nominaInstance.id}"/>
+    							<g:hiddenField name="ID" value="${nominaInstance.id}"/>
  							 </g:jasperReport>
 						</li>
 						
