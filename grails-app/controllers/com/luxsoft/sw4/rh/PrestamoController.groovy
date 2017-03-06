@@ -90,6 +90,13 @@ class PrestamoController {
 	
 	@Transactional
 	def salvarAbono(PrestamoAbono abono){
+		
+		abono=new PrestamoAbono(
+			 fecha: params.fecha,
+			importe: params.importe,
+			comentario: params.comentario
+		)
+
 		def prestamo=Prestamo.get(params.prestamo.id)
 		abono.validate()
 		if(abono.hasErrors()){
