@@ -7,7 +7,7 @@
 <body>
 	
 <content tag="header">
-	<h2>Retistro de prestamos del INFONAVIT</h2>
+	<h2>Registro de prestamos del INFONAVIT</h2>
 </content>
 
 <content tag="reportes">

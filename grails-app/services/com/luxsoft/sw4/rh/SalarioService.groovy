@@ -180,7 +180,7 @@ class SalarioService {
 				.replaceAll('@TIPO', it=='SEMANA'? 'S.periodicidad=\'SEMANAL\'' : 'S.periodicidad<>\'QUINCENAL\'')
 				.replaceAll('@PERIODO',it+'L')
 									
-			//println query
+			println query
 				Sql sql=new Sql(dataSource)
 				sql.eachRow(query){ row->
 					
@@ -211,9 +211,9 @@ class SalarioService {
 						found.agndoDias=row.AGNDO_DIAS
 						found.factor=row.FACTOR
 						found.sdiF=found.sdb*found.factor
-							
+
 						found.diasLabBim=row.DIAS_LAB_BIM
-						if((!empleado.controlDeAsistencia && empleado.salario.periodicidad=='QUINCENAL' && bimestre==1) || empleado.id==441){
+						if((!empleado.controlDeAsistencia && empleado.salario.periodicidad=='QUINCENAL' && bimestre==1) ){
 							
 							found.diasLabBim=found.diasLabBim-2
 						}
@@ -238,8 +238,9 @@ class SalarioService {
 							found.varDia=0
 							
 						def sdiNvo=found.sdiF+found.varDia
+
 						found.sdiCalc=sdiNvo
-							
+
 						if(found.sdb==0.0){
 							sdiNvo=found.varDia*found.factor
 						}
@@ -247,8 +248,9 @@ class SalarioService {
 						def topoSalarial=25*zona.uma
 						found.topeSmg=topoSalarial
 							
-						if(sdiNvo>topoSalarial)
+						if(sdiNvo>topoSalarial){
 							found.sdiNvo=topoSalarial
+						}
 						else{
 							found.sdiNvo=sdiNvo
 						}

@@ -91,15 +91,21 @@ class PrestamoController {
 	@Transactional
 	def salvarAbono(PrestamoAbono abono){
 		
+
+		def prestamo=Prestamo.get(params.prestamo.id)
+
 		abono=new PrestamoAbono(
 			 fecha: params.fecha,
 			importe: params.importe,
-			comentario: params.comentario
+			comentario: params.comentario,
+			prestamo:prestamo
 		)
 
-		def prestamo=Prestamo.get(params.prestamo.id)
 		abono.validate()
 		if(abono.hasErrors()){
+			  abono.errors.allErrors.each {
+        println it
+   			 }
 			flash.message="Error de validacion en abono"
 			render view:'agregarAbono',model:[prestamoInstance:prestamo,prestamoAbonoInstance:abono]
 		}

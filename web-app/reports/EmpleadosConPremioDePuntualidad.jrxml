@@ -32,7 +32,7 @@
 	<parameter name="NomReporte" isForPrompting="false" class="java.lang.String">
 		<defaultValueExpression ><![CDATA["EMPLEADOS CON PREMIO DE PUNTUALIDAD"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="ID" isForPrompting="true" class="java.lang.Long"/>
+	<parameter name="ID" isForPrompting="true" class="java.lang.String"/>
 	<queryString><![CDATA[SELECT E.id,E.clave,concat(ifnull(e.apellido_paterno,''),' ',ifnull(e.apellido_materno,''),' ',ifnull(e.nombres,'')) AS nombre,p.tipo_de_incentivo
 ,n.folio,n.ejercicio,n.periodicidad,n.periodo_fecha_inicial,n.periodo_fecha_final,sum(case when c.id=21 then ND.importe_gravado else 0 end) as importe
 ,(case when sum(case when c.id=21 then ND.importe_gravado else 0 end)=0 then 'NO OTORGADO' else 'OTORGADO' end) as pp
@@ -216,11 +216,11 @@ group by e.id]]></queryString>
 					<textElement verticalAlignment="Top">
 						<font size="10" isUnderline="true"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Long"><![CDATA[$P{ID}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{ID}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement
-						x="358"
+						x="352"
 						y="42"
 						width="63"
 						height="14"
@@ -235,9 +235,9 @@ group by e.id]]></queryString>
 				</staticText>
 				<textField isStretchWithOverflow="false" pattern="dd-MMM-yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="421"
+						x="415"
 						y="42"
-						width="57"
+						width="60"
 						height="14"
 						key="textField-15"/>
 					<box></box>
@@ -248,7 +248,7 @@ group by e.id]]></queryString>
 				</textField>
 				<staticText>
 					<reportElement
-						x="478"
+						x="475"
 						y="42"
 						width="14"
 						height="14"
@@ -263,9 +263,9 @@ group by e.id]]></queryString>
 				</staticText>
 				<textField isStretchWithOverflow="false" pattern="dd-MMM-yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="492"
+						x="489"
 						y="42"
-						width="57"
+						width="60"
 						height="14"
 						key="textField-17"/>
 					<box></box>
@@ -679,21 +679,4 @@ group by e.id]]></queryString>
 			<band height="0"  isSplitAllowed="true" >
 			</band>
 		</summary>
-		<noData>
-			<band height="173"  isSplitAllowed="true" >
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="113"
-						y="155"
-						width="100"
-						height="18"
-						key="textField"/>
-					<box></box>
-					<textElement>
-						<font/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{NomReporte}]]></textFieldExpression>
-				</textField>
-			</band>
-		</noData>
 </jasperReport>

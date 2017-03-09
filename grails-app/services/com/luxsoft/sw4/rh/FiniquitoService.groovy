@@ -87,7 +87,7 @@ class FiniquitoService {
             antiguedad = (finiquito.baja.fecha - finiquito.empleado.alta) + 1
             diasDelEjercicio = de
             diasTrabajadoEjercicio = dte
-            anosTrabajados = (((finiquito.baja.fecha - finiquito.empleado.alta) + 1)/365).setScale(0,RoundingMode.UP).intValue()
+            anosTrabajados = (((finiquito.baja.fecha - finiquito.empleado.alta) + 1)/365).setScale(0,RoundingMode.HALF_EVEN).intValue()
             salario = finiquito.empleado.salario.salarioDiario
             salarioVariable = finiquito.empleado.salario.salarioVariable
             salarioDiarioIntegrado = finiquito.empleado.salario.salarioDiarioIntegrado            

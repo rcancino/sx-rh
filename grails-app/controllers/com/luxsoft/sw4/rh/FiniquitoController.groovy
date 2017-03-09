@@ -8,6 +8,9 @@ import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
 import org.codehaus.groovy.grails.plugins.jasper.JasperExportFormat
 import org.codehaus.groovy.grails.plugins.jasper.JasperReportDef
+import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+
 
 
 
@@ -143,7 +146,15 @@ def reporte(){
                 def monto=totalFiniquito+totalLiquidacion
                 
                 params['IMP_CON_LETRA']=  com.luxsoft.sw4.cfdi.ImporteALetra.aLetra(monto)
-                params['MONTO']=  monto
+
+              
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd 'de' MMMM 'de' yyyy,");
+                def bajaF=dateFormat.format(finiquito.baja.fecha);
+
+                def montoF= new DecimalFormat("#,##0.00").format(monto)
+
+                params['MONTO']=  montoF
+                params['BAJA']=  bajaF
 
 
             }
@@ -151,7 +162,7 @@ def reporte(){
             ByteArrayOutputStream  pdfStream=runReport(params)
             render(file: pdfStream.toByteArray(), contentType: 'application/pdf',fileName:params.reportName+'.pdf')
         }else{
-            flash.message="Reporte incorrecto: "+re
+            flash.message="Reporte incorrecto: "
             redirect action:'index'
 
         }

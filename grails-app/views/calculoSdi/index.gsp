@@ -36,7 +36,7 @@
 			 
 			<g:link action="reporte" params="[tipo:'CALCULO']"> Sdi Bimestral Calculo</g:link>
 			<g:link action="reporte" params="[tipo:'VARIABLES']">Sdi Bimestral Variables</g:link>
-			<g:link action="reporte" params="[tipo:'PUNTUALIDAD']">Premio de puntualidad</g:link>
+			
 			
 		</li>
 	</content>

@@ -35,7 +35,7 @@ class InfonavitService {
 		det.salarioDiarioIntegrado=infonavit.empleado.salario.salarioDiarioIntegrado
 		//det.salarioMinimoGeneral=67.29
 		//det.salarioMinimoGeneral=salarioMinimo  //********cambio
-		det.salarioMinimoGeneral=zona.salario
+		det.salarioMinimoGeneral=zona.uma
 		det.faltas=0
 		det.incapacidades=0
 		det.saldo=infonavit.ultimaDiferencia
@@ -76,7 +76,10 @@ class InfonavitService {
 		//def periodoAnterior=Bimestre.getBimestre(ejercicioAnterior,bimestreAnterior)
 		def diasDelBimestre=periodo.fechaFinal-periodo.fechaInicial+1
 		log.info "Periodo base $periodo  Dias del periodo: $diasDelBimestre"
-		def det=InfonavitDet.find{infonavit==infonavit && ejercicio==ejercicio && bimestre==bimestre}
+//		def det=InfonavitDet.findByInfonavitAndEjercicioAnd{infonavit==infonavit && ejercicio==ejercicio && bimestre==bimestre}
+		def det=InfonavitDet.findByInfonavitAndEjercicioAndBimestre(infonavit , ejercicio , bimestre)
+
+
 
 		//def salarioMinimo=ZonaEconomica.valores.find(){it.clave='A'}.salario
 		def zona=ZonaEconomica.findByClaveAndEjercicio('A',ejercicio)
@@ -94,7 +97,7 @@ class InfonavitService {
 		det.cuota=infonavit.cuotaFija
 		det.seguroDeVivienda=15.00
 		det.salarioDiarioIntegrado=infonavit.empleado.salario.salarioDiarioIntegrado
-		det.salarioMinimoGeneral=zona.salario
+		det.salarioMinimoGeneral=zona.uma
 		det.faltas=0
 		det.incapacidades=0
 		det.saldo=infonavit.ultimaDiferencia
