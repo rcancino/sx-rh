@@ -218,10 +218,10 @@ group by x.tipo,x.clave]]></queryString>
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#CCCCCC"/>
 </box>
-					<textElement textAlignment="Justified" verticalAlignment="Top" rotation="None" lineSpacing="Single">
+					<textElement textAlignment="Justified" verticalAlignment="Top" rotation="None" isStyledText="true" lineSpacing="Single">
 						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="12" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{nombre}.concat(" y PAPEL, S.A. DE C.V.")]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA["<style isBold=\"true\" forecolor='#005C99' pdfFontName=\"Helvetica-Bold\">"+$F{nombre}+"</style>".concat(" y PAPEL, S.A. DE C.V.")]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="dd de MMM de yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -249,7 +249,7 @@ group by x.tipo,x.clave]]></queryString>
 						mode="Opaque"
 						x="56"
 						y="171"
-						width="120"
+						width="126"
 						height="15"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
@@ -268,9 +268,9 @@ group by x.tipo,x.clave]]></queryString>
 				<textField isStretchWithOverflow="false" pattern="dd de MMM de yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						mode="Opaque"
-						x="176"
+						x="182"
 						y="171"
-						width="357"
+						width="351"
 						height="15"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
@@ -284,7 +284,7 @@ group by x.tipo,x.clave]]></queryString>
 					<textElement textAlignment="Justified" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 						<font fontName="Arial" pdfFontName="Helvetica" size="12" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[" o de quien  sus  intereses  represente  o llegare representar en un"]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA["o de quien sus  intereses  represente o llegare representar en un"]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="dd de MMM de yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -319,7 +319,7 @@ group by x.tipo,x.clave]]></queryString>
 						<font fontName="Arial" pdfFontName="Helvetica" size="12" isBold="false" isItalic="false" isUnderline="false"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA["Recibí de  "+"<style isBold=\"true\" pdfFontName=\"Helvetica-Bold\">PAPEL, S.A. DE C.V.</style>" +"  la cantidad de  $"
-+$P{MONTO}+" ("+"<style isBold=\"true\" pdfFontName=\"Helvetica-Bold\">"+$P{IMP_CON_LETRA}+"</style>"+"),  por concepto de:"]]></textFieldExpression>
++"<style forecolor='#005C99' pdfFontName=\"Helvetica-Bold\">"+$P{MONTO}+"</style>"+" ("+"<style isBold=\"true\" forecolor='#005C99' pdfFontName=\"Helvetica-Bold\">"+$P{IMP_CON_LETRA}+"</style>"+"),  por concepto de:"]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="dd de MMM de yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -340,7 +340,7 @@ group by x.tipo,x.clave]]></queryString>
 					<textElement textAlignment="Justified" verticalAlignment="Top" rotation="None" isStyledText="true" lineSpacing="Single">
 						<font fontName="Arial" pdfFontName="Helvetica" size="12" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA["Con Fecha "+"<style isBold=\"true\" pdfFontName=\"Helvetica-Bold\">"+$P{BAJA}+"</style>"+" se  da por  terminada la relación de trabajo entre"]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Con Fecha "+"<style isBold=\"true\" forecolor='#005C99' pdfFontName=\"Helvetica-Bold\">"+$P{BAJA}+"</style>"+" se  da por  terminada la relación de trabajo entre"]]></textFieldExpression>
 				</textField>
 			</band>
 		</columnHeader>
@@ -406,10 +406,11 @@ group by x.tipo,x.clave]]></queryString>
 						key="textField-191"/>
 					<box>					<topPen lineWidth="0.75"/>
 </box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
+					<textElement textAlignment="Center" verticalAlignment="Middle" isStyledText="true">
 						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="12" isBold="true" isItalic="false" isUnderline="false"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{nombre}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA["<style isBold=\"true\" backcolor='#e6f5ff' pdfFontName=\"Helvetica-Bold\">"+$F{nombre}+"</style>"
+]]></textFieldExpression>
 				</textField>
 			</band>
 		</lastPageFooter>
