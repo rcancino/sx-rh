@@ -211,11 +211,11 @@ class NominaService {
 		Nomina nomina=Nomina.get(id)
 		def calendarioDet=nomina.calendarioDet
 		def asistencia=calendarioDet.asistencia
-		//def porBorrar=[]
+		def porBorrar=[]
 		nomina.partidas.each{ ne->
 			def empleado=ne.empleado
 			if(empleado.baja && empleado.baja.fecha>=asistencia.fechaInicial){
-				//porBorrar.add(ne)
+				porBorrar.add(ne)
 				
 			}
 			//Localisando modiificaciones de ubicacion
@@ -225,7 +225,7 @@ class NominaService {
 			}
 
 		}
-		/*
+		
 		porBorrar.each{ ne->
 			ne.conceptos.each{
 				//Tratando de localizar prestamo
@@ -240,7 +240,7 @@ class NominaService {
 
 
 		}
-		*/
+		
 		// Ordendar la nomina
 		ordenar(nomina)
 		nomina.save failOnError:true

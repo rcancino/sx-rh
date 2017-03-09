@@ -66,9 +66,6 @@
 						</li>
 						
 					</g:if>
-					<g:if test="${['QUINCENAL'].contains(nominaInstance.periodicidad) }">
-						
-						
 						<li>
 							<g:jasperReport
           						jasper="EmpleadosConPremioDePuntualidad"
@@ -76,9 +73,7 @@
           						name="ConPremioDePuntualidad">
     							<g:hiddenField name="ID" value="${nominaInstance.id}"/>
  							 </g:jasperReport>
-						</li>
-						
-					</g:if>
+						</li>		
 					<li>
 						<button class="btn btn-default btn-outline" data-toggle="modal" data-target="#detalleDeNominaForm"> Detalle</button>
 					</li>
