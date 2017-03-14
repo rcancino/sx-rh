@@ -72,9 +72,10 @@
 							<f:field property="diasPorPagar" widget-class="form-control" wrapper="bootstrap3"/>
                             <f:field property="montoIntereses" widget-class="form-control" wrapper="bootstrap3"/>
                             <f:field property="tasaInteres" widget-class="form-control" wrapper="bootstrap3"/>
+                            <f:field property="liq" widget-class="form-control" wrapper="bootstrap3"/> 
                             <%-- Temporalmente deshabilitado hasta que el usuario solicite la activacion del calculo de finiquito usando estas opciones  --%>
                        <%--     <f:field property="sdiOpcion" widget-class="form-control" wrapper="bootstrap3"/>
-                            <f:field property="liq" widget-class="form-control" wrapper="bootstrap3"/> --%>
+                            --%>
 						</f:with>
                     </div>
                 </g:form>	

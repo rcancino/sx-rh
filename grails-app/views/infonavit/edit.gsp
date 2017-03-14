@@ -22,11 +22,20 @@
 			<f:field property="alta" />
 			<f:field property="numeroDeCredito" widget-class="form-control"/>
 			<f:field property="tipo" widget-class="form-control chosen-select"/>
-			<f:field property="cuotaFija" widget="numeric" label="Descuento"/>
+			<f:field property="cuotaFija"  label="Descuento">
+				<input id="${property}" type="text" name="${property}"  class="form-control decimal" value="${value}"/>
+			</f:field>
 			<f:field property="activo" input-type="text" input-class="form-control " />
 			<f:field property="suspension" />
 			<f:field property="comentario" widget-class="form-control"/>
 		</f:with>
+
+		<script type="text/javascript">
+			$(function(){
+				$(".decimal").autoNumeric('init',{vMin:'0.000'},{vMax:'9999.0000'});
+			});
+		</script>
+		
 	</content>
 	
 </body>

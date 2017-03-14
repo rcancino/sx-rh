@@ -121,7 +121,8 @@ class ComplementoBuilder {
     	receptor.numSeguridadSocial = empleado.seguridadSocial.numero.replace('-','')
         receptor.antigüedad = "P${nominaEmpleado.antiguedad}W"
         if(nominaEmpleado.antiguedad <= 0){
-        	def diasLab=new BigDecimal(nominaEmpleado.diasTrabajados).setScale(0, RoundingMode.HALF_EVEN)
+        	//def diasLab=new BigDecimal(nominaEmpleado.diasTrabajados).setScale(0, RoundingMode.HALF_EVEN)
+        	def diasLab=new BigDecimal(nominaEmpleado.nomina.periodo.fechaFinal-nominaEmpleado.empleado.alta).setScale(0, RoundingMode.HALF_EVEN)
         	receptor.antigüedad = "P${diasLab}D"
         }
         def tr = empleado.perfil.regimenContratacion.clave.toString().padLeft(2,'0')

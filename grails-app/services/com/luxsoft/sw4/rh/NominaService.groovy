@@ -784,7 +784,7 @@ class NominaService {
 		nomina.save flush:true
 
 		def finiquitos = Finiquito.findAll (
-				"from Finiquito a where a.neLiquidacion = null and a.empleado.salario.periodicidad=?  "
+				"from Finiquito a where a.liq is true and a.neLiquidacion = null and a.empleado.salario.periodicidad=?  "
 				,[nomina.periodicidad])
 
 		int orden = 1;
