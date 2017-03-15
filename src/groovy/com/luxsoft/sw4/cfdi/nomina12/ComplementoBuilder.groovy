@@ -122,7 +122,7 @@ class ComplementoBuilder {
         receptor.antigüedad = "P${nominaEmpleado.antiguedad}W"
         if(nominaEmpleado.antiguedad <= 0){
         	//def diasLab=new BigDecimal(nominaEmpleado.diasTrabajados).setScale(0, RoundingMode.HALF_EVEN)
-        	def diasLab=new BigDecimal(nominaEmpleado.nomina.periodo.fechaFinal-nominaEmpleado.empleado.alta).setScale(0, RoundingMode.HALF_EVEN)
+        	def diasLab=new BigDecimal((nominaEmpleado.nomina.periodo.fechaFinal-nominaEmpleado.empleado.alta)+1).setScale(0, RoundingMode.HALF_EVEN)
         	receptor.antigüedad = "P${diasLab}D"
         }
         def tr = empleado.perfil.regimenContratacion.clave.toString().padLeft(2,'0')
@@ -147,19 +147,19 @@ class ComplementoBuilder {
         if(nominaEmpleado.nomina.tipo == 'LIQUIDACION' || nominaEmpleado.nomina.tipo == 'PTU' || nominaEmpleado.nomina.tipo == 'AGUINALDO' ){
         	receptor.setPeriodicidadPago(CPeriodicidadPago.X_99)
         }
-        if(empleado?.salario?.banco?.clave && nominaEmpleado.nomina.formaDePago == 'TRANSFERENCIA'){
-        	def bancoClave = empleado?.salario.banco.clave.toString().padLeft(3,'0')
-			receptor.setBanco(CBanco.Enum.forString(bancoClave))
-        }
+        
         if( nominaEmpleado.nomina.formaDePago == 'TRANSFERENCIA'){
 
         	if(empleado.salario.clabe){
 
         		//receptor.cuentaBancaria = empleado.salario.clabe
-        		receptor.banco = null
+        		//receptor.banco = null
 
         	} else {
-
+        			if(empleado?.salario?.banco?.clave && nominaEmpleado.nomina.formaDePago == 'TRANSFERENCIA'){
+        				def bancoClave = empleado?.salario.banco.clave.toString().padLeft(3,'0')
+						receptor.setBanco(CBanco.Enum.forString(bancoClave))
+        				}
         		receptor.cuentaBancaria = new BigInteger(empleado.salario.numeroDeCuenta)
         	}
 
