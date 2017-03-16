@@ -266,9 +266,17 @@ class ExportadorController {
 		  def salarioBase=calculo.sdiInf.toString().replace('.','').padLeft(6,"0")
 		  def filler= StringUtils.leftPad("",6)
 		  def tipoTrabajador="1"
-		  def tipoSalario="2"
-			if(calculo.empleado.id==273 || calculo.empleado.id==274)
-			tipoSalario=1
+		  def tipoSalario="0"
+
+			if(calculo.comisiones>0 && calculo.variable-calculo.comisiones>0)
+				tipoSalario="2"
+
+			if(calculo.comisiones>0 && calculo.variable-calculo.comisiones=0)
+				tipoSalario="1"
+
+			if(calculo.comisiones=0 && calculo.variable-calculo.comisiones>0)
+				tipoSalario="2"
+
 		  def tipoJornada=0
 			if(calculo.empleado.perfil.jornada=="MEDIA" || calculo.empleado.perfil.jornada=="REDUCIDA")
 			 tipoJornada=6
