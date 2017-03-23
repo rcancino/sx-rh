@@ -23,7 +23,7 @@ import org.apache.commons.lang.StringUtils;
 class CfdiPrintUtils {
 	
 	static resolverParametros(Comprobante comprobante,Nomina nomina,NominaPorEmpleado nominaPorEmpleado){
-		//NominaDocument nominaDocto=NominaDocument.Factory.parse(comprobante.getCo)
+		
 		
 		
 		
@@ -49,6 +49,8 @@ class CfdiPrintUtils {
 		parametros.put("EXPEDIDO_DIRECCION", direccionEmisor);
 		parametros.put("REGIMEN",comprobante.getEmisor().getRegimenFiscalArray(0).regimen);
 		parametros.put("METODO_DE_PAGO", 		comprobante.getMetodoDePago());
+
+	
 		
 		// Datos tomados del Comprobante fiscal digital XML
 		parametros.put("NOMBRE", 			comprobante.getReceptor().getNombre()); //Recibir como Parametro
@@ -58,36 +60,19 @@ class CfdiPrintUtils {
 		parametros['CURP']=nomina.CURP
 		parametros['REGIMEN_TRABAJADOR']=nomina.tipoRegimen.toString()
 		parametros['EMISOR_RFC']=comprobante.emisor.rfc
-		parametros['TIPO_NOMINA']=nomina.tipo
 		parametros['PERIOCIDAD_PAGO']=nomina.periodicidadPago
-		
-		
 		parametros.put("SERIE", 			comprobante.getSerie());
-		
 		parametros.put("FOLIO", 			comprobante.getFolio());
 		parametros.put("NUM_CERTIFICADO", 	comprobante.getNoCertificado());
 		parametros.put("SELLO_DIGITAL", 	comprobante.getSello());
 		parametros.put("IMP_CON_LETRA", 	ImporteALetra.aLetra(comprobante.getTotal()));
-		
 		parametros['REGISTRO_PATRONAL']=nomina.registroPatronal
-		
-		
-		
 		parametros.put("NFISCAL", 			comprobante.getSerie()+" - "+comprobante.getFolio());
-		//parametros['PUESTO']=nomina.puesto
-		//parametros['DEPARTAMENTO']=nomina.departamento
-		//parametros['SUCURSAL']=nomina.departamento
 		parametros['RIESGO_PUESTO']=''+nomina.riesgoPuesto
 		parametros['TIPO_JORNADA']=nomina.tipoJornada
-		//parametros['DEPARTAMENTO']=nomina.departamento
 		parametros['FECHA_INGRESO_LABORAL']=nomina.fechaInicioRelLaboral?.format("yyyy-MM-dd")
 		parametros['ANTIGUEDAD']=''+nomina.antiguedad
 		parametros['TIPO_CONTRATO']=nomina.tipoContrato
-		//parametros['SALARIO_DIARIO_BASE']=nomina.salarioBaseCotApor
-		//parametros['SALARIO_DIARIO_INTEGRADO']=nomina.salarioDiarioIntegrado
-
-
-		
 		parametros['FECHA_INICIAL']=nomina.fechaInicialPago?.format("yyyy-MM-dd")
 		parametros['FECHA_FINAL']=nomina.fechaFinalPago?.format("yyyy-MM-dd")
 		parametros['DIAS_PAGADOS']=nomina.numDiasPagados
@@ -95,80 +80,25 @@ class CfdiPrintUtils {
 		parametros.put("TOTAL", comprobante.getTotal());
 		parametros['COMENTARIO_NOM']='Nómina'
 		
-		//parametros['DIAS_HORAS_EXTRA']=nomina?.horasExtras?.horasExtraArray[0]?.dias
-		
-		
-		
-		/*
-		//parametros.put("FECHA", 			comprobante.getFecha().getTime());
-		parametros.put("NFISCAL", 			comprobante.getSerie()+" - "+comprobante.getFolio());
-		parametros.put("IMPORTE", 			comprobante.getSubTotal());
-		parametros.put("IVA", 			comprobante.getImpuestos().getTotalImpuestosTrasladados());
-		parametros.put("TOTAL", 			comprobante.getTotal());
-		parametros.put("RECEPTOR_DIRECCION", 		getDireccionEnFormatoEstandar(comprobante.getReceptor().getDomicilio()) );
-		parametros.put("NUM_CTA_PAGO", 		comprobante.getNumCtaPago());
-		
-		//Datos tomado de la aplicacion
-		
-		parametros['FORMA_DE_PAGO']=comprobante.formaDePago
-		parametros['PINT_IVA']='16 '
-		parametros['TIPO_DE_COMPROBANTE']=comprobante.tipoDeComprobante.toString().toUpperCase()
-		
-		parametros.put("DESCUENTOS", 	comprobante.getDescuento()?:0.0);
-		
-		
-		if(comprobante.getReceptor().rfc=='XAXX010101000'){
-			parametros.put("IMPORTE", 			comprobante.getTotal());
-		}
-		
-		
-		
-		if (emisor.getExpedidoEn() != null){
-			TUbicacion expedido=emisor.getExpedidoEn();
-		
-			String pattern2="{0} {1}  {2}  {3}" +
-				"\n{4}  {5}  {6}";
-			String expedidoDir=MessageFormat.format(pattern2
-				,expedido.getCalle()
-				,expedido.getNoExterior()
-				,StringUtils.defaultIfEmpty(expedido.getNoInterior(),"")
-				,expedido.getColonia()
-				,expedido.getMunicipio()
-				,expedido.getCodigoPostal()
-				,expedido.getEstado()
-				);
-			parametros.put("EXPEDIDO_DIRECCION", expedidoDir);
-		}
-		*/	
-		
-		//Especiales para CFDI
 			
-		
-			//println 'Imagen generada: '+img
 			def img=QRCodeUtils.generarQR(comprobante)
-			//println 'Imagen generada: '+img
+			
 			parametros.put("QR_CODE",img);
-			//parametros.put("QR_CODE",QRCodeUtils.getQCode(cfdi.getComprobante()))
+			
 			TimbreFiscal timbre=new TimbreFiscal(comprobante)
 			parametros.put("FECHA_TIMBRADO", timbre.FechaTimbrado);
 			parametros.put("FOLIO_FISCAL", timbre.UUID);
 			parametros.put("SELLO_DIGITAL_SAT", timbre.selloSAT);
 			parametros.put("CERTIFICADO_SAT", timbre.noCertificadoSAT);
 			parametros.put("CADENA_ORIGINAL_SAT", timbre.cadenaOriginal());
-		
-			//parametros["EMPRESA_LOGO"]=new File("z://siipapex/etc/empresaFacLogo.jpg")
-			
 			
 			parametros['SALARIO_DIARIO_BASE']=nomina.salarioBaseCotApor as String
-			parametros['SALARIO_DIARIO_INTEGRADO']=nomina.salarioDiarioIntegrado
+			parametros['SALARIO_DIARIO_INTEGRADO']=nomina.salarioDiarioIntegrado as String
 
 			parametros['PUESTO']=nomina.puesto
 			parametros['DEPARTAMENTO']=nomina.departamento
 
 		if(nominaPorEmpleado.asistencia){
-			//parametros['DIAS_PAGADOS']=nomina.numDiasPagados as String
-			
-			
 			
 			def diasTrabajados=0
 			def faltas=0
@@ -176,38 +106,35 @@ class CfdiPrintUtils {
 				if(nominaPorEmpleado.asistencia){
 					if(!nominaPorEmpleado.empleado.controlDeAsistencia){
 					      diasTrabajados=nominaPorEmpleado.diasTrabajados+nominaPorEmpleado.vacaciones+nominaPorEmpleado.asistencia.paternidad
-				   		//diasTrabajados= nominaPorEmpleado.diasTrabajados+nominaPorEmpleado.vacaciones-(nominaPorEmpleado.asistencia.faltasManuales+(nominaPorEmpleado.asistencia.faltasManuales*0.167)+ nominaPorEmpleado.incapacidades)
+				   		
 				   		faltas=	(nominaPorEmpleado.asistencia.faltasManuales+(nominaPorEmpleado.asistencia.faltasManuales*0.167))
 					}else{
 
 
 				  		if(nominaPorEmpleado.empleado.alta<=nominaPorEmpleado.asistencia.calendarioDet.inicio){
-							// diasTrabajados=nominaPorEmpleado.diasDelPeriodo-(nominaPorEmpleado.faltas+ nominaPorEmpleado.fraccionDescanso + nominaPorEmpleado.incapacidades)
-							// faltas=(nominaPorEmpleado.faltas+ nominaPorEmpleado.fraccionDescanso + nominaPorEmpleado.incapacidades)
+							
 					 		diasTrabajados=nominaPorEmpleado.diasTrabajados+nominaPorEmpleado.vacaciones+nominaPorEmpleado.asistencia.paternidad
 				  	 		faltas=nominaPorEmpleado.diasDelPeriodo-nominaPorEmpleado.diasTrabajados-nominaPorEmpleado.vacaciones-nominaPorEmpleado.asistencia.paternidad
 				  		}else{
-				  			diasTrabajados=nominaPorEmpleado.diasTrabajados //-(nominaPorEmpleado.asistencia.faltasManuales+nominaPorEmpleado.incapacidades)
-					  		faltas= nominaPorEmpleado.faltas+nominaPorEmpleado.fraccionDescanso+nominaPorEmpleado.incapacidades //(nominaPorEmpleado.asistencia.faltasManuales+nominaPorEmpleado.incapacidades)
+				  			diasTrabajados=nominaPorEmpleado.diasTrabajados 
+					  		faltas= nominaPorEmpleado.faltas+nominaPorEmpleado.fraccionDescanso+nominaPorEmpleado.incapacidades //(
 				  		}
 					}
 				}
 			}
-			parametros['DIAS_TRABAJADOS']=diasTrabajados
+
+
+			parametros['DIAS_TRABAJADOS']=""+diasTrabajados
 
 			parametros['SUB_EMPLEO_APLIC']=nominaPorEmpleado.subsidioEmpleoAplicado
 
+			parametros['FALTAS']= ""+faltas
 
-//			if(nominaPorEmpleado?.asistencia?.diasTrabajados>0){
-//				parametros['DIAS_TRABAJADOS']=(com.luxsoft.sw4.MonedaUtils.round(nominaPorEmpleado.asistencia.diasTrabajados)) as String
-//			}else{
-				   //(com.luxsoft.sw4.MonedaUtils.round(nominaPorEmpleado.diasDelPeriodo)) as String
-//			}			
-
-			parametros['FALTAS']= faltas //nominaPorEmpleado.faltas+nominaPorEmpleado.incapacidades
+			
 		}
 		
-		
+		parametros['ASIMILADOS']=new String("NO")
+		println parametros
 		return parametros;
 	}
 	

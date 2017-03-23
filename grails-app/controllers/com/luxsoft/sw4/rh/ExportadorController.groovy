@@ -271,10 +271,10 @@ class ExportadorController {
 			if(calculo.comisiones>0 && calculo.variable-calculo.comisiones>0)
 				tipoSalario="2"
 
-			if(calculo.comisiones>0 && calculo.variable-calculo.comisiones=0)
+			if(calculo.comisiones>0 && calculo.variable-calculo.comisiones==0)
 				tipoSalario="1"
 
-			if(calculo.comisiones=0 && calculo.variable-calculo.comisiones>0)
+			if(calculo.comisiones==0 && calculo.variable-calculo.comisiones>0)
 				tipoSalario="2"
 
 		  def tipoJornada=0
