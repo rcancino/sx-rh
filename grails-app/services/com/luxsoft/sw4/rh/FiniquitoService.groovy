@@ -108,7 +108,7 @@ class FiniquitoService {
                 def aniversarioAnterior = cv.aniversario - 366 + 1
                 diasTrabajadoParaVacaciones = 
                 (finiquito.baja.fecha - cv.aniversario ) < 0 ? finiquito.baja.fecha - aniversarioAnterior + 1 : finiquito.baja.fecha - cv.aniversario + 1
-
+                /*
                 if(finiquito.diasTrabajadoParaVacaciones.abs() < 0 )
                     diasTrabajadoParaVacaciones = 0             
                 def vacacionesFiniquito = finiquito.vacacionesEjercicio + finiquito.vacacionesAnteriores - finiquito.vacacionesAplicadas  
@@ -123,7 +123,14 @@ class FiniquitoService {
                 } else {
                     vacaciones = (  ((sd * vacacionesFiniquito / diasDelEjercicio) * diasTrabajadoParaVacaciones))
                 }
-                
+
+                */
+               
+                def proporcionDiasVac = diasTrabajadoParaVacaciones * vacacionesEjercicio / diasDelEjercicio
+                def vacacionesFiniquito = proporcionDiasVac + vacacionesAnteriores - vacacionesAplicadas
+                vacacionesFiniquito = vacacionesFiniquito <= 0 ? 0 : vacacionesFiniquito
+                def sd = !finiquito.salario ? finiquito.salarioVariable : finiquito.salario
+                vacaciones = sd * vacacionesFiniquito                 
                 def pv = vacaciones * primaVacacional
                 def topeEx = smg.salario * 15
                 primaVacacionalExenta = (primVacExAcu <= topeEx ? (primVacExAcu + pv < topeEx ? pv : topeEx - primVacExAcu) : 0.0)

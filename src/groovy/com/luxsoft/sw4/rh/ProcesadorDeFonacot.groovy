@@ -43,13 +43,11 @@ class ProcesadorDeFonacot {
 			
 			def mesNombre=ne.nomina.calendarioDet.mes
 
-			def periodoMes=CalendarioDet.executeQuery("select min(c.inicio) as inicio,max(c.fin) as fin from CalendarioDet c where c.mes=? and c.calendario.ejercicio=?",[mesNombre,ne.nomina.ejercicio])
+			def periodoMes=CalendarioDet.executeQuery("select min(c.inicio) as inicio,max(c.fin) as fin from CalendarioDet c where c.mes=? and c.calendario.ejercicio=? and CONCAT(c.calendario.tipo,\'L\')=?",[mesNombre,ne.nomina.ejercicio,ne.nomina.periodicidad])
 			
 
 			def diasDelMes=(new Periodo(periodoMes[0][0],periodoMes[0][1]).dias())+1
-
-			
-			
+					
 			def importeExcento=fonacot.retencionMensual/diasDelMes *(ne.diasDelPeriodo)
 
 			

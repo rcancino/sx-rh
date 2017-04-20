@@ -4,6 +4,7 @@ package com.luxsoft.sw4.rh
 
 
 import groovy.sql.Sql
+import com.luxsoft.sw4.Empresa
 
 
 
@@ -29,8 +30,8 @@ class RevisionNominaExport {
 			,max(case when c.clave='P030' THEN NED.importe_gravado ELSE 0 END)  AS PRIMA_DOM_G
 			,max(case when c.clave='P002' THEN NED.importe_excento ELSE 0 END)  AS AGUINALDO_E
 			,max(case when c.clave='P002' THEN NED.importe_gravado ELSE 0 END)  AS AGUINALDO_G
-			,max(case when c.clave='P003' THEN NED.importe_excento ELSE 0 END)  AS PTU_E
-			,max(case when c.clave='P003' THEN NED.importe_gravado ELSE 0 END)  AS PTU_G
+			,max(case when c.clave=(case when (SELECT rfc FROM empresa)='PAP830101CR3' then 'P003' else 'P031' end) THEN NED.importe_excento ELSE 0 END)  AS PTU_E
+			,max(case when c.clave=(case when (SELECT rfc FROM empresa)='PAP830101CR3' then 'P003' else 'P031' end) THEN NED.importe_gravado ELSE 0 END)  AS PTU_G
 			,max(case when c.clave='P028' THEN NED.importe_excento ELSE 0 END)  AS INDEMNIZACION_E
 			,max(case when c.clave='P028' THEN NED.importe_gravado ELSE 0 END)  AS INDEMNIZACION_G
 			,max(case when c.clave='P022' THEN NED.importe_excento ELSE 0 END)  AS HRS_EXTRAS_DOBLES_E
@@ -81,10 +82,16 @@ class RevisionNominaExport {
 
 		def sql=new Sql(dataSource)
 		def temp = File.createTempFile("temp",".txt",null)
-
-		
+		Empresa empresa=Empresa.first()
+				
 		temp.with{
-			append("""id,clave, nombre,numero_de_trabajador,e.alta, baja ,ubicacion,tipo,forma_de_pago,periodicidad,folio,periodo_fecha_inicial,periodo_fecha_final,dias_del_periodo,idNe,salario_diario_base,salario_diario_integrado,dias_trabajados,dias_vac,incapacidades,faltas,fraccion_descanso,SUELDO,COMISIONES,INCENTIVO,VACACIONES, VACACIONES_P, PRIMA_VAC_E, PRIMA_VAC_G, PRIMA_ANT_E, PRIMA_ANT_G,PRIMA_DOM_E, PRIMA_DOM_G, AGUINALDO_E, AGUINALDO_G, PTU_E, PTU_G,INDEMNIZACION_E,INDEMNIZACION_G, HRS_EXTRAS_DOBLES_E, HRS_EXTRAS_DOBLES_G, HRS_EXTRAS_TRIPLES,COMPENSACION, BONO, BONO_ANT, BONO_PRODUCT, BONO__DESEMP, GRATIFICACION,PERMISO_PATERNID,OTRAS_E,OTRAS_G, SUB__EMP_PAG_E,OTRAS_DEV_ISPT_E,COMPENSACION_SAF_E, SUB_EMP_APLIC,IMSS, ISR,RETARDOS,PENSION_ALIMENT, ANTICIPO, INFONAVIT, INFONACOT, PRESTAMO, OTRAS, RET_COMPENSACION_SAF,percepcionE,prcepcionG,totalPercepcion,deduccion,total\r\n""" )
+			def encabezado = """id,clave, nombre,numero_de_trabajador,e.alta, baja ,ubicacion,tipo,forma_de_pago,periodicidad,folio,periodo_fecha_inicial,periodo_fecha_final,dias_del_periodo,idNe,salario_diario_base,salario_diario_integrado,dias_trabajados,dias_vac,incapacidades,faltas,fraccion_descanso,SUELDO,COMISIONES,INCENTIVO,VACACIONES, VACACIONES_P, PRIMA_VAC_E, PRIMA_VAC_G, PRIMA_ANT_E, PRIMA_ANT_G,PRIMA_DOM_E, PRIMA_DOM_G, AGUINALDO_E, AGUINALDO_G, PTU_E, PTU_G,INDEMNIZACION_E,INDEMNIZACION_G, HRS_EXTRAS_DOBLES_E, HRS_EXTRAS_DOBLES_G, HRS_EXTRAS_TRIPLES,COMPENSACION, BONO, BONO_ANT, BONO_PRODUCT, BONO__DESEMP, GRATIFICACION,PERMISO_PATERNID,OTRAS_E,OTRAS_G, SUB__EMP_PAG_E,OTRAS_DEV_ISPT_E,COMPENSACION_SAF_E, SUB_EMP_APLIC,IMSS, ISR,RETARDOS,PENSION_ALIMENT, ANTICIPO, INFONAVIT, INFONACOT, PRESTAMO, OTRAS, RET_COMPENSACION_SAF,percepcionE,prcepcionG,totalPercepcion,deduccion,total\r\n""" 
+
+			if(!empresa.rfc.equals("PAP830101CR3")){
+				encabezado = """id,clave, nombre,numero_de_trabajador,e.alta, baja ,ubicacion,tipo,forma_de_pago,periodicidad,folio,periodo_fecha_inicial,periodo_fecha_final,dias_del_periodo,idNe,salario_diario_base,salario_diario_integrado,dias_trabajados,dias_vac,incapacidades,faltas,fraccion_descanso,SUELDO,COMISIONES,INCENTIVO,VACACIONES, VACACIONES_P, PRIMA_VAC_E, PRIMA_VAC_G, PRIMA_ANT_E, PRIMA_ANT_G,PRIMA_DOM_E, PRIMA_DOM_G, AGUINALDO_E, AGUINALDO_G, DIA_FEST_E, DIA_FEST_G,INDEMNIZACION_E,INDEMNIZACION_G, HRS_EXTRAS_DOBLES_E, HRS_EXTRAS_DOBLES_G, HRS_EXTRAS_TRIPLES,COMPENSACION, BONO, BONO_ANT, BONO_PRODUCT, BONO__DESEMP, GRATIFICACION,PERMISO_PATERNID,OTRAS_E,OTRAS_G, SUB__EMP_PAG_E,OTRAS_DEV_ISPT_E,COMPENSACION_SAF_E, SUB_EMP_APLIC,IMSS, ISR,RETARDOS,PENSION_ALIMENT, ANTICIPO, INFONAVIT, INFONACOT, PRESTAMO, OTRAS, RET_COMPENSACION_SAF,percepcionE,prcepcionG,totalPercepcion,deduccion,total\r\n""" 
+			}
+				append(encabezado)
+
 				sql.eachRow(query,[id]){ row->
 
 						NominaPorEmpleado ne= NominaPorEmpleado.get(row.idNe)

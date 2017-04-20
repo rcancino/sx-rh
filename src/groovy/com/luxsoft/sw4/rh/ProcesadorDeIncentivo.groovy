@@ -31,8 +31,10 @@ class ProcesadorDeIncentivo {
 		
 		if(incentivo){
 			log.debug "Procesando Incentivo $incentivo.id (${ne.empleado} ) "
-
+				
 			switch(tipo) {
+
+
 				case 'SEMANAL':
 					concepto = ConceptoDeNomina.findByClave('P009')
 					importeGravado=calcularImporteSemanal(ne,incentivo)
@@ -43,6 +45,7 @@ class ProcesadorDeIncentivo {
 					importeGravado=calcularImporteQuincenal(ne,incentivo)
 					break
 				case 'MENSUAL':
+
 					importeGravado=calcularImporteMensual(ne,incentivo)
 					break
 			}	
