@@ -32,7 +32,9 @@
 ,e.alta,date(f.date_created) as creado,date(f.last_updated) as ult_modif,(SELECT b.fecha FROM baja_de_empleado b where b.empleado_id=e.id) as baja,(SELECT U.descripcion FROM ubicacion U WHERE p.ubicacion_id=u.id) AS ubicacion
 ,(SELECT U.descripcion FROM departamento U WHERE p.departamento_id=u.id) AS departamento,(SELECT U.descripcion FROM puesto U WHERE p.puesto_id=u.id) AS puesto
 ,f.anos_trabajados,f.antiguedad,f.dias_del_ejercicio,f.dias_para_aguinaldo,f.dias_aguinaldo
-,f.vacaciones_anteriores,f.vacaciones_ejercicio,f.vacaciones_aplicadas,f.vacaciones_anteriores+f.vacaciones_ejercicio-f.vacaciones_aplicadas as vacs_pendtes,f.dias_trabajado_ejercicio,f.dias_trabajado_para_vacaciones,f.dias_por_pagar
+,f.vacaciones_anteriores,f.vacaciones_ejercicio,f.vacaciones_aplicadas
+,(f.dias_trabajado_para_vacaciones*f.vacaciones_ejercicio/f.dias_del_ejercicio)+f.vacaciones_anteriores-f.vacaciones_aplicadas as vacs_finiquito
+,f.dias_trabajado_ejercicio,f.dias_trabajado_para_vacaciones,f.dias_por_pagar
 ,f.salario,f.salario_variable,f.salario_diario_integrado,f.salario*30 as sueldo_mensual
 ,f.indemnizacion_intereses,f.indemnizacion20dias_por_anio,f.indemnizacion3meses_de_sueldo,f.indemnizacion_prima_de_antiguedad
 ,x.class,x.tipo,x.clave,x.descripcion,sum(x.importe_gravado) as gravado,sum(x.importe_excento) as exento
@@ -77,7 +79,7 @@ group by x.class,x.tipo,x.clave]]></queryString>
 	<field name="vacaciones_anteriores" class="java.lang.Integer"/>
 	<field name="vacaciones_ejercicio" class="java.lang.Integer"/>
 	<field name="vacaciones_aplicadas" class="java.lang.Integer"/>
-	<field name="vacs_pendtes" class="java.lang.Long"/>
+	<field name="vacs_finiquito" class="java.math.BigDecimal"/>
 	<field name="dias_trabajado_ejercicio" class="java.lang.Integer"/>
 	<field name="dias_trabajado_para_vacaciones" class="java.lang.Integer"/>
 	<field name="dias_por_pagar" class="java.lang.Integer"/>
@@ -795,7 +797,7 @@ group by x.class,x.tipo,x.clave]]></queryString>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font pdfFontName="Times-Roman" size="7"/>
 					</textElement>
-				<text><![CDATA[VACS:  ANT   /      AÑO      /      APLIC     /   PENDTES]]></text>
+				<text><![CDATA[VACS:  ANT   /      AÑO        /      APLIC      /     FINIQ]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -831,7 +833,7 @@ group by x.class,x.tipo,x.clave]]></queryString>
 					</textElement>
 				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{vacaciones_ejercicio}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="false" pattern="###0.000" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="529"
 						y="56"
@@ -846,7 +848,7 @@ group by x.class,x.tipo,x.clave]]></queryString>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="SansSerif" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Long"><![CDATA[$F{vacs_pendtes}]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{vacs_finiquito}]]></textFieldExpression>
 				</textField>
 				<staticText>
 					<reportElement

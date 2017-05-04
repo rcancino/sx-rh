@@ -1,7 +1,10 @@
 
-<table id="grid" class="table table-striped table-bordered table-condensed">
+<table id="detGrid"  class=" grid gtable  table-striped table-bordered table-condensed">
+
+
 	<thead>
 		<tr>
+			<th>ID</th>
 			<th>Nombre</th>
 			<th>Ubicación</th>
 			<th>E</th>
@@ -48,7 +51,8 @@
 		<g:each 
 			in="${ptuInstance?.partidas.sort({ a,b -> a.empleado.perfil.ubicacion.clave <=> b.empleado.perfil.ubicacion.clave?: a.empleado.apellidoPaterno<=>b.empleado.apellidoPaterno  }) }" var="row">
 			<tr >
-				<td>
+				<td>${row.id}</td>
+				<td id="nombreField" >
 					${fieldValue(bean:row,field:"empleado")}
 				</td>
 				<td>${fieldValue(bean:row,field:'empleado.perfil.ubicacion.clave')}</td>

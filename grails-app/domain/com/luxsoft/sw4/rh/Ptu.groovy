@@ -79,7 +79,7 @@ class Ptu {
 	}
 
 	def getEmpleadoTope(){
-		def found=partidas.max({if(it.empleado.perfil.tipo=='SINDICALIZADO') it.getSalarioNeto()})
+		def found=partidas.max({if(it.empleado.perfil.tipo=='SINDICALIZADO' && it.empleado.status!='BAJA') it.getSalarioNeto()})
 		return found
 	}
 

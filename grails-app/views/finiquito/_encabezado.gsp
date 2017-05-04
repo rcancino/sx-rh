@@ -25,8 +25,11 @@
                 <ul>
                     <li>Vacaciones anteriores: ${entity.vacacionesAnteriores}</li>
                     <li>Vacaciones ejercicio: ${entity.vacacionesEjercicio}</li>
-                    <li>Vacaciones aplicadas: ${entity.vacacionesAplicadas}</li>
-                    <li>Vacaciones finiquito: ${entity.vacacionesEjercicio + entity.vacacionesAnteriores - entity.vacacionesAplicadas }</li>
+                    <li>Vacaciones aplicadas: ${entity.vacacionesAplicadas}</li>                    
+                    <li>Vacaciones finiquito:
+                        <g:formatNumber number="${((entity.diasTrabajadoParaVacaciones * entity.vacacionesEjercicio / entity.diasDelEjercicio) + entity.vacacionesAnteriores - entity.vacacionesAplicadas)}" type="number"
+                            maxFractionDigits="3" roundingMode="HALF_EVEN" />
+                    </li>
                 </ul>
             </div>
             <div class="col-md-3">

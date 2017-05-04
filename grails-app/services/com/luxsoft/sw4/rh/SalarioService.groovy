@@ -10,7 +10,7 @@ import grails.transaction.Transactional
 import grails.transaction.NotTransactional
 import grails.events.Listener
 import groovy.sql.Sql
-
+import java.math.*
 import com.luxsoft.sw4.Empresa
 
 @Transactional
@@ -209,7 +209,8 @@ class SalarioService {
 						found.vacDias=row.VAC_DIAS
 						found.vacPrima=row.VAC_PRIMA
 						found.agndoDias=row.AGNDO_DIAS
-						found.factor=row.FACTOR
+						found.diasPrimaDominical=empleado.salario.primaDominicalFija ? ((365/7).setScale(0,RoundingMode.FLOOR) * 0.25) : 0.0
+						found.factor=empleado.salario.primaDominicalFija? (((found.vacPrima*found.vacDias)+found.agndoDias+found.diasPrimaDominical)/365)+1 : row.FACTOR
 						found.sdiF=found.sdb*found.factor
 
 						found.diasLabBim=row.DIAS_LAB_BIM
@@ -311,12 +312,14 @@ class SalarioService {
 				case 42:
 					//sdi.primaDom+=it.importeGravado+it.importeExcento
 					//break
+					
 					if(sdi.empleado.salario.primaDominicalFija){
     					log.info("Salario dominical fijo para ${sdi.empleado}")
     					sdi.primaDom = 0.0
     				} else {
     					sdi.primaDom += it.importeGravado + it.importeExcento
     				}
+    				//sdi.primaDom += it.importeGravado + it.importeExcento
     				break
 				case 44:
 					sdi.vacacionesP+=it.importeGravado+it.importeExcento

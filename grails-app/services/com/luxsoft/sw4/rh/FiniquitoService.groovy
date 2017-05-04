@@ -86,7 +86,12 @@ class FiniquitoService {
             alta = finiquito?.empleado?.alta
             antiguedad = (finiquito.baja.fecha - finiquito.empleado.alta) + 1
             diasDelEjercicio = de
-            diasTrabajadoEjercicio = dte
+            if(alta>p.fechaInicial){
+                    diasTrabajadoEjercicio = (finiquito.baja.fecha-alta)+1
+                }else{
+                    diasTrabajadoEjercicio = dte        
+                }
+            
             anosTrabajados = (((finiquito.baja.fecha - finiquito.empleado.alta) + 1)/365).setScale(0,RoundingMode.HALF_EVEN).intValue()
             salario = finiquito.empleado.salario.salarioDiario
             salarioVariable = finiquito.empleado.salario.salarioVariable
@@ -107,6 +112,8 @@ class FiniquitoService {
                 def primVacExAcu = cv.acumuladoExcento
                 def aniversarioAnterior = cv.aniversario - 366 + 1
                 diasTrabajadoParaVacaciones = 
+
+
                 (finiquito.baja.fecha - cv.aniversario ) < 0 ? finiquito.baja.fecha - aniversarioAnterior + 1 : finiquito.baja.fecha - cv.aniversario + 1
                 /*
                 if(finiquito.diasTrabajadoParaVacaciones.abs() < 0 )
@@ -127,7 +134,7 @@ class FiniquitoService {
                 */
                
                 def proporcionDiasVac = diasTrabajadoParaVacaciones * vacacionesEjercicio / diasDelEjercicio
-                def vacacionesFiniquito = proporcionDiasVac + vacacionesAnteriores - vacacionesAplicadas
+                def vacacionesFiniquito =  proporcionDiasVac + vacacionesAnteriores - vacacionesAplicadas
                 vacacionesFiniquito = vacacionesFiniquito <= 0 ? 0 : vacacionesFiniquito
                 def sd = !finiquito.salario ? finiquito.salarioVariable : finiquito.salario
                 vacaciones = sd * vacacionesFiniquito                 
@@ -147,12 +154,14 @@ class FiniquitoService {
                 factorLiquidacion = MonedaUtils.round(factorLiquidacion,4) + 1
                 salarioDiarioIntegradoLiq = salario  * finiquito.factorLiquidacion        
                 def diasAguinaldoDiciembre =  31
-                if( (empleado.alta.isSameMonth(baja.fecha)) && (empleado.alta.toMonth() == 12) ) {
+                if( (empleado.alta.isSameMonth(baja.fecha)) && (empleado.alta.toMonth() == 12)  && (empleado.alta.toYear() == baja.fecha.toYear()) ){
                     println('Mes: '+ empleado.alta.toMonth())
                     diasAguinaldoDiciembre =  baja.fecha - empleado.alta + 1
                     println('diasAguinaldoDiciembre: '+ diasAguinaldoDiciembre)
                     diasParaAguinaldo = diasAguinaldoDiciembre
-                } else {
+                } else if( (empleado.alta.toYear() == baja.fecha.toYear()) && (empleado.alta.toMonth() != 12)) {
+                        diasParaAguinaldo = diasTrabajadoEjercicio 
+                } else{
                     diasParaAguinaldo = diasTrabajadoEjercicio + diasAguinaldoDiciembre
                 }
                 

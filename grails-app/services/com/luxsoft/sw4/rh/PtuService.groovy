@@ -137,6 +137,9 @@ class PtuService {
             if(it.empleado.id==260 || it.empleado.id==280 || it.empleado.id==246){
                 it.noAsignado=true
             }
+            it.alta=it.empleado.alta
+            it.status=it.empleado.status
+            it.baja=it.empleado.baja!=null ? it.empleado.baja.fecha : null
         }
 
         ptu.montoDias=ptu.total*0.5
@@ -164,6 +167,18 @@ class PtuService {
                 it.montoDias=0.0
                 it.montoSalario=0.0
                 it.montoPtu=0.0
+            }
+                        //when ptd.no_asignado is true and e.id in(260,280,246) then '3
+            if(!it.noAsignado && it.status!='BAJA'){
+                it.tipo=1
+            }else if(!it.noAsignado && it.status=='BAJA'){
+                it.tipo=2
+            }else if(it.noAsignado && it.status!='BAJA' && it.diasPtu<60 && it.empleado.id != 260 && it.empleado.id != 280 && it.empleado.id != 246){
+                  it.tipo=4  
+            }else if(it.noAsignado && it.status=='BAJA' && it.diasPtu<60 && it.empleado.id != 260 && it.empleado.id != 280 && it.empleado.id != 246){
+                    it.tipo=5
+            }else if(it.noAsignado &&  (it.empleado.id==260 || it.empleado.id==280 || it.empleado.id==246)){
+                    it.tipo=3
             }
             
         }
@@ -264,13 +279,14 @@ class PtuService {
     }
 
     def calcularImpuestos(Ptu ptu){
-        def zona=ZonaEconomica.findByClaveAndEjercicio('A',ptu.ejercicio)
-        ptu.salarioMinimoGeneral=zona.salario
+        def zona=ZonaEconomica.findByClaveAndEjercicio('A',ptu.ejercicio+1)
+        ptu.salarioMinimoGeneral=zona.uma
         ptu.topeSmg=ptu.salarioMinimoGeneral*15
         ptu.partidas.each{
             it.ptuExcento=it.montoPtu>=ptu.topeSmg?ptu.topeSmg:it.montoPtu
             it.ptuGravado=it.montoPtu-it.ptuExcento
-            it.salarioDiario=it.empleado.salario.salarioDiario
+
+            it.salarioDiario = it.salarioDiario==null ? it.empleado.salario.salarioDiario : it.salarioDiario
             if(it.empleado.salario.periodicidad=='QUINCENAL'){
                 it.salarioMensual=it.salarioDiario*31
                 if(it.noAsignado || (it.empleado.baja && it.empleado.baja.fecha>it.empleado.alta)){
@@ -309,11 +325,11 @@ class PtuService {
     def calcularImpuestos(PtuDet it){
         def zona=ZonaEconomica.findByClaveAndEjercicio('A',it.ptu.ejercicio)
         def ptu=it.ptu
-        ptu.salarioMinimoGeneral=zona.salario
+        ptu.salarioMinimoGeneral=zona.uma
         ptu.topeSmg=ptu.salarioMinimoGeneral*15
         it.ptuExcento=it.montoPtu>=ptu.topeSmg?ptu.topeSmg:it.montoPtu
         it.ptuGravado=it.montoPtu-it.ptuExcento
-        it.salarioDiario=it.empleado.salario.salarioDiario
+        it.salarioDiario=it.salarioDiario==null ? it.empleado.salario.salarioDiario : it.salarioDiario
         if(it.empleado.salario.periodicidad=='QUINCENAL'){
             it.salarioMensual=it.salarioDiario*31
             if(it.noAsignado || it.empleado.baja){

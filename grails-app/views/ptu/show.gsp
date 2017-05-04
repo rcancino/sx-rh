@@ -3,7 +3,7 @@
 	<meta charset="UTF-8" >
 	 <meta  name="layout" content="operaciones2"/>
 	<title>PTU (${ptuInstance.ejercicio})</title>
-	
+	<r:require modules="datatables"/> 
 	
 </head>
 <body>
@@ -105,10 +105,10 @@
 
 	<content tag="filtros">
 		<div class="col-md-3">
-	         <input id="nombreF" placeholder="Empleado" class="form-control" autofocus="autofocus" autocomplete="off">
+	         <input id="nombreField" placeholder="Empleado" class="form-control" autofocus="autofocus" autocomplete="off">
 	     </div>
 	     <div class="col-md-3">
-	         <input id="ubicacionF" placeholder="Ubicacion" class="form-control" autocomplete="off" >
+	         <input id="ubicacionField" placeholder="Ubicacion" class="form-control" autocomplete="off" >
 	     </div>
 	</content>
 
@@ -267,11 +267,11 @@
 
 	</div><!-- .container end -->
 	
-	<script>
+	<%--<script>
 		$(function(){
 
 
-			var table=$("#gridDet").dataTable({
+			var table=$("#detGrid").dataTable({
 			        "paging":   false,
 			        "ordering": false,
 			        "info":     false,
@@ -279,14 +279,30 @@
     				});
 			
 
-			  $("#nombreF").keyup(function(){
+			  $("#empleadoF").keyup(function(){
       					table.DataTable().column(0).search( $(this).val() ).draw();
       					
 					});
 			
 			
 		});
-	</script>
+	</script>--%>
+	<r:script>
+			$(function(){
+				var table=$("#detGrid).dataTable({
+			        "paging":   false,
+			        "ordering": false,
+			        "info":     false,
+			         "dom":'t'
+    				});
+
+				
+    				$("#nombreField").keyup(function(){
+      					table.DataTable().column(1).search( $(this).val() ).draw();
+					});
+					
+			});
+	</r:script>
 
 </body>
 </html>

@@ -13,7 +13,7 @@
 			<th>Ant (D)</th>
 			<th>Vac (D)</th>
 			<th>Agn (D)</th>
-			
+			<th>primDom(D)</th>
 			<th>Factor</th>
 			<th>SDI (F)</th>
 			<th>Dias lab</th>
@@ -46,6 +46,7 @@
 				<td><g:formatNumber number="${row.dias}" format="###"/></td>
 				<td><g:formatNumber number="${row.vacDias}" format="###"/></td>
 				<td><g:formatNumber number="${row.agndoDias}" format="###"/></td>
+				<td><g:formatNumber number="${row.diasPrimaDominical}" format="###"/></td>
 				
 				<td><g:formatNumber number="${row.factor}" format="###.####"/></td>
 				<td><g:formatNumber number="${row.sdiF}" format="###.##"/></td>

@@ -71,6 +71,7 @@ class CalculoSdi {
 	BigDecimal sdiNvo=0.0
 	BigDecimal sdiInf=0.0
 	BigDecimal sdbAnterior=0.0
+	BigDecimal diasPrimaDominical=0.0
 	
 	String tipo
 	
