@@ -23,6 +23,8 @@ class NominaService {
 	
 	def calculoAnualService
 
+
+
 	@Transactional
 	def save(Nomina nomina) {
 		def xmlPendiente = nomina.partidas.find{it.cfdi==null}
@@ -101,6 +103,11 @@ class NominaService {
 			return nomina
 		}
 
+		if(nomina.tipo=='ESPECIAL'){
+			nomina = generarPartidasEspecial(nomina)
+			return nomina
+		}
+
 		def tipo=nomina.periodicidad
 		//def asistencias=Asistencia.findAllByCalendarioDet(nomina.calendarioDet)
 		def asistencias=Asistencia
@@ -136,6 +143,44 @@ class NominaService {
 		return nomina
 	}
 	
+
+	@Transactional
+	def generarPartidasEspecial(Nomina nomina){
+
+
+		//def operacionesGenericas=OperacionGenerica.findAllByCalendarioDet(nomina.calendarioDet)
+		def query = OperacionGenerica
+			.where{calendarioDet == nomina.calendarioDet && empleado.salario.periodicidad == nomina.periodicidad}
+
+		//def operacionesGenericas = query.where { }.list()
+		def operacionesGenericas = query.list()
+
+		operacionesGenericas.each{op ->
+			if(op.empleado.salario.formaDePago == nomina.formaDePago){
+				NominaPorEmpleado ne=nomina.partidas.find{
+				it.empleado.id==op.empleado.id
+			}
+			if(!ne ){
+				log.info 'Agregando empleado: '+op.empleado
+				ne=new NominaPorEmpleado(
+					empleado:op.empleado,
+					ubicacion:op.empleado.perfil.ubicacion,
+					antiguedadEnSemanas:0,
+					nomina:nomina,
+					vacaciones:0,
+					fraccionDescanso:0
+					)
+				nomina.addToPartidas(ne)	
+				}
+				ne.antiguedadEnSemanas=ne.getAntiguedad()
+			}
+		}
+		ordenar(nomina)
+		nomina.save failOnError:true
+		return nomina
+	}
+
+
 	/**
 	* Nota: Por el momento este metodo no se debe llamar si la nomina ya ha sido generada
 	* 		es decir solo  funciona bien para genera los registros de nomina por empleado
@@ -669,6 +714,7 @@ class NominaService {
 		log.info ' Registros de PTU detectados: '
 
 		ptus.each{
+			
 			def empleado=it.empleado
 			def ne=new NominaPorEmpleado(
 			empleado:empleado,
@@ -698,7 +744,7 @@ class NominaService {
 			ne.conceptos.clear()
 			def ptu=PtuDet.findByNominaPorEmpleado(ne)
 			if(ptu){
-				log.info 'Actualizando ptu: '+ptu
+				log.info 'Actualizando ptu: '+ne.empleado.nombre
 				//Percepcion 1
 				def p1=new NominaPorEmpleadoDet(
 					concepto:ConceptoDeNomina.findByClave('P003')
@@ -766,6 +812,11 @@ class NominaService {
 			}
 			
 		}
+
+		nomina.save flush : true
+
+		
+
 		return nomina
 	}
 

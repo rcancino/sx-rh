@@ -38,7 +38,7 @@ class RevisionNominaExport {
 			,max(case when c.clave='P022' THEN NED.importe_gravado ELSE 0 END)  AS HRS_EXTRAS_DOBLES_G
 			,max(case when c.clave='P023' THEN NED.importe_gravado ELSE 0 END)  AS HRS_EXTRAS_TRIPLES
 			,max(case when c.clave='P007' THEN NED.importe_gravado ELSE 0 END)  AS COMPENSACION
-			,max(case when c.clave='P034' THEN NED.importe_gravado ELSE 0 END)  AS BONO
+			,max(case when c.clave='P037' THEN NED.importe_gravado ELSE 0 END)  AS BONO
 			,max(case when c.clave='P035' THEN NED.importe_gravado ELSE 0 END)  AS BONO_ANT
 			,max(case when c.clave='P011' THEN NED.importe_gravado ELSE 0 END)  AS BONO_PRODUCT
 			,max(case when c.clave='P012' THEN NED.importe_gravado ELSE 0 END)  AS BONO__DESEMP

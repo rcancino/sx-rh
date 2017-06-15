@@ -41,7 +41,7 @@ class SeparacionIndeminzacionBuilder {
 			Finiquito finiquito = Finiquito.where {neLiquidacion == nominaEmpleado}.find()
 			assert finiquito, 'No se ha registrado la enitdad Finiquito para la nomina de empleado:' + nominaEmpleado.id 
 			def ingresoGravadoPorIndeminacion = nominaEmpleado.getPercepcionesGravadas()
-			def ultimoSueldoMensualOrdinario = finiquito.sueldo
+			def ultimoSueldoMensualOrdinario = ingresoGravadoPorIndeminacion<= 0.0 ? 0.0: finiquito.sueldo
 
 			def ingresoAcumulable = ingresoGravadoPorIndeminacion > ultimoSueldoMensualOrdinario ? ultimoSueldoMensualOrdinario : ingresoGravadoPorIndeminacion
 			def ingresoNoAcumulable = ingresoGravadoPorIndeminacion - ultimoSueldoMensualOrdinario

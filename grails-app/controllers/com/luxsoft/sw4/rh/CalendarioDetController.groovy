@@ -35,18 +35,20 @@ class CalendarioDetController {
 
 		def year = session.ejercicio
 
-		def nominaSemana = Nomina.where {periodicidad == 'SEMANAL' }.list([sort:'id',order:'desc', max:1])
-		def semana = nominaSemana.calendarioDet
+		//def nominaSemana = Nomina.where {periodicidad == 'SEMANAL' || comentario =~ term}.list([sort:'id',order:'desc', max:1])
+		//def semana = nominaSemana.calendarioDet
 		
-		def nominaQuincena = Nomina.where {periodicidad == 'QUINCENAL'}.find([sort: 'id', order: 'desc', max:1])
-		def quincena = session.calendarioQuincena
-
-		def list = CalendarioDet.where{ calendario.ejercicio == year && calendario.tipo == 'SEMANA' }.list()
-		def l2 = CalendarioDet.where{ calendario.ejercicio == year && calendario.tipo == 'QUINCENA' }.list()
-		list.addAll(l2)
+		//def nominaQuincena = Nomina.where {periodicidad == 'QUINCENAL' || comentario =~ term}.find([sort: 'id', order: 'desc', max:1])
+		//def quincena = session.calendarioQuincena
+		params.sort = 'id'
+		params.order = 'desc'
+		def list = CalendarioDet.where{ calendario.ejercicio == year && (calendario.tipo =~ term  || calendario.comentario =~ term )}.list(params)
+		//def l2 = CalendarioDet.where{ calendario.ejercicio == year && calendario.tipo == 'QUINCENA' }.list()
+		//list.addAll(l2)
 		
 		list=list.collect{ calDet->
-			def nombre="$calDet.calendario.tipo $calDet.folio  $calDet.calendario.ejercicio"
+			//def nombre="$calDet.calendario.tipo $calDet.folio  $calDet.calendario.ejercicio"
+			def nombre="$calDet.calendario.tipo $calDet.folio  $calDet.calendario.ejercicio (${calDet.inicio.text()} - ${calDet.fin.text()}) ${calDet.calendario.comentario}"
 			[id:calDet.id
 				,label:nombre
 				,value:nombre

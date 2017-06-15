@@ -3,8 +3,6 @@ package com.luxsoft.sw4.rh
 import java.util.Date
 import groovy.transform.EqualsAndHashCode
 
-import groovy.transform.EqualsAndHashCode
-
 import com.luxsoft.sw4.Empresa
 
 

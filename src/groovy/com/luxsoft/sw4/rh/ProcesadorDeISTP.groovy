@@ -21,8 +21,6 @@ class ProcesadorDeISTP {
 		if(!concepto) {
 			concepto=ConceptoDeNomina.findByClave(conceptoClave)
 		}
-		//println "******************************Procesando ISTP para ${nominaEmpleado.empleado}"
-		log.debug "*********Procesando ISTP para ${nominaEmpleado.empleado}"
 		
 		def percepciones=nominaEmpleado.getPercepcionesGravadas()
 		
@@ -42,20 +40,21 @@ class ProcesadorDeISTP {
 		def calDet=nominaEmpleado.nomina.calendarioDet
 		//def periodos=calDet.calendario.periodos.findAll{it.mes==calDet.mes}
 		//periodos.sort{it.folio}
-		def dias=calDet.calendario.periodos.sum 0,{
+		def dias=calDet.calendario.periodos.sum 0,{			
 			if(it.mes==calDet.mes){
 				(it.fin-it.inicio)+1
 			}else 0
 		}
-		//dias++
 		
-		println 'Dias contemplados en el mes: '+dias
-		//def tarifa =TarifaIsr.obtenerTabla(diasTrabajados).find(){(percepciones>it.limiteInferior && percepciones<=it.limiteSuperior)}
+		if(nominaEmpleado.nomina.tipo == 'ESPECIAL'){
+			dias = 1
+		}
+				
+		
 		def tarifa =TarifaIsr.obtenerTabla(ejercicio,'MENSUAL',diasTrabajados,dias)
 			.find(){(percepciones>it.limiteInferior && percepciones<=it.limiteSuperior)}
 		assert tarifa,"No encontro TarifaIsr para los parametros: Dias: ${diasTrabajados} Perc:${percepciones} Empleado: ${nominaEmpleado.empleado}"
-		//def subsidio=Subsidio.obtenerTabla(diasTrabajados).find(){(percepciones>it.desde && percepciones<=it.hasta)}
-		//def subsidio=SubsidioEmpleo.obtenerTabla(diasTrabajados,ejercicio,dias)
+		
 		def subsidio=SubsidioEmpleo.obtenerTabla(diasTrabajados,ejercicio,dias)
 			.find(){(percepciones>it.desde && percepciones<=it.hasta)}
 		assert subsidio,'No existe registro en tabla de subsidio para el empleo'

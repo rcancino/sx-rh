@@ -25,7 +25,7 @@ environments {
             pooled = true
             dbCreate="update"
             url = 'jdbc:mysql://localhost/sx_rh?autoReconnect=true'
-            //url = 'jdbc:mysql://10.10.1.229/sx_rh?autoReconnect=true'
+            //url = 'jdbc:mysql://rhkyorev/sx_rh?autoReconnect=true'
             //url = 'jdbc:mysql://10.10.1.9/rhkyorev?autoReconnect=true'
             driverClassName = "com.mysql.jdbc.Driver"
             dialect = org.hibernate.dialect.MySQL5InnoDBDialect

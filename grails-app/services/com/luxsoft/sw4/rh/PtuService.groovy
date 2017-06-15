@@ -192,7 +192,7 @@ class PtuService {
     def recalcularEspecial(Ptu ptu){
         
         def tope=ptu.getSalarioTope()
-        def partidas = ptu.partidas.findAll {it.tipo == 2 && it.empleado.id != 283}
+        def partidas = ptu.partidas.findAll {it.tipo == 2 && it.empleado.id != 32}
         //def partidas = ptu.partidas.findAll {it.tipo == 2 }
         
 
@@ -273,6 +273,11 @@ class PtuService {
                     if(alta>periodo.fechaInicial && alta>baja && ptuDet.ptu.ejercicio== yearAlta){
                         fechaDeInicio=alta
                     }
+                    if(alta==baja && ptuDet.ptu.ejercicio== yearAlta){
+                        fechaDeInicio=alta
+                        fechaSuperior=baja
+                    }
+
             de=(fechaSuperior-fechaDeInicio+1)+diasReingreso
           }
         }
@@ -323,7 +328,7 @@ class PtuService {
     }
 
     def calcularImpuestos(PtuDet it){
-        def zona=ZonaEconomica.findByClaveAndEjercicio('A',it.ptu.ejercicio)
+        def zona=ZonaEconomica.findByClaveAndEjercicio('A',it.ptu.ejercicio+1)
         def ptu=it.ptu
         ptu.salarioMinimoGeneral=zona.uma
         ptu.topeSmg=ptu.salarioMinimoGeneral*15

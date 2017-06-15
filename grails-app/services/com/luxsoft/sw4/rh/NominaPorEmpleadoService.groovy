@@ -18,6 +18,8 @@ class NominaPorEmpleadoService {
 	def procesadorDeNominaFiniquito
 
 	def procesadorDeNominaLiquidacion
+
+	def procesadorDeNominaEspecial
 	
 	//def prestamoService
 	
@@ -214,6 +216,49 @@ class NominaPorEmpleadoService {
 		}
 		procesadorDeNominaLiquidacion.reglas.each {
 			it.procesar(ne)
+		}
+		ne.save failOnError:true, flush:true
+		return ne
+	}
+
+	@Transactional
+	def actualizarNominaEspecial(NominaPorEmpleado ne){
+		
+		ne.conceptos.clear()
+
+		def genericas = OperacionGenerica.where {empleado == ne.empleado && calendarioDet == ne.nomina.calendarioDet}.list()
+		
+		def percepciones = genericas.findAll {
+			it.concepto.tipo == 'PERCEPCION' 
+		}
+
+		def deducciones = genericas.findAll {
+			it.concepto.tipo == 'DEDUCCION' 
+		}
+
+		if (deducciones)
+			percepciones << deducciones
+
+		ne.diasTrabajados = 1
+		ne.diasDelPeriodo = 1
+		ne.salarioDiarioBase = ne.empleado.salario.salarioDiario
+		ne.salarioDiarioIntegrado = ne.empleado.salario.salarioDiarioIntegrado
+		
+		percepciones.each { det ->
+			//log.info( "Agregando:  ${det.tipo} ${det.concepto}" )
+				def d2 = new NominaPorEmpleadoDet(concepto:det.concepto
+						,importeGravado:det.importeGravado
+						,importeExcento:det.importeExcento
+						,comentario:'PENDIENTE')
+				if(d2.total>0)
+					ne.addToConceptos(d2)
+		}
+		procesadorDeNominaEspecial.reglas.each {
+			def pg=ne.getPercepcionesGravadas()
+			//log.info("Aplicando procesadores a nomina especial de ${ne.empleado}  ${it} percepciones: ${pg}")
+			it.procesar(ne)
+			ne.diasTrabajados = 0 // Ajustes 
+			ne.diasDelPeriodo = 0
 		}
 		ne.save failOnError:true, flush:true
 		return ne

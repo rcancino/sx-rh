@@ -166,5 +166,15 @@ beans = {
 			]
 	}
 
+	procesadorDeNominaEspecial(ProcesadorDeNomina){
+		reglas=[
+			ref('procesadorDeISTP'),
+			ref('procesadorDeAjusteISPT'),
+			ref('prcoesadorDePensionAlimenticia'),
+			ref('procesadorDeOtrasDeducciones'),
+			ref('procesadorDePrestamosPersonales')
+			]
+	}
+
 	
 }

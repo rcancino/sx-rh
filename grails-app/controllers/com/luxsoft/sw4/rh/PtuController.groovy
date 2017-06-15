@@ -144,11 +144,17 @@ class PtuController {
             notFound()
             return
         }
+
+            ptuService.recalcularEspecial(ptuInstance)
+
         def partidas=ptuInstance.partidas.grep {it.empleado.status=='BAJA' && !it.noAsignado && !it.nominaPorEmpleado}
         partidas.each{
-            log.info('Actualizando impuestos para petu de : '+it.empleado)
+            log.info('Actualizando impuestos para petu de : '+it.empleado +it.ptu.montoe)
+
+
+
             ptuService.calcularImpuestos(it)
-            it.save flush:true
+            it.save failOnError:true, flush:true
         }
         //ptuInstance.save flush:true
         //redirect action:'show',params:[id:ptuInstance.id]

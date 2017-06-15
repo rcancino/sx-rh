@@ -37,6 +37,7 @@ class TarifaIsr {
 
 	static def obtenerTabla(def ejercicio,def tipo,def diasDelPeriodo,def diasMes){
 		//def diasMes=30.4
+		//println "Buscando tabla ISR tipo:${tipo} diasDelPeriodo:${diasDelPeriodo} diasMes: ${diasMes}"
 		def res=[] //diasMap[diasDelPeriodo]
 
 		def valores=TarifaIsr.findAllByEjercicioAndTipo(ejercicio,tipo)

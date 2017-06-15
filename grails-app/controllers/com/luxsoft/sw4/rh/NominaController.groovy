@@ -102,6 +102,15 @@ class NominaController {
 			redirect action:'show',params:[id:id]
 			return
 		}
+		if(nomina.tipo == 'ESPECIAL'){
+			nominaService.generarPartidasEspecial(nomina)
+			nomina.partidas.each { ne ->
+				nominaPorEmpleadoService.actualizarNominaEspecial(ne)
+			}
+			flash.message="Nomina Especial actualizada"
+			redirect action:'show',params:[id:id]
+			return
+		}
 		for(it in nomina.partidas){
 			if(it.finiquito){
 				log.info "Finiquito detectado para ${it.empleado}"
