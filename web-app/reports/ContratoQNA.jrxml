@@ -2,7 +2,7 @@
 <!-- Created with iReport - A designer for JasperReports -->
 <!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
 <jasperReport
-		 name="Contrato"
+		 name="ContratoQNA"
 		 columnCount="1"
 		 printOrder="Vertical"
 		 orientation="Portrait"
@@ -30,19 +30,15 @@
 		<defaultValueExpression ><![CDATA["PAPEL, S.A. DE C.V." ]]></defaultValueExpression>
 	</parameter>
 	<parameter name="ID" isForPrompting="true" class="java.lang.String"/>
-	<parameter name="BONO_ALMACEN" isForPrompting="false" class="java.lang.Object"/>
-	<parameter name="BONO_ASISTENCIA" isForPrompting="false" class="java.lang.Object"/>
-	<parameter name="BONO_MOSTRADOR" isForPrompting="false" class="java.lang.Object"/>
+	<parameter name="TABULADOR_BONO" isForPrompting="false" class="java.lang.Object"/>
 	<queryString><![CDATA[SELECT CONCAT(e.nombres," ",E.apellido_paterno," ",E.apellido_materno) AS nombre,d.estado_civil,e.rfc,e.curp
 ,(SELECT m.mes_nombre FROM mes m where m.mes=month(e.alta)) as mes,DAYOFMONTH(e.alta) as dia,year(e.alta) as year
-,(case 	when p.puesto_id in(33,34,26,27,40,41,43,49,50) or (SELECT U.periodicidad FROM salario U WHERE e.id=U.empleado_id)='QUINCENAL' then 'BONO_ASISTENCIA'
-		when p.puesto_id in(28,29,30) then 'BONO_MOSTRADOR' else 'BONO_ALMACEN' end) as bono
-,p.puesto_id,(SELECT U.clave FROM puesto U WHERE p.puesto_id=U.ID) AS puesto
+,(SELECT U.clave FROM puesto U WHERE p.puesto_id=U.ID) AS puesto
 ,(SELECT U.descripcion FROM puesto U WHERE p.puesto_id=U.ID) AS funciones_puesto
 ,FLOOR((TO_DAYS(NOW())-(TO_DAYS(E.fecha_de_nacimiento)))/365) AS years
 ,(SELECT U.salario_diario FROM salario U WHERE e.id=U.empleado_id) AS sbd
 ,(SELECT U.salario_diario FROM salario U WHERE e.id=U.empleado_id)*30 AS sueldo_mes
-,(SELECT U.periodicidad FROM salario U WHERE e.id=U.empleado_id) AS periodicidad
+,(case when substr((SELECT U.periodicidad FROM salario U WHERE e.id=U.empleado_id),1,3)='SEMANAL' THEN 'SEMANAS' ELSE 'QUINCENAS'END) AS periodicidad
 ,concat(d.direccion_calle,' No. ',ifnull(D.direccion_numero_interior,''),' INT ',ifnull(D.direccion_numero_interior,''),', COL. ',d.direccion_colonia,', C.P. ',D.direccion_codigo_postal,', ',D.direccion_municipio,', ',D.direccion_estado,', ',D.direccion_pais) AS direccion_empleado
 ,(select concat(x.direccion_calle,' No. ',x.direccion_numero_exterior,' INT ',ifnull(x.direccion_numero_interior,''),', COL. ',x.direccion_colonia,', C.P. ',x.direccion_codigo_postal,', ',x.direccion_municipio,', ',x.direccion_estado,', ',x.direccion_pais) AS direccion_empresa
 	from empresa x where x.id=p.empresa_id) as direccion_empresa
@@ -62,8 +58,6 @@ Where e.id=$P{ID}]]></queryString>
 	<field name="mes" class="java.lang.String"/>
 	<field name="dia" class="java.lang.Long"/>
 	<field name="year" class="java.lang.Long"/>
-	<field name="bono" class="java.lang.String"/>
-	<field name="puesto_id" class="java.lang.Long"/>
 	<field name="puesto" class="java.lang.String"/>
 	<field name="funciones_puesto" class="java.lang.String"/>
 	<field name="years" class="java.lang.Long"/>
@@ -248,24 +242,11 @@ Where e.id=$P{ID}]]></queryString>
 			</band>
 			</groupHeader>
 			<groupFooter>
-			<band height="263"  isSplitAllowed="true" >
-				<image  evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="23"
-						y="10"
-						width="449"
-						height="241"
-						key="image-1">
-							<printWhenExpression><![CDATA[new Boolean($F{bono}.equals( "BONO_ALMACEN" ))]]></printWhenExpression>
-						</reportElement>
-					<box></box>
-					<graphicElement stretchType="NoStretch"/>
-					<imageExpression class="java.lang.String"><![CDATA[$P{BONO_ALMACEN}]]></imageExpression>
-				</image>
+			<band height="293"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="0"
-						y="218"
+						y="6"
 						width="494"
 						height="45"
 						key="textField-228"/>
@@ -289,32 +270,6 @@ Where e.id=$P{ID}]]></queryString>
 +"\n\n"+
 "LEÍDO que fue en voz alta y en forma íntegra el presente Contrato Individual de Trabajo y sabedoras las partes que en él intervienen de su alcance y consecuencias jurídicas lo ratifican y firman por duplicado para constancia de su voluntad de obligarse recíprocamente en sus términos este día "+"<style isBold=\"true\"  pdfFontName=\"Helvetica-Bold\">"+$F{alta}+"</style>"+", en la Ciudad de México."]]></textFieldExpression>
 				</textField>
-				<image  evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="71"
-						y="10"
-						width="399"
-						height="196"
-						key="image-2">
-							<printWhenExpression><![CDATA[new Boolean($F{bono}.equals( "BONO_MOSTRADOR" ))]]></printWhenExpression>
-						</reportElement>
-					<box></box>
-					<graphicElement stretchType="NoStretch"/>
-					<imageExpression class="java.lang.String"><![CDATA[$P{BONO_MOSTRADOR}]]></imageExpression>
-				</image>
-				<image  evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="71"
-						y="10"
-						width="399"
-						height="196"
-						key="image-3">
-							<printWhenExpression><![CDATA[new Boolean($F{bono}.equals( "BONO_ASISTENCIA" ))]]></printWhenExpression>
-						</reportElement>
-					<box></box>
-					<graphicElement stretchType="NoStretch"/>
-					<imageExpression class="java.lang.String"><![CDATA[$P{BONO_ASISTENCIA}]]></imageExpression>
-				</image>
 			</band>
 			</groupFooter>
 		</group>

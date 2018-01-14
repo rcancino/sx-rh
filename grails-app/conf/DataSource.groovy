@@ -24,9 +24,10 @@ environments {
             //url = "jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"
             pooled = true
             dbCreate="update"
-            url = 'jdbc:mysql://localhost/sx_rh?autoReconnect=true'
+           // url = 'jdbc:mysql://10.10.1.229/sx_rh?autoReconnect=true'
             //url = 'jdbc:mysql://rhkyorev/sx_rh?autoReconnect=true'
-            //url = 'jdbc:mysql://10.10.1.9/rhkyorev?autoReconnect=true'
+            //url = 'jdbc:mysql://10.10.1.225/sx_rh?autoReconnect=true'
+            url = 'jdbc:mysql://10.10.1.9/rh_kyo?autoReconnect=true'
             driverClassName = "com.mysql.jdbc.Driver"
             dialect = org.hibernate.dialect.MySQL5InnoDBDialect
             username = "root"
@@ -131,6 +132,8 @@ environments {
         dataSource {
           pooled = true
           dbCreate="update"
+          // url="jdbc:mysql://10.10.1.76/sx_rh?autoReconnect=true"
+          //url="jdbc:mysql://10.10.6.1/sx_rh?autoReconnect=true"
           url="jdbc:mysql://10.10.1.229/sx_rh?autoReconnect=true"
           driverClassName = "com.mysql.jdbc.Driver"
           dialect = org.hibernate.dialect.MySQL5InnoDBDialect

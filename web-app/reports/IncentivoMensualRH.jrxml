@@ -33,8 +33,9 @@
 ,(SELECT U.descripcion FROM ubicacion U WHERE p.UBICACION_ID=U.ID) AS ubicacion,i.ejercicio,i.mes,i.tipo,i.calificacion
 ,i.tasa_bono1,i.tasa_bono2,(case when i.otorgado is true then 'SI' ELSE 'NO' END) otorgado
 ,i.ingreso_base,i.incentivo,i.checadas_faltantes,i.faltas,i.minutos_no_laborados
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
 FROM incentivo i join empleado e on(e.id=i.empleado_id) join perfil_de_empleado p on(e.id=p.empleado_id)
-where i.tipo=$P{TIPO} and i.ejercicio=$P{EJERCICIO} and i.mes=$P{MES} ]]></queryString>
+where i.tipo=$P{TIPO} and i.ejercicio=$P{EJERCICIO} and i.mes=$P{MES}]]></queryString>
 
 	<field name="id" class="java.lang.Long"/>
 	<field name="clave" class="java.lang.String"/>
@@ -53,6 +54,7 @@ where i.tipo=$P{TIPO} and i.ejercicio=$P{EJERCICIO} and i.mes=$P{MES} ]]></query
 	<field name="checadas_faltantes" class="java.lang.Integer"/>
 	<field name="faltas" class="java.lang.Integer"/>
 	<field name="minutos_no_laborados" class="java.lang.Integer"/>
+	<field name="EMPRESA" class="java.lang.String"/>
 
 	<sortField name="ubicacion" />
 	<sortField name="clave" />
@@ -162,23 +164,6 @@ where i.tipo=$P{TIPO} and i.ejercicio=$P{EJERCICIO} and i.mes=$P{MES} ]]></query
 					</textElement>
 				<text><![CDATA[CONTROL DE INCENTIVO (RH)]]></text>
 				</staticText>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="264"
-						y="-1"
-						width="313"
-						height="22"
-						key="textField-1"/>
-					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-</box>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="Helvetica-Bold" size="15" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{COMPANY}]]></textFieldExpression>
-				</textField>
 				<staticText>
 					<reportElement
 						mode="Opaque"
@@ -283,6 +268,19 @@ where i.tipo=$P{TIPO} and i.ejercicio=$P{EJERCICIO} and i.mes=$P{MES} ]]></query
 						<font fontName="Arial" pdfFontName="Helvetica-Oblique" size="9" isBold="false" isItalic="true" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
 				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{ejercicio}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="263"
+						y="0"
+						width="313"
+						height="22"
+						key="textField"/>
+					<box></box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font pdfFontName="Helvetica-Bold" size="15" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{EMPRESA}]]></textFieldExpression>
 				</textField>
 			</band>
 		</pageHeader>

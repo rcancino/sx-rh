@@ -28,7 +28,7 @@ class OtrosPagosBuilder {
         		subsidioAlEmpleo.setSubsidioCausado(it.total)
 		  	}
 		  	if(clave == '004') {
-		  		def eje = 2016
+		  		def eje = 2017
 		  		CalculoAnual ca = CalculoAnual.where {ejercicio == eje && empleado == nominaEmpleado.empleado}.find()
 		  		assert ca, 'Debe existir el calculo anual para poder usar el concepto 004'
 		  		Nomina.OtrosPagos.OtroPago.CompensacionSaldosAFavor compensacionSaldosAFavor  = otroPago.addNewCompensacionSaldosAFavor()

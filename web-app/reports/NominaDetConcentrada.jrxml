@@ -111,7 +111,7 @@ WHERE  n.tipo=$P{TIPO} and n.periodicidad=$P{PERIODICIDAD} AND N.FOLIO =$P{FOLIO
 	<field name="IMPORTE_GRAVADO" class="java.math.BigDecimal"/>
 
 	<sortField name="SUCURSAL" />
-	<sortField name="CLAVE_E" />
+	<sortField name="NOMBRE_E" />
 	<sortField name="CONCEPTO" order="Descending" />
 	<sortField name="CLAVE" />
 

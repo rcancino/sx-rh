@@ -35,15 +35,20 @@ class ContratacionController {
 		def salario=command.empleado.salario.getSalarioMensual()
 		def repParams=[:]
 		repParams['ID']=command.empleado.id as Integer
-		repParams['SALARIO_MENSUAL']=salario as String
-		repParams['IMP_CON_LETRA']=ImporteALetra.aLetra(salario)
+		repParams['BONO_ASISTENCIA']=grailsApplication.mainContext.getResource("/reports/BONO_ASISTENCIA.jpg").file
+		repParams['BONO_ALMACEN']=grailsApplication.mainContext.getResource("/reports/BONO_ALMACEN.jpg").file
+		repParams['BONO_MOSTRADOR']=grailsApplication.mainContext.getResource("/reports/BONO_MOSTRADOR.jpg").file
+		//repParams['SALARIO_MENSUAL']=salario as String
+		//repParams['IMP_CON_LETRA']=ImporteALetra.aLetra(salario)
+
+		def reporteName= 'Contrato' //command.empleado.salario.periodicidad == 'QUINCENAL' || command.empleado.perfil.puesto.id == 33 || command.empleado.perfil.puesto.id == 34 ? 'ContratoQNA' : 'ContratoSEM'
 		def reportDef=new JasperReportDef(
-			name:'Contrato'
+			name:reporteName
 			,fileFormat:JasperExportFormat.PDF_FORMAT
 			,parameters:repParams
 			)
 		ByteArrayOutputStream  pdfStream=jasperService.generateReport(reportDef)
-		render(file: pdfStream.toByteArray(), contentType: 'application/pdf',fileName:command.empleado.nombre+'_contrato')
+		render(file: pdfStream.toByteArray(), contentType: 'application/pdf',fileName:command.empleado.nombre+'_contrato.pdf')
 	}
 	
 	def solicitud(){

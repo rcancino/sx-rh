@@ -12,8 +12,9 @@
 	    <div class="col-lg-10">
 	        <h2> Lista de nóminas <small>(${periodicidad })</small></h2>
 	        <ol class="breadcrumb">
+
         	    <li >
-        	    	<g:link action="index" params="[periodicidad:'QUINCENAL'	]" >
+        	    	<g:link action="index" params="[periodicidad:'QUINCENAL']" >
         	    		<g:if test="${periodicidad=='QUINCENAL'}">
         	    			<strong>Quincenal</strong>
         	    		</g:if>
@@ -32,7 +33,7 @@
         	    		</g:else>
         	    	</g:link>
         	    </li>
-
+				
 	        </ol>
 	        <g:if test="${flash.message}">
 	            <small><span class="label label-warning ">${flash.message}</span></small>
@@ -80,7 +81,7 @@
 						</li>
 					</ul>
 				</div>
-						
+						 
 						
 						
 						

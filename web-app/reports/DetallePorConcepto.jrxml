@@ -39,6 +39,7 @@
 ,N.folio,N.periodicidad,N.periodo_fecha_inicial,N.periodo_fecha_final
 ,C.CLASE,C.DESCRIPCION,C.CLAVE_SAT,C.TIPO
 ,N.EJERCICIO,N.TIPO AS FORM,N.forma_de_pago
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
 FROM nomina N JOIN nomina_por_empleado NE ON (NE.nomina_id=N.ID) JOIN nomina_por_empleado_det ND ON (ND.parent_id=NE.ID)
 JOIN empleado E ON (NE.empleado_id=E.ID)JOIN perfil_de_empleado P ON (P.empleado_id=E.ID) JOIN ubicacion U ON  (P.ubicacion_id=U.ID)
 JOIN concepto_de_nomina C ON (C.ID=ND.concepto_id)
@@ -64,6 +65,7 @@ order by u.id,e.clave]]></queryString>
 	<field name="EJERCICIO" class="java.lang.Integer"/>
 	<field name="FORM" class="java.lang.String"/>
 	<field name="forma_de_pago" class="java.lang.String"/>
+	<field name="EMPRESA" class="java.lang.String"/>
 
 	<variable name="TOTAL_EXC_SUC" class="java.math.BigDecimal" resetType="Report" calculation="Sum">
 		<variableExpression><![CDATA[$F{importe_excento}]]></variableExpression>
@@ -93,19 +95,6 @@ order by u.id,e.clave]]></queryString>
 		</title>
 		<pageHeader>
 			<band height="77"  isSplitAllowed="true" >
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="364"
-						y="0"
-						width="187"
-						height="15"
-						key="textField-1"/>
-					<box></box>
-					<textElement textAlignment="Right">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{COMPANY}]]></textFieldExpression>
-				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="300"
@@ -399,6 +388,19 @@ order by u.id,e.clave]]></queryString>
 					</textElement>
 				<text><![CDATA[-]]></text>
 				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="364"
+						y="0"
+						width="187"
+						height="15"
+						key="textField"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{EMPRESA}]]></textFieldExpression>
+				</textField>
 			</band>
 		</pageHeader>
 		<columnHeader>

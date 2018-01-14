@@ -34,6 +34,7 @@
 ,p.importe-(SELECT IFNULL(SUM(IMPORTE),0) FROM prestamo_abono X WHERE X.prestamo_id=P.ID) as saldo
 ,CASE WHEN A.nomina_por_empleado_det_id IS NULL THEN 'ABONO' ELSE 'ABONO POR NOMINA' END AS TIPO_ABONO,m.folio,m.periodicidad,m.pago,m.tipo
 ,P.ALTA,P.autorizo,P.tasa_descuento,P.comentario
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
 FROM 
 prestamo p join empleado e on (e.id=p.empleado_id) left join prestamo_abono a on (p.id=a.prestamo_id) JOIN perfil_de_empleado R ON (R.empleado_id=E.ID) JOIN UBICACION U ON (U.ID=R.UBICACION_ID)
 left join nomina_por_empleado_det o on (a.nomina_por_empleado_det_id=o.id)
@@ -58,6 +59,7 @@ P.id=$P{PRESTAMO_ID}]]></queryString>
 	<field name="autorizo" class="java.lang.String"/>
 	<field name="tasa_descuento" class="java.math.BigDecimal"/>
 	<field name="comentario" class="java.lang.String"/>
+	<field name="EMPRESA" class="java.lang.String"/>
 
 	<variable name="SALDO_VAR" class="java.math.BigDecimal" resetType="Report" calculation="Sum">
 		<variableExpression><![CDATA[$F{ABONO}]]></variableExpression>
@@ -75,19 +77,6 @@ P.id=$P{PRESTAMO_ID}]]></queryString>
 		</title>
 		<pageHeader>
 			<band height="65"  isSplitAllowed="true" >
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="364"
-						y="0"
-						width="187"
-						height="15"
-						key="textField-1"/>
-					<box></box>
-					<textElement textAlignment="Right">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{COMPANY}]]></textFieldExpression>
-				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="300"
@@ -344,6 +333,19 @@ P.id=$P{PRESTAMO_ID}]]></queryString>
 						<font size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{tasa_descuento}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="364"
+						y="0"
+						width="187"
+						height="15"
+						key="textField"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{EMPRESA}]]></textFieldExpression>
 				</textField>
 			</band>
 		</pageHeader>

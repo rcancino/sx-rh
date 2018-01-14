@@ -43,6 +43,7 @@
 ,sum((case when vv.mes=10 then 1 else 0 end)) as oct
 ,sum((case when vv.mes=11 then 1 else 0 end)) as nov
 ,sum((case when vv.mes=12 then 1 else 0 end)) as dic
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
 FROM (
 SELECT v.empleado_id,month(d.dias_date) as mes,d.dias_date
 FROM vacaciones v 
@@ -82,6 +83,7 @@ join empleado e on (c.empleado_id=e.id) join salario s on(s.empleado_id=e.id)
 	<field name="oct" class="java.math.BigDecimal"/>
 	<field name="nov" class="java.math.BigDecimal"/>
 	<field name="dic" class="java.math.BigDecimal"/>
+	<field name="EMPRESA" class="java.lang.String"/>
 
 
 		<group  name="SUCURSAL" isStartNewPage="true" >
@@ -122,23 +124,6 @@ join empleado e on (c.empleado_id=e.id) join salario s on(s.empleado_id=e.id)
 					</textElement>
 				<text><![CDATA[PROGRAMACION DE VACACIONES (RH)]]></text>
 				</staticText>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="445"
-						y="-1"
-						width="313"
-						height="22"
-						key="textField-1"/>
-					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-</box>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="Helvetica-Bold" size="15" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{COMPANY}]]></textFieldExpression>
-				</textField>
 				<staticText>
 					<reportElement
 						mode="Opaque"
@@ -208,6 +193,19 @@ join empleado e on (c.empleado_id=e.id) join salario s on(s.empleado_id=e.id)
 						<font fontName="Arial" pdfFontName="Helvetica-Oblique" size="10" isBold="false" isItalic="true" isUnderline="true" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ubicacion}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="445"
+						y="0"
+						width="313"
+						height="22"
+						key="textField"/>
+					<box></box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font pdfFontName="Helvetica-Bold" size="15" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{EMPRESA}]]></textFieldExpression>
 				</textField>
 			</band>
 		</pageHeader>

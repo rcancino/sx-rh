@@ -117,11 +117,52 @@ class ParamsUtils {
 			parametros['FALTAS']=com.luxsoft.sw4.MonedaUtils.round(faltas,2) as String
 			parametros['DIAS_TRABAJADOS']=com.luxsoft.sw4.MonedaUtils.round(diasTrabajados,2) as String
 		}	
-			parametros['SUB_EMPLEO_APLIC']=nominaPorEmpleado.subsidioEmpleoAplicado
+		parametros['SUB_EMPLEO_APLIC']=nominaPorEmpleado.subsidioEmpleoAplicado
 
+		def horasExtras = nominaPorEmpleado.conceptos.find {it.concepto.clave == 'P022'|| it.concepto.clave=='P023'}
+		if(horasExtras){
+			def diasDobles = 0;
+			def diasTriples = 0;
+			def horasDobles = 0;
+			def horasTriples = 0;
+			def importeDobles = 0
+			def importeTriples = 0
+			nomina.getPercepciones().getPercepcionArray().each {
+				it.getHorasExtraArray().each { pp->
+					if(pp.tipoHoras.toString() == '01') {
+						diasDobles=pp.getDias()
+						horasDobles= pp.getHorasExtra()	
+						importeDobles= pp.importePagado
+					}
+					if( pp.tipoHoras.toString() =='02'){
+						diasTriples=pp.getDias()	
+						horasTriples= pp.getHorasExtra()	
+						importeTriples = pp.importePagado
+					}
+
+
+				}
+			}
+		
+			parametros.put("DIAS_HORAS_EXTRA_DOBLE", diasDobles )
+			parametros['TIPO_HORAS_DOBLE'] = '01'
+			parametros['HORAS_EXTRA_DOBLE'] = horasDobles
+			parametros['IMPORTE_HORAS_EXTRA_DOBLE'] = importeDobles
+
+			if(importeTriples > 0 ) {	
+				parametros['DIAS_HORAS_EXTRA_TRIPLE'] = diasDobles 
+				parametros['TIPO_HORAS_TRIPLE'] ='02'
+				parametros['HORAS_EXTRA_TRIPLE']= horasTriples
+				parametros['IMPORTE_HORAS_EXTRA_TRIPLE'] = importeTriples
+			}
+
+			
+			
+			
+		}
 			
 		
 		
 		return parametros
+		}
 	}
-}

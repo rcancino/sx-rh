@@ -27,6 +27,7 @@ import com.luxsoft.sw4.rh.ProcesadorDePercepcionGenerica
 import com.luxsoft.sw4.rh.ProcesadorDeDeduccionGenerica
 import com.luxsoft.sw4.rh.RevisionAguinaldoExport
 import com.luxsoft.sw4.rh.ProcesadorSeguroSocialFiniquito
+import com.luxsoft.sw4.rh.ProcesadorDeISTPLiquidacion
 
 import com.luxsoft.sw4.rh.ExportadorDim
 
@@ -131,6 +132,7 @@ beans = {
 
 	procesadorDePercepcionGenerica(ProcesadorDePercepcionGenerica){}
 	procesadorDeDeduccionGenerica(ProcesadorDeDeduccionGenerica){}
+	procesadorDeISTPLiquidacion(ProcesadorDeISTPLiquidacion){}
 	
 	exportadorDim(ExportadorDim){}
 	procesadorDeChecadasFaltantes(ProcesadorDeChecadasFaltantes){}
@@ -158,8 +160,9 @@ beans = {
 
 	procesadorDeNominaLiquidacion(ProcesadorDeNomina){
 		reglas=[
-			ref('procesadorDeISTP'),
-			ref('procesadorDeAjusteISPT'),
+			//ref('procesadorDeISTP'),
+			//ref('procesadorDeAjusteISPT'),
+			ref('procesadorDeISTPLiquidacion'),
 			ref('prcoesadorDePensionAlimenticia'),
 			ref('procesadorDeOtrasDeducciones'),
 			ref('procesadorDePrestamosPersonales')

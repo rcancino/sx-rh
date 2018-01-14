@@ -118,6 +118,14 @@ class CalculoAnual {
 	BigDecimal bono = 0.0
 
 	BigDecimal bonoAntiguedad = 0.0
+
+	BigDecimal bonoPuntualidadAsist = 0.0
+
+	BigDecimal diaDescanso = 0.0
+
+	BigDecimal premioPuntualidad= 0.0
+
+	BigDecimal honorariosAlConsejo= 0.0
 		
 	Date dateCreated
 	

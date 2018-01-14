@@ -24,7 +24,7 @@ class CfdiBuilder {
 	OtrosPagosBuilder otrosPagosBuilder = new OtrosPagosBuilder()
 	DeduccionesBuilder deduccionesBuilder = new DeduccionesBuilder()
 	SeparacionIndeminzacionBuilder indeminzacionBuilder = new SeparacionIndeminzacionBuilder()
-	
+	 // IncapacidadesBuilder incapacidadesBuilder = new IncapacidadesBuilder();
 
 	
 
@@ -43,7 +43,7 @@ class CfdiBuilder {
 		indeminzacionBuilder.build(complementoNomina, nominaEmpleado)
 		otrosPagosBuilder.build(complementoNomina, nominaEmpleado)
 		deduccionesBuilder.build(complementoNomina, nominaEmpleado)
-		
+		// incapacidadesBuilder.build(complementoNomina, nominaEmpleado)
 		
 		registrarEmisor(comprobante, empresa)
 		registrarReceptor(comprobante, empleado)

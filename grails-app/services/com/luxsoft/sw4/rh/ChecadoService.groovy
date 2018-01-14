@@ -12,16 +12,16 @@ class ChecadoService {
 	def grailsApplication
 
     @NotTransactional
-    def importarLecturas(Periodo periodo){
+    def importarLecturas(Periodo periodo ,String rfc){
 		//log.info 'Importando lectoras para el periodo: '+periodo
     	for(date in periodo.fechaInicial..periodo.fechaFinal){
-    		importarLecturas(date)
+    		importarLecturas(date , rfc)
     	}
     	
     }
 
     @NotTransactional
-    def importarLecturas(Date date){
+    def importarLecturas(Date date,String rfc){
 
 		def sdate=date.format('yyyyMMdd')
 		def rawdata=grailsApplication.config.sw4.rh.asistencia.rawdata
@@ -46,10 +46,22 @@ class ChecadoService {
 			fecha=Date.parse('yyyyMMdd',fields[2])
 			  //println 'Fecha: '+fecha
 		  }else{
-			//
-			def hora=Date.parse('HHmmss',fields[0])
-			//println "registrando evento empleado: ${fields[2]} hora:$hora  Fecha:$fecha"
-			def r=Checado.findOrSaveWhere(lector:lector,fecha:fecha,hora:hora,numeroDeEmpleado:fields[2])
+
+		  		if(rfc=='PBA0511077F9'){
+		  			
+		  			lector=fields[0]
+		  			fecha=Date.parse('yyyyMMdd',fields[1])
+		  			def hora=Date.parse('HHmmss',fields[2])
+		  			def numeroDeEmpleado=fields[4].replaceFirst("0", "")
+		  			def r=Checado.findOrSaveWhere(lector:lector,fecha:fecha,hora:hora,numeroDeEmpleado:numeroDeEmpleado)
+
+		  			}else{
+		  				//
+						def hora=Date.parse('HHmmss',fields[0])
+						//println "registrando evento empleado: ${fields[2]} hora:$hora  Fecha:$fecha"
+						def r=Checado.findOrSaveWhere(lector:lector,fecha:fecha,hora:hora,numeroDeEmpleado:fields[2])
+		  			}
+				
 		  }
 		  
 		}

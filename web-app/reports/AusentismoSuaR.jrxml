@@ -35,6 +35,7 @@
 ,U.CLAVE AS SUC, T.DESCRIPCION AS TURNO
 ,(SELECT COUNT(*) FROM asistencia X JOIN asistencia_det Y ON(Y.ASISTENCIA_ID=X.ID) where X.EMPLEADO_ID=E.ID AND Y.fecha BETWEEN $P{FECHA_INI} and $P{FECHA_FIN} and Y.tipo='falta' and e.control_de_asistencia is true
 and (Y.fecha>=e.alta and (Y.fecha <= ifnull(b.fecha,CURRENT_DATE)  or e.alta>b.fecha  ))) AS totalFaltas
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
 FROM 
 empleado e join perfil_de_empleado p on (e.id=p.empleado_id) join turno t on (t.id=p.turno_id) join ubicacion u on (u.id=p.ubicacion_id)
 join asistencia a on(a.empleado_id=e.id) join asistencia_det d on (d.asistencia_id=a.id) JOIN 	seguridad_social s on (s.empleado_id=e.id)
@@ -53,6 +54,7 @@ and (d.fecha>=e.alta and (d.fecha <= ifnull(b.fecha,CURRENT_DATE)  or e.alta>b.f
 	<field name="SUC" class="java.lang.String"/>
 	<field name="TURNO" class="java.lang.String"/>
 	<field name="totalFaltas" class="java.lang.Long"/>
+	<field name="EMPRESA" class="java.lang.String"/>
 
 
 		<group  name="SUCURSAL" >
@@ -130,19 +132,6 @@ and (d.fecha>=e.alta and (d.fecha <= ifnull(b.fecha,CURRENT_DATE)  or e.alta>b.f
 			<band height="40"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="364"
-						y="0"
-						width="187"
-						height="15"
-						key="textField-1"/>
-					<box></box>
-					<textElement textAlignment="Right">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{COMPANY}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
 						x="300"
 						y="12"
 						width="252"
@@ -218,6 +207,19 @@ and (d.fecha>=e.alta and (d.fecha <= ifnull(b.fecha,CURRENT_DATE)  or e.alta>b.f
 						<font size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.util.Date"><![CDATA[$P{FECHA_FIN}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="365"
+						y="0"
+						width="187"
+						height="15"
+						key="textField"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{EMPRESA}]]></textFieldExpression>
 				</textField>
 			</band>
 		</pageHeader>

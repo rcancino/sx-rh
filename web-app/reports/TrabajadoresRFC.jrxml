@@ -32,12 +32,14 @@
 	<parameter name="FECHA_INI" isForPrompting="true" class="java.util.Date"/>
 	<parameter name="FECHA_FIN" isForPrompting="true" class="java.util.Date"/>
 	<queryString><![CDATA[SELECT concat(ifnull(e.apellido_paterno,"")," ",ifnull(e.apellido_materno,"")," ", nombres) as empleado,alta AS fecha_alta,curp
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
 FROM empleado e where alta between $P{FECHA_INI} and $P{FECHA_FIN}
 order by ifnull(e.apellido_paterno,apellido_materno)]]></queryString>
 
 	<field name="empleado" class="java.lang.String"/>
 	<field name="fecha_alta" class="java.sql.Timestamp"/>
 	<field name="curp" class="java.lang.String"/>
+	<field name="EMPRESA" class="java.lang.String"/>
 
 		<background>
 			<band height="49"  isSplitAllowed="true" >
@@ -49,19 +51,6 @@ order by ifnull(e.apellido_paterno,apellido_materno)]]></queryString>
 		</title>
 		<pageHeader>
 			<band height="65"  isSplitAllowed="true" >
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="364"
-						y="0"
-						width="187"
-						height="15"
-						key="textField-1"/>
-					<box></box>
-					<textElement textAlignment="Right">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{COMPANY}]]></textFieldExpression>
-				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="300"
@@ -139,6 +128,19 @@ order by ifnull(e.apellido_paterno,apellido_materno)]]></queryString>
 						<font size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.util.Date"><![CDATA[$P{FECHA_FIN}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="365"
+						y="0"
+						width="187"
+						height="15"
+						key="textField"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{EMPRESA}]]></textFieldExpression>
 				</textField>
 			</band>
 		</pageHeader>

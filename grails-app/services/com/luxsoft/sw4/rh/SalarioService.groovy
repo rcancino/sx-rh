@@ -228,10 +228,11 @@ class SalarioService {
 						found.comisiones=0.0
 						found.primaDom=0.0
 						found.vacacionesP=0.0
+						found.diaDescanso=0.0
 						actualizarVariables(found)
 						registrarTiempoExtraDoble(found)
 						found.with{
-							variable=compensacion+incentivo+bonoPorDesemp+hrsExtrasDobles+hrsExtrasTriples+comisiones+primaDom+vacacionesP+bono+bonoPorAntiguedad
+							variable=compensacion+incentivo+bonoPorDesemp+hrsExtrasDobles+hrsExtrasTriples+comisiones+primaDom+vacacionesP+bono+bonoPorAntiguedad+diaDescanso
 						}							
 						if(found.diasLabBim)
 							found.varDia=found.variable/found.diasLabBim
@@ -280,8 +281,9 @@ class SalarioService {
 	
 	private actualizarVariables(CalculoSdi sdi){
 		//log.info("Actualizando variables para ${sdi.empleado}")
+		println ("Actualizando variables para ${sdi.empleado}************************************")
 		def partidas=NominaPorEmpleadoDet
-		.findAll("from NominaPorEmpleadoDet d where d.parent.empleado=? and d.concepto.id in(19,22,24,43,41,42,44,49,50) and d.parent.nomina.ejercicio=? and d.parent.nomina.calendarioDet.bimestre=?"
+		.findAll("from NominaPorEmpleadoDet d where d.parent.empleado=? and d.concepto.id in(19,22,24,43,41,42,44,49,50,53) and d.parent.nomina.ejercicio=? and d.parent.nomina.calendarioDet.bimestre=?"
 				 ,[sdi.empleado,sdi.ejercicio,sdi.bimestre])
 	
 		sdi.compensacion=0.0
@@ -292,10 +294,13 @@ class SalarioService {
 		sdi.comisiones=0.0
 		sdi.primaDom=0.0
 		sdi.vacacionesP=0.0
+		sdi.diaDescanso=0.0
 		Empresa emp=Empresa.first()
 	
 		partidas.each{it->
+					println "evaluamdo el concepto "+it.concepto.id
 			switch(it.concepto.id){
+
 				case 19:
 					sdi.compensacion+=it.importeGravado+it.importeExcento
 					break
@@ -330,6 +335,10 @@ class SalarioService {
     			case 50:
     				sdi.bonoPorAntiguedad+=it.importeGravado+it.importeExcento
     				break
+    			case 53:
+    					println "Calculando el SDIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII"
+    				sdi.diaDescanso+=it.importeGravado+it.importeExcento
+    			break
 			}
 		}
 		
@@ -368,12 +377,12 @@ SELECT (CASE WHEN (25)*(SELECT Z.SALARIO FROM zona_economica Z WHERE Z.CLAVE='A'
 	( ROUND( ( ( (SELECT MAX(CASE WHEN X.ID IN(274,273) THEN F.COB_FACTOR WHEN  S.periodicidad='SEMANAL' THEN F.SEM_FACTOR ELSE F.QNA_FACTOR END) 		
 		FROM factor_de_integracion F WHERE F.TIPO=(CASE WHEN YEAR(X.ALTA)=YEAR('@FECHA_FIN') AND MONTH(X.ALTA)>=3 THEN 1 WHEN YEAR(X.ALTA)=YEAR('@FECHA_FIN') THEN 0 ELSE 2 END) AND 	
 		ROUND((-(TIMESTAMPDIFF(MINUTE,'@FECHA_ULT_MODIF',X.ALTA)/60)/24),0) BETWEEN F.DIAS_DE AND F.DIAS_HASTA )		*	 @SALARIO )	+			
-	( IFNULL(SUM((SELECT SUM(ifnull(D.importe_excento,0)+ifnull(D.importe_gravado,0)) AS VARIABLE FROM nomina_por_empleado_det D 	WHERE E.ID=D.PARENT_ID AND  D.CONCEPTO_ID IN(19,22,24,34,35,41,42,44) AND D.ID IS NOT NULL)),0) /	(ROUND(((-(TIMESTAMPDIFF(MINUTE,'@FECHA_FIN',(CASE WHEN X.ALTA>'@FECHA_INI' THEN X.ALTA ELSE '@FECHA_INI' END))/60)/24)+1),0)  -SUM(E.FALTAS)-SUM(E.INCAPACIDADES)) ) ),2) )			
+	( IFNULL(SUM((SELECT SUM(ifnull(D.importe_excento,0)+ifnull(D.importe_gravado,0)) AS VARIABLE FROM nomina_por_empleado_det D 	WHERE E.ID=D.PARENT_ID AND  D.CONCEPTO_ID IN(19,22,24,34,35,41,42,44,49,50,53) AND D.ID IS NOT NULL)),0) /	(ROUND(((-(TIMESTAMPDIFF(MINUTE,'@FECHA_FIN',(CASE WHEN X.ALTA>'@FECHA_INI' THEN X.ALTA ELSE '@FECHA_INI' END))/60)/24)+1),0)  -SUM(E.FALTAS)-SUM(E.INCAPACIDADES)) ) ),2) )			
 		THEN		 (25)*(SELECT Z.SALARIO FROM zona_economica Z WHERE Z.CLAVE='A' ) 		ELSE 
 	( ROUND( ( ( (SELECT MAX(CASE WHEN X.ID IN(274,273) THEN F.COB_FACTOR WHEN  S.periodicidad='SEMANAL' THEN F.SEM_FACTOR ELSE F.QNA_FACTOR END) 		
 		FROM factor_de_integracion F WHERE F.TIPO=(CASE WHEN YEAR(X.ALTA)=YEAR('@FECHA_FIN') AND MONTH(X.ALTA)>=3 THEN 1 WHEN YEAR(X.ALTA)=YEAR('@FECHA_FIN') THEN 0 ELSE 2 END) AND 	
 		ROUND((-(TIMESTAMPDIFF(MINUTE,'@FECHA_ULT_MODIF',X.ALTA)/60)/24),0) BETWEEN F.DIAS_DE AND F.DIAS_HASTA )		*	 @SALARIO )	+			
-	( IFNULL(SUM((SELECT SUM(ifnull(D.importe_excento,0)+ifnull(D.importe_gravado,0)) AS VARIABLE FROM nomina_por_empleado_det D 	WHERE E.ID=D.PARENT_ID AND  D.CONCEPTO_ID IN(19,22,24,34,35,41,42,44) AND D.ID IS NOT NULL)),0) /	(ROUND(((-(TIMESTAMPDIFF(MINUTE,'@FECHA_FIN',(CASE WHEN X.ALTA>'@FECHA_INI' THEN X.ALTA ELSE '@FECHA_INI' END))/60)/24)+1),0)  -SUM(E.FALTAS)-SUM(E.INCAPACIDADES)) ) ),2) )			
+	( IFNULL(SUM((SELECT SUM(ifnull(D.importe_excento,0)+ifnull(D.importe_gravado,0)) AS VARIABLE FROM nomina_por_empleado_det D 	WHERE E.ID=D.PARENT_ID AND  D.CONCEPTO_ID IN(19,22,24,34,35,41,42,44,49,50,53) AND D.ID IS NOT NULL)),0) /	(ROUND(((-(TIMESTAMPDIFF(MINUTE,'@FECHA_FIN',(CASE WHEN X.ALTA>'@FECHA_INI' THEN X.ALTA ELSE '@FECHA_INI' END))/60)/24)+1),0)  -SUM(E.FALTAS)-SUM(E.INCAPACIDADES)) ) ),2) )			
 		END ) AS SDI_NVO				
 		FROM NOMINA N 						
 		JOIN nomina_por_empleado E ON(E.nomina_id=N.ID)
@@ -431,47 +440,47 @@ SELECT (CASE WHEN (25)*(SELECT Z.SALARIO FROM zona_economica Z WHERE Z.CLAVE='A'
 		,IFNULL(SUM((SELECT SUM(ifnull(D.importe_excento,0)+ifnull(D.importe_gravado,0)) AS VARIABLE FROM nomina_por_empleado_det D 	WHERE E.ID=D.PARENT_ID AND  D.CONCEPTO_ID IN(41) AND D.ID IS NOT NULL)),0) AS COMISIONES	
 		,IFNULL(SUM((SELECT SUM(ifnull(D.importe_excento,0)+ifnull(D.importe_gravado,0)) AS VARIABLE FROM nomina_por_empleado_det D 	WHERE E.ID=D.PARENT_ID AND  D.CONCEPTO_ID IN(42) AND D.ID IS NOT NULL)),0) AS PRIMA_DOM	
 		,IFNULL(SUM((SELECT SUM(ifnull(D.importe_excento,0)+ifnull(D.importe_gravado,0)) AS VARIABLE FROM nomina_por_empleado_det D 	WHERE E.ID=D.PARENT_ID AND  D.CONCEPTO_ID IN(44) AND D.ID IS NOT NULL)),0) AS VACACIONES_P
-		,IFNULL(SUM((SELECT SUM(ifnull(D.importe_excento,0)+ifnull(D.importe_gravado,0)) AS VARIABLE FROM nomina_por_empleado_det D 	WHERE E.ID=D.PARENT_ID AND  D.CONCEPTO_ID IN(19,22,24,34,35,41,42,44) AND D.ID IS NOT NULL)),0) AS VARIABLE	
-		,( IFNULL(SUM((SELECT SUM(ifnull(D.importe_excento,0)+ifnull(D.importe_gravado,0)) AS VARIABLE FROM nomina_por_empleado_det D 	WHERE E.ID=D.PARENT_ID AND  D.CONCEPTO_ID IN(19,22,24,34,35,41,42,44) AND D.ID IS NOT NULL)),0)/
+		,IFNULL(SUM((SELECT SUM(ifnull(D.importe_excento,0)+ifnull(D.importe_gravado,0)) AS VARIABLE FROM nomina_por_empleado_det D 	WHERE E.ID=D.PARENT_ID AND  D.CONCEPTO_ID IN(19,22,24,34,35,41,42,44,49,50,53) AND D.ID IS NOT NULL)),0) AS VARIABLE	
+		,( IFNULL(SUM((SELECT SUM(ifnull(D.importe_excento,0)+ifnull(D.importe_gravado,0)) AS VARIABLE FROM nomina_por_empleado_det D 	WHERE E.ID=D.PARENT_ID AND  D.CONCEPTO_ID IN(19,22,24,34,35,41,42,44,49,50,53) AND D.ID IS NOT NULL)),0)/
 			(ROUND(((-(TIMESTAMPDIFF(MINUTE,'@FECHA_FIN',(CASE WHEN X.ALTA>'@FECHA_INI' THEN X.ALTA ELSE '@FECHA_INI' END))/60)/24)+1),0)  -SUM(E.FALTAS)-SUM(E.INCAPACIDADES)) ) AS VAR_DIA					
 		,( ROUND( ( ( (SELECT MAX(CASE WHEN X.ID IN(274,273) THEN F.COB_FACTOR WHEN  @TIPO THEN F.SEM_FACTOR ELSE F.QNA_FACTOR END) 		
 				FROM factor_de_integracion F WHERE F.TIPO=(CASE WHEN YEAR(X.ALTA)=YEAR('@FECHA_FIN') AND MONTH(X.ALTA)>=3 THEN 1 WHEN YEAR(X.ALTA)=YEAR('@FECHA_FIN') THEN 0 ELSE 2 END) AND 	
 				ROUND((-(TIMESTAMPDIFF(MINUTE,'@FECHA_ULT_MODIF',X.ALTA)/60)/24),0)+1 BETWEEN F.DIAS_DE AND F.DIAS_HASTA )		*	  s.salario_diario  )	+			
-			( IFNULL(SUM((SELECT SUM(ifnull(D.importe_excento,0)+ifnull(D.importe_gravado,0)) AS VARIABLE FROM nomina_por_empleado_det D 	WHERE E.ID=D.PARENT_ID AND  D.CONCEPTO_ID IN(19,22,24,34,35,41,42,44) AND D.ID IS NOT NULL)),0) /	(ROUND(((-(TIMESTAMPDIFF(MINUTE,'@FECHA_FIN',(CASE WHEN X.ALTA>'@FECHA_INI' THEN X.ALTA ELSE '@FECHA_INI' END))/60)/24)+1),0)  -SUM(E.FALTAS)-SUM(E.INCAPACIDADES)) ) ),2) )  AS SDI_CALC			
+			( IFNULL(SUM((SELECT SUM(ifnull(D.importe_excento,0)+ifnull(D.importe_gravado,0)) AS VARIABLE FROM nomina_por_empleado_det D 	WHERE E.ID=D.PARENT_ID AND  D.CONCEPTO_ID IN(19,22,24,34,35,41,42,44,49,50,53) AND D.ID IS NOT NULL)),0) /	(ROUND(((-(TIMESTAMPDIFF(MINUTE,'@FECHA_FIN',(CASE WHEN X.ALTA>'@FECHA_INI' THEN X.ALTA ELSE '@FECHA_INI' END))/60)/24)+1),0)  -SUM(E.FALTAS)-SUM(E.INCAPACIDADES)) ) ),2) )  AS SDI_CALC			
 		,(CASE WHEN (25)*(SELECT Z.SALARIO FROM zona_economica Z WHERE Z.CLAVE='A' )<=						
 			( ROUND( ( ( (SELECT MAX(CASE WHEN X.ID IN(274,273) THEN F.COB_FACTOR WHEN  @TIPO THEN F.SEM_FACTOR ELSE F.QNA_FACTOR END) 		
 				FROM factor_de_integracion F WHERE F.TIPO=(CASE WHEN YEAR(X.ALTA)=YEAR('@FECHA_FIN') AND MONTH(X.ALTA)>=3 THEN 1 WHEN YEAR(X.ALTA)=YEAR('@FECHA_FIN') THEN 0 ELSE 2 END) AND 	
 				ROUND((-(TIMESTAMPDIFF(MINUTE,'@FECHA_ULT_MODIF',X.ALTA)/60)/24),0)+1 BETWEEN F.DIAS_DE AND F.DIAS_HASTA )		*	  s.salario_diario  )	+			
-			( IFNULL(SUM((SELECT SUM(ifnull(D.importe_excento,0)+ifnull(D.importe_gravado,0)) AS VARIABLE FROM nomina_por_empleado_det D 	WHERE E.ID=D.PARENT_ID AND  D.CONCEPTO_ID IN(19,22,24,34,35,41,42,44) AND D.ID IS NOT NULL)),0) /	(ROUND(((-(TIMESTAMPDIFF(MINUTE,'@FECHA_FIN',(CASE WHEN X.ALTA>'@FECHA_INI' THEN X.ALTA ELSE '@FECHA_INI' END))/60)/24)+1),0)  -SUM(E.FALTAS)-SUM(E.INCAPACIDADES)) ) ),2) )			
+			( IFNULL(SUM((SELECT SUM(ifnull(D.importe_excento,0)+ifnull(D.importe_gravado,0)) AS VARIABLE FROM nomina_por_empleado_det D 	WHERE E.ID=D.PARENT_ID AND  D.CONCEPTO_ID IN(19,22,24,34,35,41,42,44,49,50,53,) AND D.ID IS NOT NULL)),0) /	(ROUND(((-(TIMESTAMPDIFF(MINUTE,'@FECHA_FIN',(CASE WHEN X.ALTA>'@FECHA_INI' THEN X.ALTA ELSE '@FECHA_INI' END))/60)/24)+1),0)  -SUM(E.FALTAS)-SUM(E.INCAPACIDADES)) ) ),2) )			
 				THEN		 (25)*(SELECT Z.SALARIO FROM zona_economica Z WHERE Z.CLAVE='A' ) 		ELSE 
 			( ROUND( ( ( (SELECT MAX(CASE WHEN X.ID IN(274,273) THEN F.COB_FACTOR WHEN  @TIPO THEN F.SEM_FACTOR ELSE F.QNA_FACTOR END) 		
 				FROM factor_de_integracion F WHERE F.TIPO=(CASE WHEN YEAR(X.ALTA)=YEAR('@FECHA_FIN') AND MONTH(X.ALTA)>=3 THEN 1 WHEN YEAR(X.ALTA)=YEAR('@FECHA_FIN') THEN 0 ELSE 2 END) AND 	
 				ROUND((-(TIMESTAMPDIFF(MINUTE,'@FECHA_ULT_MODIF',X.ALTA)/60)/24),0)+1 BETWEEN F.DIAS_DE AND F.DIAS_HASTA )		*	  s.salario_diario  )	+			
-			( IFNULL(SUM((SELECT SUM(ifnull(D.importe_excento,0)+ifnull(D.importe_gravado,0)) AS VARIABLE FROM nomina_por_empleado_det D 	WHERE E.ID=D.PARENT_ID AND  D.CONCEPTO_ID IN(19,22,24,34,35,41,42,44) AND D.ID IS NOT NULL)),0) /	(ROUND(((-(TIMESTAMPDIFF(MINUTE,'@FECHA_FIN',(CASE WHEN X.ALTA>'@FECHA_INI' THEN X.ALTA ELSE '@FECHA_INI' END))/60)/24)+1),0)  -SUM(E.FALTAS)-SUM(E.INCAPACIDADES)) ) ),2) )			
+			( IFNULL(SUM((SELECT SUM(ifnull(D.importe_excento,0)+ifnull(D.importe_gravado,0)) AS VARIABLE FROM nomina_por_empleado_det D 	WHERE E.ID=D.PARENT_ID AND  D.CONCEPTO_ID IN(19,22,24,34,35,41,42,44,49,50,53) AND D.ID IS NOT NULL)),0) /	(ROUND(((-(TIMESTAMPDIFF(MINUTE,'@FECHA_FIN',(CASE WHEN X.ALTA>'@FECHA_INI' THEN X.ALTA ELSE '@FECHA_INI' END))/60)/24)+1),0)  -SUM(E.FALTAS)-SUM(E.INCAPACIDADES)) ) ),2) )			
 				END ) AS SDI_NVO				
 		,CASE WHEN S.SALARIO_DIARIO_INTEGRADO <> 
 			(CASE WHEN (25)*(SELECT Z.SALARIO FROM zona_economica Z WHERE Z.CLAVE='A' )<=						
 				( ROUND( ( ( (SELECT MAX(CASE WHEN X.ID IN(274,273) THEN F.COB_FACTOR WHEN  @TIPO THEN F.SEM_FACTOR ELSE F.QNA_FACTOR END) 		
 				FROM factor_de_integracion F WHERE F.TIPO=(CASE WHEN YEAR(X.ALTA)=YEAR('@FECHA_FIN') AND MONTH(X.ALTA)>=3 THEN 1 WHEN YEAR(X.ALTA)=YEAR('@FECHA_FIN') THEN 0 ELSE 2 END) AND 	
 				ROUND((-(TIMESTAMPDIFF(MINUTE,'@FECHA_ULT_MODIF',X.ALTA)/60)/24),0)+1 BETWEEN F.DIAS_DE AND F.DIAS_HASTA )		*	  s.salario_diario  )	+			
-			( IFNULL(SUM((SELECT SUM(ifnull(D.importe_excento,0)+ifnull(D.importe_gravado,0)) AS VARIABLE FROM nomina_por_empleado_det D 	WHERE E.ID=D.PARENT_ID AND  D.CONCEPTO_ID IN(19,22,24,34,35,41,42,44) AND D.ID IS NOT NULL)),0) /	(ROUND(((-(TIMESTAMPDIFF(MINUTE,'@FECHA_FIN',(CASE WHEN X.ALTA>'@FECHA_INI' THEN X.ALTA ELSE '@FECHA_INI' END))/60)/24)+1),0)  -SUM(E.FALTAS)-SUM(E.INCAPACIDADES)) ) ),2) )			
+			( IFNULL(SUM((SELECT SUM(ifnull(D.importe_excento,0)+ifnull(D.importe_gravado,0)) AS VARIABLE FROM nomina_por_empleado_det D 	WHERE E.ID=D.PARENT_ID AND  D.CONCEPTO_ID IN(19,22,24,34,35,41,42,44,49,50,53) AND D.ID IS NOT NULL)),0) /	(ROUND(((-(TIMESTAMPDIFF(MINUTE,'@FECHA_FIN',(CASE WHEN X.ALTA>'@FECHA_INI' THEN X.ALTA ELSE '@FECHA_INI' END))/60)/24)+1),0)  -SUM(E.FALTAS)-SUM(E.INCAPACIDADES)) ) ),2) )			
 				THEN		 (25)*(SELECT Z.SALARIO FROM zona_economica Z WHERE Z.CLAVE='A' ) 		ELSE 
 			( ROUND( ( ( (SELECT MAX(CASE WHEN X.ID IN(274,273) THEN F.COB_FACTOR WHEN  @TIPO THEN F.SEM_FACTOR ELSE F.QNA_FACTOR END) 		
 				FROM factor_de_integracion F WHERE F.TIPO=(CASE WHEN YEAR(X.ALTA)=YEAR('@FECHA_FIN') AND MONTH(X.ALTA)>=3 THEN 1 WHEN YEAR(X.ALTA)=YEAR('@FECHA_FIN') THEN 0 ELSE 2 END) AND 	
 				ROUND((-(TIMESTAMPDIFF(MINUTE,'@FECHA_ULT_MODIF',X.ALTA)/60)/24),0)+1 BETWEEN F.DIAS_DE AND F.DIAS_HASTA )		*	  s.salario_diario  )	+			
-			( IFNULL(SUM((SELECT SUM(ifnull(D.importe_excento,0)+ifnull(D.importe_gravado,0)) AS VARIABLE FROM nomina_por_empleado_det D 	WHERE E.ID=D.PARENT_ID AND  D.CONCEPTO_ID IN(19,22,24,34,35,41,42,44) AND D.ID IS NOT NULL)),0) /	(ROUND(((-(TIMESTAMPDIFF(MINUTE,'@FECHA_FIN',(CASE WHEN X.ALTA>'@FECHA_INI' THEN X.ALTA ELSE '@FECHA_INI' END))/60)/24)+1),0)  -SUM(E.FALTAS)-SUM(E.INCAPACIDADES)) ) ),2) )			
+			( IFNULL(SUM((SELECT SUM(ifnull(D.importe_excento,0)+ifnull(D.importe_gravado,0)) AS VARIABLE FROM nomina_por_empleado_det D 	WHERE E.ID=D.PARENT_ID AND  D.CONCEPTO_ID IN(19,22,24,34,35,41,42,44,49,50,53) AND D.ID IS NOT NULL)),0) /	(ROUND(((-(TIMESTAMPDIFF(MINUTE,'@FECHA_FIN',(CASE WHEN X.ALTA>'@FECHA_INI' THEN X.ALTA ELSE '@FECHA_INI' END))/60)/24)+1),0)  -SUM(E.FALTAS)-SUM(E.INCAPACIDADES)) ) ),2) )			
 				END ) 				
 			THEN 					
 			(CASE WHEN (25)*(SELECT Z.SALARIO FROM zona_economica Z WHERE Z.CLAVE='A' )<=						
 				( ROUND( ( ( (SELECT MAX(CASE WHEN X.ID IN(274,273) THEN F.COB_FACTOR WHEN  @TIPO THEN F.SEM_FACTOR ELSE F.QNA_FACTOR END) 		
 				FROM factor_de_integracion F WHERE F.TIPO=(CASE WHEN YEAR(X.ALTA)=YEAR('@FECHA_FIN') AND MONTH(X.ALTA)>=3 THEN 1 WHEN YEAR(X.ALTA)=YEAR('@FECHA_FIN') THEN 0 ELSE 2 END) AND 	
 				ROUND((-(TIMESTAMPDIFF(MINUTE,'@FECHA_ULT_MODIF',X.ALTA)/60)/24),0)+1 BETWEEN F.DIAS_DE AND F.DIAS_HASTA )		*	  s.salario_diario  )	+			
-			( IFNULL(SUM((SELECT SUM(ifnull(D.importe_excento,0)+ifnull(D.importe_gravado,0)) AS VARIABLE FROM nomina_por_empleado_det D 	WHERE E.ID=D.PARENT_ID AND  D.CONCEPTO_ID IN(19,22,24,34,35,41,42,44) AND D.ID IS NOT NULL)),0) /	(ROUND(((-(TIMESTAMPDIFF(MINUTE,'@FECHA_FIN',(CASE WHEN X.ALTA>'@FECHA_INI' THEN X.ALTA ELSE '@FECHA_INI' END))/60)/24)+1),0)  -SUM(E.FALTAS)-SUM(E.INCAPACIDADES)) ) ),2) )			
+			( IFNULL(SUM((SELECT SUM(ifnull(D.importe_excento,0)+ifnull(D.importe_gravado,0)) AS VARIABLE FROM nomina_por_empleado_det D 	WHERE E.ID=D.PARENT_ID AND  D.CONCEPTO_ID IN(19,22,24,34,35,41,42,44,49,50,53) AND D.ID IS NOT NULL)),0) /	(ROUND(((-(TIMESTAMPDIFF(MINUTE,'@FECHA_FIN',(CASE WHEN X.ALTA>'@FECHA_INI' THEN X.ALTA ELSE '@FECHA_INI' END))/60)/24)+1),0)  -SUM(E.FALTAS)-SUM(E.INCAPACIDADES)) ) ),2) )			
 				THEN		 (25)*(SELECT Z.SALARIO FROM zona_economica Z WHERE Z.CLAVE='A' ) 		ELSE 
 			( ROUND( ( ( (SELECT MAX(CASE WHEN X.ID IN(274,273) THEN F.COB_FACTOR WHEN  @TIPO THEN F.SEM_FACTOR ELSE F.QNA_FACTOR END) 		
 				FROM factor_de_integracion F WHERE F.TIPO=(CASE WHEN YEAR(X.ALTA)=YEAR('@FECHA_FIN') AND MONTH(X.ALTA)>=3 THEN 1 WHEN YEAR(X.ALTA)=YEAR('@FECHA_FIN') THEN 0 ELSE 2 END) AND 	
 				ROUND((-(TIMESTAMPDIFF(MINUTE,'@FECHA_ULT_MODIF',X.ALTA)/60)/24),0)+1 BETWEEN F.DIAS_DE AND F.DIAS_HASTA )		*	  s.salario_diario  )	+			
-			( IFNULL(SUM((SELECT SUM(ifnull(D.importe_excento,0)+ifnull(D.importe_gravado,0)) AS VARIABLE FROM nomina_por_empleado_det D 	WHERE E.ID=D.PARENT_ID AND  D.CONCEPTO_ID IN(19,22,24,34,35,41,42,44) AND D.ID IS NOT NULL)),0) /	(ROUND(((-(TIMESTAMPDIFF(MINUTE,'@FECHA_FIN',(CASE WHEN X.ALTA>'@FECHA_INI' THEN X.ALTA ELSE '@FECHA_INI' END))/60)/24)+1),0)  -SUM(E.FALTAS)-SUM(E.INCAPACIDADES)) ) ),2) )			
+			( IFNULL(SUM((SELECT SUM(ifnull(D.importe_excento,0)+ifnull(D.importe_gravado,0)) AS VARIABLE FROM nomina_por_empleado_det D 	WHERE E.ID=D.PARENT_ID AND  D.CONCEPTO_ID IN(19,22,24,34,35,41,42,44,49,50,53) AND D.ID IS NOT NULL)),0) /	(ROUND(((-(TIMESTAMPDIFF(MINUTE,'@FECHA_FIN',(CASE WHEN X.ALTA>'@FECHA_INI' THEN X.ALTA ELSE '@FECHA_INI' END))/60)/24)+1),0)  -SUM(E.FALTAS)-SUM(E.INCAPACIDADES)) ) ),2) )			
 				END )				
 			ELSE 0 END	AS SDI_INF			
 		FROM NOMINA N 						

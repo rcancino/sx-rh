@@ -38,6 +38,7 @@
 		WHEN YEAR(I.FECHA_INICIAL)=YEAR($P{FECHA_FIN}) THEN ROUND((FLOOR(-(TIMESTAMPDIFF(MINUTE,DATE(CONCAT(YEAR(I.FECHA_INICIAL),'-12-31')),I.fecha_inicial)/60)/24)+1),0)
 		WHEN YEAR(I.FECHA_INICIAL)<YEAR(I.FECHA_FINAL) THEN ROUND((FLOOR(-(TIMESTAMPDIFF(MINUTE,I.fecha_final,DATE(CONCAT(YEAR(I.FECHA_FINAL),'-01-01')))/60)/24)+1),0)
 	ELSE ROUND((FLOOR(-(TIMESTAMPDIFF(MINUTE,I.fecha_final,I.fecha_inicial)/60)/24)+1),0) END) AS dias
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
 FROM incapacidad I JOIN empleado E ON(E.ID=I.empleado_id) 
 JOIN sat_incapacidad SI ON(SI.ID=I.tipo_id)
 JOIN perfil_de_empleado P ON(P.empleado_id=E.ID)
@@ -59,6 +60,7 @@ and e.iD=$P{EMPLEADO_ID}]]></queryString>
 	<field name="ubicacion" class="java.lang.String"/>
 	<field name="departamento" class="java.lang.String"/>
 	<field name="dias" class="java.math.BigDecimal"/>
+	<field name="EMPRESA" class="java.lang.String"/>
 
 	<sortField name="fecha_inicial" />
 
@@ -92,23 +94,6 @@ and e.iD=$P{EMPLEADO_ID}]]></queryString>
 					</textElement>
 				<text><![CDATA[CONTROL DE INCAPACIDADES POR EMPLEADO (RH)]]></text>
 				</staticText>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="264"
-						y="-1"
-						width="313"
-						height="22"
-						key="textField-1"/>
-					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-</box>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="Helvetica-Bold" size="15" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{COMPANY}]]></textFieldExpression>
-				</textField>
 				<staticText>
 					<reportElement
 						mode="Opaque"
@@ -244,6 +229,19 @@ and e.iD=$P{EMPLEADO_ID}]]></queryString>
 						<font size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.util.Date"><![CDATA[$P{FECHA_FIN}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="264"
+						y="0"
+						width="313"
+						height="22"
+						key="textField"/>
+					<box></box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font pdfFontName="Helvetica-Bold" size="15" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{EMPRESA}]]></textFieldExpression>
 				</textField>
 			</band>
 		</pageHeader>

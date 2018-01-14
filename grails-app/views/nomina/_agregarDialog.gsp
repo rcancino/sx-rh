@@ -1,6 +1,6 @@
 <%@page expressionCodec="none"%>
 <%@ page import="com.luxsoft.sw4.rh.CalendarioDet" %>
-<div class="modal fade" id="agregarNominaForm" tabindex="-1">
+<div class="modal fade" id="agregarNominaForm" tabindex="-1"> 
 	<div class="modal-dialog modal-lg">
 		<div id="modalContent" class="modal-content">
 			<div class="modal-header">
@@ -9,10 +9,10 @@
 				<h4 class="modal-title" id="myModalLabel">Agregar nomina </h4>
 			</div>
 			<g:form action="generar" class="form-horizontal" >
-				<g:hiddenField name="periodicidad" value="${ periodicidad}"/>
+				<g:hiddenField name="periodicidad" value="${ periodicidad}" />
 				<div class="modal-body">
 					<div class="form-group">
-    					<label for="tipoField" class="col-sm-3">Tipo</label>
+    					<label for="tipoField" class="col-sm-3">Tipo</label> 
     					<div class="col-sm-9">
     						<g:select id="tipoField" class="form-control "  
 								name="tipo" 
@@ -21,7 +21,7 @@
     					</div>
   					</div>
   					<div class="form-group">
-  						<label for="comentarioField" class="col-sm-3">Calendario</label>
+  						<label for="comentarioField" class="col-sm-3">Calendario  ${ periodicidad} </label>
     					<div class="col-sm-9">
     						%{-- <g:select id="periodoField" class="form-control chosen-select"  
 								name="calendarioDet" 
@@ -72,7 +72,7 @@
 <script type="text/javascript">
 	$(function(){
 		$("#calendarioDetField").autocomplete({
-			source:'<g:createLink controller="calendarioDet" action="getCalendariosDisponibles"/>',
+			source:'<g:createLink controller="calendarioDet" action="getCalendariosDisponibles" params="[periodicidad: periodicidad]" />',
 			minLength:1,
 			select:function(e,ui){
 				$("#calendarioFieldId").val(ui.item.id);

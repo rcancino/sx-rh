@@ -40,6 +40,7 @@
       when bimestre=4 then CONCAT("01/09/",cast((ejercicio) as CHAR(4))) 
       when bimestre=5 then CONCAT("01/11/",cast((ejercicio) as CHAR(4))) 
       when bimestre=6 then CONCAT("01/01/",cast((ejercicio+1) as CHAR(4)))  end as fecha_mov
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
 FROM empleado e join perfil_de_empleado p on (e.id=p.empleado_id) join turno t on (t.id=p.turno_id) join ubicacion u on (u.id=p.ubicacion_id)
 left join calculo_sdi s on(s.empleado_id=e.id) join seguridad_social l on (e.id=l.empleado_id)  join salario x on(x.empleado_id=e.id)
 where bimestre=$P{BIMESTRE} and ejercicio=$P{EJERCICIO} AND S.TIPO='CALCULO_SDI'  and x.periodicidad like $P{TIPO} and s.sdi_inf<>0
@@ -60,6 +61,7 @@ ORDER BY E.APELLIDO_PATERNO]]></queryString>
 	<field name="periodicidad" class="java.lang.String"/>
 	<field name="per" class="java.lang.String"/>
 	<field name="fecha_mov" class="java.lang.String"/>
+	<field name="EMPRESA" class="java.lang.String"/>
 
 		<background>
 			<band height="0"  isSplitAllowed="true" >
@@ -71,19 +73,6 @@ ORDER BY E.APELLIDO_PATERNO]]></queryString>
 		</title>
 		<pageHeader>
 			<band height="44"  isSplitAllowed="true" >
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="364"
-						y="0"
-						width="187"
-						height="15"
-						key="textField-1"/>
-					<box></box>
-					<textElement textAlignment="Right">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{COMPANY}]]></textFieldExpression>
-				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="300"
@@ -174,6 +163,19 @@ ORDER BY E.APELLIDO_PATERNO]]></queryString>
 						<font size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$P{TIPO}.equals( "%" ) ? "MIXTO" : $P{TIPO}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="363"
+						y="0"
+						width="187"
+						height="15"
+						key="textField"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{EMPRESA}]]></textFieldExpression>
 				</textField>
 			</band>
 		</pageHeader>

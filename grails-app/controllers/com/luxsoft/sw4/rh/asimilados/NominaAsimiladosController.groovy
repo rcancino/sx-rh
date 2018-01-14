@@ -45,8 +45,9 @@ class NominaAsimiladosController {
 
 	def getCalendariosDisponibles() {
 
+
 		def term = params.term.trim() + '%'
-		def list = CalendarioDet.where{ calendario.comentario == 'ASIMILADOS' }.list([sort:'id',order:'desc', max:1])
+		def list = CalendarioDet.where{ calendario.comentario == 'ASIMILADOS' }.list([sort:'id',order:'desc'])
 		
 		list=list.collect{ calDet->
 			def nombre = "$calDet.calendario.tipo $calDet.folio  ($calDet.calendario.ejercicio $calDet.calendario.comentario )"

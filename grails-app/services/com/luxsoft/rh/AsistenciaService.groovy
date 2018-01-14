@@ -8,6 +8,9 @@ import grails.transaction.Transactional
 import grails.transaction.NotTransactional
 import groovy.time.TimeCategory;
 import groovy.time.TimeDuration;
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import  java.util.Date
 
 import com.luxsoft.sw4.Periodo
 import com.luxsoft.sw4.rh.Asistencia;
@@ -84,6 +87,7 @@ class AsistenciaService {
 		boolean valid=validarEmpleado(empleado,cal,asistencia)
 		if(!valid){
 			//log.debug 'Empleado no valido para control de asistencias '+empleado
+			println 'Empleado no valido para control de asistencias '+empleado
 			return
 		}
 
@@ -147,6 +151,43 @@ class AsistenciaService {
 			asistencia.diasTrabajados=diasPagados
 		}
 		
+
+		if(empleado.alta<=periodo.fechaFinal){
+				procesadorDeChecadas.registrarChecadas(asistencia)
+				recalcularRetardos(asistencia)
+				incapacidadService.procesar(asistencia)
+				vacacionesService.procesar(asistencia)
+				incidenciaService.procesar(asistencia)
+				
+				procesadorDeChecadasFaltantes.procesar(asistencia)
+
+				if(!empleado.controlDeAsistencia){
+			asistencia.partidas.each{
+				if(it.tipo=='FALTA'){
+					
+					it.tipo=='ASISTENCIA'
+				}
+			}
+		}
+		
+		asistencia.asistencias=asistencia.partidas.sum 0,{it.tipo=='ASISTENCIA'?1:0}
+		asistencia.faltas=asistencia.partidas.sum 0,{it.tipo=='FALTA'?1:0}
+		
+		//Actualizar horas trabajadas (Horas de trabajo)
+		asistencia.horasTrabajadas=0
+		asistencia.partidas.each{ it->
+			if(it.tipo!='ASISTENCIA'){
+				it.horasTrabajadas=0.0
+			}else{
+				asistencia.horasTrabajadas+=it.horasTrabajadas
+			}
+		}
+		
+		asistencia.save failOnError:true
+		return asistencia 
+		}
+
+/*
 		procesadorDeChecadas.registrarChecadas(asistencia)
 		recalcularRetardos(asistencia)
 		incapacidadService.procesar(asistencia)
@@ -154,7 +195,7 @@ class AsistenciaService {
 		incidenciaService.procesar(asistencia)
 		
 		procesadorDeChecadasFaltantes.procesar(asistencia)
-		
+	
 		if(!empleado.controlDeAsistencia){
 			asistencia.partidas.each{
 				if(it.tipo=='FALTA'){
@@ -179,6 +220,7 @@ class AsistenciaService {
 		
 		asistencia.save failOnError:true
 		return asistencia
+		*/
 	}
 
 	
@@ -340,7 +382,13 @@ class AsistenciaService {
 			
 			
 			if(it.entrada1) {
-				Date inicio=it.turnoDet.entrada1
+
+				String entradaT = "09:00";
+				DateFormat formatter = new SimpleDateFormat("HH:mm");
+				Date entradaTurno = formatter.parse(entradaT);
+				
+
+				Date inicio=it.turnoDet.entrada1?: entradaTurno
 				Date entrada=it.entrada1
 				
 	
@@ -415,7 +463,6 @@ class AsistenciaService {
 					it.tipo='FALTA'
 				}
 			}
-			
 			
 			
 			Date salidaOficial=turnoDet.salida2?:turnoDet.salida1

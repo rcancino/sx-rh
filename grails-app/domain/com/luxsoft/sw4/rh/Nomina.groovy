@@ -70,7 +70,6 @@ class Nomina {
 
 		if(tipo=='ASIMILADOS' && periodo.obtenerMes(periodo.fechaInicial)==1){
 			duration=30
-
 		}
 		return duration
 	}

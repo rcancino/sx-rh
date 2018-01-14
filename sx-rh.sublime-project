@@ -5,49 +5,55 @@
 	"folders":
 	[
 		{
+			"file_exclude_patterns":
+			[
+				"*.log",
+				"*.project",
+				"*.classpath",
+				"*.sublime-project"
+			],
+			"folder_exclude_patterns":
+			[
+				"*"
+			],
 			"name": "RottFoleder",
-			"path": ".",
-			"folder_exclude_patterns": ["*"],
-			"file_exclude_patterns": ["*.log","*.project","*.classpath","*.sublime-project"]
-		},
-		{
-			"name": "Configuration",
-			"path": "grails-app/conf"
+			"path": "."
 		},
 		{
 			"name": "Domain Objects",
-			"path": "grails-app/domain"
+			"path": "grails-app\\domain"
+		},
+		{
+			"name": "Configuration",
+			"path": "grails-app\\conf"
 		},
 		{
 			"name": "Controllers",
-			"path": "grails-app/controllers"
+			"path": "grails-app\\controllers"
 		},
 		{
 			"name": "Services",
-			"path": "grails-app/services"
+			"path": "grails-app\\services"
 		},
-		
 		{
 			"name": "Views",
-			"path": "grails-app/views"
+			"path": "grails-app\\views"
 		},
-
 		{
 			"name": "Assets",
-			"path": "grails-app/assets"
+			"path": "grails-app\\assets"
 		},
 		{
 			"name": "Internationalization",
-			"path": "grails-app/i18n"
+			"path": "grails-app\\i18n"
 		},
-		
 		{
 			"name": "Tag Libraries",
-			"path": "grails-app/taglib"
+			"path": "grails-app\\taglib"
 		},
 		{
 			"name": "Utils",
-			"path": "grails-app/utils"
+			"path": "grails-app\\utils"
 		},
 		{
 			"name": "Scripts",
@@ -55,35 +61,34 @@
 		},
 		{
 			"name": "Groovy Source",
-			"path": "src/groovy"
+			"path": "src\\groovy"
 		},
 		{
 			"name": "Java Source",
-			"path": "src/java"
+			"path": "src\\java"
 		},
 		{
 			"name": "Integeration Tests",
-			"path": "test/integration"
+			"path": "test\\integration"
 		},
 		{
 			"name": "Unit Tests",
-			"path": "test/unit"
+			"path": "test\\unit"
 		},
 		{
 			"name": "Web App",
 			"path": "web-app"
 		},
-		{	
-			"name":"Jobs",
-			"path":"grails-app/jobs"
-
+		{
+			"name": "Jobs",
+			"path": "grails-app\\jobs"
 		},
 		{
 			"name": "Templates",
-			"path": "src/templates"
+			"path": "src\\templates"
 		},
 		{
-			"path": "grails-app/migrations"
+			"path": "grails-app\\migrations"
 		}
 	],
 	"settings":

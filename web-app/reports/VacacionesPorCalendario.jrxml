@@ -37,6 +37,7 @@
 ,min(date(dias_date)) as inicio_vac,max(date(dias_date)) fin_vac,count(*) as dias_tomados
 ,(SELECt inicio FROM calendario_det where id=$P{CALENDARIODET}) as periodo_ini,(SELECt fin FROM calendario_det where id=$P{CALENDARIODET}) periodo_fin
 ,u.id as sucursal_id
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
 FROM
 empleado e join perfil_de_empleado p on (e.id=p.empleado_id) join ubicacion u on (u.id=p.ubicacion_id) join vacaciones v on (e.id=v.empleado_id) join vacaciones_dias d on (v.id=d.vacaciones_id)
 join salario s on (s.empleado_id=e.id)
@@ -48,6 +49,7 @@ SELECT '*' AS tipo,u.clave as 'SUCURSAL',e.id,e.CLAVE AS clavemp,CONCAT(ifnull(a
 ,(SELECt fin FROM calendario_det where id=$P{CALENDARIODET}) as inicio_vac,(SELECt fin FROM calendario_det where id=$P{CALENDARIODET}) fin_vac,sum(v.dias_pagados) as dias_tomados
 ,(SELECt inicio FROM calendario_det where id=$P{CALENDARIODET}) as periodo_ini,(SELECt fin FROM calendario_det where id=$P{CALENDARIODET}) periodo_fin
 ,u.id as sucursal_id
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
 fROM
 empleado e join perfil_de_empleado p on (e.id=p.empleado_id) join ubicacion u on (u.id=p.ubicacion_id) join vacaciones v on (e.id=v.empleado_id) 
 join calendario_det c on (c.id=v.calendario_det_id) join salario s on (s.empleado_id=e.id)
@@ -67,6 +69,7 @@ order by tipo,sucursal_id,clavemp]]></queryString>
 	<field name="periodo_ini" class="java.sql.Date"/>
 	<field name="periodo_fin" class="java.sql.Date"/>
 	<field name="sucursal_id" class="java.lang.Long"/>
+	<field name="EMPRESA" class="java.lang.String"/>
 
 	<variable name="AUSENCIAS" class="java.lang.Integer" resetType="Report" calculation="Sum">
 	</variable>
@@ -105,19 +108,6 @@ order by tipo,sucursal_id,clavemp]]></queryString>
 		</title>
 		<pageHeader>
 			<band height="65"  isSplitAllowed="true" >
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="364"
-						y="0"
-						width="187"
-						height="15"
-						key="textField-1"/>
-					<box></box>
-					<textElement textAlignment="Right">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{COMPANY}]]></textFieldExpression>
-				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="300"
@@ -195,6 +185,19 @@ order by tipo,sucursal_id,clavemp]]></queryString>
 						<font size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.util.Date"><![CDATA[$F{periodo_fin}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="362"
+						y="0"
+						width="187"
+						height="15"
+						key="textField"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{EMPRESA}]]></textFieldExpression>
 				</textField>
 			</band>
 		</pageHeader>

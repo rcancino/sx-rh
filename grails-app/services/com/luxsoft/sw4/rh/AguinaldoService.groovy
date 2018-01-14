@@ -45,7 +45,7 @@ class AguinaldoService {
 			
 			aguinaldo.diasParaAguinaldo=aguinaldo.getDiasDelEjercicio()
 			aguinaldo.diasParaBono=aguinaldo.getDiasDelEjercicio()
-			if(getEmpresa().clave != 'PAPEL'){
+			if(getEmpresa().clave == 'GASOC'){
 				aguinaldo.diasParaBono = 0
 				aguinaldo.porcentajeBono = 0.0
 			}
@@ -63,7 +63,7 @@ class AguinaldoService {
 	def calcular(Integer ejercicio){
 		
 		def ids=NominaPorEmpleado.executeQuery(
-			"select distinct(n.empleado.id) from NominaPorEmpleado n where n.nomina.ejercicio=? and n.empleado.status!='BAJA'",[ejercicio])
+			"select distinct(n.empleado.id) from NominaPorEmpleado n where n.nomina.ejercicio=? and n.empleado.status!='BAJA' and n.empleado.contratado is true",[ejercicio])
 		log.info "Calculando aguinaldo para $ids.size empleados del ejercicio $ejercicio"
 		ids.each{ 
 			def empleado=Empleado.get(it)
@@ -124,7 +124,7 @@ class AguinaldoService {
 		
 		aguinaldo.diasParaAguinaldo=aguinaldo.getDiasDelEjercicio()
 		aguinaldo.diasParaBono=aguinaldo.getDiasDelEjercicio()
-		if(getEmpresa().clave != 'PAPEL'){
+		if(getEmpresa().clave == 'GASOC'){
 			aguinaldo.diasParaBono = 0
 			aguinaldo.porcentajeBono=0.0
 		}
@@ -145,14 +145,14 @@ class AguinaldoService {
 			if(aguinaldo.antiguedad<diasDelEjercicioReales){
 				aguinaldo.porcentajeBono=0.0
 			}
-			if(getEmpresa().clave != 'PAPEL'){
+			if(getEmpresa().clave == 'GASOC'){
 				aguinaldo.diasParaBono = 0
 				aguinaldo.porcentajeBono=0.0
 			}
     	}
 		
 		aguinaldo.diasParaBono=aguinaldo.diasDelEjercicio-aguinaldo.faltas-aguinaldo.incapacidades-aguinaldo.permisoEspecial-aguinaldo.incapacidadesMAT-aguinaldo.incapacidadesRTT-aguinaldo.incapacidadesRTE
-		if(getEmpresa().clave != 'PAPEL'){
+		if(getEmpresa().clave == 'GASOC'){
 			aguinaldo.diasParaBono = 0
 		}
 		def factorBono=(aguinaldo.diasDeBono/diasDelEjercicioReales)*aguinaldo.diasParaBono
@@ -166,9 +166,18 @@ class AguinaldoService {
 	
 	def registrarCalculo(Aguinaldo aguinaldo){
 		def zona=ZonaEconomica.findByClaveAndEjercicio('A',aguinaldo.ejercicio)
-		def topeSalarial=30*zona.salario
+		def topeSalarial=30*zona.uma
 		def aguinaldoExcento=aguinaldo.aguinaldo<topeSalarial?aguinaldo.aguinaldo:topeSalarial
 		def aguinaldoGravable=aguinaldo.aguinaldo-aguinaldoExcento
+
+
+		def cal = getCalendario(aguinaldo)
+		def periodo = cal.asistencia
+		log.info 'Periodo de aguinaldo: '+periodo+ ' Cal: '+cal.id
+		aguinaldo.fechaInicial= periodo.fechaInicial
+		aguinaldo.fechaFinal = periodo.fechaFinal
+		
+		def diasDelEjercicioReales=periodo.fechaFinal-periodo.fechaInicial+1
 		
 		def bonoGravable=aguinaldo.bono
 		def totalGravable=aguinaldoGravable+bonoGravable
@@ -177,7 +186,8 @@ class AguinaldoService {
 		aguinaldo.aguinaldoGravado=aguinaldoGravable
 		aguinaldo.totalGravable=totalGravable
 		
-		aguinaldo.promedioGravable=(totalGravable/aguinaldo.diasDelEjercicio)*30.4
+		//aguinaldo.promedioGravable=(totalGravable/aguinaldo.diasDelEjercicio)*30.4
+		aguinaldo.promedioGravable=(totalGravable/diasDelEjercicioReales)*30.4
 		aguinaldo.sueldoMensual=aguinaldo.salario*31
 		aguinaldo.proporcionPromedioMensual=aguinaldo.promedioGravable+aguinaldo.sueldoMensual
 		
@@ -297,6 +307,7 @@ class AguinaldoService {
 
 		def incapacidadesMAT=rows.count{it.tipo == 'INCAPACIDAD' && it.comentario=='INCAPACIDAD MAT'}
 		if(getEmpresa().clave != 'PAPEL'){
+			faltas = 0
 			incapacidades = 0
 			incapacidadesRTT = 0
 			incapacidadesRTE = 0

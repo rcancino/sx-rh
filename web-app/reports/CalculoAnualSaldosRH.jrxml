@@ -34,6 +34,7 @@
 (SELECT U.descripcion FROM ubicacion U WHERE P.UBICACION_ID=U.ID) AS ubicacion,c.ejercicio,
 c.id,0 as folio,0 as neId,' ' as cfdi_id,c.resultado,c.aplicado,0.0 as importe,c.resultado-c.aplicado as saldo ,b.fecha as baja
 ,0 as ult
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
 FROM calculo_anual c 
 join empleado x on(x.id=c.empleado_id)
 join salario s on(s.empleado_id=x.id)
@@ -48,6 +49,7 @@ SELECT 'NOM' as tipo,X.clave,X.id,CONCAT(ifnull(x.apellido_paterno,"")," ",ifnul
 ,(d.importe_excento+d.importe_gravado) as importe
 ,(z.resultado-z.aplicado) as saldo,b.fecha as baja
 ,(SELECT max(y.folio) FROM nomina y join nomina_por_empleado ne where ne.empleado_id=x.id and y.ejercicio=$P{EJERCICIO}+1 ) as ult
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
 FROM empleado x
 join perfil_de_empleado p on(p.empleado_id=x.id)
 JOIN UBICACION U ON(U.ID=p.UBICACION_ID)
@@ -78,6 +80,7 @@ and (z.resultado-z.aplicado)<>0.00]]></queryString>
 	<field name="saldo" class="java.math.BigDecimal"/>
 	<field name="baja" class="java.sql.Timestamp"/>
 	<field name="ult" class="java.lang.Long"/>
+	<field name="EMPRESA" class="java.lang.String"/>
 
 	<sortField name="periodicidad" order="Descending" />
 	<sortField name="clave" />
@@ -134,19 +137,6 @@ and (z.resultado-z.aplicado)<>0.00]]></queryString>
 			<band height="43"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="380"
-						y="6"
-						width="187"
-						height="15"
-						key="textField-1"/>
-					<box></box>
-					<textElement textAlignment="Right">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{COMPANY}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
 						x="280"
 						y="18"
 						width="288"
@@ -192,6 +182,19 @@ and (z.resultado-z.aplicado)<>0.00]]></queryString>
 					</textElement>
 				<text><![CDATA[EJERCICIO = ]]></text>
 				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="381"
+						y="5"
+						width="187"
+						height="15"
+						key="textField"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{EMPRESA}]]></textFieldExpression>
+				</textField>
 			</band>
 		</pageHeader>
 		<columnHeader>

@@ -30,6 +30,7 @@
 	<parameter name="IMPORTE_LETRA" isForPrompting="true" class="java.lang.String"/>
 	<queryString><![CDATA[SELECT E.id,E.clave,CONCAT(ifnull(E.apellido_paterno,'')," ",ifnull(E.apellido_materno,'')," ",E.nombres) AS nombre,(SELECT U.descripcion FROM ubicacion U WHERE p.UBICACION_ID=U.ID) AS ubicacion
 ,n.id,(n.ejercicio-1) as ejercicio,n.periodicidad as tipoPrdo,n.pago,ne.id,ptd.id as ptu_id,ptd.monto_dias,ptd.monto_salario,round(ptd.isr_por_retener,2) as isr_por_retener,ptd.isr_acreditable,ptd.pensiona,ptd.otras_ded,ptd.prestamo,ptd.por_pagar_neto
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
 FROM ptu_det ptd
 join nomina_por_empleado ne on(ptd.nomina_por_empleado_id=ne.id)
 join nomina n on(n.id=ne.nomina_id)
@@ -53,6 +54,7 @@ where NE.ID=$P{NE_ID}]]></queryString>
 	<field name="otras_ded" class="java.math.BigDecimal"/>
 	<field name="prestamo" class="java.math.BigDecimal"/>
 	<field name="por_pagar_neto" class="java.math.BigDecimal"/>
+	<field name="EMPRESA" class="java.lang.String"/>
 
 	<sortField name="tipoPrdo" />
 	<sortField name="ubicacion" />
@@ -83,23 +85,6 @@ Col. San Salvador Xochimanca C.P. 02870
 Tel.:5342 7166
 Fax:2465 0388]]></text>
 				</staticText>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="248"
-						y="28"
-						width="313"
-						height="22"
-						key="textField-1"/>
-					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-</box>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="Helvetica-Bold" size="15" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{COMPANY}]]></textFieldExpression>
-				</textField>
 				<textField isStretchWithOverflow="false" pattern="EEEEE',' dd 'de' MMMMM 'de' yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="21"
@@ -221,6 +206,19 @@ $F{monto_dias}.doubleValue()+$F{monto_salario}.doubleValue()
 						<font fontName="Arial" pdfFontName="Helvetica-Oblique" size="10" isBold="false" isItalic="true" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA["DE PARTICIPACION DE UTILIDADES CORRESPONDIENTES AL EJERCICIO FISCAL ".concat($F{ejercicio}.toString()).concat(". SEGUN LOS TERMINOS DE LA FRACCION IX DEL ARTICULO 123 CONSTITUCIONAL Y LOS ARTICULOS 117 AL 131 DE LA LEY FEDERAL DEL TRABAJO.")]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="246"
+						y="29"
+						width="313"
+						height="22"
+						key="textField"/>
+					<box></box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font pdfFontName="Helvetica-Bold" size="15" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{EMPRESA}]]></textFieldExpression>
 				</textField>
 			</band>
 			</groupHeader>

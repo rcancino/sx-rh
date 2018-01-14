@@ -8,7 +8,9 @@
 					<f:with bean="empleadoInstance">
 						<f:field property="perfil.tipo" widget-class="form-control" wrapper="bootstrap3"/>	
 						<f:field property="perfil.numeroDeTrabajador" widget-class="form-control" wrapper="bootstrap3"/>	
-						<f:field property="perfil.puesto" widget-class="form-control" wrapper="bootstrap3"/>	
+						
+						<f:field property="perfil.puesto" label="Puesto" name="puesto" widget-class="form-control" wrapper="bootstrap3"/>	
+
 						<f:field property="perfil.departamento" widget-class="form-control" wrapper="bootstrap3"/>	
 						<f:field property="perfil.ubicacion" widget-class="form-control" wrapper="bootstrap3"/>	
 						<f:field property="perfil.tipoDeContrato" widget-class="form-control" wrapper="bootstrap3"/>	

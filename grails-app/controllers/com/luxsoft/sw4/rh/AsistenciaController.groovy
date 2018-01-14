@@ -101,7 +101,7 @@ class AsistenciaController {
 	
 	def importarLecturas(){
 		def periodo = session.periodoDeLecturas
-		checadoService.importarLecturas(periodo)
+		checadoService.importarLecturas(periodo,session.empresa.rfc)
 		redirect action:'lectora'
 	}
 

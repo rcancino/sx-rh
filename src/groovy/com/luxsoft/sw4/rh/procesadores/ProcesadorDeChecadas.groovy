@@ -7,7 +7,9 @@ import com.luxsoft.sw4.rh.Checado
 import com.luxsoft.sw4.rh.DiaFestivo;
 import com.luxsoft.sw4.rh.Empleado
 import com.luxsoft.sw4.rh.TurnoDet
-
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import  java.util.Date
 import java.sql.Time
 
 
@@ -42,6 +44,12 @@ class ProcesadorDeChecadas {
 				it.horasTrabajadas=(res/(1000*60*60) as BigDecimal)
 				
 			}
+
+			if(!turnoDet.entrada1){
+				
+				it.horasTrabajadas=9.5 as BigDecimal
+				
+			}
 			
 			def lecturas=buscarLecturas(empleado,it.fecha)
 			def row = 1
@@ -68,10 +76,50 @@ class ProcesadorDeChecadas {
 			}
 		}
 		
-		if(t.entrada1==null || t.salida1 == null) { // Descanso
+		if((t.entrada1==null || t.salida1 == null) && !chk) { // Descanso
+		//if((t.entrada1==null || t.salida1 == null)) { // Descanso
 			ad.tipo='DESCANSO'
 			return 
 		}
+
+			//Descanso Laborado 
+		
+		if((t.entrada1==null || t.salida1==null) && chk) {
+
+			ad.tipo='DESCANSO'
+
+			String salidaT = "13:00";
+			String entradaT = "09:00";
+			DateFormat formatter = new SimpleDateFormat("HH:mm");
+			Date entrada = formatter.parse(entradaT);
+			Date salida = formatter.parse(salidaT);
+			
+
+
+			if(lectura<salida && (ad.entrada1==null)) {
+				ad.entrada1=time
+				return
+			}
+			if(lectura>=salida) {
+				ad.salida1=time
+				
+				return
+			}
+			
+			if(ad.entrada1){
+				Date checado=ad.entrada1
+				def dif = (lectura.getTime() - checado.getTime() ) / (1000 * 60)
+				//def dif=( ((lectura.getHourOfDay()*60)+lectura.getMinuteOfHour()) - ((checado.getHourOfDay()*60)+checado.getMinuteOfHour()) )
+				if(dif > 60 ) {
+					ad.salida1=time
+					
+				}
+				
+			}
+			return
+		}
+
+
 		
 		//Dia festivo parcial
 		if(festivo && festivo.parcial){

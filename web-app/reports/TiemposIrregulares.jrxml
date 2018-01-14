@@ -33,6 +33,7 @@
 	<queryString><![CDATA[SELECT E.ID,C.FOLIO,C.ASISTENCIA_FECHA_INICIAL,ASISTENCIA_FECHA_FINAL,U.CLAVE AS SUCURSAL,concat(ifnull(e.apellido_paterno,''),' ',ifnull(e.apellido_materno,''),' ',ifnull(e.nombres,'')) AS nombre,E.CLAVE,P.numero_de_trabajador,D.FECHA,DAYOFWEEK(D.FECHA)AS DIA
 ,(SELECT ENTRADA1 FROM turno_det X WHERE X.turno_id=T.ID AND dias_idx=DAYOFWEEK(D.FECHA)) AS ENTRADA_TURNO,D.ENTRADA1,D.SALIDA1,D.ENTRADA2,D.SALIDA2
 ,D.RETARDO_MAYOR,D.RETARDO_COMIDA,D.RETARDO_MAYOR+D.RETARDO_COMIDA as 'NO_LABORADOS',D.MINUTOS_NO_LABORADOS
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
 FROM  asistencia_det D JOIN asistencia A ON (A.id=D.asistencia_id) JOIN empleado E ON (E.ID=A.empleado_id) JOIN perfil_de_empleado P ON (P.empleado_id=E.ID) JOIN ubicacion U ON  (P.ubicacion_id=U.ID)
 JOIN turno T ON ( P.turno_id=T.ID)  JOIN calendario_det C ON (C.ID=A.CALENDARIO_DET_ID)
 WHERE A.CALENDARIO_DET_ID=$P{CALENDARIODET}  AND d.entrada1 is not null and (D.retardo_mayor>15 or D.retardo_comida>15)
@@ -44,8 +45,7 @@ WHEN DAYOFWEEK(D.FECHA) =7 AND (if(d.entrada1 is not null,1,0)+if(d.salida1 is n
 WHEN DAYOFWEEK(D.FECHA) BETWEEN 2 AND 6 AND D.FECHA =(SELECT FECHA FROM dia_festivo F WHERE F.FECHA=D.FECHA ) 
 AND (if(d.entrada1 is not null,1,0)+if(d.salida1 is not null,1,0)+if(d.entrada2 is not null,1,0)+if(d.salida2 is not null,1,0))=2 THEN 'OK'  
 ELSE 'ERROR' END)='OK' )
-ORDER BY p.ubicacion_id,E.APELLIDO_PATERNO,E.APELLIDO_MATERNO
-]]></queryString>
+ORDER BY p.ubicacion_id,E.APELLIDO_PATERNO,E.APELLIDO_MATERNO]]></queryString>
 
 	<field name="ID" class="java.lang.Long"/>
 	<field name="FOLIO" class="java.lang.Integer"/>
@@ -66,6 +66,7 @@ ORDER BY p.ubicacion_id,E.APELLIDO_PATERNO,E.APELLIDO_MATERNO
 	<field name="RETARDO_COMIDA" class="java.lang.Integer"/>
 	<field name="NO_LABORADOS" class="java.lang.Long"/>
 	<field name="MINUTOS_NO_LABORADOS" class="java.lang.Integer"/>
+	<field name="EMPRESA" class="java.lang.String"/>
 
 
 		<group  name="SUUCRSAL" isStartNewPage="true" >
@@ -102,19 +103,6 @@ ORDER BY p.ubicacion_id,E.APELLIDO_PATERNO,E.APELLIDO_MATERNO
 		</title>
 		<pageHeader>
 			<band height="65"  isSplitAllowed="true" >
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="544"
-						y="0"
-						width="187"
-						height="15"
-						key="textField-1"/>
-					<box></box>
-					<textElement textAlignment="Right">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{COMPANY}]]></textFieldExpression>
-				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="480"
@@ -179,6 +167,19 @@ ORDER BY p.ubicacion_id,E.APELLIDO_PATERNO,E.APELLIDO_MATERNO
 						<font size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.sql.Timestamp"><![CDATA[$F{ASISTENCIA_FECHA_FINAL}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="543"
+						y="0"
+						width="187"
+						height="15"
+						key="textField"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{EMPRESA}]]></textFieldExpression>
 				</textField>
 			</band>
 		</pageHeader>

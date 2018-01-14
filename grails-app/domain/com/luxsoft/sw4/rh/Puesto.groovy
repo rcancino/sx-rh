@@ -15,6 +15,6 @@ class Puesto implements Serializable{
     }
 
     String toString(){
-    	return "$descripcion ($clave)"
+    	return "$clave"
     }
 }

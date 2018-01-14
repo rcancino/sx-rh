@@ -35,6 +35,7 @@
 u.clave as 'ubic',e.id,e.CLAVE AS clavemp,P.numero_de_trabajador AS NUMERO,CONCAT(IFNULL(apellido_paterno,''),' ',apellido_materno,' ',nombres) as emp
 ,A.periodo_fecha_inicial,A.periodo_fecha_final,C.FECHA AS CHECADA,D.FECHA AS ASIST ,C.HORA
 ,(case when c.lector=1 then 'TAC' when c.lector=3 then 'AND' when c.lector=5 then 'BOL' when c.lector=7 then '5FE' when c.lector=-10 then 'CA4' else 'N/D' end) as ubicacion
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
 FROM empleado E join perfil_de_empleado p on (p.empleado_id=e.id) JOIN ubicacion U ON (U.ID=P.ubicacion_id)
 JOIN asistencia a on (a.empleado_id=e.id) join asistencia_det d on (a.id=d.asistencia_id )
 join checado c on (p.numero_de_trabajador=c.numero_de_empleado AND D.FECHA=C.FECHA)
@@ -52,6 +53,7 @@ ORDER BY C.FECHA ASC,C.HORA ASC]]></queryString>
 	<field name="ASIST" class="java.sql.Date"/>
 	<field name="HORA" class="java.sql.Time"/>
 	<field name="ubicacion" class="java.lang.String"/>
+	<field name="EMPRESA" class="java.lang.String"/>
 
 
 		<group  name="FECHA" >
@@ -75,19 +77,6 @@ ORDER BY C.FECHA ASC,C.HORA ASC]]></queryString>
 		</title>
 		<pageHeader>
 			<band height="55"  isSplitAllowed="true" >
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="357"
-						y="0"
-						width="187"
-						height="15"
-						key="textField-1"/>
-					<box></box>
-					<textElement textAlignment="Right">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{COMPANY}]]></textFieldExpression>
-				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="293"
@@ -192,6 +181,19 @@ ORDER BY C.FECHA ASC,C.HORA ASC]]></queryString>
 					</textElement>
 				<text><![CDATA[EMPLEADO :]]></text>
 				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="357"
+						y="0"
+						width="187"
+						height="15"
+						key="textField"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{EMPRESA}]]></textFieldExpression>
+				</textField>
 			</band>
 		</pageHeader>
 		<columnHeader>

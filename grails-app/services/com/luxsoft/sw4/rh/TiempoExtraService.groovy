@@ -3,6 +3,7 @@ package com.luxsoft.sw4.rh
 import com.luxsoft.sw4.Dias;
 
 import grails.transaction.Transactional
+import com.luxsoft.sw4.rh.tablas.ZonaEconomica
 
 
 @Transactional
@@ -100,6 +101,10 @@ class TiempoExtraService {
 	def getMinutosExtras(AsistenciaDet det){
 		
 		if(det.pagarTiempoExtra){
+
+			if(det.fecha[Calendar.DAY_OF_WEEK]==Calendar.SUNDAY){
+				println "Se laboro en domingo"
+			}
 			
 			Date salidaOficial
 			Date salidaReal
@@ -110,12 +115,25 @@ class TiempoExtraService {
 				salidaOficial=det.turnoDet.salida1
 				salidaReal=det.salida1
 			}
+
+		
+
 			assert salidaOficial, 'Debe haber salida oficial declarada en el turno del empleado para  '+det
 			assert salidaReal,'Debe haber salida registrada  '+det
 			
+			Calendar calendar = Calendar.getInstance()
+			
+			calendar.setTime(salidaReal) 
+					def  salidaRMinute=(calendar.get(Calendar.HOUR_OF_DAY)*60)+calendar.get(Calendar.MINUTE);
+			calendar.setTime(salidaOficial) 
+					def salidaOMinute=(calendar.get(Calendar.HOUR_OF_DAY)*60)+calendar.get(Calendar.MINUTE); 
+			/*
 			def tiempoExtra=( ((salidaReal.getHourOfDay()*60)+salidaReal.getMinuteOfHour()) -
 				((salidaOficial.getHourOfDay()*60)+salidaOficial.getMinuteOfHour())
-			   )
+			   )	*/
+
+			   def tiempoExtra=salidaRMinute - salidaOMinute
+
 			log.debug "Minutos extras ${det.fecha[Calendar.DAY_OF_WEEK]} De: $salidaReal a $salidaOficial res:$tiempoExtra"
 			return tiempoExtra
 		}
@@ -145,8 +163,11 @@ class TiempoExtraService {
 	}
 	
 	def calcularImportesMinutosDobles(TiempoExtra te){
-	//	def smg=67.29
-		def smg=70.1
+	
+		ZonaEconomica zona=ZonaEconomica.findByEjercicioAndClave(te.ejercicio,'A')
+		def smg=zona.uma
+		
+
 		def maximo=smg*5
 		//def factor=(maximo<=te.empleado.salario.salarioDiario)?1.0:0.5
 		def salarioDiario=te.empleado.salario.salarioDiario
@@ -212,9 +233,14 @@ class TiempoExtraService {
 					if(diasTrabajados>3){
 						
 						if( (minutosAcumulados+minutos)>540){
-							def dobles=540-minutosAcumulados
+
+							if(minutosAcumulados<540){
+								def dobles=540-minutosAcumulados	
+									minutosIntegra+=dobles
+							}
+							
 							def triples=(minutosAcumulados+minutos)-540
-							minutosIntegra+=dobles
+							
 							minutosIntegraTripes+=triples
 							//println dia+' Dobles: '+dobles
 							//println dia+' Triples: '+triples
@@ -263,9 +289,13 @@ class TiempoExtraService {
 				
 				if(minutos>0){
 					if( (minutosAcumulados+minutos)>540){
-							def dobles=540-minutosAcumulados
+							if(minutosAcumulados<540){
+								def dobles=540-minutosAcumulados	
+									minutosDobles+=dobles
+							}
+							
 							def triples=(minutosAcumulados+minutos)-540
-							minutosDobles+=dobles
+							
 							minutosTriples+=triples
 							
 					}else{

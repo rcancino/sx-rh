@@ -10,10 +10,10 @@ class OperacionGenericaController {
 		params.max?:500
 		params.sort='lastUpdated'
 		params.order='desc'
-		def ejercicio = session.ejericio
+		def ejercicio = session.ejercicio
 		log.info('Ejercicio: ' + ejercicio)
 		//def query = OperacionGenerica.where{calendarioDet.calendario.ejercicio == ejercicio}
-		def query = OperacionGenerica.where {calendarioDet.calendario.ejercicio == 2016 }
+		def query = OperacionGenerica.where {calendarioDet.calendario.ejercicio == ejercicio }
 		def list = query.list(params)
 		log.info('Reg: ' + list.size())
 		[operacionGenericaInstanceList:list,operacionGenericaInstanceCount:query.count()]

@@ -18,6 +18,7 @@ class ProcesadorDeNomina {
 		reglas.each{ p ->
 			try {
 				if(ne.asistencia){
+				
 					p.procesar(ne)
 				}
 			}catch(Exception ex) {

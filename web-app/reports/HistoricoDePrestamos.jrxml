@@ -37,6 +37,7 @@ e.id,E.CLAVE,CONCAT(E.apellido_paterno,' ',E.apellido_materno,' ',E.NOMBRES)as n
 ,(SELECT DATE(max(x.fecha)) FROM prestamo_abono x where x.prestamo_id=p.id) as ULT_PAGO
 ,P.ALTA,P.autorizo,P.tasa_descuento,P.comentario
 ,(SELECT SUM(IMPORTE) FROM prestamo A WHERE A.EMPLEADO_ID=E.ID) AS TOTAL_PRESTAMOS
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
 FROM 
 prestamo p join empleado e on (e.id=p.empleado_id)  
 JOIN perfil_de_empleado R ON (R.empleado_id=E.ID) JOIN UBICACION U ON (U.ID=R.UBICACION_ID)
@@ -54,6 +55,7 @@ where e.id=$P{EMPLEADO_ID} AND YEAR(P.ALTA)=$P{EJERCICIO}]]></queryString>
 	<field name="tasa_descuento" class="java.math.BigDecimal"/>
 	<field name="comentario" class="java.lang.String"/>
 	<field name="TOTAL_PRESTAMOS" class="java.math.BigDecimal"/>
+	<field name="EMPRESA" class="java.lang.String"/>
 
 		<background>
 			<band height="49"  isSplitAllowed="true" >
@@ -65,19 +67,6 @@ where e.id=$P{EMPLEADO_ID} AND YEAR(P.ALTA)=$P{EJERCICIO}]]></queryString>
 		</title>
 		<pageHeader>
 			<band height="65"  isSplitAllowed="true" >
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="544"
-						y="0"
-						width="187"
-						height="15"
-						key="textField-1"/>
-					<box></box>
-					<textElement textAlignment="Right">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{COMPANY}]]></textFieldExpression>
-				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="480"
@@ -202,6 +191,19 @@ where e.id=$P{EMPLEADO_ID} AND YEAR(P.ALTA)=$P{EJERCICIO}]]></queryString>
 						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{TOTAL_PRESTAMOS}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="544"
+						y="0"
+						width="187"
+						height="15"
+						key="textField"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{EMPRESA}]]></textFieldExpression>
 				</textField>
 			</band>
 		</pageHeader>

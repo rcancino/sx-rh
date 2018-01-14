@@ -79,7 +79,7 @@ class CalculoAnualService {
 		
 		def partidas=NominaPorEmpleadoDet
 		.findAll("from NominaPorEmpleadoDet d where d.parent.empleado=?"+
-			" and d.concepto.id in(13,41,37,44,36,22,14,40,38,18,19,15,43,23,24,31,42,20,45,34,35,33,2,12,43,49,50 )"+
+			" and d.concepto.id in(13,41,37,44,36,22,14,40,38,18,19,15,43,23,24,31,42,20,45,34,35,33,2,12,43,49,50,52,53,21,51)"+
 			" and d.parent.nomina.ejercicio=? "
 				,[anual.empleado,anual.ejercicio])
 		
@@ -175,7 +175,18 @@ class CalculoAnualService {
 				case 50:
 					anual.bonoAntiguedad += it.importeGravado
 					break
-
+				case 52:
+					anual.bonoPuntualidadAsist += it.importeGravado
+					break
+				case 53:
+					anual.diaDescanso += it.importeGravado
+					break
+				case 21:
+					anual.premioPuntualidad += it.importeGravado
+					break
+				case 11:
+					anual.honorariosAlConsejo += it.honorariosAlConsejo
+					break
 
 			}
 			
@@ -198,8 +209,10 @@ class CalculoAnualService {
 
 			def compen=NominaPorEmpleadoDet.find("from NominaPorEmpleadoDet det where det.parent.nomina.calendarioDet=? and det.parent.empleado=? and det.concepto.id=?",[ultimoCalendario,anual.empleado,47L])
 
-			anual.devISPTAnt= compAntSAF?:0 
-			anual.compensacionSAF= compen?.importeExcento?:0   
+			//anual.devISPTAnt= compAntSAF?:0 
+			anual.devISPTAnt= 0
+			//anual.compensacionSAF= compen?.importeExcento?:0   
+			anual.compensacionSAF= 0
 
 		def subEmpAplic=0.0
 		
@@ -212,7 +225,7 @@ class CalculoAnualService {
 		anual.totalGravado=0.0
 		def netoGravado=0.0
 		anual.with{
-			totalGravado=sueldo+comisiones+vacaciones+vacacionesPagadas+primaVacacionalGravada+incentivo+aguinaldoGravable+indemnizacionGravada+primaDeAntiguedadGravada+compensacion+ptuGravada+bonoDeProductividad+bonoPorDesempeno+primaDominicalGravada+gratificacion+permisoPorPaternidad+tiempoExtraDobleGravado+tiempoExtraTripleGravado+bono+bonoAntiguedad
+			totalGravado=sueldo+comisiones+vacaciones+vacacionesPagadas+primaVacacionalGravada+premioPuntualidad+incentivo+aguinaldoGravable+indemnizacionGravada+primaDeAntiguedadGravada+compensacion+ptuGravada+bonoDeProductividad+bonoPorDesempeno+primaDominicalGravada+honorariosAlConsejo+gratificacion+permisoPorPaternidad+tiempoExtraDobleGravado+tiempoExtraTripleGravado+bono+bonoPuntualidadAsist+diaDescanso+bonoAntiguedad
 			totalExento=primaVacacionalExenta+aguinaldoExento+indemnizacionExenta+primaDeAntiguedadExenta+ptuExenta+primaDominicalExenta+tiempoExtraDobleExento  
 			total=totalGravado+totalExento
 			netoGravado=totalGravado-retardos

@@ -34,6 +34,7 @@
 ,D.ENTRADA1,D.SALIDA1,D.ENTRADA2,D.SALIDA2
 ,D.RETARDO_COMIDA
 ,(case when dayofweek(fecha)=1 then 'DOM' when dayofweek(fecha)=2 then 'LUN' when dayofweek(fecha)=3 then 'MAR' when dayofweek(fecha)=4 then 'MIE' when dayofweek(fecha)=5 then 'JUE' when dayofweek(fecha)=6 then 'VIE' when dayofweek(fecha)=7 then 'SAB' ELSE 'ND' END) as diaSem
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
 FROM  asistencia_det D JOIN asistencia A ON (A.id=D.asistencia_id) JOIN empleado E ON (E.ID=A.empleado_id) JOIN perfil_de_empleado P ON (P.empleado_id=E.ID) JOIN ubicacion U ON  (P.ubicacion_id=U.ID)
 JOIN turno T ON ( P.turno_id=T.ID)  JOIN calendario_det C ON (C.ID=A.CALENDARIO_DET_ID)
 WHERE A.CALENDARIO_DET_ID=$P{CALENDARIODET}  AND d.entrada1 is not null  and d.RETARDO_COMIDA>0 and d.RETARDO_COMIDA<=10
@@ -63,6 +64,7 @@ ORDER BY U.ID,E.APELLIDO_PATERNO,E.APELLIDO_MATERNO]]></queryString>
 	<field name="SALIDA2" class="java.sql.Time"/>
 	<field name="RETARDO_COMIDA" class="java.lang.Integer"/>
 	<field name="diaSem" class="java.lang.String"/>
+	<field name="EMPRESA" class="java.lang.String"/>
 
 
 		<group  name="SUCURSAL" isStartNewPage="true" >
@@ -99,19 +101,6 @@ ORDER BY U.ID,E.APELLIDO_PATERNO,E.APELLIDO_MATERNO]]></queryString>
 		</title>
 		<pageHeader>
 			<band height="65"  isSplitAllowed="true" >
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="364"
-						y="0"
-						width="187"
-						height="15"
-						key="textField-1"/>
-					<box></box>
-					<textElement textAlignment="Right">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{COMPANY}]]></textFieldExpression>
-				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="300"
@@ -189,6 +178,19 @@ ORDER BY U.ID,E.APELLIDO_PATERNO,E.APELLIDO_MATERNO]]></queryString>
 						<font size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.sql.Timestamp"><![CDATA[$F{ASISTENCIA_FECHA_INICIAL}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="365"
+						y="0"
+						width="187"
+						height="15"
+						key="textField"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{EMPRESA}]]></textFieldExpression>
 				</textField>
 			</band>
 		</pageHeader>

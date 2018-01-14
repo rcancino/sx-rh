@@ -28,6 +28,7 @@
 	</parameter>
 	<parameter name="EJERCICIO" isForPrompting="true" class="java.lang.String"/>
 	<queryString><![CDATA[SELECT d.id,d.ejercicio,d.fecha,(case when d.parcial is false then 'COMPLETO' else 'PARCIAL' end) as tipo,d.salida,d.descripcion
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
  FROM dia_festivo d  where d.ejercicio=$P{EJERCICIO}
 order by d.fecha]]></queryString>
 
@@ -37,6 +38,7 @@ order by d.fecha]]></queryString>
 	<field name="tipo" class="java.lang.String"/>
 	<field name="salida" class="java.sql.Time"/>
 	<field name="descripcion" class="java.lang.String"/>
+	<field name="EMPRESA" class="java.lang.String"/>
 
 		<background>
 			<band height="0"  isSplitAllowed="true" >
@@ -65,23 +67,6 @@ order by d.fecha]]></queryString>
 					</textElement>
 				<text><![CDATA[CALENDARIO ANUAL DE DIAS FESTIVOS (RH) ]]></text>
 				</staticText>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="262"
-						y="-1"
-						width="313"
-						height="22"
-						key="textField-1"/>
-					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-</box>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="Helvetica-Bold" size="15" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{COMPANY}]]></textFieldExpression>
-				</textField>
 				<staticText>
 					<reportElement
 						mode="Opaque"
@@ -116,6 +101,19 @@ order by d.fecha]]></queryString>
 						<font fontName="Arial" pdfFontName="Helvetica-Oblique" size="10" isBold="false" isItalic="true" isUnderline="true" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
 				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{ejercicio}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="261"
+						y="0"
+						width="313"
+						height="22"
+						key="textField"/>
+					<box></box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font pdfFontName="Helvetica-Bold" size="15" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{EMPRESA}]]></textFieldExpression>
 				</textField>
 			</band>
 		</pageHeader>

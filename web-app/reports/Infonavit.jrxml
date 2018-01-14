@@ -55,6 +55,7 @@
 ,(SELECT periodo_fecha_final FROM nomina where  calendario_det_id=$P{CALENDARIODET}) as fecha_final
 ,ifnull((SELECT a.faltas FROM asistencia a where calendario_det_id=$P{CALENDARIODET} and a.empleado_id=e.id),0) as faltotas
 ,(SELECT CASE WHEN A.dias_trabajados>0 THEN a.faltas_manuales ELSE A.FALTAS END FROM asistencia A WHERE calendario_det_id=$P{CALENDARIODET} AND A.empleado_id=E.ID) AS faltas
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
 FROM infonavit p 
 join empleado e on(e.id=p.empleado_id)
 JOIN perfil_de_empleado x ON(E.ID=x.empleado_id)
@@ -87,6 +88,7 @@ where s.periodicidad=$P{PERIODICIDAD} and p.activo is true AND E.ID NOT IN(SELEC
 	<field name="fecha_final" class="java.sql.Timestamp"/>
 	<field name="faltotas" class="java.lang.Long"/>
 	<field name="faltas" class="java.math.BigDecimal"/>
+	<field name="EMPRESA" class="java.lang.String"/>
 
 	<sortField name="tipo" />
 	<sortField name="clave" />
@@ -101,19 +103,6 @@ where s.periodicidad=$P{PERIODICIDAD} and p.activo is true AND E.ID NOT IN(SELEC
 		</title>
 		<pageHeader>
 			<band height="79"  isSplitAllowed="true" >
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="544"
-						y="0"
-						width="187"
-						height="15"
-						key="textField-1"/>
-					<box></box>
-					<textElement textAlignment="Right">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{COMPANY}]]></textFieldExpression>
-				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="480"
@@ -336,6 +325,19 @@ where s.periodicidad=$P{PERIODICIDAD} and p.activo is true AND E.ID NOT IN(SELEC
 						<font fontName="Arial" pdfFontName="Helvetica-Oblique" size="8" isBold="false" isItalic="true" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
 				<textFieldExpression   class="java.util.Date"><![CDATA[$F{fecha_final}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="544"
+						y="0"
+						width="187"
+						height="15"
+						key="textField"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{EMPRESA}]]></textFieldExpression>
 				</textField>
 			</band>
 		</pageHeader>

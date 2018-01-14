@@ -2,7 +2,7 @@
 <!-- Created with iReport - A designer for JasperReports -->
 <!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
 <jasperReport
-		 name="Incapacidades"
+		 name="Incapacidadesbak"
 		 columnCount="1"
 		 printOrder="Vertical"
 		 orientation="Landscape"
@@ -36,6 +36,7 @@
 ,s.numero,t.descripcion as TURNO
 ,(case when i.tipo_id=2 then 'EG' when i.tipo_id=3 then 'MAT' when i.tipo_id=1 and i.comentario like 'TRAYECTO %' then 'RTT' else 'RTE' end) as rama
 ,i.secuela,i.control
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
 FROM 
 empleado e join perfil_de_empleado p on (e.id=p.empleado_id) join turno t on (t.id=p.turno_id) join ubicacion u on (u.id=p.ubicacion_id)
  JOIN 	seguridad_social s on (s.empleado_id=e.id) JOIN incapacidad i on (i.empleado_id=e.id) 
@@ -53,6 +54,7 @@ empleado e join perfil_de_empleado p on (e.id=p.empleado_id) join turno t on (t.
 	<field name="rama" class="java.lang.String"/>
 	<field name="secuela" class="java.lang.String"/>
 	<field name="control" class="java.lang.String"/>
+	<field name="EMPRESA" class="java.lang.String"/>
 
 	<variable name="TOTAL_DIAS" class="java.lang.Integer" resetType="Report" calculation="Sum">
 		<variableExpression><![CDATA[$F{dias_inc}]]></variableExpression>
@@ -67,19 +69,6 @@ empleado e join perfil_de_empleado p on (e.id=p.empleado_id) join turno t on (t.
 		</title>
 		<pageHeader>
 			<band height="52"  isSplitAllowed="true" >
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="537"
-						y="0"
-						width="187"
-						height="15"
-						key="textField-1"/>
-					<box></box>
-					<textElement textAlignment="Right">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{COMPANY}]]></textFieldExpression>
-				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="473"
@@ -157,6 +146,19 @@ empleado e join perfil_de_empleado p on (e.id=p.empleado_id) join turno t on (t.
 						<font size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.util.Date"><![CDATA[$P{FECHA_FINAL}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="537"
+						y="0"
+						width="187"
+						height="15"
+						key="textField"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{EMPRESA}]]></textFieldExpression>
 				</textField>
 			</band>
 		</pageHeader>

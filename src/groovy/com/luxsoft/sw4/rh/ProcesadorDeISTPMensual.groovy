@@ -16,7 +16,7 @@ class ProcesadorDeISTPMensual {
 		
 		def ejercicio=ne.nomina.ejercicio
 		def concepto = ConceptoDeNomina.findByClave('D002')
-		def importeGravado = 0.0
+		def importeExcento = 0.0
 		
 		def honorarios = ne.getPercepciones()
 		if(ne.empleado.contratado){
@@ -31,17 +31,17 @@ class ProcesadorDeISTPMensual {
 			def ingresoTotal = salarioMensual + honorarios
 			def impuestoTotal = calcularImpuesto(ingresoTotal, ejercicio)
 
-			importeGravado = impuestoTotal - impuestoMensual
+			importeExcento = impuestoTotal - impuestoMensual
 
 		} else {
-			importeGravado = calcularImpuestoAsalariado(honorarios, ejercicio)
+			importeExcento = calcularImpuestoAsalariado(honorarios, ejercicio)
 		}
 		
 
 		def nominaPorEmpleadoDet = new NominaPorEmpleadoDet(concepto:concepto,importeGravado:0.0,importeExcento:0.0,comentario:'PENDIENTE')
 		ne.addToConceptos(nominaPorEmpleadoDet)
-		nominaPorEmpleadoDet.importeExcento = 0.0
-		nominaPorEmpleadoDet.importeGravado = importeGravado.setScale(2,RoundingMode.HALF_EVEN)
+		nominaPorEmpleadoDet.importeGravado = 0.0
+		nominaPorEmpleadoDet.importeExcento = importeExcento.setScale(2,RoundingMode.HALF_EVEN)
 		ne.actualizar()
 		
 	}
@@ -63,12 +63,12 @@ class ProcesadorDeISTPMensual {
 		def tarifa = TarifaIsr.buscar(ejercicio, 'MENSUAL', percepciones)
 		assert tarifa,"No encontro TarifaIsr para los parametros: Perc:${percepciones} Ejercicio: ${ejercicio}"
 		
-		def importeGravado = percepciones - tarifa.limiteInferior
-		importeGravado *= tarifa.porcentaje
-		importeGravado /= 100
-		importeGravado += tarifa.cuotaFija
-		importeGravado = importeGravado.setScale(2,RoundingMode.HALF_EVEN)
-		return importeGravado
+		def importeExcento = percepciones - tarifa.limiteInferior
+		importeExcento *= tarifa.porcentaje
+		importeExcento /= 100
+		importeExcento += tarifa.cuotaFija
+		importeExcento = importeExcento.setScale(2,RoundingMode.HALF_EVEN)
+		return importeExcento
 
 	}
 

@@ -31,7 +31,7 @@
 	<queryString><![CDATA[SELECT E.id,E.clave,CONCAT(ifnull(E.apellido_paterno,"")," ",ifnull(E.apellido_materno,"")," ",E.nombres) AS nombre,P.numero_de_trabajador,'1ENT' AS tipo,(SELECT U.descripcion FROM ubicacion U WHERE P.UBICACION_ID=U.ID) AS ubicacion
 ,C.folio,C.id,C.asistencia_fecha_inicial,C.asistencia_fecha_final,a.tipo as tipoPrdo,e.alta
 ,a.dias_trabajados
-,(SELECT (A.horas_trabajadas) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha= DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 0 DAY)) ) as hrTrab
+,(SELECT sum(case when d.horas_trabajadas>5 then 8.5 when d.horas_trabajadas=5 then 5 else 0 end) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha BETWEEN a.periodo_fecha_inicial and a.periodo_fecha_final group by d.fecha) as hrTrab
 ,TIME_FORMAT((SELECT MAX(x.entrada1) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha= DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 0 DAY)) ),'%H:%i') as reg1
 ,TIME_FORMAT((SELECT MAX(x.entrada1) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha= DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 1 DAY)) ),'%H:%i') as reg2
 ,TIME_FORMAT((SELECT MAX(x.entrada1) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha= DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 2 DAY)) ),'%H:%i') as reg3
@@ -48,6 +48,7 @@
 ,TIME_FORMAT((SELECT MAX(x.entrada1) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha= DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 13 DAY)) ),'%H:%i') as reg14
 ,TIME_FORMAT((SELECT MAX(x.entrada1) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha= DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 14 DAY)) ),'%H:%i') as reg15
 ,TIME_FORMAT((SELECT MAX(x.entrada1) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha= DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 15 DAY)) ),'%H:%i') as reg16
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
 FROM EMPLEADO E JOIN perfil_de_empleado P ON(E.ID=P.empleado_id) JOIN asistencia A ON(A.empleado_id=E.ID) JOIN asistencia_det D ON(A.ID=D.asistencia_id)
 JOIN calendario_det C ON(C.id=A.calendario_det_id) LEFT JOIN baja_de_empleado B ON(B.EMPLEADO_ID=E.ID)
 WHERE C.ID=$P{CALENDARIO_ID} AND P.UBICACION_ID=$P{UBICACION_ID}
@@ -55,7 +56,7 @@ group by E.id,E.clave,CONCAT(E.apellido_paterno," ",E.apellido_materno," ",E.nom
 UNION
 SELECT E.id,E.clave,CONCAT(ifnull(E.apellido_paterno,"")," ",ifnull(E.apellido_materno,"")," ",E.nombres) AS nombre,P.numero_de_trabajador,'1SAL' AS tipo,(SELECT U.descripcion FROM ubicacion U WHERE P.UBICACION_ID=U.ID) AS UBICACION
 ,C.folio,C.id,C.asistencia_fecha_inicial,C.asistencia_fecha_final,a.tipo,e.alta,a.dias_trabajados
-,(SELECT (A.horas_trabajadas) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha= DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 0 DAY)) ) as hrTrab
+,(SELECT sum(case when d.horas_trabajadas>5 then 8.5 when d.horas_trabajadas=5 then 5 else 0 end) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha BETWEEN a.periodo_fecha_inicial and a.periodo_fecha_final group by d.fecha) as hrTrab
 ,TIME_FORMAT((SELECT MAX(x.salida1) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha= DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 0 DAY)) ),'%H:%i') as reg1
 ,TIME_FORMAT((SELECT MAX(x.salida1) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha= DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 1 DAY)) ),'%H:%i') as reg2
 ,TIME_FORMAT((SELECT MAX(x.salida1) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha= DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 2 DAY)) ),'%H:%i') as reg3
@@ -72,6 +73,7 @@ SELECT E.id,E.clave,CONCAT(ifnull(E.apellido_paterno,"")," ",ifnull(E.apellido_m
 ,TIME_FORMAT((SELECT MAX(x.salida1) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha= DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 13 DAY)) ),'%H:%i') as reg14
 ,TIME_FORMAT((SELECT MAX(x.salida1) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha= DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 14 DAY)) ),'%H:%i') as reg15
 ,TIME_FORMAT((SELECT MAX(x.salida1) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha= DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 15 DAY)) ),'%H:%i') as reg16
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
 FROM EMPLEADO E 
 JOIN perfil_de_empleado P ON(E.ID=P.empleado_id)
 JOIN asistencia A ON(A.empleado_id=E.ID)
@@ -83,7 +85,7 @@ group by E.id,E.clave,CONCAT(E.apellido_paterno," ",E.apellido_materno," ",E.nom
 UNION
 SELECT E.id,E.clave,CONCAT(ifnull(E.apellido_paterno,"")," ",ifnull(E.apellido_materno,"")," ",E.nombres) AS nombre,P.numero_de_trabajador,'2ENT' AS tipo,(SELECT U.descripcion FROM ubicacion U WHERE P.UBICACION_ID=U.ID) AS UBICACION
 ,C.folio,C.id,C.asistencia_fecha_inicial,C.asistencia_fecha_final,a.tipo,e.alta,a.dias_trabajados
-,(SELECT (A.horas_trabajadas) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha= DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 0 DAY)) ) as hrTrab
+,(SELECT sum(case when d.horas_trabajadas>5 then 8.5 when d.horas_trabajadas=5 then 5 else 0 end) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha BETWEEN a.periodo_fecha_inicial and a.periodo_fecha_final group by d.fecha) as hrTrab
 ,TIME_FORMAT((SELECT MAX(x.entrada2) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha= DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 0 DAY)) ),'%H:%i') as reg1
 ,TIME_FORMAT((SELECT MAX(x.entrada2) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha= DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 1 DAY)) ),'%H:%i') as reg2
 ,TIME_FORMAT((SELECT MAX(x.entrada2) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha= DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 2 DAY)) ),'%H:%i') as reg3
@@ -100,6 +102,7 @@ SELECT E.id,E.clave,CONCAT(ifnull(E.apellido_paterno,"")," ",ifnull(E.apellido_m
 ,TIME_FORMAT((SELECT MAX(x.entrada2) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha= DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 13 DAY)) ),'%H:%i') as reg14
 ,TIME_FORMAT((SELECT MAX(x.entrada2) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha= DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 14 DAY)) ),'%H:%i') as reg15
 ,TIME_FORMAT((SELECT MAX(x.entrada2) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha= DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 15 DAY)) ),'%H:%i') as reg16
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
 FROM EMPLEADO E 
 JOIN perfil_de_empleado P ON(E.ID=P.empleado_id)
 JOIN asistencia A ON(A.empleado_id=E.ID)
@@ -111,7 +114,7 @@ group by E.id,E.clave,CONCAT(E.apellido_paterno," ",E.apellido_materno," ",E.nom
 UNION
 SELECT E.id,E.clave,CONCAT(ifnull(E.apellido_paterno,"")," ",ifnull(E.apellido_materno,"")," ",E.nombres) AS nombre,P.numero_de_trabajador,'2SAL' AS tipo,(SELECT U.descripcion FROM ubicacion U WHERE P.UBICACION_ID=U.ID) AS UBICACION
 ,C.folio,C.id,C.asistencia_fecha_inicial,C.asistencia_fecha_final,a.tipo,e.alta,a.dias_trabajados
-,(SELECT (A.horas_trabajadas) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha= DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 0 DAY)) ) as hrTrab
+,(SELECT sum(case when d.horas_trabajadas>5 then 8.5 when d.horas_trabajadas=5 then 5 else 0 end) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha BETWEEN a.periodo_fecha_inicial and a.periodo_fecha_final group by d.fecha) as hrTrab
 ,TIME_FORMAT((SELECT MAX(x.salida2) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha= DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 0 DAY)) ),'%H:%i') as reg1
 ,TIME_FORMAT((SELECT MAX(x.salida2) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha= DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 1 DAY)) ),'%H:%i') as reg2
 ,TIME_FORMAT((SELECT MAX(x.salida2) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha= DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 2 DAY)) ),'%H:%i') as reg3
@@ -128,6 +131,7 @@ SELECT E.id,E.clave,CONCAT(ifnull(E.apellido_paterno,"")," ",ifnull(E.apellido_m
 ,TIME_FORMAT((SELECT MAX(x.salida2) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha= DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 13 DAY)) ),'%H:%i') as reg14
 ,TIME_FORMAT((SELECT MAX(x.salida2) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha= DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 14 DAY)) ),'%H:%i') as reg15
 ,TIME_FORMAT((SELECT MAX(x.salida2) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha= DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 15 DAY)) ),'%H:%i') as reg16
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
 FROM EMPLEADO E 
 JOIN perfil_de_empleado P ON(E.ID=P.empleado_id)
 JOIN asistencia A ON(A.empleado_id=E.ID)
@@ -139,7 +143,7 @@ group by E.id,E.clave,CONCAT(E.apellido_paterno," ",E.apellido_materno," ",E.nom
 UNION
 SELECT E.id,E.clave,CONCAT(ifnull(E.apellido_paterno,"")," ",ifnull(E.apellido_materno,"")," ",E.nombres) AS nombre,P.numero_de_trabajador,'3TOT' AS tipo,(SELECT U.descripcion FROM ubicacion U WHERE P.UBICACION_ID=U.ID) AS UBICACION
 ,C.folio,C.id,C.asistencia_fecha_inicial,C.asistencia_fecha_final,a.tipo,e.alta,a.dias_trabajados
-,(SELECT (A.horas_trabajadas) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha= DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 0 DAY)) ) as hrTrab
+,(SELECT sum(case when d.horas_trabajadas>5 then 8.5 when d.horas_trabajadas=5 then 5 else 0 end) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha BETWEEN a.periodo_fecha_inicial and a.periodo_fecha_final group by d.fecha) as hrTrab
 ,(SELECT ((CASE WHEN E.STATUS='BAJA' AND B.FECHA IS NOT NULL AND  DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 0 DAY))>DATE(B.FECHA) THEN "" 	WHEN X.tipo='FALTA' AND a.dias_trabajados>0 THEN '' WHEN X.tipo='FALTA' THEN 'FLT' WHEN X.tipo='DESCANSO' THEN 'DSC' WHEN X.tipo='DIA_FESTIVO' THEN 'FES' WHEN X.tipo='VACACIONES' THEN 'VAC' WHEN X.tipo='INCAPACIDAD' THEN 'INC'
 				WHEN X.COMENTARIO='INCIDENCIA DESCANSO_P' THEN 'DES' WHEN X.COMENTARIO='INCIDENCIA PERMISO' THEN 'PCG' WHEN X.COMENTARIO='INCIDENCIA PERMISO_P' THEN 'PCP'  WHEN X.COMENTARIO='INCIDENCIA PATERNIDAD' THEN 'PAT' 
 		WHEN X.tipo='INCIDENCIA_F' THEN 'FLT' WHEN X.tipo='ASISTENCIA' THEN 'AST' ELSE 'NDT' END)) FROM asistencia_det x where x.asistencia_id=a.id and X.fecha= DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 0 DAY)) ) as reg1
@@ -188,6 +192,7 @@ SELECT E.id,E.clave,CONCAT(ifnull(E.apellido_paterno,"")," ",ifnull(E.apellido_m
 ,(SELECT ((CASE WHEN E.STATUS='BAJA' AND B.FECHA IS NOT NULL AND  DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 15 DAY))>DATE(B.FECHA) THEN ""	WHEN X.tipo='FALTA' AND a.dias_trabajados>0 THEN '' WHEN X.tipo='FALTA' THEN 'FLT' WHEN X.tipo='DESCANSO' THEN 'DSC' WHEN X.tipo='DIA_FESTIVO' THEN 'FES' WHEN X.tipo='VACACIONES' THEN 'VAC' WHEN X.tipo='INCAPACIDAD' THEN 'INC'
 				WHEN X.COMENTARIO='INCIDENCIA DESCANSO_P' THEN 'DES' WHEN X.COMENTARIO='INCIDENCIA PERMISO' THEN 'PCG' WHEN X.COMENTARIO='INCIDENCIA PERMISO_P' THEN 'PCP'  WHEN X.COMENTARIO='INCIDENCIA PATERNIDAD' THEN 'PAT'  		
 		WHEN X.tipo='INCIDENCIA_F' THEN 'FLT' WHEN X.tipo='ASISTENCIA' THEN 'AST' ELSE 'NDT' END)) FROM asistencia_det x where x.asistencia_id=a.id and x.fecha= DATE(DATE_ADD(C.asistencia_fecha_inicial, INTERVAL 15 DAY)) ) as reg16
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
 FROM EMPLEADO E 
 JOIN perfil_de_empleado P ON(E.ID=P.empleado_id)
 JOIN asistencia A ON(A.empleado_id=E.ID)
@@ -226,6 +231,7 @@ group by E.id,E.clave,CONCAT(E.apellido_paterno," ",E.apellido_materno," ",E.nom
 	<field name="reg14" class="java.lang.String"/>
 	<field name="reg15" class="java.lang.String"/>
 	<field name="reg16" class="java.lang.String"/>
+	<field name="EMPRESA" class="java.lang.String"/>
 
 	<sortField name="clave" />
 
@@ -279,23 +285,6 @@ group by E.id,E.clave,CONCAT(E.apellido_paterno," ",E.apellido_materno," ",E.nom
 					</textElement>
 				<text><![CDATA[CONTROL DE ASISTENCIA ( RH )]]></text>
 				</staticText>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="232"
-						y="-1"
-						width="313"
-						height="22"
-						key="textField-1"/>
-					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-</box>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="Helvetica-Bold" size="15" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{COMPANY}]]></textFieldExpression>
-				</textField>
 				<staticText>
 					<reportElement
 						mode="Opaque"
@@ -460,6 +449,19 @@ group by E.id,E.clave,CONCAT(E.apellido_paterno," ",E.apellido_materno," ",E.nom
 						<font pdfFontName="Helvetica-Bold" size="8" isBold="true" isUnderline="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{folio}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="232"
+						y="0"
+						width="313"
+						height="22"
+						key="textField"/>
+					<box></box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font pdfFontName="Helvetica-Bold" size="15" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{EMPRESA}]]></textFieldExpression>
 				</textField>
 			</band>
 		</pageHeader>
@@ -1077,7 +1079,7 @@ group by E.id,E.clave,CONCAT(E.apellido_paterno," ",E.apellido_materno," ",E.nom
 						mode="Opaque"
 						x="541"
 						y="5"
-						width="28"
+						width="32"
 						height="21"
 						key="staticText-61"/>
 					<box>					<pen lineWidth="0.0" lineStyle="Solid" lineColor="#CCCCCC"/>
@@ -1535,24 +1537,76 @@ new Date($F{asistencia_fecha_inicial}.getTime()+(86400000*15)).compareTo( $F{asi
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{reg16}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<staticText>
 					<reportElement
-						x="540"
+						mode="Opaque"
+						x="556"
 						y="1"
-						width="28"
+						width="4"
 						height="11"
-						key="textField-115">
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="staticText-64">
 							<printWhenExpression><![CDATA[new Boolean($F{tipo}.equals( "3TOT" ) )]]></printWhenExpression>
 						</reportElement>
-					<box>					<topPen lineWidth="0.25" lineColor="#CCCCCC"/>
+					<box>					<pen lineWidth="0.0" lineColor="#333333"/>
+					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Arial" pdfFontName="Helvetica-Oblique" size="8" isBold="false" isItalic="true" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<text><![CDATA[:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="560"
+						y="1"
+						width="13"
+						height="11"
+						key="textField-119">
+							<printWhenExpression><![CDATA[new Boolean($F{tipo}.equals( "3TOT" ) )]]></printWhenExpression>
+						</reportElement>
+					<box>					<pen lineWidth="0.0" lineColor="#333333"/>
+					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font pdfFontName="Helvetica" size="8" isBold="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[new Double(
+(
+$F{hrTrab}.doubleValue()
+-
+Math.floor($F{hrTrab}.doubleValue())
+)*60
+)]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="541"
+						y="1"
+						width="15"
+						height="11"
+						key="textField-120">
+							<printWhenExpression><![CDATA[new Boolean($F{tipo}.equals( "3TOT" ) )]]></printWhenExpression>
+						</reportElement>
+					<box>					<pen lineWidth="0.0" lineColor="#333333"/>
+					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
 					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
 					<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
 					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
 </box>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="Helvetica" size="7" isBold="false"/>
+						<font pdfFontName="Helvetica" size="8" isBold="false"/>
 					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{hrTrab}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[new Double(
+Math.floor($F{hrTrab}.doubleValue())
+)]]></textFieldExpression>
 				</textField>
 			</band>
 		</detail>

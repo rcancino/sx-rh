@@ -41,10 +41,11 @@
 		WHEN D.COMENTARIO='INCIDENCIA DESCANSO_P' THEN 'DES' WHEN D.COMENTARIO='INCIDENCIA PERMISO' THEN 'PCG' WHEN D.COMENTARIO='INCIDENCIA PERMISO_P' THEN 'PCP'  WHEN D.COMENTARIO='INCIDENCIA PATERNIDAD' THEN 'PAT'  		
 		WHEN d.tipo='INCIDENCIA_F' THEN 'FLT' WHEN d.tipo='ASISTENCIA' THEN 'AST' ELSE 'NDT' END))
 		END AS tipoReg
-,a.horas_trabajadas,d.horas_trabajadas as hrsTrab
+,a.horas_trabajadas,(case when d.horas_trabajadas>5 then d.horas_trabajadas-1 else d.horas_trabajadas end) as hrsTrab
 ,ifnull(((TIME_TO_SEC((CASE WHEN D.SALIDA2 IS NULL THEN SEC_TO_TIME((TIME_TO_SEC(d.salida1)-TIME_TO_SEC(d.entrada1))) ELSE SEC_TO_TIME((TIME_TO_SEC(d.salida2)-TIME_TO_SEC(d.entrada1))) END)))/60)/60,0) AS hrsTrabReal
 ,d.retardo_menor as retMn,d.retardo_mayor as retMy,d.retardo_comida as retCm
 ,A.dias_trabajados,(case when d.manual is true then '*' else '' end) as manual
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
 FROM EMPLEADO E JOIN perfil_de_empleado P ON(E.ID=P.empleado_id) JOIN asistencia A ON(A.empleado_id=E.ID) JOIN asistencia_det D ON(A.ID=D.asistencia_id)
 JOIN calendario_det C ON(C.id=A.calendario_det_id)
 LEFT JOIN baja_de_empleado B ON(B.EMPLEADO_ID=E.ID)
@@ -89,6 +90,7 @@ and d.fecha<= (case when B.id IS not NULL AND b.fecha>e.alta and b.fecha<=d.fech
 	<field name="retCm" class="java.lang.Integer"/>
 	<field name="dias_trabajados" class="java.math.BigDecimal"/>
 	<field name="manual" class="java.lang.String"/>
+	<field name="EMPRESA" class="java.lang.String"/>
 
 	<sortField name="ubicacion" />
 	<sortField name="clave" />
@@ -128,23 +130,6 @@ and d.fecha<= (case when B.id IS not NULL AND b.fecha>e.alta and b.fecha<=d.fech
 					</textElement>
 				<text><![CDATA[CONTROL DE ASISTENCIA POR EMPLEADO ( RH )]]></text>
 				</staticText>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="264"
-						y="1"
-						width="313"
-						height="22"
-						key="textField-1"/>
-					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-</box>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="Helvetica-Bold" size="15" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{COMPANY}]]></textFieldExpression>
-				</textField>
 				<staticText>
 					<reportElement
 						mode="Opaque"
@@ -334,7 +319,7 @@ and d.fecha<= (case when B.id IS not NULL AND b.fecha>e.alta and b.fecha<=d.fech
 					<reportElement
 						x="75"
 						y="74"
-						width="42"
+						width="52"
 						height="11"
 						key="textField-51"/>
 					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -350,7 +335,7 @@ and d.fecha<= (case when B.id IS not NULL AND b.fecha>e.alta and b.fecha<=d.fech
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="117"
+						x="127"
 						y="74"
 						width="10"
 						height="11"
@@ -369,7 +354,7 @@ and d.fecha<= (case when B.id IS not NULL AND b.fecha>e.alta and b.fecha<=d.fech
 				</staticText>
 				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="127"
+						x="137"
 						y="74"
 						width="16"
 						height="11"
@@ -526,7 +511,7 @@ and d.fecha<= (case when B.id IS not NULL AND b.fecha>e.alta and b.fecha<=d.fech
 						mode="Opaque"
 						x="439"
 						y="98"
-						width="32"
+						width="36"
 						height="11"
 						key="staticText-51"/>
 					<box>					<pen lineWidth="0.0" lineStyle="Solid" lineColor="#CCCCCC"/>
@@ -621,7 +606,7 @@ and d.fecha<= (case when B.id IS not NULL AND b.fecha>e.alta and b.fecha<=d.fech
 						mode="Opaque"
 						x="439"
 						y="87"
-						width="32"
+						width="36"
 						height="11"
 						key="staticText-67"/>
 					<box>					<pen lineWidth="0.0" lineStyle="Solid" lineColor="#CCCCCC"/>
@@ -638,9 +623,9 @@ and d.fecha<= (case when B.id IS not NULL AND b.fecha>e.alta and b.fecha<=d.fech
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="471"
+						x="475"
 						y="87"
-						width="111"
+						width="107"
 						height="22"
 						key="staticText-70"/>
 					<box>					<pen lineWidth="0.0" lineStyle="Solid" lineColor="#CCCCCC"/>
@@ -730,6 +715,19 @@ and d.fecha<= (case when B.id IS not NULL AND b.fecha>e.alta and b.fecha<=d.fech
 					</textElement>
 				<text><![CDATA[ENTRADA]]></text>
 				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="264"
+						y="0"
+						width="313"
+						height="22"
+						key="textField"/>
+					<box></box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font pdfFontName="Helvetica-Bold" size="15" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{EMPRESA}]]></textFieldExpression>
+				</textField>
 			</band>
 			</groupHeader>
 			<groupFooter>
@@ -758,9 +756,9 @@ and d.fecha<= (case when B.id IS not NULL AND b.fecha>e.alta and b.fecha<=d.fech
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="471"
+						x="475"
 						y="1"
-						width="111"
+						width="107"
 						height="18"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
@@ -776,24 +774,6 @@ and d.fecha<= (case when B.id IS not NULL AND b.fecha>e.alta and b.fecha<=d.fech
 					</textElement>
 				<text><![CDATA[]]></text>
 				</staticText>
-				<textField isStretchWithOverflow="false" pattern="##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="439"
-						y="1"
-						width="32"
-						height="18"
-						key="textField-39"/>
-					<box>					<pen lineWidth="0.0" lineColor="#333333"/>
-					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
-					<leftPen lineWidth="0.25" lineColor="#CCCCCC"/>
-					<bottomPen lineWidth="2.0" lineColor="#CCCCCC"/>
-					<rightPen lineWidth="0.25" lineColor="#CCCCCC"/>
-</box>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{HRS_TRAB}]]></textFieldExpression>
-				</textField>
 				<staticText>
 					<reportElement
 						mode="Opaque"
@@ -928,6 +908,71 @@ and d.fecha<= (case when B.id IS not NULL AND b.fecha>e.alta and b.fecha<=d.fech
 						<font pdfFontName="Helvetica-Bold" size="8" isBold="true" isUnderline="true"/>
 					</textElement>
 				<textFieldExpression   class="java.util.Date"><![CDATA[$F{periodo_fecha_final}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="457"
+						y="1"
+						width="4"
+						height="18"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="staticText-80"/>
+					<box>					<pen lineWidth="0.0" lineColor="#333333"/>
+					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="2.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Arial" pdfFontName="Helvetica-BoldOblique" size="8" isBold="true" isItalic="true" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<text><![CDATA[:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="461"
+						y="1"
+						width="14"
+						height="18"
+						key="textField-55"/>
+					<box>					<pen lineWidth="0.0" lineColor="#333333"/>
+					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="2.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.25" lineColor="#CCCCCC"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[new Double(
+(
+$V{HRS_TRAB}.doubleValue()
+-
+Math.floor($V{HRS_TRAB}.doubleValue())
+)*60
+)]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="439"
+						y="1"
+						width="18"
+						height="18"
+						key="textField-56"/>
+					<box>					<pen lineWidth="0.0" lineColor="#333333"/>
+					<topPen lineWidth="1.0" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.25" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="2.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[new Double(
+Math.floor($V{HRS_TRAB}.doubleValue())
+)]]></textFieldExpression>
 				</textField>
 			</band>
 			</groupFooter>
@@ -1118,27 +1163,6 @@ and d.fecha<= (case when B.id IS not NULL AND b.fecha>e.alta and b.fecha<=d.fech
 					</textElement>
 				<textFieldExpression   class="java.sql.Time"><![CDATA[$F{entrada3}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" pattern="##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="439"
-						y="1"
-						width="32"
-						height="9"
-						key="textField-34">
-							<printWhenExpression><![CDATA[new Boolean( 
-!$F{tipoReg}.equals( "" )
-)]]></printWhenExpression>
-						</reportElement>
-					<box>					<topPen lineWidth="0.25" lineColor="#CCCCCC"/>
-					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
-					<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
-					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
-</box>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="Helvetica" size="7" isBold="false"/>
-					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{hrsTrab}]]></textFieldExpression>
-				</textField>
 				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="412"
@@ -1176,6 +1200,28 @@ and d.fecha<= (case when B.id IS not NULL AND b.fecha>e.alta and b.fecha<=d.fech
 						<font size="7"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{manual}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="439"
+						y="1"
+						width="32"
+						height="9"
+						key="textField-54">
+							<printWhenExpression><![CDATA[new Boolean( 
+!$F{tipoReg}.equals( "" )
+)]]></printWhenExpression>
+						</reportElement>
+					<box>					<topPen lineWidth="0.25" lineColor="#CCCCCC"/>
+					<leftPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<bottomPen lineWidth="0.0" lineColor="#CCCCCC"/>
+					<rightPen lineWidth="0.0" lineColor="#CCCCCC"/>
+</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font pdfFontName="Helvetica" size="7" isBold="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{hrsTrab}.doubleValue() > 5 ? "08:30" :
+$F{hrsTrab}.doubleValue() == 5 ? "05:00" : ""]]></textFieldExpression>
 				</textField>
 			</band>
 		</detail>

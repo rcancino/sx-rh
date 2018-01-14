@@ -119,7 +119,6 @@ GROUP BY A.CONCEPTO,A.CLAVE,A.DESCRIPCION,A.CLAVE_SAT]]></queryString>
 	<field name="EMPLEADOS" class="java.lang.Long"/>
 
 	<sortField name="CONCEPTO" order="Descending" />
-	<sortField name="CLAVE" />
 
 	<variable name="TOTAL_GRUPO_EXENTO" class="java.math.BigDecimal" resetType="Group" resetGroup="GRUPO1" calculation="Sum">
 		<variableExpression><![CDATA[$F{TOT_EXT}]]></variableExpression>

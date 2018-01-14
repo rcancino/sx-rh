@@ -41,6 +41,7 @@
 		when c.tope_smg<>c.sdi_nvo or c.sdi_anterior<>c.sdi_nvo then 'C'
 	else 'X' end) as clasif
 ,(case when c.status='APLICADO' then 0 else 1 end) as aplicado
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
 FROM calculo_Sdi c 
 join empleado e on (e.id= c.empleado_id )
 join modificacion_salarial m on(m.calculo_sdi_id=c.id)
@@ -55,12 +56,15 @@ where m.fecha=$P{INICIA}  and m.tipo='AUMENTO']]></queryString>
 	<field name="version" class="java.lang.Long"/>
 	<field name="agndo_dias" class="java.lang.Integer"/>
 	<field name="bimestre" class="java.lang.Integer"/>
+	<field name="bono" class="java.math.BigDecimal"/>
+	<field name="bono_por_antiguedad" class="java.math.BigDecimal"/>
 	<field name="bono_por_desemp" class="java.math.BigDecimal"/>
 	<field name="comisiones" class="java.math.BigDecimal"/>
 	<field name="compensacion" class="java.math.BigDecimal"/>
 	<field name="dias" class="java.math.BigDecimal"/>
 	<field name="dias_bim" class="java.math.BigDecimal"/>
 	<field name="dias_lab_bim" class="java.math.BigDecimal"/>
+	<field name="dias_prima_dominical" class="java.math.BigDecimal"/>
 	<field name="ejercicio" class="java.lang.Integer"/>
 	<field name="empleado_id" class="java.lang.Long"/>
 	<field name="factor" class="java.math.BigDecimal"/>
@@ -73,6 +77,7 @@ where m.fecha=$P{INICIA}  and m.tipo='AUMENTO']]></queryString>
 	<field name="incentivo" class="java.math.BigDecimal"/>
 	<field name="prima_dom" class="java.math.BigDecimal"/>
 	<field name="sdb" class="java.math.BigDecimal"/>
+	<field name="sdb_anterior" class="java.math.BigDecimal"/>
 	<field name="sdi_anterior" class="java.math.BigDecimal"/>
 	<field name="sdi_calc" class="java.math.BigDecimal"/>
 	<field name="sdif" class="java.math.BigDecimal"/>
@@ -88,13 +93,11 @@ where m.fecha=$P{INICIA}  and m.tipo='AUMENTO']]></queryString>
 	<field name="var_dia" class="java.math.BigDecimal"/>
 	<field name="variable" class="java.math.BigDecimal"/>
 	<field name="years" class="java.math.BigDecimal"/>
-	<field name="sdb_anterior" class="java.math.BigDecimal"/>
-	<field name="bono" class="java.math.BigDecimal"/>
-	<field name="bono_por_antiguedad" class="java.math.BigDecimal"/>
 	<field name="ubicacion" class="java.lang.String"/>
 	<field name="periodicidad" class="java.lang.String"/>
 	<field name="clasif" class="java.lang.String"/>
 	<field name="aplicado" class="java.lang.Long"/>
+	<field name="EMPRESA" class="java.lang.String"/>
 
 	<sortField name="ubicacion" />
 	<sortField name="EMP" />
@@ -148,19 +151,6 @@ where m.fecha=$P{INICIA}  and m.tipo='AUMENTO']]></queryString>
 			<band height="42"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="570"
-						y="0"
-						width="187"
-						height="15"
-						key="textField-1"/>
-					<box></box>
-					<textElement textAlignment="Right">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{COMPANY}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
 						x="506"
 						y="12"
 						width="252"
@@ -206,6 +196,19 @@ where m.fecha=$P{INICIA}  and m.tipo='AUMENTO']]></queryString>
 						<font fontName="Arial" pdfFontName="Helvetica-Oblique" size="8" isBold="false" isItalic="true" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
 				<textFieldExpression   class="java.util.Date"><![CDATA[$P{INICIA}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="569"
+						y="0"
+						width="187"
+						height="15"
+						key="textField"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{EMPRESA}]]></textFieldExpression>
 				</textField>
 			</band>
 		</pageHeader>

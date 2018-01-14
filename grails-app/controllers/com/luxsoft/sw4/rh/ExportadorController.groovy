@@ -94,7 +94,7 @@ class ExportadorController {
 			def blanco=StringUtils.leftPad("",20)
 
 			registroGlobal=tipoReg+tipoOp+claveMoneda+importeCargo+tipoCta+claveSuc+numCta+blanco
-			append(registroGlobal+"\n")
+			append(registroGlobal+"\r\n")
 
 			def numAbonos=0
 			n.partidas.sort{it.empleado.apellidoPaterno}.each{
@@ -170,7 +170,7 @@ class ExportadorController {
 				def ultimo="0000000000"
 
 				registroIndividual=tipoRegInd+tipoOpInd+claveMoneda+importeAbono+tipoCtaInd+claveSucInd+numCtaInd+referencia+beneficiario+blanco1+blanco2+ultimo
-				append(registroIndividual+"\n")
+				append(registroIndividual+"\r\n")
 				numAbonos=numAbonos+1
 			}
 
@@ -182,7 +182,7 @@ class ExportadorController {
 			def numCargos="000001"
 
 			registroTotales=tipoRegTotal+claveMoneda+abonos+importeCargo+numCargos+importeCargo
-			append(registroTotales+"\n")
+			append(registroTotales+"\r\n")
 
 
 			println absolutePath
@@ -1120,11 +1120,11 @@ temp.with {
      		becasExc=0
      		pagosOtrosGra=0
      		pagosOtrosExc=0
-     		OtrosIngreGra=(calculo.incentivo+calculo.bonoDeProductividad+calculo.bonoPorDesempeno+calculo.compensacion+calculo.bono+calculo.bonoAntiguedad+calculo.gratificacion).setScale(0, RoundingMode.HALF_EVEN)
+     		OtrosIngreGra=(calculo.incentivo+calculo.bonoDeProductividad+calculo.bonoPorDesempeno+calculo.compensacion+calculo.bono+calculo.bonoAntiguedad+calculo.gratificacion+calculo.bonoPuntualidadAsist+calculo.diaDescanso).setScale(0, RoundingMode.HALF_EVEN)
     		otrosIngreExc=0
 
     		if(session.empresa.rfc=='OAG100209GN8'){     		
-    			OtrosIngreGra=(calculo.incentivo+calculo.bonoDeProductividad+calculo.bonoPorDesempeno+calculo.compensacion+calculo.bono+calculo.bonoAntiguedad+calculo.gratificacion + calculo.ptuGravada).setScale(0, RoundingMode.HALF_EVEN)
+    			OtrosIngreGra=(calculo.incentivo+calculo.bonoDeProductividad+calculo.bonoPorDesempeno+calculo.compensacion+calculo.bono+calculo.bonoAntiguedad+calculo.gratificacion + calculo.ptuGravada+calculo.bonoPuntualidadAsist+calculo.diaDescanso).setScale(0, RoundingMode.HALF_EVEN)
     			otrosIngreExc=calculo.ptuExenta.setScale(0, RoundingMode.HALF_EVEN)
     			ptuGra=0
      			ptuExc=0

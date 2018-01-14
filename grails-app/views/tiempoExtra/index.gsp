@@ -24,6 +24,8 @@
 			<span class="glyphicon glyphicon-cog"></span> Actualizar
 		</a>
 	</li>
+	<g:render template="actualizarDialog"/>
+
 </content>
 
 <content tag="gridPanel">
@@ -32,4 +34,4 @@
 
 
 </body>
-</html>
+</html>  

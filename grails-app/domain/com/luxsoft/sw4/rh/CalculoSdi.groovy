@@ -64,6 +64,7 @@ class CalculoSdi {
 	BigDecimal comisiones=0.0
 	BigDecimal primaDom=0.0
 	BigDecimal vacacionesP=0.0
+	BigDecimal diaDescanso=0.0
 	
 	BigDecimal variable=0.0
 	BigDecimal varDia=0.0
@@ -72,6 +73,8 @@ class CalculoSdi {
 	BigDecimal sdiInf=0.0
 	BigDecimal sdbAnterior=0.0
 	BigDecimal diasPrimaDominical=0.0
+
+
 	
 	String tipo
 	

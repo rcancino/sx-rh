@@ -39,6 +39,7 @@
 	<queryString><![CDATA[SELECT E.ID,U.CLAVE AS ubicacion,concat(ifnull(e.apellido_paterno,''),' ',ifnull(e.apellido_materno,''),' ',ifnull(e.nombres,'')) AS nombre,E.CLAVE AS EMP,P.numero_de_trabajador
 ,ND.importe_gravado,ND.importe_excento,ND.importe_gravado+ND.importe_excento AS TOTAL
 ,C.ID AS ID_CON,C.CLAVE AS CLAVE_CON,C.CLASE,C.DESCRIPCION,C.CLAVE_SAT,C.TIPO,N.periodo_fecha_inicial,n.FOLIO
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
 FROM nomina N JOIN nomina_por_empleado NE ON (NE.nomina_id=N.ID) JOIN nomina_por_empleado_det ND ON (ND.parent_id=NE.ID) JOIN calendario_det D ON (D.ID=N.calendario_det_id) JOIN calendario L ON (L.ID=D.calendario_id)
 JOIN empleado E ON (NE.empleado_id=E.ID)JOIN perfil_de_empleado P ON (P.empleado_id=E.ID) JOIN ubicacion U ON  (P.ubicacion_id=U.ID)
 JOIN concepto_de_nomina C ON (C.ID=ND.concepto_id)
@@ -61,6 +62,7 @@ ORDER BY U.CLAVE,E.ID]]></queryString>
 	<field name="TIPO" class="java.lang.String"/>
 	<field name="periodo_fecha_inicial" class="java.sql.Timestamp"/>
 	<field name="FOLIO" class="java.lang.Integer"/>
+	<field name="EMPRESA" class="java.lang.String"/>
 
 	<variable name="TOTAL_EXC_SUC" class="java.math.BigDecimal" resetType="Group" resetGroup="UBICACION" calculation="Sum">
 		<variableExpression><![CDATA[$F{importe_excento}]]></variableExpression>
@@ -294,19 +296,6 @@ ORDER BY U.CLAVE,E.ID]]></queryString>
 			<band height="74"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="364"
-						y="0"
-						width="187"
-						height="15"
-						key="textField-1"/>
-					<box></box>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{COMPANY}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
 						x="300"
 						y="12"
 						width="252"
@@ -527,6 +516,19 @@ ORDER BY U.CLAVE,E.ID]]></queryString>
 					</textElement>
 				<text><![CDATA[ID :]]></text>
 				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="365"
+						y="0"
+						width="187"
+						height="15"
+						key="textField"/>
+					<box></box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{EMPRESA}]]></textFieldExpression>
+				</textField>
 			</band>
 		</pageHeader>
 		<columnHeader>

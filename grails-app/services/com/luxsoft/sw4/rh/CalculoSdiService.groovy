@@ -99,12 +99,13 @@ class CalculoSdiService {
 			found.comisiones=0.0
 			found.primaDom=0.0
 			found.vacacionesP=0.0
+			found.diaDescanso=0.0
 		
 			actualizarVariables(found)
 
 			registrarTiempoExtraDoble(found)
 			found.with{
-				variable=compensacion+incentivo+bonoPorDesemp+bono+bonoPorAntiguedad+hrsExtrasDobles+hrsExtrasTriples+comisiones+primaDom+vacacionesP
+				variable=compensacion+incentivo+bonoPorDesemp+bono+bonoPorAntiguedad+hrsExtrasDobles+hrsExtrasTriples+comisiones+primaDom+vacacionesP+diaDescanso
 			}
 
 			if(found.diasLabBim)
@@ -158,7 +159,7 @@ class CalculoSdiService {
     private actualizarVariables(CalculoSdi sdi){
     	
     	def partidas=NominaPorEmpleadoDet
-    	.findAll("from NominaPorEmpleadoDet d where d.parent.empleado=? and d.concepto.id in(19,22,24,41,42,44,49,50,43) and d.parent.nomina.ejercicio=? and d.parent.nomina.calendarioDet.bimestre=?"
+    	.findAll("from NominaPorEmpleadoDet d where d.parent.empleado=? and d.concepto.id in(19,22,24,41,42,44,49,50,43,53) and d.parent.nomina.ejercicio=? and d.parent.nomina.calendarioDet.bimestre=?"
     			 ,[sdi.empleado,sdi.ejercicio,sdi.bimestre])
     		
     	sdi.compensacion=0.0
@@ -169,6 +170,7 @@ class CalculoSdiService {
     	sdi.comisiones=0.0
     	sdi.primaDom=0.0
     	sdi.vacacionesP=0.0
+    	sdi.diaDescanso=0.0
 
     	Empresa emp=Empresa.first()
     
@@ -202,6 +204,9 @@ class CalculoSdiService {
     				break
     			case 44:
     				sdi.vacacionesP+=it.importeGravado+it.importeExcento
+    				break
+    			case 53:
+    				sdi.diaDescanso+=it.importeGravado+it.importeExcento
     				break
     		}
     	}

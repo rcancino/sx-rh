@@ -12,7 +12,7 @@ import groovy.sql.Sql
 class RevisionAguinaldoExport {
 	
 
-	String query="""select e.id,e.clave,CONCAT(IFNULL(e.apellido_paterno,''),' ',e.apellido_materno,' ',e.nombres) as nombre,p.numero_de_trabajador,s.periodicidad,x.descripcion as puesto,u.descripcion as ubicacion,e.alta,e.status ,b.fecha as f_baja	
+	String query="""select e.id,e.clave,CONCAT(IFNULL(e.apellido_paterno,''),' ',e.apellido_materno,' ',e.nombres) as nombre,p.numero_de_trabajador,s.periodicidad,x.clave as puesto,u.descripcion as ubicacion,e.alta,e.status ,b.fecha as f_baja	
 		,ROUND((-(TIMESTAMPDIFF(MINUTE,DATE(( CASE WHEN B.FECHA<a.fecha_final AND B.FECHA>e.ALTA THEN B.FECHA ELSE a.fecha_final END )),e.ALTA)/60)/24)/365,2)  AS years		
 		,ROUND(-(TIMESTAMPDIFF(MINUTE,DATE(( CASE WHEN B.FECHA<a.fecha_final  AND B.FECHA>e.ALTA THEN B.FECHA ELSE a.fecha_final END )),e.ALTA)/60)/24,0)  AS dias	
 		,a.id,a.ejercicio,a.fecha_inicial,a.fecha_final,a.salario,a.faltas,a.incapacidades,a.incapacidadesmat,a.incapacidadesrte,a.incapacidadesrtt,a.permiso_especial	

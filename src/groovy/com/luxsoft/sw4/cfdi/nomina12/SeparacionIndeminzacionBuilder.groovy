@@ -41,15 +41,17 @@ class SeparacionIndeminzacionBuilder {
 			Finiquito finiquito = Finiquito.where {neLiquidacion == nominaEmpleado}.find()
 			assert finiquito, 'No se ha registrado la enitdad Finiquito para la nomina de empleado:' + nominaEmpleado.id 
 			def ingresoGravadoPorIndeminacion = nominaEmpleado.getPercepcionesGravadas()
-			def ultimoSueldoMensualOrdinario = ingresoGravadoPorIndeminacion<= 0.0 ? 0.0: finiquito.sueldo
+			//def ultimoSueldoMensualOrdinario = ingresoGravadoPorIndeminacion<= 0.0 ? 0.0: finiquito.sueldo
+			def ultimoSueldoMensualOrdinario = nominaEmpleado.empleado.salario.salarioDiario * 30
 
 			def ingresoAcumulable = ingresoGravadoPorIndeminacion > ultimoSueldoMensualOrdinario ? ultimoSueldoMensualOrdinario : ingresoGravadoPorIndeminacion
 			def ingresoNoAcumulable = ingresoGravadoPorIndeminacion - ultimoSueldoMensualOrdinario
+			if(ingresoNoAcumulable < 0 ) ingresoNoAcumulable = 0.0
 
 			
 			
 			SeparacionIndemnizacion separacion = nomina.percepciones.addNewSeparacionIndemnizacion()
-			separacion.setUltimoSueldoMensOrd(finiquito.sueldo)
+			separacion.setUltimoSueldoMensOrd(ultimoSueldoMensualOrdinario)
         	separacion.setIngresoAcumulable(ingresoAcumulable)
         	separacion.setIngresoNoAcumulable(ingresoNoAcumulable )
         	separacion.setNumAñosServicio(finiquito.anosTrabajados)

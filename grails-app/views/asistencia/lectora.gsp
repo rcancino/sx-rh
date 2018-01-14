@@ -28,6 +28,22 @@
 	     		onclick="return confirm('Eliminar registros de checado del periodo ' );">
 	     			<span class="glyphicon glyphicon-trash"></span> Eliminar
 	     		</g:link>
+					
+			<div class="btn-group">
+				<button type="button" name="reportes"
+					class="btn btn-outline btn-default dropdown-toggle" data-toggle="dropdown"
+					role="menu">
+					Reportes <span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu">
+					
+							
+				</ul>
+				
+			</div>
+
+
+
 		    </div>	
 	    </div>
 	</div>

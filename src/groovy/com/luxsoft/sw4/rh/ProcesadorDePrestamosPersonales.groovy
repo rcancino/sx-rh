@@ -74,8 +74,12 @@ class ProcesadorDePrestamosPersonales {
 				def percepciones = getPercepciones(ne)
 				def deducciones = getRetencionesPrecedentesFiniquito(ne)
 				def saldo = prestamo.saldo
-				def disponible = percepciones - deducciones 
+				def retFiniquito = getRetencionesEnFiniquito(ne)
+				def disponible = percepciones - deducciones - retFiniquito
 				def otrasDeducciones=ne.conceptos.find {it.concepto.clave=="D005"}
+
+				
+				
 				
 				if(otrasDeducciones) {
 					disponible -= otrasDeducciones.getTotal()
@@ -178,6 +182,22 @@ class ProcesadorDePrestamosPersonales {
 		}
 		return importe
 	}
+
+	private BigDecimal getRetencionesEnFiniquito(NominaPorEmpleado ne){
+		def finiquito = Finiquito.where {neFiniquito == ne }.find()
+		if(finiquito){
+			def retenciones = finiquito.partidas.findAll {it.manual && it.tipo=='DEDUCCION'}	
+			def result = retenciones.sum 0, {it.importeExcento}
+			return result
+		} else {
+			finiquito = Finiquito.where {neLiquidacion == ne }.find()
+			def retenciones = finiquito.partidas.findAll {it.manual && it.tipo=='DEDUCCION'}	
+			def result = retenciones.sum 0, {it.importeExcento}
+			return result
+		}
+			
+	}
+
 
 	private BigDecimal getAbonoPorFiniquito(NominaPorEmpleado ne) {
 		def finiquito = Finiquito.where {neLiquidacion == ne }.find()

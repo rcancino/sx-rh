@@ -176,17 +176,28 @@
   	<div class="row">
   		<div class="col-md-12">
   				<ul class="nav nav-tabs" role="tablist">
-  				  <li class="${tipo=='SEMANA'?'active':''}">
-  				  	<a href="#andrade" role="tab" data-toggle="tab">Andrade</a>
-  				  </li>
-  				  <li><a href="#bolivar" role="tab" data-toggle="tab">Bolivar</a></li>
-  				  <li><a href="#calle4" role="tab" data-toggle="tab">Calle 4</a></li>
-  				  <li><a href="#cf5febrero" role="tab" data-toggle="tab">5 de Febrero</a></li>
-  				  <li><a href="#tacuba" role="tab" data-toggle="tab">Tacuba</a></li>
-  				  <li class="${tipo=='QUINCENA'?'active':''}">
-  				  	<a href="#oficinas" role="tab" data-toggle="tab">Oficinas</a>
-  				  </li>
-  				  <li><a href="#ventas" role="tab" data-toggle="tab">Ventas</a></li>
+  				
+  				  <g:if test="${session.empresa.rfc == 'PAP830101CR3' || session.empresa.rfc == 'OAG100209GN8'}">
+	     			  <li class="${tipo=='SEMANA'?'active':''}">
+	  				  	<a href="#andrade" role="tab" data-toggle="tab">Andrade</a>
+	  				  </li>
+	  				  <li><a href="#bolivar" role="tab" data-toggle="tab">Bolivar</a></li>
+	  				  <li><a href="#calle4" role="tab" data-toggle="tab">Calle 4</a></li>
+	  				  <li><a href="#cf5febrero" role="tab" data-toggle="tab">5 de Febrero</a></li>
+	  				  <li><a href="#tacuba" role="tab" data-toggle="tab">Tacuba</a></li>
+	  				  
+	  				  <li><a href="#ventas" role="tab" data-toggle="tab">Ventas</a></li>
+				</g:if>
+				<g:if test="${session.empresa.rfc == 'PBA0511077F9' || session.empresa.rfc == 'PAP830101CR3'  || session.empresa.rfc == 'OAG100209GN8'  }">
+					<li class="${tipo=='QUINCENA'?'active':''}">
+	  				  	<a href="#oficinas" role="tab" data-toggle="tab">Oficinas</a>
+	  				  </li>
+				</g:if>
+			    <g:if test="${session.empresa.rfc == 'PBA0511077F9'}">
+					<li><a href="#leon" role="tab" data-toggle="tab">Leon</a></li>
+			  		<li><a href="#queretaro" role="tab" data-toggle="tab">Queretaro</a></li>
+				</g:if>
+  				  
   				</ul>
 
   				<div class="tab-content">
@@ -210,6 +221,12 @@
   			  		</div>
   			  		<div class="tab-pane" id="ventas">
   			  			<g:render template="asistenciaGridPanel" model="['partidasList':partidasMap['VENTAS']]"/>
+  			  		</div>
+  			  		<div class="tab-pane" id="leon">
+  			  			<g:render template="asistenciaGridPanel" model="['partidasList':partidasMap['LEON']]"/>
+  			  		</div>
+  			  		<div class="tab-pane" id="queretaro">
+  			  			<g:render template="asistenciaGridPanel" model="['partidasList':partidasMap['QUERETARO']]"/>
   			  		</div>
   				</div>
   		</div>

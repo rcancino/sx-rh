@@ -36,6 +36,7 @@
 ,(SELECT U.descripcion FROM departamento U WHERE U.ID=P.departamento_id) AS depto
 ,sum(d.retardo_menor) as retardo_menor,sum(case when d.retardo_menor>0 then 1 else 0 end) as regs_ret_min
 ,sum(d.retardo_menor_comida) as ret_men_com,sum(case when d.retardo_Menor_comida>0 then 1 else 0 end) as regs_ret_men_com
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
 FROM EMPLEADO E 
 JOIN perfil_de_empleado P ON(E.ID=P.empleado_id)
 JOIN asistencia A ON(A.empleado_id=E.ID)
@@ -55,6 +56,7 @@ group by E.id,E.clave having sum(d.retardo_menor+d.retardo_menor_comida)>10]]></
 	<field name="regs_ret_min" class="java.math.BigDecimal"/>
 	<field name="ret_men_com" class="java.math.BigDecimal"/>
 	<field name="regs_ret_men_com" class="java.math.BigDecimal"/>
+	<field name="EMPRESA" class="java.lang.String"/>
 
 	<sortField name="tipoPrdo" />
 	<sortField name="ubicacion" />
@@ -82,23 +84,6 @@ group by E.id,E.clave having sum(d.retardo_menor+d.retardo_menor_comida)>10]]></
 					</textElement>
 				<text><![CDATA[CONTROL DE MINUTOS ACUMULADOS POR RETARDO A PAGAR (RH)]]></text>
 				</staticText>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="264"
-						y="1"
-						width="313"
-						height="22"
-						key="textField-1"/>
-					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-</box>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="Helvetica-Bold" size="15" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{COMPANY}]]></textFieldExpression>
-				</textField>
 				<staticText>
 					<reportElement
 						mode="Opaque"
@@ -686,6 +671,19 @@ group by E.id,E.clave having sum(d.retardo_menor+d.retardo_menor_comida)>10]]></
 					</textElement>
 				<text><![CDATA[TOTAL MINUTOS]]></text>
 				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="264"
+						y="3"
+						width="313"
+						height="22"
+						key="textField"/>
+					<box></box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font pdfFontName="Helvetica-Bold" size="15" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{EMPRESA}]]></textFieldExpression>
+				</textField>
 			</band>
 			</groupHeader>
 			<groupFooter>

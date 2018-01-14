@@ -87,6 +87,14 @@
 									
 								</g:jasperReport>
 							</li>
+							<li><g:jasperReport jasper="BitacoraChecado"
+									format="PDF" name="BitacoraChecado">
+									<g:hiddenField name="EMPLEADO_ID" value="${asistenciaInstance.empleado.id}" />
+									<g:hiddenField name="CALENDARIODET" 
+										value="${asistenciaInstance.calendarioDet.id}" />
+									
+								</g:jasperReport>
+							</li>
 							<li>
 							
 								<a  data-toggle="modal" data-target="#calendarioForm"> Mensual X Empleado</a>

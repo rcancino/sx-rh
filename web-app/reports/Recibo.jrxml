@@ -95,7 +95,7 @@
 					<reportElement
 						x="178"
 						y="0"
-						width="228"
+						width="220"
 						height="12"
 						key="textField-133"/>
 					<box></box>
@@ -106,9 +106,9 @@
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="406"
+						x="398"
 						y="12"
-						width="168"
+						width="176"
 						height="12"
 						key="textField-134"/>
 					<box></box>
@@ -121,7 +121,7 @@
 					<reportElement
 						x="178"
 						y="12"
-						width="228"
+						width="220"
 						height="12"
 						key="textField-135"/>
 					<box></box>
@@ -132,9 +132,9 @@
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="406"
+						x="398"
 						y="0"
-						width="84"
+						width="92"
 						height="12"
 						key="textField-136"/>
 					<box></box>
@@ -197,7 +197,7 @@
 					<reportElement
 						x="81"
 						y="102"
-						width="325"
+						width="317"
 						height="14"
 						key="staticText-151"/>
 					<box>					<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#CCCCCC"/>
@@ -225,9 +225,9 @@
 				</staticText>
 				<staticText>
 					<reportElement
-						x="406"
+						x="398"
 						y="102"
-						width="84"
+						width="92"
 						height="14"
 						key="staticText-153"/>
 					<box>					<leftPen lineWidth="0.25" lineStyle="Solid" lineColor="#CCCCCC"/>
@@ -650,7 +650,7 @@
 					<rightPen lineWidth="0.5"/>
 </box>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font fontName="SansSerif" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+						<font fontName="SansSerif" pdfFontName="Helvetica-Bold" size="7" isBold="true" isItalic="false" isUnderline="false"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$P{PUESTO}]]></textFieldExpression>
 				</textField>
@@ -791,7 +791,7 @@
 					<reportElement
 						x="81"
 						y="1"
-						width="325"
+						width="317"
 						height="10"
 						key="textField-87"/>
 					<box></box>
@@ -802,9 +802,9 @@
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="406"
+						x="398"
 						y="1"
-						width="84"
+						width="92"
 						height="10"
 						key="textField-88"/>
 					<box></box>
@@ -843,9 +843,9 @@
 			<band height="78"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="406"
+						x="398"
 						y="1"
-						width="168"
+						width="176"
 						height="15"
 						key="textField-26"/>
 					<box></box>
@@ -856,7 +856,7 @@
 				</textField>
 				<staticText>
 					<reportElement
-						x="325"
+						x="317"
 						y="1"
 						width="81"
 						height="15"
@@ -913,7 +913,7 @@
 				</staticText>
 				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="279"
+						x="271"
 						y="1"
 						width="46"
 						height="15"
@@ -926,7 +926,7 @@
 				</textField>
 				<staticText>
 					<reportElement
-						x="161"
+						x="153"
 						y="1"
 						width="118"
 						height="15"

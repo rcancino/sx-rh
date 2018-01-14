@@ -9,7 +9,8 @@ class IncapacidadesBuilder {
 	def build(Nomina nomina, NominaPorEmpleado nominaEmpleado){
 		
 		// Percepcion por subsidio en incapacidad....
-		def percepcionIncapacidad = nominaEmpleado.conceptos.find{it.concepto.claveSat.toString().padLeft(3,'0') == '014'}
+		def percepcionIncapacidad = nominaEmpleado.conceptos
+			.find{it.concepto.claveSat.toString().padLeft(3,'0') == '014'}
 		
 		
 		

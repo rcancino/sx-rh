@@ -30,7 +30,7 @@
 	<parameter name="ID" isForPrompting="true" class="java.lang.String"/>
 	<queryString><![CDATA[SELECT f.id,(SELECT MAX(x.nombre) FROM empresa x) as empresa,CONCAT(ifnull(E.apellido_paterno,'')," ",ifnull(E.apellido_materno,'')," ",E.nombres) AS nombre
 ,e.alta,date(f.date_created) as creado,date(f.last_updated) as ult_modif,(SELECT b.fecha FROM baja_de_empleado b where b.empleado_id=e.id) as baja,(SELECT U.descripcion FROM ubicacion U WHERE p.ubicacion_id=u.id) AS ubicacion
-,(SELECT U.descripcion FROM departamento U WHERE p.departamento_id=u.id) AS departamento,(SELECT U.descripcion FROM puesto U WHERE p.puesto_id=u.id) AS puesto
+,(SELECT U.descripcion FROM departamento U WHERE p.departamento_id=u.id) AS departamento,(SELECT U.clave FROM puesto U WHERE p.puesto_id=u.id) AS puesto
 ,f.anos_trabajados,f.antiguedad,f.dias_del_ejercicio,f.dias_para_aguinaldo,f.dias_aguinaldo
 ,f.vacaciones_anteriores,f.vacaciones_ejercicio,f.vacaciones_aplicadas
 ,(f.dias_trabajado_para_vacaciones*f.vacaciones_ejercicio/f.dias_del_ejercicio)+f.vacaciones_anteriores-f.vacaciones_aplicadas as vacs_finiquito

@@ -214,9 +214,11 @@ class NominaPorEmpleadoService {
 				if(d2.total>0)
 					ne.addToConceptos(d2)
 		}
+		
 		procesadorDeNominaLiquidacion.reglas.each {
 			it.procesar(ne)
 		}
+
 		ne.save failOnError:true, flush:true
 		return ne
 	}

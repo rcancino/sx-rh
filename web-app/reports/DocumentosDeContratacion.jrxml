@@ -37,6 +37,7 @@
 ,(SELECT U.telefono1 FROM empleado_contacto U WHERE u.empleado_id=e.ID) AS contacto_tel
 ,(SELECT U.parentesco FROM empleado_contacto U WHERE u.empleado_id=e.ID) AS contacto_parentesco
 ,(SELECT U.unidad_medica FROM seguridad_social U WHERE u.empleado_id=e.ID) AS unidad_medica
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
 FROM empleado e 
 join datos_personales d on(d.empleado_id=e.id)
 join perfil_de_empleado p on(p.empleado_id=e.id)
@@ -50,6 +51,7 @@ Where e.id=$P{ID}]]></queryString>
 	<field name="contacto_tel" class="java.lang.String"/>
 	<field name="contacto_parentesco" class="java.lang.String"/>
 	<field name="unidad_medica" class="java.lang.String"/>
+	<field name="EMPRESA" class="java.lang.String"/>
 
 		<background>
 			<band height="0"  isSplitAllowed="true" >
@@ -104,23 +106,6 @@ Where e.id=$P{ID}]]></queryString>
 						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA["(NOMBRE, APELLIDO PATERNO, APELLIDO MATERNO)"]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="11"
-						y="0"
-						width="472"
-						height="22"
-						key="textField-225"/>
-					<box>					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="SansSerif" pdfFontName="Helvetica-Bold" size="14" isBold="true" isItalic="false" isUnderline="false"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{COMPANY}]]></textFieldExpression>
 				</textField>
 				<rectangle>
 					<reportElement
@@ -791,6 +776,19 @@ Where e.id=$P{ID}]]></queryString>
 						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{unidad_medica}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="11"
+						y="0"
+						width="472"
+						height="22"
+						key="textField"/>
+					<box></box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" pdfFontName="Helvetica-Bold" size="14" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{EMPRESA}]]></textFieldExpression>
 				</textField>
 			</band>
 		</columnHeader>

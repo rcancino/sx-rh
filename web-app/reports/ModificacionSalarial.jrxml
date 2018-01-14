@@ -35,6 +35,7 @@
 	<parameter name="FECHA" isForPrompting="true" class="java.util.Date"/>
 	<queryString><![CDATA[SELECT concat(ifnull(e.apellido_paterno,''),' ',ifnull(e.apellido_materno,''),' ',ifnull(e.nombres,'')) AS nombre,E.CLAVE AS EMP
 ,e.alta,c.*,u.clave as ubicacion,SUBSTRING(s.periodicidad,1,1) as periodicidad,m.fecha
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
 FROM calculo_Sdi c join empleado e on (e.id= c.empleado_id )
 JOIN perfil_de_empleado p  on (p.empleado_id=e.id) join ubicacion u  on (u.id=p.ubicacion_id) 
 join salario s on (s.empleado_id=e.id) join modificacion_salarial m on (c.id=m.calculo_sdi_id)
@@ -47,12 +48,15 @@ where m.fecha=$P{FECHA}]]></queryString>
 	<field name="version" class="java.lang.Long"/>
 	<field name="agndo_dias" class="java.lang.Integer"/>
 	<field name="bimestre" class="java.lang.Integer"/>
+	<field name="bono" class="java.math.BigDecimal"/>
+	<field name="bono_por_antiguedad" class="java.math.BigDecimal"/>
 	<field name="bono_por_desemp" class="java.math.BigDecimal"/>
 	<field name="comisiones" class="java.math.BigDecimal"/>
 	<field name="compensacion" class="java.math.BigDecimal"/>
 	<field name="dias" class="java.math.BigDecimal"/>
 	<field name="dias_bim" class="java.math.BigDecimal"/>
 	<field name="dias_lab_bim" class="java.math.BigDecimal"/>
+	<field name="dias_prima_dominical" class="java.math.BigDecimal"/>
 	<field name="ejercicio" class="java.lang.Integer"/>
 	<field name="empleado_id" class="java.lang.Long"/>
 	<field name="factor" class="java.math.BigDecimal"/>
@@ -65,6 +69,7 @@ where m.fecha=$P{FECHA}]]></queryString>
 	<field name="incentivo" class="java.math.BigDecimal"/>
 	<field name="prima_dom" class="java.math.BigDecimal"/>
 	<field name="sdb" class="java.math.BigDecimal"/>
+	<field name="sdb_anterior" class="java.math.BigDecimal"/>
 	<field name="sdi_anterior" class="java.math.BigDecimal"/>
 	<field name="sdi_calc" class="java.math.BigDecimal"/>
 	<field name="sdif" class="java.math.BigDecimal"/>
@@ -80,10 +85,10 @@ where m.fecha=$P{FECHA}]]></queryString>
 	<field name="var_dia" class="java.math.BigDecimal"/>
 	<field name="variable" class="java.math.BigDecimal"/>
 	<field name="years" class="java.math.BigDecimal"/>
-	<field name="sdb_anterior" class="java.math.BigDecimal"/>
 	<field name="ubicacion" class="java.lang.String"/>
 	<field name="periodicidad" class="java.lang.String"/>
 	<field name="fecha" class="java.sql.Date"/>
+	<field name="EMPRESA" class="java.lang.String"/>
 
 	<sortField name="ubicacion" />
 	<sortField name="EMP" />
@@ -123,19 +128,6 @@ where m.fecha=$P{FECHA}]]></queryString>
 		</title>
 		<pageHeader>
 			<band height="53"  isSplitAllowed="true" >
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="544"
-						y="0"
-						width="187"
-						height="15"
-						key="textField-1"/>
-					<box></box>
-					<textElement textAlignment="Right">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{COMPANY}]]></textFieldExpression>
-				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="480"
@@ -181,6 +173,19 @@ where m.fecha=$P{FECHA}]]></queryString>
 						<font size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.util.Date"><![CDATA[$F{fecha}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="544"
+						y="0"
+						width="187"
+						height="15"
+						key="textField"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{EMPRESA}]]></textFieldExpression>
 				</textField>
 			</band>
 		</pageHeader>

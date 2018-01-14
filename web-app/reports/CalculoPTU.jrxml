@@ -47,6 +47,7 @@
 ,ptd.total as acum_anual,ptd.tope_anual,e.alta as f_ingreso,b.fecha as  f_baja,ptd.dias_del_ejercicio as dias_anio,ptd.faltas,ptd.incapacidades,ptd.permisosp,ptd.dias_ptu,ptd.monto_dias as f_monto_dias,ptd.monto_salario as f_monto_salario
 ,ptd.por_pagar_bruto,e.status,p.ubicacion_id,u.clave
 ,pt.sindicalizado_maximo,pt.sindicalizado_nombre
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
 FROM ptu_det ptd
 JOIN PTU pt on(pt.id=ptd.ptu_id)
 join empleado e on(e.id=ptd.empleado_id)
@@ -106,6 +107,7 @@ order by 21 ASC,2 DESC,45 ASC,1 ASC]]></queryString>
 	<field name="clave" class="java.lang.String"/>
 	<field name="sindicalizado_maximo" class="java.math.BigDecimal"/>
 	<field name="sindicalizado_nombre" class="java.lang.String"/>
+	<field name="EMPRESA" class="java.lang.String"/>
 
 	<variable name="TOTAL_ACUM_ANUAL" class="java.math.BigDecimal" resetType="Report" calculation="Sum">
 		<variableExpression><![CDATA[$F{acum_anual}]]></variableExpression>
@@ -435,19 +437,6 @@ order by 21 ASC,2 DESC,45 ASC,1 ASC]]></queryString>
 			<band height="74"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="544"
-						y="0"
-						width="187"
-						height="15"
-						key="textField-1"/>
-					<box></box>
-					<textElement textAlignment="Right">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{COMPANY}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
 						x="320"
 						y="12"
 						width="412"
@@ -750,6 +739,19 @@ order by 21 ASC,2 DESC,45 ASC,1 ASC]]></queryString>
 					</textElement>
 				<text><![CDATA[SALARIO]]></text>
 				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="544"
+						y="0"
+						width="187"
+						height="15"
+						key="textField"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{EMPRESA}]]></textFieldExpression>
+				</textField>
 			</band>
 		</pageHeader>
 		<columnHeader>

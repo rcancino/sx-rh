@@ -36,6 +36,7 @@
 	<parameter name="FECHA_FINAL" isForPrompting="true" class="java.util.Date"/>
 	<queryString><![CDATA[SELECT u.clave as 'SUCURSAL',e.id,e.CLAVE AS clavemp,CONCAT(apellido_paterno,' ',apellido_materno,' ',nombres) as nombre,D.retardo_menor
 ,sum(d.retardo_menor+ d.retardo_menor_comida) AS MINUTOS,sum(d.retardo_menor+ d.retardo_menor_comida)*2 AS MINUTOS_DOBLES
+,(SELECT x.nombre FROM empresa x ) as EMPRESA
 FROM asistencia a JOIN asistencia_det d ON (a.id=d.asistencia_id) JOIN empleado e on (e.id= a.empleado_id) join perfil_de_empleado p on (p.empleado_id=e.id) join ubicacion u on (u.id=p.ubicacion_id)
 where d.fecha BETWEEN $P{FECHA_INICIAL} and $P{FECHA_FINAL} and (d.retardo_menor <>0 or d.retardo_menor_comida<>0)
 group by e.id HAVING sum(D.retardo_menor+ d.retardo_menor_comida)>10
@@ -48,6 +49,7 @@ ORDER BY U.CLAVE,E.CLAVE]]></queryString>
 	<field name="retardo_menor" class="java.lang.Integer"/>
 	<field name="MINUTOS" class="java.math.BigDecimal"/>
 	<field name="MINUTOS_DOBLES" class="java.math.BigDecimal"/>
+	<field name="EMPRESA" class="java.lang.String"/>
 
 	<variable name="AUSENCIAS" class="java.lang.Integer" resetType="Report" calculation="Sum">
 	</variable>
@@ -120,19 +122,6 @@ ORDER BY U.CLAVE,E.CLAVE]]></queryString>
 		</title>
 		<pageHeader>
 			<band height="65"  isSplitAllowed="true" >
-				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="364"
-						y="0"
-						width="187"
-						height="15"
-						key="textField-1"/>
-					<box></box>
-					<textElement textAlignment="Right">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{COMPANY}]]></textFieldExpression>
-				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="300"
@@ -210,6 +199,19 @@ ORDER BY U.CLAVE,E.CLAVE]]></queryString>
 						<font size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.util.Date"><![CDATA[$P{FECHA_FINAL}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="362"
+						y="0"
+						width="187"
+						height="15"
+						key="textField"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{EMPRESA}]]></textFieldExpression>
 				</textField>
 			</band>
 		</pageHeader>
