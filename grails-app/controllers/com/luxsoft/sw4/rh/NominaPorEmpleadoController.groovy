@@ -167,9 +167,10 @@ class NominaPorEmpleadoController {
 	}
 
 	def generarCfdi(NominaPorEmpleado ne) {
-		def cfdi = cfdiService.generarCfdi(ne)
-		nominaService.actualizarSaldos(ne)
-		flash.message = "Cfdi ${cfdi.id} generado para nomina por empleado: ${ne.id} "
+		// def cfdi = cfdiService.generarCfdi(ne)
+		// nominaService.actualizarSaldos(ne)
+		// flash.message = "Cfdi ${cfdi.id} generado para nomina por empleado: ${ne.id} "
+		flash.message = "CFDI 3.3 pendiente de implmenetacion"
 		redirect action:'edit', id: ne.id
 	}
 	

@@ -41,6 +41,8 @@ grails.project.dependency.resolution = {
         mavenLocal()
         grailsCentral()
         mavenCentral()
+
+        mavenRepo "http://dl.bintray.com/rcancino/cfdi"
         // uncomment these (or add new ones) to enable remote dependency resolution from public Maven repositories
         //mavenRepo "http://repository.codehaus.org"
         //mavenRepo "http://download.java.net/maven/2/"
@@ -70,6 +72,8 @@ grails.project.dependency.resolution = {
         //     excludes 'itext'
         // }
         compile "org.jadira.usertype:usertype.jodatime:1.9"
+        compile 'lx.cfdi:v32:1.0.1'
+        compile 'lx.cfdi:v33:1.0.5'
     }
 
     plugins {
