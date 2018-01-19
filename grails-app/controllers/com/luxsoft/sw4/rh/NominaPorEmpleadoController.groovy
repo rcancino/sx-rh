@@ -23,6 +23,8 @@ class NominaPorEmpleadoController {
 	def calculoAnualService
 
 	def cfdiService
+
+	def cfdiV33Service
 	
 
     def index() { }
@@ -167,7 +169,7 @@ class NominaPorEmpleadoController {
 	}
 
 	def generarCfdi(NominaPorEmpleado ne) {
-		// def cfdi = cfdiService.generarCfdi(ne)
+		def cfdi = cfdiV33Service.generar(ne)
 		// nominaService.actualizarSaldos(ne)
 		// flash.message = "Cfdi ${cfdi.id} generado para nomina por empleado: ${ne.id} "
 		flash.message = "CFDI 3.3 pendiente de implmenetacion"

@@ -17,7 +17,7 @@ public class CfdiV33Service {
 	final static SimpleDateFormat CFDI_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
 
 	def generar(NominaPorEmpleado ne){
-		
+		assert false, 'Version CFDI 3.3 en desarrollo'
 		assert !ne.cfdi , "NominaPorEmpleado ${ne.id} ya tiene  gnerado un CFDI"
 
 		CfdiBuilder33  builder = new CfdiBuilder33()

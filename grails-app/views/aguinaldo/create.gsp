@@ -48,7 +48,7 @@
 		
 		<g:form class="form-horizontal" action="save">
 			
-			<f:with bean="${aguinaldoInstance }">
+			<f:with bean="${aguinaldoInstance}">
 				<f:field property="ejercicio" input-class="form-control"/>
 				<f:field property="empleado" input-class="form-control"/>
 			</f:with>

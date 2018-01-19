@@ -71,6 +71,8 @@ class ProcesadorDePrestamosPersonales {
 			} else {
 
 				println "Se vino por aca"
+
+				
 				def percepciones = getPercepciones(ne)
 				def deducciones = getRetencionesPrecedentesFiniquito(ne)
 				def saldo = prestamo.saldo

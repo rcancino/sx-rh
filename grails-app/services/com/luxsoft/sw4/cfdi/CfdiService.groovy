@@ -33,8 +33,21 @@ class CfdiService {
 
 	def cfdiBuilder 
 
-	Cfdi generarCfdi(NominaPorEmpleado ne) {
 
+	Cfdi regenerarCfdi(NominaPorEmpleado ne){
+		throw new RuntimeException('Version de CFDI 3.2 ya no es operable')
+		/*
+		if(ne.cfdi == null) return generarCfdi(ne)
+		assert !ne.cfdi.uuid, "NominaPorEmpleado ${ne.id} ya timbrada: ${ne.cfdi.uuid}"
+		ne.cfdi.delete flush:true
+		return generarCfdi(ne);
+		*/
+	}
+
+
+	Cfdi generarCfdi(NominaPorEmpleado ne) {
+		throw new RuntimeException('Version de CFDI 3.2 ya no es operable')
+		/*
 		assert !ne.cfdi , "NominaPorEmpleado ${ne.id} ya tiene  gnerado un CFDI"
 
 		ComprobanteDocument document = generarXml(ne)
@@ -47,14 +60,10 @@ class CfdiService {
 		ne.cfdi = cfdi
 		ne.save()
 		return cfdi
+		*/
 	}
 
-	Cfdi regenerarCfdi(NominaPorEmpleado ne){
-		if(ne.cfdi == null) return generarCfdi(ne)
-		assert !ne.cfdi.uuid, "NominaPorEmpleado ${ne.id} ya timbrada: ${ne.cfdi.uuid}"
-		ne.cfdi.delete flush:true
-		return generarCfdi(ne);
-	}
+	
 
 	ComprobanteDocument generarXml(NominaPorEmpleado ne){
 		ComprobanteDocument document = cfdiBuilder.build(ne)
@@ -75,10 +84,13 @@ class CfdiService {
 	}
 
 	Cfdi timbrar(NominaPorEmpleado ne) {
+		throw new RuntimeException('Timbrado CFDI 3.2 descontinuado')
+		/*
 		assert ne.cfdi , "No se ha generado archivo XML para timbrar la nomina ${ne.id} de ${ne.empleado} "
 		assert ne.cfdi.uuid == null , "La nomina ${ne.id} de ${ne.empleado} ya esta timbrada UUID: ${ne.cfdi.uuid}"
 		def cfdi = cfdiTimbrador.timbrar(ne.cfdi,"PAP830101CR3", "yqjvqfofb")
 		return cfdi
+		*/
 	}
 	
 	void validarDocumento(ComprobanteDocument document) {
