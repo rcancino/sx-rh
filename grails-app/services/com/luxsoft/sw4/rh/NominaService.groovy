@@ -550,19 +550,21 @@ class NominaService {
 	
 	def actualizarSaldos(Nomina nomina){
 		nomina.partidas.each{ne->
-			if(ne.cfdi){
+
+			//Ajuste temporal por timbrado 3.3  se debe validar el cfdi para el recalculo de saldos
+			//if(ne.cfdi){
 				actualizarOtrasDeducciones(ne)
 				actualizarPrestamo(ne)
 				actualizarCalculoAnual(ne)
 				actualizarVacaciones(ne)
-			}else{
+			//}else{
 				/*
 				actualizarOtrasDeducciones(ne)
 				actualizarPrestamo(ne)
 				actualizarCalculoAnual(ne)
 				actualizarVacaciones(ne)
 				*/
-			}
+			//}
 			
 		}
 	}
