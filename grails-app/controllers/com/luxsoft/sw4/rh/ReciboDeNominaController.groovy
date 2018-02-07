@@ -15,14 +15,6 @@ import org.codehaus.groovy.grails.plugins.jasper.JasperExportFormat;
 import org.codehaus.groovy.grails.plugins.jasper.JasperReportDef
 import org.springframework.core.io.Resource
 
-
-
-
-
-
-
-
-
 import com.luxsoft.sw4.Mes;
 import com.luxsoft.sw4.cfdi.Cfdi;
 import com.luxsoft.sw4.cfdi.CfdiPrintUtils;
@@ -31,12 +23,17 @@ import com.luxsoft.sw4.Empresa
 
 import grails.plugin.springsecurity.annotation.Secured
 
+
+import com.luxsoft.cfdix.v33.NominaPrintUtils
+
 @Secured(["hasAnyRole('ROLE_ADMIN','RH_USER')"])
 class ReciboDeNominaController {
 	
 	def jasperService
 
-	def nominaPrintService
+	// def nominaPrintService
+
+	def v33NominaPrintService
 
     def index(long nominaId) {
 		
@@ -72,18 +69,76 @@ class ReciboDeNominaController {
 	
 	def impresionDirecta(Cfdi cfdi) {
 		
-		ByteArrayOutputStream  pdfStream = nominaPrintService.imprimir(cfdi, params)
-		def fileName="cfdi_${cfdi.folio}_${cfdi.receptor}.pdf"
-		render(file: pdfStream.toByteArray(), contentType: 'application/pdf',fileName:fileName)
+		if (cfdi.versionCfdi == '3.3' ){
+			ByteArrayOutputStream  pdfStream = v33NominaPrintService.imprimir(cfdi, params)
+			def fileName="cfdi_${cfdi.folio}_${cfdi.receptor}.pdf"
+			render(file: pdfStream.toByteArray(), contentType: 'application/pdf',fileName:fileName)
+			return
+		} else {
+			
+			ByteArrayOutputStream  pdfStream = nominaPrintService.imprimir(cfdi, params)
+			def fileName="cfdi_${cfdi.folio}_${cfdi.receptor}.pdf"
+			render(file: pdfStream.toByteArray(), contentType: 'application/pdf',fileName:fileName)
+			return
+			
+		}
+		
+		
 	}
 
 	def imprimirCfdi() {
-		//println 'Imprimiendo CFDI: '+params.id
-		def cfdi=Cfdi.findById(params.id)
+		def cfdi = Cfdi.findById(params.id)
+		
 		if(cfdi==null){
 			flash.message = message(code: 'default.not.found.message', args: [message(code: 'cfdiInstance.label', default: 'Cfdi'), params.id])
 			redirect action: "show", params:[id:id]
 		}
+
+		if(cfdi.versionCfdi == '3.2') {
+			redirect action: "show", params:[id:id]
+			return
+		}
+		NominaPorEmpleado nominaPorEmpleado=NominaPorEmpleado.findByCfdi(cfdi)
+		Comprobante comprobante = CfdiUtils.read(cfdi.xml)
+		def complemento = comprobante.complemento
+		lx.cfdi.v33.nomina.Nomina nomina  = complemento.any.get(0)
+		def deducciones = nomina.deducciones.deduccion
+		def modelData=deducciones.collect { cc ->
+		    def res=[
+		        'GRUPO':cc.tipoDeduccion,
+		        'CLAVE':cc.clave,
+		        'DESCRIPCION':cc.concepto,
+		        'IMPORTE_GRAVADO': 0.0,
+				'IMPORTE_EXENTO':cc.importe,
+		        'CONCEPTO':'D'
+		    ]
+		    return res
+		}
+		def percepciones = nomina.percepciones.percepcion
+		percepciones.each{ cc->
+		    def res=[
+		        'GRUPO':cc.tipoPercepcion,
+		        'CLAVE':cc.clave,
+		        'DESCRIPCION':cc.concepto,
+		        'IMPORTE_GRAVADO':cc.importeGravado,
+		        'IMPORTE_EXENTO':cc.importeExento,
+		        'CONCEPTO':'P'
+		    ]
+		    modelData<<res
+		}
+		modelData.sort{ it.clave}
+		
+		def repParams = NominaPrintUtils.resolverParametros(cfdi, nomina, nominaPorEmpleado)
+		params << repParams
+		params.FECHA = comprobante.fecha.format("yyyy-MM-dd'T'HH:mm:ss")
+		params['RECIBO_NOMINA'] = nominaPorEmpleado.id
+		params[PdfExporterConfiguration.PROPERTY_PDF_JAVASCRIPT]="this.print();"
+		chain(controller:'jasper',action:'index',model:[data:modelData],params:params)
+
+	}
+
+	def imprimirCfdiV32() {
+		def cfdi=Cfdi.findById(params.id)
 		NominaPorEmpleado nominaPorEmpleado=NominaPorEmpleado.findByCfdi(cfdi)
 		Comprobante comprobante=cfdi.comprobante
 		ComplementoNomina complemento=new ComplementoNomina(comprobante)

@@ -12,44 +12,31 @@ import com.luxsoft.sw4.cfdi.Cfdi
 @Transactional
 public class CfdiV33Service {
 
-	def springSecurityService
+
+	def cfdiSellador33
 
 	final static SimpleDateFormat CFDI_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
 
 	def generar(NominaPorEmpleado ne){
-		assert false, 'Version CFDI 3.3 en desarrollo'
 		assert !ne.cfdi , "NominaPorEmpleado ${ne.id} ya tiene  gnerado un CFDI"
-
-		CfdiBuilder33  builder = new CfdiBuilder33()
-		CfdiSellador33 sellador = new CfdiSellador33()
-		Comprobante comprobante = builder.build(ne)
-		comprobante = sellador.sellar(comprobante, ne.empresa)
-
+		CfdiBuilder33 builder = new CfdiBuilder33()
+		def comprobante = builder.build(ne)
+		cfdiSellador33.sellar(comprobante)
 		def cfdi = new Cfdi()
-		// cfdi.tipo="INGRESO"
-		// cfdi.referencia="FACTURA"
-		cfdi.serie = comprobante.serie
-		cfdi.folio = comprobante.folio
-		cfdi.fecha = CFDI_DATE_FORMAT.parse(comprobante.fecha)
-		cfdi.emisor = comprobante.emisor.nombre
-		//cfdi.emisorRfc = comprobante.emisor.rfc
-		cfdi.receptor = comprobante.receptor.nombre
-		cfdi.receptorRfc = comprobante.receptor.rfc
-		cfdi.total = comprobante.total
-		cfdi.versionCfdi = comprobante.version
-
-		cfdi.xml = CfdiUtils.toXmlByteArray(comprobante)
-		// cfdi.setXmlName("$cfdi.receptorRfc-${'CFDIV33'}-$cfdi.serie-$cfdi.folio"+".xml")
-		cfdi.setXmlName("$cfdi.receptorRfc-$cfdi.serie-$cfdi.folio"+".xml")
-		
-		// def user=springSecurityService.getCurrentUser().username
-		// ne.modificadoPor=user
-		// cfdi.modificadoPor=user
-		// cfdi.creadoPor=user
-		cfdi.save(failOnError:true)
-		ne.cfdi=cfdi
+		cfdi.serie=comprobante.serie
+		cfdi.folio=comprobante.folio
+		cfdi.fecha = Date.parse("yyyy-MM-dd'T'HH:mm:ss", comprobante.fecha)
+		cfdi.emisor=comprobante.emisor.nombre
+		cfdi.receptor=comprobante.receptor.nombre
+		cfdi.receptorRfc=comprobante.receptor.rfc
+		cfdi.total=comprobante.total
+		cfdi.versionCfdi = 3.3
+		cfdi.xml = CfdiUtils.serialize(comprobante).getBytes()
+		cfdi.setXmlName("${cfdi.receptorRfc}_${cfdi.serie}_${cfdi.folio}.xml")
+		cfdi.save failOnError:true, flush:true
+		ne.cfdi = cfdi
+		ne.save()
 		return cfdi
-
 	}
 	
 

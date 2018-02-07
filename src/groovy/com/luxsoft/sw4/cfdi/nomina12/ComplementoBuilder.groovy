@@ -152,9 +152,6 @@ class ComplementoBuilder {
 
         	if(empleado.salario.clabe){
 
-        		//receptor.cuentaBancaria = empleado.salario.clabe
-        		//receptor.banco = null
-
         	} else {
         			if(empleado?.salario?.banco?.clave && nominaEmpleado.nomina.formaDePago == 'TRANSFERENCIA'){
         				def bancoClave = empleado?.salario.banco.clave.toString().padLeft(3,'0')
@@ -162,10 +159,6 @@ class ComplementoBuilder {
         				}
         		receptor.cuentaBancaria = new BigInteger(empleado.salario.numeroDeCuenta)
         	}
-
-        	//receptor.cuentaBancaria = new BigInteger(empleado?.salario.clabe?:empleado.salario.numeroDeCuenta)
-        	//receptor.cuentaBancaria = empleado?.salario.clabe?:empleado.salario.numeroDeCuenta
-        		
         }
 		receptor.setSalarioBaseCotApor(nominaEmpleado.salarioDiarioBase)
 		receptor.setSalarioDiarioIntegrado(nominaEmpleado.salarioDiarioIntegrado)

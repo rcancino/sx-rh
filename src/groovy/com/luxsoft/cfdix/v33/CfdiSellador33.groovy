@@ -16,10 +16,12 @@ public class CfdiSellador33 {
 	//String algoritmo = 'SHA1withRSA'
 	String algoritmo = 'SHA256withRSA'
 
-	CfdiCadenaBuilder33 cadenaBuilder = new CfdiCadenaBuilder33()
+	// CfdiCadenaBuilder33 cadenaBuilder = new CfdiCadenaBuilder33()
+	def cfdiCadenaBuilder33
 
-	Comprobante sellar(Comprobante comprobante, Empresa empresa){
-		String cadenaOriginal = cadenaBuilder.build(comprobante)
+	Comprobante sellar(Comprobante comprobante){
+		Empresa empresa = Empresa.first()
+		String cadenaOriginal = cfdiCadenaBuilder33.build(comprobante)
 
 		final byte[] input=cadenaOriginal.getBytes("UTF-8")
 		Signature signature=Signature.getInstance(algoritmo,"BC");

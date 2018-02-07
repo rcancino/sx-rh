@@ -82,7 +82,7 @@ class NominaPrintService {
 
 
 
-def imprimirCfdi(Cfdi cfdi) {
+	def imprimirCfdi(Cfdi cfdi) {
 		
 		
 		if(cfdi==null){
@@ -153,7 +153,6 @@ def imprimirCfdi(Cfdi cfdi) {
 
 		return pdfStream
 	}
-
 
 
 	def generarReportDef(NominaPorEmpleado ne, def params = [:]){

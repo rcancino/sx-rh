@@ -33,6 +33,7 @@ import com.luxsoft.sw4.rh.ExportadorDim
 
 import com.luxsoft.sw4.cfdi.nomina12.*
 
+import com.luxsoft.cfdix.v33.*
 
 // Place your Spring DSL code here
 beans = {
@@ -178,6 +179,16 @@ beans = {
 			ref('procesadorDePrestamosPersonales')
 			]
 	}
+
+	// CFDI 3.3
+
+	cfdiCadenaBuilder33(CfdiCadenaBuilder33){}
+
+	cfdiSellador33(CfdiSellador33){
+		cfdiCadenaBuilder33 = ref('cfdiCadenaBuilder33')
+	}	
+
+	v33NominaPrintService(V33NominaPrintService){}
 
 	
 }

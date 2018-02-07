@@ -23,95 +23,62 @@ import com.edicom.ediwinws.service.cfdi.CancelaResponse
 
 import org.bouncycastle.util.encoders.Base64
 
+import lx.cfdi.v33.Comprobante
+import lx.cfdi.v33.CfdiUtils
+import com.luxsoft.cfdix.v33.CfdiBuilder33 
+
 
 @Transactional
 class CfdiService {
 	
 	def cfdiSellador
-	
-	def cfdiTimbrador
 
-	def cfdiBuilder 
+	def cfdiSellador33
+
+	def  cfdiTimbradoService
 
 
 	Cfdi regenerarCfdi(NominaPorEmpleado ne){
-		throw new RuntimeException('Version de CFDI 3.2 ya no es operable')
-		/*
-		if(ne.cfdi == null) return generarCfdi(ne)
+		if(ne.cfdi == null) 
+			return generarCfdi(ne)
 		assert !ne.cfdi.uuid, "NominaPorEmpleado ${ne.id} ya timbrada: ${ne.cfdi.uuid}"
 		ne.cfdi.delete flush:true
 		return generarCfdi(ne);
-		*/
 	}
 
 
 	Cfdi generarCfdi(NominaPorEmpleado ne) {
-		throw new RuntimeException('Version de CFDI 3.2 ya no es operable')
-		/*
+		
 		assert !ne.cfdi , "NominaPorEmpleado ${ne.id} ya tiene  gnerado un CFDI"
 
-		ComprobanteDocument document = generarXml(ne)
-		Comprobante comprobante = document.getComprobante()
-
-		def cfdi = new Cfdi(comprobante)
-		salvarXml(cfdi, document)
-
+		CfdiBuilder33 builder = new CfdiBuilder33()
+		def comprobante = builder.build(ne)
+		cfdiSellador33.sellar(comprobante)
+		def cfdi = new Cfdi()
+		cfdi.serie=comprobante.serie
+		cfdi.folio=comprobante.folio
+		cfdi.fecha = Date.parse("yyyy-MM-dd'T'HH:mm:ss", comprobante.fecha)
+		cfdi.emisor=comprobante.emisor.nombre
+		cfdi.receptor=comprobante.receptor.nombre
+		cfdi.receptorRfc=comprobante.receptor.rfc
+		cfdi.total=comprobante.total
+		cfdi.xml = CfdiUtils.serialize(comprobante).getBytes()
+		cfdi.setXmlName("$cfdi.receptorRfc_${cfdi.serie}_${cfdi.folio}.xml")
 		cfdi.save failOnError:true, flush:true
 		ne.cfdi = cfdi
 		ne.save()
 		return cfdi
-		*/
 	}
-
 	
-
-	ComprobanteDocument generarXml(NominaPorEmpleado ne){
-		ComprobanteDocument document = cfdiBuilder.build(ne)
-		Comprobante comprobante = document.getComprobante()
-		comprobante.folio = ne.id.toString()
-		comprobante.serie = 'NOMINA12'
-		comprobante.sello=cfdiSellador.sellar(ne.nomina.empresa.privateKey,document)
-		return document
-	}
-
-	Cfdi salvarXml(Cfdi cfdi, ComprobanteDocument document){
-
-		ByteArrayOutputStream os=new ByteArrayOutputStream()
-    	document.save(os, NominaUtils.getXmlOptions())
-    	cfdi.xml = os.toByteArray()
-		cfdi.setXmlName("$cfdi.receptorRfc-$cfdi.serie-$cfdi.folio"+".xml")
-		return cfdi;
-	}
 
 	Cfdi timbrar(NominaPorEmpleado ne) {
-		throw new RuntimeException('Timbrado CFDI 3.2 descontinuado')
-		/*
 		assert ne.cfdi , "No se ha generado archivo XML para timbrar la nomina ${ne.id} de ${ne.empleado} "
 		assert ne.cfdi.uuid == null , "La nomina ${ne.id} de ${ne.empleado} ya esta timbrada UUID: ${ne.cfdi.uuid}"
-		def cfdi = cfdiTimbrador.timbrar(ne.cfdi,"PAP830101CR3", "yqjvqfofb")
+		def cfdi = cfdiTimbradoService.timbrar(ne.cfdi)
 		return cfdi
-		*/
+		
 	}
 	
-	void validarDocumento(ComprobanteDocument document) {
-		List<XmlValidationError> errores=findErrors(document);
-		if(errores.size()>0){
-			StringBuffer buff=new StringBuffer();
-			for(XmlValidationError e:errores){
-				buff.append(e.getMessage()+"\n");
-			}
-			throw new CfdiException(message:"Datos para generar el comprobante fiscal (CFD) incorrectos "+buff.toString());
-		}
-	}
-	
-	List findErrors(final XmlObject node){
-		println 'Validando....' + node
-		final XmlOptions options=new XmlOptions();
-		final List errors=new ArrayList();
-		options.setErrorListener(errors);
-		node.validate(options);
-		return errors
-	}
 
 	@Transactional
 	def CancelacionDeCfdi cancelar(Cfdi cfdi,String comentario){

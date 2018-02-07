@@ -8,7 +8,7 @@ import grails.transaction.Transactional
 import com.luxsoft.sw4.cfdi.Cfdi
 import com.luxsoft.sw4.rh.acu.IsptMensual
 
-//@Secured(["hasAnyRole('ROLE_ADMIN','RH_USER')"])
+
 @Secured(['ROLE_ADMIN'])
 class NominaPorEmpleadoController {
 	
@@ -22,9 +22,10 @@ class NominaPorEmpleadoController {
 
 	def calculoAnualService
 
-	def cfdiService
+	// def cfdiService
 
 	def cfdiV33Service
+	def cfdiTimbradoService
 	
 
     def index() { }
@@ -171,20 +172,20 @@ class NominaPorEmpleadoController {
 	def generarCfdi(NominaPorEmpleado ne) {
 		def cfdi = cfdiV33Service.generar(ne)
 		// nominaService.actualizarSaldos(ne)
-		// flash.message = "Cfdi ${cfdi.id} generado para nomina por empleado: ${ne.id} "
-		flash.message = "CFDI 3.3 pendiente de implmenetacion"
+		flash.message = "Cfdi ${cfdi.id} generado para nomina por empleado: ${ne.id} "
+		// flash.message = "CFDI 3.3 pendiente de implmenetacion"
 		redirect action:'edit', id: ne.id
 	}
 	
 	def timbrar(NominaPorEmpleado ne){
-		cfdiService.timbrar(ne)
+		// cfdiService.timbrar(ne)
+		cfdiTimbradoService.timbrar(ne.cfdi)
 		flash.message=" Nomina de empleado ${ne.empleado} timbrara exitosamente"
 		redirect action:'edit', id: ne.id
 	}
 	
 	
 	def informacionDeConcepto(Long id) {
-		println "Informacion de concepto ${id}"
 		def  neDet=NominaPorEmpleadoDet.get(id)
 		def ruleModel=conceptoDeNominaRuleResolver.getModel(neDet.concepto)
 
@@ -332,7 +333,6 @@ class NominaPorEmpleadoController {
 	}
 
 	def mostrarXml(Cfdi cfdi){
-	
 		render(text: cfdi.comprobanteDocument.xmlText(), contentType: "text/xml", encoding: "UTF-8")
 	}
 	

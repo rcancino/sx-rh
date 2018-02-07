@@ -10,6 +10,7 @@ import com.luxsoft.sw4.MonedaUtils
 import lx.cfdi.utils.DateUtils
 import lx.cfdi.v33.ObjectFactory
 import lx.cfdi.v33.Comprobante
+import lx.cfdi.v33.nomina.Nomina
 
 // Catalogos
 import lx.cfdi.v33.CUsoCFDI
@@ -29,16 +30,22 @@ class CfdiBuilder33 {
 	private Comprobante comprobante;
     private Empresa empresa
     private NominaPorEmpleado ne;
+    private Nomina nomina
 
-    def build(NominaPorEmpleado ne, String serie = 'FACTURA'){
-        buildComprobante(ne, serie)
+    def build(NominaPorEmpleado ne){
+        this.nomina = new NominaBuilder().build(ne)
+        buildComprobante(ne)
         .buildEmisor()
         .buildReceptor()
         .buildFormaDePago()
         .buildConceptos()
-        .buildImpuestos()
         .buildTotales()
         .buildCertificado()
+        
+        Comprobante.Complemento complemento = factory.createComprobanteComplemento()
+        complemento.any.add(nomina)
+        comprobante.complemento = complemento
+
         return comprobante
     }
     
@@ -48,12 +55,12 @@ class CfdiBuilder33 {
 
 		this.comprobante = factory.createComprobante()
         this.ne = ne;
-        this.empresa = ne.empresa
+        this.empresa = Empresa.first()
         comprobante.version = "3.3"
-        comprobante.tipoDeComprobante = CTipoDeComprobante.I
-        comprobante.serie = 'NOMINA_CFDI'
-        comprobante.folio = ne.folio
-        comprobante.setFecha(DateUtils.getCfdiDate(ne.fecha))
+        comprobante.tipoDeComprobante = CTipoDeComprobante.N
+        comprobante.serie = 'NOMINA12'
+        comprobante.folio = ne.id
+        comprobante.setFecha(DateUtils.getCfdiDate(new Date()))
         comprobante.moneda = CMoneda.MXN
         comprobante.lugarExpedicion = empresa.direccion.codigoPostal
         return this
@@ -64,7 +71,7 @@ class CfdiBuilder33 {
         Comprobante.Emisor emisor = factory.createComprobanteEmisor()
         emisor.rfc = empresa.rfc
         emisor.nombre = empresa.nombre
-        emisor.regimenFiscal = empresa.regimenClaveSat ?:'601' 
+        emisor.regimenFiscal = '601' 
         comprobante.emisor = emisor
         return this
     }
@@ -72,138 +79,45 @@ class CfdiBuilder33 {
     def buildReceptor(){
         /** Receptor ***/
         Comprobante.Receptor receptor = factory.createComprobanteReceptor()
-        receptor.rfc = ne.cliente.rfc
-        receptor.nombre = ne.cliente.nombre
-        receptor.usoCFDI = CUsoCFDI.G_03 // Adquisicion de mercancías
-        switch(ne.usoCfdi) {
-            case 'G01':
-                receptor.usoCFDI = CUsoCFDI.G_01
-                break
-            case 'G02':
-                receptor.usoCFDI = CUsoCFDI.G_02
-                break
-            case 'G03':
-                receptor.usoCFDI = CUsoCFDI.G_03
-                break
-            case 'P01':
-                receptor.usoCFDI = CUsoCFDI.P_01
-                break
-            case 'I01':
-                receptor.usoCFDI = CUsoCFDI.I_01
-                break
-          default:
-              receptor.usoCFDI = CUsoCFDI.P_01
-          break
-        }
+        receptor.rfc = ne.empleado.rfc
+        receptor.nombre = ne.empleado.nombre
+        receptor.usoCFDI = CUsoCFDI.P_01
         comprobante.receptor = receptor
         return this
     }
 
     def buildFormaDePago(){
-        switch (ne.formaDePago) {
-            case 'EFECTIVO':
-              comprobante.formaPago = '01'
-              break
-            case 'CHEQUE':
-              comprobante.formaPago = '02'
-              break
-            case 'TRANSFERENCIA':
-              comprobante.formaPago = '03'
-              break
-            case 'TARJETA_CREDITO':
-              comprobante.formaPago = '04'
-              break
-            case 'TARJETA_DEBITO':
-              comprobante.formaPago = '28'
-              break
-            default:
-              comprobante.formaPago = '99'
-        }
-        switch(ne.metodoDePago) {
-            case 'PPD':
-                comprobante.metodoPago = CMetodoPago.PPD
-                comprobante.condicionesDePago = 'Credito'
-                break
-            case 'PUE':
-                comprobante.metodoPago = CMetodoPago.PUE
-                break
-        }
-        
+        comprobante.formaPago = '99'
+        comprobante.metodoPago = CMetodoPago.PUE
         return this
     }
 
     def buildConceptos(){
         /** Conceptos ***/
         Comprobante.Conceptos conceptos = factory.createComprobanteConceptos()
-        ne.partidas.each{ det -> 
-            Comprobante.Conceptos.Concepto concepto = factory.createComprobanteConceptosConcepto()
-            concepto.with { 
-                String desc = (det.comentario?:'')+' '+ ne.comentario?:''
-                claveProdServ = det.producto.claveProdServ ?: "80131500" // Tomarlo del producto
-                noIdentificacion = det.producto.clave
-                cantidad = det.cantidad
-                claveUnidad = det.producto.claveUnidadSat ?: 'EA'
-                unidad = det.producto.unidadSat ?: 'Pieza'
-                descripcion = desc
-                valorUnitario = det.precio
-                importe = det.importeNeto
-                // Impuestos del concepto
-                concepto.impuestos = factory.createComprobanteConceptosConceptoImpuestos()
-                concepto.impuestos.traslados = factory.createComprobanteConceptosConceptoImpuestosTraslados()
-                Comprobante.Conceptos.Concepto.Impuestos.Traslados.Traslado traslado1 
-                traslado1 = factory.createComprobanteConceptosConceptoImpuestosTrasladosTraslado()
-                traslado1.base =  det.importeNeto
-                traslado1.impuesto = '002'
-
-                if( det.producto.impuesto == 0.0) {
-                    traslado1.tipoFactor = CTipoFactor.EXENTO
-                } else {
-                    traslado1.tipoFactor = CTipoFactor.TASA
-                    traslado1.tasaOCuota = '0.160000'
-                    traslado1.importe = MonedaUtils.round(det.impuesto)
-                }
-                
-                concepto.impuestos.traslados.traslado.add(traslado1)
-                conceptos.concepto.add(concepto)
-
-                def renta=Renta.findByneDet(det)
-                if(renta){
-                    Comprobante.Conceptos.Concepto.CuentaPredial cp = factory.createComprobanteConceptosConceptoCuentaPredial()
-                    cp.setNumero(renta.arrendamiento.inmueble.cuentaPredial)
-                    concepto.cuentaPredial = cp
-                }
-                comprobante.conceptos = conceptos
-
-            }
-        }
+        Comprobante.Conceptos.Concepto concepto = factory.createComprobanteConceptosConcepto()
+        concepto.claveProdServ = "84111505"
+        concepto.cantidad = 1
+        concepto.claveUnidad = 'ACT'
+        concepto.descripcion = 'Pago de nómina'
+        def totalPercepciones = nomina.totalPercepciones?:0.0
+        def totalOtrosPagos = nomina.totalOtrosPagos?:0.0
+        concepto.setValorUnitario(totalPercepciones + totalOtrosPagos);
+        concepto.setImporte(totalPercepciones + totalOtrosPagos);
+        concepto.setDescuento(nomina.totalDeducciones)
+        conceptos.concepto.add(concepto)
+        comprobante.conceptos = conceptos
         return this
     }
+    
 
-    def buildImpuestos(){
-        /** Impuestos **/
-        Comprobante.Impuestos impuestos = factory.createComprobanteImpuestos()
-        impuestos.setTotalImpuestosTrasladados(ne.impuesto)
-
-        
-        
-        if(ne.impuesto > 0 ) {
-            Comprobante.Impuestos.Traslados traslados = factory.createComprobanteImpuestosTraslados()
-            Comprobante.Impuestos.Traslados.Traslado traslado = factory.createComprobanteImpuestosTrasladosTraslado()
-            traslado.impuesto = '002'
-            traslado.tipoFactor = CTipoFactor.TASA
-            traslado.tasaOCuota = '0.160000'
-            traslado.importe = ne.impuesto
-            traslados.traslado.add(traslado)
-            impuestos.traslados = traslados
-        }
-        
-        comprobante.setImpuestos(impuestos)
-        return this
-    }
-
-    def buildTotales(){
-        comprobante.subTotal = ne.subTotal
-        comprobante.total = ne.total
+    def buildTotales() {
+        def totalPercepciones = nomina.totalPercepciones?:0.0
+        def totalOtrosPagos = nomina.totalOtrosPagos?:0.0
+        def totalDeducciones = nomina.totalDeducciones?:0.0
+        comprobante.setSubTotal(totalPercepciones + totalOtrosPagos)
+        comprobante.setDescuento(totalDeducciones)
+        comprobante.setTotal(totalPercepciones + totalOtrosPagos - totalDeducciones)
         return this
     }
 

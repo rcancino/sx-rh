@@ -12,7 +12,6 @@ import mx.gob.sat.cfd.x3.ComprobanteDocument.Comprobante
 
 class Cfdi {
 	
-	
 	String serie
 	String folio
 	Date fecha
@@ -24,6 +23,7 @@ class Cfdi {
 	BigDecimal total
 	String xmlName
 	byte[] xml
+	String versionCfdi = '3.3'
 	
 	ComprobanteDocument comprobanteDocument
 	
@@ -46,6 +46,7 @@ class Cfdi {
 		xmlName nullable:true,maxSize:200
 		xml maxSize:(1024 * 512)  // 50kb para almacenar el xml
 		cancelacion nullable:true
+		versionCfdi nullable: true
     }
 	
 	static transients = ['comprobanteDocument','timbreFiscal']
