@@ -255,8 +255,10 @@ class NominaBuilder {
             separacion.setIngresoNoAcumulable(ingresoNoAcumulable )
             separacion.setNumAñosServicio(finiquito.anosTrabajados)
             separacion.setTotalPagado(ne.total)
+            nomina.percepciones.separacionIndemnizacion = separacion
             
         }
+        return this
     }
 
     def buildOtrosPagos(){
