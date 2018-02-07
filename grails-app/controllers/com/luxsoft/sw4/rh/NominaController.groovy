@@ -21,7 +21,10 @@ class NominaController {
 
 	def nominaService
 
-	def cfdiService
+	// def cfdiService
+
+	def cfdiV33Service
+	def cfdiTimbradoService
     //static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 	def importarNominaService
 	
@@ -160,7 +163,7 @@ class NominaController {
     	nomina.partidas.each { ne ->
     		if(!ne.cfdi){
     			try {
-    				cfdiService.generarCfdi(ne)
+    				cfdiV33Service.generar(ne)
     				nominaService.actualizarSaldos(ne)
     			}
     			catch(Exception e) {
@@ -186,10 +189,13 @@ class NominaController {
 
 		pendientes.each{ ne ->
 			try {
-				cfdiService.timbrar(ne)
+				// cfdiV33Service.timbrar(ne)
+				cfdiTimbradoService.timbrar(ne.cfdi)
 			}
 			catch(Exception e) {
-				errores << " Error timbrando ${ne.empleado}"
+				def ccc = ExceptionUtils.getRootCouseMessage(e)
+				println " Error timbrando ${ne.empleado} ${cc}"
+				errores << " Error timbrando ${ne.empleado} ${cc}"
 			}
 		}
 

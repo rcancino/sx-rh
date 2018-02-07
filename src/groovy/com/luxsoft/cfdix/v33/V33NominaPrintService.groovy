@@ -44,7 +44,7 @@ class V33NominaPrintService {
 		modelData.sort{it.clave}
 
 		def repParams = NominaPrintUtils.getParametros(cfdi, nomina, ne)
-		params.FECHA = comprobante.fecha.format("yyyy-MM-dd'T'HH:mm:ss")
+		params.FECHA = comprobante.fecha
 		params << repParams
 
 		params['RECIBO_NOMINA'] = ne.id as String

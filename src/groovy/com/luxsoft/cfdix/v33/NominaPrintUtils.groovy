@@ -44,7 +44,7 @@ class NominaPrintUtils {
         parametros.put("EMISOR_DIRECCION", "ND");
         parametros.put("EXPEDIDO_DIRECCION", empresa.direccion.codigoPostal);
         parametros.put("REGIMEN",comprobante.getEmisor().regimenFiscal);
-        parametros.put("METODO_DE_PAGO",comprobante.metodoPago);
+        parametros.put("METODO_DE_PAGO",comprobante.metodoPago.toString());
 
         parametros.put("NOMBRE", comprobante.getReceptor().getNombre()); 
         parametros.put("RFC", comprobante.getReceptor().getRfc());
@@ -65,16 +65,15 @@ class NominaPrintUtils {
             parametros['REGISTRO_PATRONAL']=nomina.emisor.registroPatronal
             parametros['RIESGO_PUESTO']=''+nomina.receptor.riesgoPuesto
             parametros['TIPO_JORNADA'] = nomina.receptor.tipoJornada
-            parametros['FECHA_INGRESO_LABORAL'] = nomina.receptor?.fechaInicioRelLaboral?.format("yyyy-MM-dd")
-            parametros['ANTIGUEDAD'] = nomina.receptor.antigüedad
+            parametros['FECHA_INGRESO_LABORAL'] = nomina.receptor?.fechaInicioRelLaboral
             parametros['TIPO_CONTRATO'] = nomina.receptor.tipoContrato
             parametros['FECHA_INICIAL'] = nomina.fechaInicialPago?.format("yyyy-MM-dd")
-            parametros['FECHA_FINAL']=nomina.fechaFinalPago?.format("yyyy-MM-dd")
-            parametros['DIAS_PAGADOS']=nomina.numDiasPagados
+            parametros['FECHA_FINAL'] = nomina.fechaFinalPago?.format("yyyy-MM-dd")
+            parametros['DIAS_PAGADOS'] = nomina.numDiasPagados
             parametros['ASIMILADOS']='NO'
             parametros['BANCO'] = nominaPorEmpleado.nomina.formaDePago == 'TRANSFERENCIA'? nomina.receptor.banco?.toString() : ''
-            parametros['CLABE']=nomina.receptor.cuentaBancaria?.toString()
-        }else{
+            parametros['CLABE'] = nomina.receptor.cuentaBancaria?.toString()
+        }else {
             parametros['REGISTRO_PATRONAL'] = ''
             parametros['RIESGO_PUESTO'] = ''
             parametros['TIPO_JORNADA'] = ''
@@ -85,10 +84,10 @@ class NominaPrintUtils {
         }
         
         parametros.put("NFISCAL", comprobante.getSerie()+": "+nominaPorEmpleado.nomina.folio+" - "+comprobante.getFolio())
-        parametros['FECHA_INGRESO_LABORAL'] = nomina.receptor.fechaInicioRelLaboral?.format("yyyy-MM-dd")
+        parametros['FECHA_INGRESO_LABORAL'] = nomina.receptor.fechaInicioRelLaboral
         parametros['TIPO_CONTRATO'] = nomina.receptor.tipoContrato.toString()
-        parametros['FECHA_INICIAL']=nomina.fechaInicialPago?.format("yyyy-MM-dd")
-        parametros['FECHA_FINAL']=nomina.fechaFinalPago?.format("yyyy-MM-dd")
+        parametros['FECHA_INICIAL'] = nomina.fechaInicialPago
+        parametros['FECHA_FINAL'] = nomina.fechaFinalPago
         parametros['TOTAL']=comprobante.getTotal() //as String
         parametros['COMENTARIO_NOM']='Nómina'
 
@@ -109,10 +108,10 @@ class NominaPrintUtils {
         parametros['TIPO_NOMINA']=nomina.tipoNomina.toString()
         parametros['SUCURSAL']=nominaPorEmpleado.empleado.perfil.ubicacion.clave
         parametros['DEPARTAMENTO']=nomina.receptor.departamento
-        parametros['FECHA']= comprobante.fecha.format("yyyy-MM-dd'T'HH:mm:ss")
+        parametros['FECHA']= comprobante.fecha
 
         if(nominaPorEmpleado.asistencia){
-            def diasTrabajados=0
+            def diasTrabajados = 0
             def faltas=0
             if(nominaPorEmpleado){
                 if(nominaPorEmpleado.asistencia){
@@ -131,7 +130,7 @@ class NominaPrintUtils {
                 }           
             }
             parametros['FALTAS']=com.luxsoft.sw4.MonedaUtils.round(faltas,2) as String
-            parametros['DIAS_TRABAJADOS']=com.luxsoft.sw4.MonedaUtils.round(diasTrabajados,2) as String
+            parametros['DIAS_TRABAJADOS'] = com.luxsoft.sw4.MonedaUtils.round(diasTrabajados,2) as String
         }   
         parametros['SUB_EMPLEO_APLIC']=nominaPorEmpleado.subsidioEmpleoAplicado
 
@@ -172,6 +171,25 @@ class NominaPrintUtils {
                 parametros['IMPORTE_HORAS_EXTRA_TRIPLE'] = importeTriples
             }
         }
+
+        // Parametros nuevos
+        parametros['USO_CFDI'] = "P01"
+        parametros['MONEDA'] = 'MXN'
+        parametros['FECHA_PAGO'] = nomina.fechaPago
+        parametros['SINDICALIZADO'] = nomina.receptor.sindicalizado
+        parametros['ENTIDAD_FEDERATIVA'] = nomina.receptor.claveEntFed.toString()
+        parametros['TIPO_DE_COMPROBANTE'] = 'N (Nónina)'
+        parametros['ANTIGUEDAD'] = nomina.receptor.antigüedad
+
+        // concepto
+        def concepto1 = comprobante.conceptos.concepto.get(0)
+        parametros['CLAVE_PROD_SAT'] = concepto1.claveProdServ
+        parametros['UNIDAD_SAT'] = concepto1.claveUnidad
+        parametros['DESCRIPCION'] = concepto1.descripcion
+        parametros['CANTIDAD'] = concepto1.cantidad
+        parametros['VALOR_UNITARIO'] = concepto1.valorUnitario
+        parametros['IMPORTE'] = concepto1.importe
+        parametros['DESCUENTO'] = concepto1.descuento
 
         return parametros
     }

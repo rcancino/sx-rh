@@ -4,6 +4,7 @@ import com.luxsoft.sw4.rh.tablas.ZonaEconomica
 import com.luxsoft.sec.User
 import com.luxsoft.sec.UserRole
 import com.luxsoft.sec.Role
+import grails.util.Environment
 
 class BootStrap {
 
@@ -69,9 +70,12 @@ class BootStrap {
             UserRole.create(admin2,adminRole,true)
         }
         */
-        def admin = User.findByUsername('admin')
-        admin.password = 123
-        admin.save(flush:true,failOnError:true)
+       	if(Environment.current == Environment.DEVELOPMENT) {
+       		def admin = User.findByUsername('admin')
+        	admin.password = 123
+        	admin.save(flush:true,failOnError:true)
+       	}
+        
     }
     
     def destroy = {
