@@ -29,7 +29,7 @@ import com.luxsoft.sw4.cfdi.Cfdi
 class V33NominaPrintService {
 
 	def imprimir(Cfdi cfdi, def params = [:]){
-		println 'Imprimiendo CFDI: ' + cfdi.folio
+		//println 'Imprimiendo CFDI: ' + cfdi.folio
 		NominaPorEmpleado ne = NominaPorEmpleado.findByCfdi(cfdi)
 		Comprobante comprobante = CfdiUtils.read(cfdi.xml)
 

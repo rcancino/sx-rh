@@ -41,8 +41,8 @@ class NominaPrintUtils {
         Comprobante.Emisor  emisor=comprobante.getEmisor();
         parametros.put("EMISOR_NOMBRE",     emisor.getNombre());
         parametros.put("EMISOR_RFC",        emisor.getRfc());
-        parametros.put("EMISOR_DIRECCION", "ND");
-        parametros.put("EXPEDIDO_DIRECCION", empresa.direccion.codigoPostal);
+        parametros.put("EMISOR_DIRECCION", empresa.direccion.codigoPostal);
+        parametros.put("EXPEDIDO_EN", empresa.direccion.codigoPostal);
         parametros.put("REGIMEN",comprobante.getEmisor().regimenFiscal);
         parametros.put("METODO_DE_PAGO",comprobante.metodoPago.toString());
 
@@ -67,8 +67,8 @@ class NominaPrintUtils {
             parametros['TIPO_JORNADA'] = nomina.receptor.tipoJornada
             parametros['FECHA_INGRESO_LABORAL'] = nomina.receptor?.fechaInicioRelLaboral
             parametros['TIPO_CONTRATO'] = nomina.receptor.tipoContrato
-            parametros['FECHA_INICIAL'] = nomina.fechaInicialPago?.format("yyyy-MM-dd")
-            parametros['FECHA_FINAL'] = nomina.fechaFinalPago?.format("yyyy-MM-dd")
+            parametros['FECHA_INICIAL'] = nomina.fechaInicialPago
+            parametros['FECHA_FINAL'] = nomina.fechaFinalPago
             parametros['DIAS_PAGADOS'] = nomina.numDiasPagados
             parametros['ASIMILADOS']='NO'
             parametros['BANCO'] = nominaPorEmpleado.nomina.formaDePago == 'TRANSFERENCIA'? nomina.receptor.banco?.toString() : ''
@@ -190,6 +190,7 @@ class NominaPrintUtils {
         parametros['VALOR_UNITARIO'] = concepto1.valorUnitario
         parametros['IMPORTE'] = concepto1.importe
         parametros['DESCUENTO'] = concepto1.descuento
+        parametros['FORMA_DE_PAGO'] = comprobante.formaPago
 
         return parametros
     }
