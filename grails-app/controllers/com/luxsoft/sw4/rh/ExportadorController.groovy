@@ -159,6 +159,15 @@ class ExportadorController {
 					numCtaInd=numCtaInd.padLeft(20,"0")
 
 				}
+					/*Jorge*/
+				if(it.empleado.id==745 ){
+
+					claveSucInd="0269"
+					tipoCtaInd="01"	
+					numCtaInd="7858043"
+					numCtaInd=numCtaInd.padLeft(20,"0")
+
+				}
 
 
 				
@@ -1135,12 +1144,13 @@ temp.with {
      		sumaIngreSalExc=calculo.totalExento.setScale(0, RoundingMode.HALF_EVEN)
 
 //     		impuestoRet=calculo.ISR.setScale(0, RoundingMode.HALF_EVEN)
-
+//
 			impuestoRet=(calculo.ISR-calculo.compensacionSAF-calculo.devISPT-calculo.devISPTAnt).setScale(0, RoundingMode.HALF_EVEN)
 
      		impuestoRetOtros=0
      		//saf=calculo.resultado.setScale(0, RoundingMode.HALF_EVEN)>0 ? calculo.resultado.setScale(0, RoundingMode.HALF_EVEN) :0
-     		saf=calculo.calculoAnual? calculo.resultado.setScale(0, RoundingMode.HALF_EVEN) :0
+     		
+     		saf= 0 ///calculo.calculoAnual? calculo.resultado.setScale(0, RoundingMode.HALF_EVEN) :0
   
 			def calculoAnt=CalculoAnual.findByEjercicioAndEmpleado(calculo.ejercicio-1,calculo.empleado)  
   
@@ -1366,9 +1376,9 @@ def empleados=CalculoAnual.findAll("from CalculoAnual c where c.ejercicio=?  ",[
     
       def nominaIndemnizacion=NominaPorEmpleadoDet.executeQuery("from NominaPorEmpleadoDet d where d.parent.empleado=? and d.parent.nomina.ejercicio=? and d.parent.finiquito is true"
                                                                 ,[calculo.empleado,ejercicio]).each{ nominaDet ->
-       
         
         if(nominaDet.concepto.id==40 || nominaDet.concepto.id==38 ){
+
       		
             totalPagOtrosSep= (totalPagOtrosSep+nominaDet.importeGravado+nominaDet.importeExcento).setScale(0, RoundingMode.HALF_EVEN)
           	ingresosExe=(ingresosExe+nominaDet.importeExcento).setScale(0, RoundingMode.HALF_EVEN)
@@ -1382,8 +1392,7 @@ def empleados=CalculoAnual.findAll("from CalculoAnual c where c.ejercicio=?  ",[
       
       if(nominaIndemnizacion ){
       	
-        println "Generando Layout para "+ calculo.empleado
-
+        
       if(yearAlta==ejercicio){
     	 mesIni=(periodo.obtenerMes(calculo.empleado.alta)+1).toString().padLeft(2,"0") 
     	} 
@@ -1794,10 +1803,11 @@ def reporteDeInfonavit(){
 				  def nombre=empleado.nombres
 				  def ingreso=df.format(empleado.alta)
 				  def tipoSalario="2"
+				  def mail=empleado.datosPersonales.email
 				  
 		  
 		 
-			  def registro=curp+p+apellidoPaterno+p+apellidoMaterno+p+nombre+p+ingreso+p+tipoSalario+p+rfc+"\r\n"
+			  def registro=curp+p+apellidoPaterno+p+apellidoMaterno+p+nombre+p+ingreso+p+tipoSalario+p+rfc+p+mail+"\r\n"
 			 	append registro
 			 //println registro
 				  

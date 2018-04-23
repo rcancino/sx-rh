@@ -168,9 +168,7 @@ class NominaController {
     			}
     			catch(Exception e) {
     				String msg="Error generando CFDI para nomina de ${ne.empleado} id: $ne.id  " + ExceptionUtils.getMessage(e)
-    				flash.mesage= msg
-    				throw new RuntimeException(msg)
-    				return
+    				println "Error generando xml " + msg
     			}
     		}
     	}
@@ -193,9 +191,9 @@ class NominaController {
 				cfdiTimbradoService.timbrar(ne.cfdi)
 			}
 			catch(Exception e) {
-				def ccc = ExceptionUtils.getRootCouseMessage(e)
-				println " Error timbrando ${ne.empleado} ${cc}"
-				errores << " Error timbrando ${ne.empleado} ${cc}"
+				def ccc = ExceptionUtils.getRootCauseMessage(e)
+				println " Error timbrando ${ne.empleado} ${ccc}"
+				errores << " Error timbrando ${ne.empleado} ${ccc}"
 			}
 		}
 

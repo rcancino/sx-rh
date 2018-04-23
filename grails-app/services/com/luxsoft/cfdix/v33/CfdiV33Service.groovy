@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat
 
 import lx.cfdi.v33.Comprobante
 import lx.cfdi.v33.CfdiUtils
+import lx.cfdi.v33.nomina.NominaUtils
 import com.luxsoft.sw4.rh.NominaPorEmpleado
 import com.luxsoft.sw4.cfdi.Cfdi
 
@@ -31,7 +32,8 @@ public class CfdiV33Service {
 		cfdi.receptorRfc=comprobante.receptor.rfc
 		cfdi.total=comprobante.total
 		cfdi.versionCfdi = 3.3
-		cfdi.xml = CfdiUtils.serialize(comprobante).getBytes()
+		// cfdi.xml = CfdiUtils.serialize(comprobante).getBytes()
+		cfdi.xml = NominaUtils.toXmlByteArray(comprobante)
 		cfdi.setXmlName("${cfdi.receptorRfc}_${cfdi.serie}_${cfdi.folio}.xml")
 		cfdi.save failOnError:true, flush:true
 		ne.cfdi = cfdi

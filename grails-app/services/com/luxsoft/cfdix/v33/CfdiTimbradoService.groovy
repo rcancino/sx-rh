@@ -55,7 +55,8 @@ public class CfdiTimbradoService {
             cfdi.save(failOnError:true)
             return cfdi
         } catch (Exception e) {
-            String msg="Imposible timbrar cfdi $cfdi.id Error: " + ExceptionUtils.getMessage(e)
+            e.printStackTrace()
+            String msg="Imposible timbrar cfdi $cfdi.id Error: " + ExceptionUtils.getRootCauseMessage(e)
             throw new CfdiException(message:msg,cfdi:cfdi)
         }
         return cfdi

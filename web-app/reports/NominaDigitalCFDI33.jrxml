@@ -43,7 +43,7 @@
 	<parameter name="EMISOR_NOMBRE" isForPrompting="false" class="java.lang.String">
 		<defaultValueExpression ><![CDATA["N/A"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="EMISOR_DIRECCION" isForPrompting="false" class="java.lang.String">
+	<parameter name="EXPEDIDO_EN" isForPrompting="false" class="java.lang.String">
 		<defaultValueExpression ><![CDATA["N/A"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="EMISOR_RFC" isForPrompting="false" class="java.lang.String">
@@ -110,6 +110,7 @@
 	<parameter name="VALOR_UNITARIO" isForPrompting="false" class="java.math.BigDecimal"/>
 	<parameter name="IMPORTE" isForPrompting="false" class="java.math.BigDecimal"/>
 	<parameter name="DESCUENTO" isForPrompting="false" class="java.math.BigDecimal"/>
+	<parameter name="FORMA_DE_PAGO" isForPrompting="false" class="java.lang.String"/>
 
 	<field name="GRUPO" class="java.lang.String"/>
 	<field name="DESCRIPCION" class="java.lang.String"/>
@@ -395,7 +396,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font pdfFontName="Times-Roman" size="7"/>
 					</textElement>
-				<text><![CDATA[METODO DE PAGO]]></text>
+				<text><![CDATA[METODO DE PAGO    /     FORMA DE PAGO]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -1189,7 +1190,7 @@
 					<reportElement
 						x="398"
 						y="76"
-						width="176"
+						width="90"
 						height="14"
 						key="textField-137"/>
 					<box>					<topPen lineWidth="0.5"/>
@@ -1303,7 +1304,7 @@
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font fontName="SansSerif" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$P{EMISOR_DIRECCION}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{EXPEDIDO_EN}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -1444,6 +1445,23 @@
 						<font fontName="SansSerif" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$P{MONEDA}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="487"
+						y="76"
+						width="86"
+						height="14"
+						key="textField-171"/>
+					<box>					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{FORMA_DE_PAGO}]]></textFieldExpression>
 				</textField>
 			</band>
 		</columnHeader>

@@ -104,7 +104,7 @@ class CfdiBuilder33 {
         def totalOtrosPagos = nomina.totalOtrosPagos?:0.0
         concepto.setValorUnitario(totalPercepciones + totalOtrosPagos);
         concepto.setImporte(totalPercepciones + totalOtrosPagos);
-        concepto.setDescuento(nomina.totalDeducciones)
+        concepto.setDescuento(nomina.totalDeducciones?: 0.0)
         conceptos.concepto.add(concepto)
         comprobante.conceptos = conceptos
         return this

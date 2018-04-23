@@ -56,28 +56,21 @@ class AjusteIsr {
 	    impuestoMensual=impuestoMensual.setScale(2,RoundingMode.HALF_EVEN)
   
 	    def subsidioMensual=subsidio.subsidio
-	/* Ajuste temporal por timbrado version 3.3 no se esta validando que tenga cfdi la nominas
+	
 	    def impuestoAcumulado=NominaPorEmpleadoDet
 			.executeQuery("select sum(det.importeGravado+det.importeExcento) from NominaPorEmpleadoDet det "
 					+" where det.parent.empleado=? and det.parent.nomina.calendarioDet.calendario.ejercicio=? and det.parent.nomina.calendarioDet.mes=? "
 					+" and det.concepto.clave=? and det.parent.cfdi is not null ",[ne.empleado,ejercicio,mes,'D002'])[0]?:0.0
-  */
- 
- def impuestoAcumulado=NominaPorEmpleadoDet
-			.executeQuery("select sum(det.importeGravado+det.importeExcento) from NominaPorEmpleadoDet det "
-					+" where det.parent.empleado=? and det.parent.nomina.calendarioDet.calendario.ejercicio=? and det.parent.nomina.calendarioDet.mes=? and calendario_det_id not in (533)  "
-					+" and det.concepto.clave=?  ",[ne.empleado,ejercicio,mes,'D002'])[0]?:0.0
-/*
+  
+
+
 def subsidioAcumulado=NominaPorEmpleadoDet
 			.executeQuery("select sum(det.importeGravado+det.importeExcento) from NominaPorEmpleadoDet det "
 					+" where det.parent.empleado=? and det.parent.nomina.calendarioDet.calendario.ejercicio=? and det.parent.nomina.calendarioDet.mes=? "
-					+" and det.concepto.clave=?  ",[ne.empleado,ejercicio,mes,'P021'])[0]?:0.0
+					+" and det.concepto.clave=? and det.parent.cfdi is not null ",[ne.empleado,ejercicio,mes,'P021'])[0]?:0.0
+					
   
-*/	
-def subsidioAcumulado=NominaPorEmpleadoDet
-			.executeQuery("select sum(det.importeGravado+det.importeExcento) from NominaPorEmpleadoDet det "
-					+" where det.parent.empleado=? and det.parent.nomina.calendarioDet.calendario.ejercicio=? and det.parent.nomina.calendarioDet.mes=?  and calendario_det_id not in (533) "
-					+" and det.concepto.clave=?  ",[ne.empleado,ejercicio,mes,'P021'])[0]?:0.0
+
 
   
 	    def diferenciaMensual=impuestoMensual-subsidioMensual
@@ -147,19 +140,17 @@ def subsidioAcumulado=NominaPorEmpleadoDet
 		
 		 //Calcular el subsidio aplicado
 		 //
-		 /* Ajuste temporal por timbrado version 3.3 
+		 
 		 def subsidioAplicado=NominaPorEmpleado
 				.executeQuery("select sum(ne.subsidioEmpleoAplicado) from NominaPorEmpleado ne "
 					+" where ne.empleado=? and ne.nomina.calendarioDet.calendario.ejercicio=? and ne.nomina.calendarioDet.mes=? and ne.cfdi is not null"
 					,[ne.empleado,ejercicio,mes])[0]?:0.0
 			log.info "Aplicado"+subsidioAplicado +"Mensual"+subsidioMensual
-			*/
+			
 		
-		def subsidioAplicado=NominaPorEmpleado
-				.executeQuery("select sum(ne.subsidioEmpleoAplicado) from NominaPorEmpleado ne "
-					+" where ne.empleado=? and ne.nomina.calendarioDet.calendario.ejercicio=? and ne.nomina.calendarioDet.mes=? and calendario_det_id not in (533) "
-					,[ne.empleado,ejercicio,mes])[0]?:0.0
-			log.info "Aplicado"+subsidioAplicado +"Mensual"+subsidioMensual	
+			
+
+
 		 def resultadoSubsidioAplicado=subsidioMensual-subsidioAplicado
 		 
 		 log.info "Base gravable: "+baseGravable

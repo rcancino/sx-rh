@@ -240,9 +240,11 @@ class IncentivoService {
 		[ejercicio,mes.nombre,'ESPECIAL','INVENTARIO'])
 		
 
-
+    	println "*************************"+e.id
 
 		def asistenciaInv=AsistenciaDet.find("from  AsistenciaDet d where  d.fecha=? and d.asistencia.empleado=?",[inventario.inicio,e])
+
+		println "------------------------------"+asistenciaInv.id
 
 		def  salidaRegistrada;
 

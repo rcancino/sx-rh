@@ -31,8 +31,8 @@ class IndeminzacionBuilder {
 
             def dias20PorAnio = 0
 
-           // def dias3MesesSueldo = 90
-            def dias3MesesSueldo = 45
+            def dias3MesesSueldo = 90
+           // def dias3MesesSueldo = 45
              
 
             def tope2Veces = smg.salario * 2
