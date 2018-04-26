@@ -103,6 +103,11 @@ class NominaService {
 			return nomina
 		}
 
+		if(nomina.tipo=='ESPECIAL_PA'){
+			nomina=generarBonoEspecial(nomina)
+			return nomina
+		}
+
 		if(nomina.tipo=='ESPECIAL'){
 			nomina = generarPartidasEspecial(nomina)
 			return nomina
@@ -355,6 +360,33 @@ class NominaService {
 		ordenar(nomina)
 		return nomina
 	}
+
+	def generarBonoEspecial(Nomina nomina){
+		def bonos = Bono
+			.findAll (
+				"from Bono a where a.ejercicio=? and a.empleado.salario.periodicidad=? and a.empleado.salario.formaDePago=? and a.bono > 0"
+			,[nomina.ejercicio,nomina.periodicidad,nomina.formaDePago])
+		
+		bonos.each{
+			def empleado=it.empleado
+			def ne=new NominaPorEmpleado(
+			empleado:empleado,
+			ubicacion:empleado.perfil.ubicacion,
+			antiguedadEnSemanas:0,
+			nomina:nomina,
+			vacaciones:0,
+			fraccionDescanso:0
+			)
+			ne.antiguedadEnSemanas=ne.getAntiguedad()
+			ne.salarioDiarioBase=empleado.salario.salarioDiario
+			ne.salarioDiarioIntegrado=empleado.salario.salarioDiarioIntegrado
+			nomina.addToPartidas(ne)
+			it.nominaPorEmpleado=ne
+		}
+		nomina.save failOnError:true
+		ordenar(nomina)
+		return nomina
+	}
 	 
 	def actualizarAguinaldo(Nomina nomina)	{	
 		nomina.partidas.each{ ne ->
@@ -403,6 +435,52 @@ class NominaService {
 					def d2=new NominaPorEmpleadoDet(concepto:ConceptoDeNomina.findByClave('D004')
 						,importeGravado:0.0
 						,importeExcento:aguinaldo.prestamo
+						,comentario:'PENDIENTE')
+					ne.addToConceptos(d2)
+				}
+				
+			}
+			ne.save failOnErro:true, flush:true
+		}
+	}
+
+	def actualizarBonoEspecial(Nomina nomina)	{	
+		nomina.partidas.each{ ne ->
+			ne.conceptos.clear()
+			def bono = Bono.findByNominaPorEmpleado(ne)
+			if(bono){
+				
+				//Percepcion 1
+				def p1=new NominaPorEmpleadoDet(concepto:ConceptoDeNomina.findByClave('P037')
+					,importeGravado: bono.bono, comentario:'BONO_PA')
+				ne.addToConceptos(p1)
+				
+				if(bono.isrPorRetener){
+					def d1=new NominaPorEmpleadoDet(concepto:ConceptoDeNomina.findByClave('D002')
+					,importeGravado:0.0
+					,importeExcento:bono.isrPorRetener
+					,comentario:'PENDIENTE')
+					ne.addToConceptos(d1)
+				}
+				
+				if(bono.pensionA){
+					def d2=new NominaPorEmpleadoDet(concepto:ConceptoDeNomina.findByClave('D007')
+						,importeGravado:0.0
+						,importeExcento:bono.pensionA
+						,comentario:'PENDIENTE')
+					ne.addToConceptos(d2)
+				}
+				if(bono.otrasDed){
+					def d2=new NominaPorEmpleadoDet(concepto:ConceptoDeNomina.findByClave('D005')
+						,importeGravado:0.0
+						,importeExcento:bono.otrasDed
+						,comentario:'PENDIENTE')
+					ne.addToConceptos(d2)
+				}
+				if(bono.prestamo){
+					def d2=new NominaPorEmpleadoDet(concepto:ConceptoDeNomina.findByClave('D004')
+						,importeGravado:0.0
+						,importeExcento:bono.prestamo
 						,comentario:'PENDIENTE')
 					ne.addToConceptos(d2)
 				}

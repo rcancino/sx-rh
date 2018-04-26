@@ -92,10 +92,15 @@ class NominaController {
 			redirect action:'show',params:[id:id]
 			return
 		}
-
 		if(nomina.tipo=='PTU'){
 			nominaService.actualizarPtu(nomina)
 			flash.message="Nomina de PTU actualizada"
+			redirect action:'show',params:[id:id]
+			return
+		}
+		if(nomina.tipo == 'ESPECIAL_PA' ){
+			nominaService.actualizarBonoEspecial(nomina)
+			flash.message="Nomina Folio: ${nomina.id} Tipo: $nomina.tipo actualizada"
 			redirect action:'show',params:[id:id]
 			return
 		}

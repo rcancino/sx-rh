@@ -16,7 +16,7 @@
     					<div class="col-sm-9">
     						<g:select id="tipoField" class="form-control "  
 								name="tipo" 
-								from="${['GENERAL','ESPECIAL','AGUINALDO','PTU','LIQUIDACION']}" 
+								from="${['GENERAL','ESPECIAL','AGUINALDO','PTU','LIQUIDACION','ESPECIAL_PA']}" 
 								/>
     					</div>
   					</div>
