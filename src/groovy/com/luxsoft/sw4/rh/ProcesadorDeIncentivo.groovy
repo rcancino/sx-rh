@@ -67,10 +67,13 @@ class ProcesadorDeIncentivo {
 		def importe=0.0
 		def salario=ne.conceptos.find{it.concepto.clave=='P001'}
 		def vac=ne.conceptos.find{it.concepto.clave=='P025'}
+		def pat=ne.conceptos.find{it.concepto.clave=='P032'}
 		if(salario ){
 			def bono=(i.tasaBono1+i.tasaBono2)
 			def vacImp=vac?vac.getTotal():0.0
-			def total=+salario.total+vacImp
+			def patImp=pat?pat.getTotal():0.0
+
+			def total=+salario.total+vacImp+patImp
 			log.debug 'Base para Incentivo  : '+total+ ' bono del: '+bono
 			importe=total*(bono)
 		}

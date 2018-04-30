@@ -27,19 +27,17 @@ class IndeminzacionBuilder {
 
             def tasaInteres = 0.0 //**** Agrgar al bean  **//
 
-            //def dias20PorAnio = 20
+            def dias20PorAnio = 20
 
-            def dias20PorAnio = 0
 
             def dias3MesesSueldo = 90
-           // def dias3MesesSueldo = 45
-             
+         
 
             def tope2Veces = smg.salario * 2
 
-            //def diasAnioPorAntiguedad = 12
+            def diasAnioPorAntiguedad = 12
         
-                def diasAnioPorAntiguedad = 0
+               
 
             indemnizacionIntereses = montoIntereses * tasaInteres / 100.0
 

@@ -30,7 +30,7 @@
 		<defaultValueExpression ><![CDATA["PAPEL S.A. DE C.V."]]></defaultValueExpression>
 	</parameter>
 	<parameter name="NomReporte" isForPrompting="false" class="java.lang.String">
-		<defaultValueExpression ><![CDATA["AGUINALDO (PAGO)"]]></defaultValueExpression>
+		<defaultValueExpression ><![CDATA["BONO (ASISTENCIA Y PUNTUALIDAD)"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="EJERCICIO" isForPrompting="true" class="java.lang.Integer"/>
 	<queryString><![CDATA[SELECT E.id,CONCAT(ifnull(E.apellido_paterno,'')," ",ifnull(E.apellido_materno,'')," ",E.nombres) AS nombre,e.alta,s.periodicidad,P.numero_de_trabajador as numTrab
@@ -44,7 +44,7 @@ join empleado e on(e.id=a.empleado_id)
 JOIN perfil_de_empleado p ON(E.ID=p.empleado_id)
 join salario s on(s.empleado_id=e.id)
 WHERE A.EJERCICIO=$P{EJERCICIO}
-ORDER BY periodicidad,ubicacion,nombre]]></queryString>
+]]></queryString>
 
 	<field name="id" class="java.lang.Long"/>
 	<field name="nombre" class="java.lang.String"/>
@@ -72,18 +72,28 @@ ORDER BY periodicidad,ubicacion,nombre]]></queryString>
 	<field name="bono_preliminar" class="java.math.BigDecimal"/>
 	<field name="bono" class="java.math.BigDecimal"/>
 
-	<sortField name="periodicidad" />
+	<sortField name="periodicidad" order="Descending" />
 	<sortField name="ubicacion" />
+	<sortField name="nombre" />
 
+	<variable name="BONO_SUC" class="java.math.BigDecimal" resetType="Group" resetGroup="UBICACION" calculation="Sum">
+		<variableExpression><![CDATA[$F{bono}]]></variableExpression>
+	</variable>
+	<variable name="BONO_PER" class="java.math.BigDecimal" resetType="Group" resetGroup="PERIODICIDAD" calculation="Sum">
+		<variableExpression><![CDATA[$F{bono}]]></variableExpression>
+	</variable>
+	<variable name="BONO_TOTAL" class="java.math.BigDecimal" resetType="Report" calculation="Sum">
+		<variableExpression><![CDATA[$F{bono}]]></variableExpression>
+	</variable>
 
 		<group  name="PERIODICIDAD" isStartNewPage="true" >
 			<groupExpression><![CDATA[$F{periodicidad}]]></groupExpression>
 			<groupHeader>
-			<band height="18"  isSplitAllowed="true" >
+			<band height="16"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="265"
-						y="3"
+						x="345"
+						y="1"
 						width="83"
 						height="15"
 						key="textField"/>
@@ -96,19 +106,46 @@ ORDER BY periodicidad,ubicacion,nombre]]></queryString>
 			</band>
 			</groupHeader>
 			<groupFooter>
-			<band height="8"  isSplitAllowed="true" >
+			<band height="12"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="638"
+						y="1"
+						width="62"
+						height="11"
+						key="textField-38"/>
+					<box>					<topPen lineWidth="1.0" lineStyle="Solid"/>
+</box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{BONO_PER}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="386"
+						y="1"
+						width="252"
+						height="11"
+						key="textField-39"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{periodicidad}.concat("  TOTAL  :  ")]]></textFieldExpression>
+				</textField>
 			</band>
 			</groupFooter>
 		</group>
 		<group  name="UBICACION" isStartNewPage="true" >
 			<groupExpression><![CDATA[$F{ubicacion}]]></groupExpression>
 			<groupHeader>
-			<band height="17"  isSplitAllowed="true" >
+			<band height="19"  isSplitAllowed="true" >
 				<line direction="TopDown">
 					<reportElement
-						x="0"
-						y="15"
-						width="762"
+						x="59"
+						y="16"
+						width="641"
 						height="2"
 						forecolor="#666666"
 						key="line-7"/>
@@ -116,8 +153,8 @@ ORDER BY periodicidad,ubicacion,nombre]]></queryString>
 				</line>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="2"
-						y="0"
+						x="65"
+						y="1"
 						width="252"
 						height="15"
 						key="textField"/>
@@ -130,7 +167,34 @@ ORDER BY periodicidad,ubicacion,nombre]]></queryString>
 			</band>
 			</groupHeader>
 			<groupFooter>
-			<band height="0"  isSplitAllowed="true" >
+			<band height="16"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="638"
+						y="3"
+						width="62"
+						height="11"
+						key="textField-36"/>
+					<box>					<topPen lineWidth="0.5" lineStyle="Solid"/>
+</box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{BONO_SUC}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="386"
+						y="3"
+						width="252"
+						height="11"
+						key="textField-37"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{ubicacion}.concat("  TOTAL  :  ")]]></textFieldExpression>
+				</textField>
 			</band>
 			</groupFooter>
 		</group>
@@ -159,9 +223,9 @@ ORDER BY periodicidad,ubicacion,nombre]]></queryString>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="490"
+						x="503"
 						y="12"
-						width="242"
+						width="229"
 						height="15"
 						key="textField"/>
 					<box></box>
@@ -173,7 +237,7 @@ ORDER BY periodicidad,ubicacion,nombre]]></queryString>
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="7"
+						x="69"
 						y="27"
 						width="52"
 						height="11"
@@ -192,7 +256,7 @@ ORDER BY periodicidad,ubicacion,nombre]]></queryString>
 				</staticText>
 				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="59"
+						x="121"
 						y="27"
 						width="30"
 						height="11"
@@ -206,7 +270,7 @@ ORDER BY periodicidad,ubicacion,nombre]]></queryString>
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="221"
+						x="318"
 						y="27"
 						width="65"
 						height="11"
@@ -225,7 +289,7 @@ ORDER BY periodicidad,ubicacion,nombre]]></queryString>
 				</staticText>
 				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="286"
+						x="383"
 						y="27"
 						width="22"
 						height="11"
@@ -239,9 +303,9 @@ ORDER BY periodicidad,ubicacion,nombre]]></queryString>
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="314"
+						x="411"
 						y="27"
-						width="79"
+						width="85"
 						height="11"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
@@ -251,16 +315,16 @@ ORDER BY periodicidad,ubicacion,nombre]]></queryString>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 </box>
-					<textElement textAlignment="Left" verticalAlignment="Bottom" rotation="None" lineSpacing="Single">
+					<textElement textAlignment="Right" verticalAlignment="Bottom" rotation="None" lineSpacing="Single">
 						<font fontName="Arial" pdfFontName="Helvetica-Oblique" size="8" isBold="false" isItalic="true" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
-				<text><![CDATA[ASISTENCIA : DEL]]></text>
+				<text><![CDATA[ASISTENCIA : DEL  ]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="false" pattern="dd-MMM-yy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="393"
+						x="496"
 						y="27"
-						width="38"
+						width="44"
 						height="11"
 						key="textField-30"/>
 					<box></box>
@@ -272,7 +336,7 @@ ORDER BY periodicidad,ubicacion,nombre]]></queryString>
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="98"
+						x="160"
 						y="27"
 						width="87"
 						height="11"
@@ -289,11 +353,11 @@ ORDER BY periodicidad,ubicacion,nombre]]></queryString>
 					</textElement>
 				<text><![CDATA[MONTO PARA BONO : ]]></text>
 				</staticText>
-				<textField isStretchWithOverflow="false" pattern="###0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="185"
+						x="247"
 						y="27"
-						width="22"
+						width="64"
 						height="11"
 						key="textField-31"/>
 					<box></box>
@@ -305,9 +369,9 @@ ORDER BY periodicidad,ubicacion,nombre]]></queryString>
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="431"
+						x="540"
 						y="27"
-						width="13"
+						width="16"
 						height="11"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
@@ -317,16 +381,16 @@ ORDER BY periodicidad,ubicacion,nombre]]></queryString>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 </box>
-					<textElement textAlignment="Left" verticalAlignment="Bottom" rotation="None" lineSpacing="Single">
+					<textElement textAlignment="Center" verticalAlignment="Bottom" rotation="None" lineSpacing="Single">
 						<font fontName="Arial" pdfFontName="Helvetica-Oblique" size="8" isBold="false" isItalic="true" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
 				<text><![CDATA[AL]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="false" pattern="dd-MMM-yy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="444"
+						x="556"
 						y="27"
-						width="38"
+						width="44"
 						height="11"
 						key="textField-32"/>
 					<box></box>
@@ -338,11 +402,11 @@ ORDER BY periodicidad,ubicacion,nombre]]></queryString>
 			</band>
 		</pageHeader>
 		<columnHeader>
-			<band height="26"  isSplitAllowed="true" >
+			<band height="24"  isSplitAllowed="true" >
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="24"
+						x="82"
 						y="2"
 						width="171"
 						height="22"
@@ -362,7 +426,7 @@ ORDER BY periodicidad,ubicacion,nombre]]></queryString>
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="3"
+						x="61"
 						y="2"
 						width="21"
 						height="22"
@@ -382,7 +446,7 @@ ORDER BY periodicidad,ubicacion,nombre]]></queryString>
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="378"
+						x="436"
 						y="13"
 						width="36"
 						height="11"
@@ -402,7 +466,7 @@ ORDER BY periodicidad,ubicacion,nombre]]></queryString>
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="414"
+						x="472"
 						y="13"
 						width="30"
 						height="11"
@@ -422,7 +486,7 @@ ORDER BY periodicidad,ubicacion,nombre]]></queryString>
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="444"
+						x="502"
 						y="13"
 						width="36"
 						height="11"
@@ -442,7 +506,7 @@ ORDER BY periodicidad,ubicacion,nombre]]></queryString>
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="308"
+						x="366"
 						y="2"
 						width="39"
 						height="22"
@@ -462,7 +526,7 @@ ORDER BY periodicidad,ubicacion,nombre]]></queryString>
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="480"
+						x="538"
 						y="13"
 						width="30"
 						height="11"
@@ -482,47 +546,7 @@ ORDER BY periodicidad,ubicacion,nombre]]></queryString>
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="510"
-						y="2"
-						width="41"
-						height="22"
-						forecolor="#000000"
-						key="staticText-60"
-						isPrintInFirstWholeBand="true"/>
-					<box>					<topPen lineWidth="1.25" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
-						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
-					</textElement>
-				<text><![CDATA[PTU EJERCICIO]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						mode="Opaque"
-						x="551"
-						y="13"
-						width="40"
-						height="11"
-						forecolor="#000000"
-						key="staticText-61"
-						isPrintInFirstWholeBand="true"/>
-					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
-						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
-					</textElement>
-				<text><![CDATA[INICIAL]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						mode="Opaque"
-						x="621"
+						x="598"
 						y="13"
 						width="40"
 						height="11"
@@ -542,27 +566,7 @@ ORDER BY periodicidad,ubicacion,nombre]]></queryString>
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="661"
-						y="13"
-						width="48"
-						height="11"
-						forecolor="#000000"
-						key="staticText-63"
-						isPrintInFirstWholeBand="true"/>
-					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
-						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
-					</textElement>
-				<text><![CDATA[OTORGADO]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						mode="Opaque"
-						x="195"
+						x="253"
 						y="2"
 						width="113"
 						height="22"
@@ -582,7 +586,7 @@ ORDER BY periodicidad,ubicacion,nombre]]></queryString>
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="348"
+						x="406"
 						y="2"
 						width="30"
 						height="22"
@@ -603,9 +607,9 @@ ANTG]]></text>
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="378"
+						x="436"
 						y="2"
-						width="132"
+						width="202"
 						height="11"
 						forecolor="#000000"
 						key="staticText-71"
@@ -623,14 +627,14 @@ ANTG]]></text>
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="591"
+						x="568"
 						y="13"
 						width="30"
 						height="11"
 						forecolor="#000000"
 						key="staticText-72"
 						isPrintInFirstWholeBand="true"/>
-					<box>					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<box>					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
@@ -643,9 +647,9 @@ ANTG]]></text>
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="709"
+						x="638"
 						y="2"
-						width="48"
+						width="62"
 						height="22"
 						forecolor="#000000"
 						key="staticText-73"
@@ -658,36 +662,16 @@ ANTG]]></text>
 					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
 						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
 					</textElement>
-				<text><![CDATA[PTU + BONO]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						mode="Opaque"
-						x="551"
-						y="2"
-						width="158"
-						height="11"
-						forecolor="#000000"
-						key="staticText-74"
-						isPrintInFirstWholeBand="true"/>
-					<box>					<topPen lineWidth="1.25" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
-</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
-						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="8" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
-					</textElement>
-				<text><![CDATA[BONO DE ASISTENCIA Y PUNTUALIDAD]]></text>
+				<text><![CDATA[BONO OTORGADO]]></text>
 				</staticText>
 			</band>
 		</columnHeader>
 		<detail>
-			<band height="12"  isSplitAllowed="true" >
+			<band height="13"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="24"
-						y="0"
+						x="82"
+						y="1"
 						width="171"
 						height="11"
 						key="textField"/>
@@ -699,9 +683,9 @@ ANTG]]></text>
 				</textField>
 				<line direction="TopDown">
 					<reportElement
-						x="0"
-						y="11"
-						width="762"
+						x="59"
+						y="12"
+						width="641"
 						height="0"
 						forecolor="#CCCCCC"
 						key="line-8"/>
@@ -709,8 +693,8 @@ ANTG]]></text>
 				</line>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="1"
-						y="0"
+						x="59"
+						y="1"
 						width="23"
 						height="11"
 						key="textField-9"/>
@@ -720,10 +704,10 @@ ANTG]]></text>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{numTrab}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="378"
-						y="0"
+						x="436"
+						y="1"
 						width="36"
 						height="11"
 						key="textField-15"/>
@@ -733,10 +717,10 @@ ANTG]]></text>
 					</textElement>
 				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{retardos}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="414"
-						y="0"
+						x="472"
+						y="1"
 						width="30"
 						height="11"
 						key="textField-19"/>
@@ -746,10 +730,10 @@ ANTG]]></text>
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{retardo_factor}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="444"
-						y="0"
+						x="502"
+						y="1"
 						width="36"
 						height="11"
 						key="textField-20"/>
@@ -761,8 +745,8 @@ ANTG]]></text>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="dd-MMM-yy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="308"
-						y="0"
+						x="366"
+						y="1"
 						width="39"
 						height="11"
 						key="textField-22"/>
@@ -772,10 +756,10 @@ ANTG]]></text>
 					</textElement>
 				<textFieldExpression   class="java.sql.Timestamp"><![CDATA[$F{alta}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="480"
-						y="0"
+						x="538"
+						y="1"
 						width="30"
 						height="11"
 						key="textField-23"/>
@@ -783,38 +767,12 @@ ANTG]]></text>
 					<textElement textAlignment="Right">
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{productividad_factor}]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{faltas_incapacidades_factor}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="510"
-						y="0"
-						width="41"
-						height="11"
-						key="textField-24"/>
-					<box></box>
-					<textElement textAlignment="Right">
-						<font size="8"/>
-					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{ptu}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="551"
-						y="0"
-						width="40"
-						height="11"
-						key="textField-25"/>
-					<box></box>
-					<textElement textAlignment="Right">
-						<font size="8"/>
-					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{bono_inicial}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="621"
-						y="0"
+						x="598"
+						y="1"
 						width="40"
 						height="11"
 						key="textField-26"/>
@@ -822,13 +780,13 @@ ANTG]]></text>
 					<textElement textAlignment="Right">
 						<font size="8"/>
 					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{bono_inicial}.subtract($F{bono})]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{ptu}.subtract($F{bono_preliminar})]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="661"
-						y="0"
-						width="48"
+						x="638"
+						y="1"
+						width="62"
 						height="11"
 						key="textField-27"/>
 					<box></box>
@@ -839,8 +797,8 @@ ANTG]]></text>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="195"
-						y="0"
+						x="253"
+						y="1"
 						width="113"
 						height="11"
 						key="textField-33"/>
@@ -850,10 +808,10 @@ ANTG]]></text>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{puesto}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="348"
-						y="0"
+						x="406"
+						y="1"
 						width="30"
 						height="11"
 						key="textField-34"/>
@@ -863,10 +821,10 @@ ANTG]]></text>
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{antDias}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="false" pattern="#,##0.0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="591"
-						y="0"
+						x="568"
+						y="1"
 						width="30"
 						height="11"
 						key="textField-35"/>
@@ -875,19 +833,6 @@ ANTG]]></text>
 						<font size="8"/>
 					</textElement>
 				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{porcentaje_bono}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="709"
-						y="0"
-						width="48"
-						height="11"
-						key="textField-36"/>
-					<box></box>
-					<textElement textAlignment="Right">
-						<font size="8"/>
-					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{ptu}.add($F{bono})]]></textFieldExpression>
 				</textField>
 			</band>
 		</detail>
@@ -1128,7 +1073,38 @@ ANTG]]></text>
 			</band>
 		</lastPageFooter>
 		<summary>
-			<band height="0"  isSplitAllowed="true" >
+			<band height="15"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="638"
+						y="4"
+						width="62"
+						height="11"
+						key="textField-40"/>
+					<box>					<pen lineWidth="0.0" lineStyle="Double"/>
+					<topPen lineWidth="2.0" lineStyle="Double"/>
+					<leftPen lineWidth="0.0" lineStyle="Double"/>
+					<bottomPen lineWidth="0.0" lineStyle="Double"/>
+					<rightPen lineWidth="0.0" lineStyle="Double"/>
+</box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{BONO_TOTAL}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="386"
+						y="4"
+						width="252"
+						height="11"
+						key="textField-41"/>
+					<box></box>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["  TOTAL GLOBAL :  "]]></textFieldExpression>
+				</textField>
 			</band>
 		</summary>
 </jasperReport>
