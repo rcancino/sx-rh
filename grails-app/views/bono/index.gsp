@@ -29,6 +29,9 @@
 			<g:link action="create">
 				<span class="glyphicon glyphicon-plus"></span> Alta
 			</g:link>
+			<g:link action="actualizar">
+				<span class="glyphicon glyphicon-refresh"></span> Actualizar
+			</g:link>
 		</li>
 	</content>
 

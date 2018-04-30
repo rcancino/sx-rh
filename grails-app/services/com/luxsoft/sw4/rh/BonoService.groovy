@@ -66,6 +66,9 @@ class BonoService {
 		def bpTotal = bonos.sum 0.0, {it.bonoPreliminar }
 		
 		bonos.each { b -> 
+			
+			b.bonoPreliminar = b.ptu * (b.porcentajeBono / 100)
+
 			def montoTotal = b.montoBonoTotal
 			def part = b.bonoPreliminar * 100 / bpTotal
 			def monto = montoTotal * (part / 100)

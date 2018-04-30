@@ -28,44 +28,29 @@ class BonoController {
     	[bonoInstanceList:list]
     }
 
-    /*def save(EmpleadoPorEjercicioCommand command){
-        log.info 'Generando aguinaldo para '+command
-        def aguinaldo=Aguinaldo.find{ejercicio==command.ejercicio && empleado==command.empleado}
-        if(aguinaldo){
-            flash.message="Agunaldo para $command.empleado para el ejercicio $command.ejercicio ya existe"
-            render view:'create',model:[aguinaldoInstance:new EmpleadoPorEjercicioCommand(ejercicio:session.ejercicio)]
-            return
-        }
-        aguinaldo=aguinaldoService.generar(command.empleado,command.ejercicio)
-        flash:'Nuevo registro de aguinaldo generado '+aguinaldo.id
-        redirect action:'index'
-    }*/
-
-    def edit(Aguinaldo a){
-        [aguinaldoInstance:a]
+    
+    def edit(Bono bonoInstance){
+        [bonoInstance:bonoInstance]
     }
 
-    def update(){
-        
-        def a = Aguinaldo.get(params.id)
-        // [aguinaldoInstance:a]
-        def bono = params['porcentajeBono'] as BigDecimal
-        
-        println 'Bono:' +params.porcentajeBono
+    def update(Bono bonoInstance){
+        // def a = Bono.get(params.id)
+        // bindData(a,params,[exclude: ['id', 'version']])
+        // flash.message = "Bono de ${a.empleado.nombre} actualizado"
+        // redirect action:'show',params:[id:a.id]
+         if (bonoInstance == null) {
+            notFound()
+            return
+        }
 
+        if (bonoInstance.hasErrors()) {
+            respond bonoInstance.errors, view:'edit'
+            return
+        }
 
-
-        bindData(a,params,[exclude: ['id', 'version']])
-        
-        bono = bono/100
-        a.porcentajeBono = bono
-
-        //log.info 'Actualizando aguinaldo: '+params+ 'Bono: '+bono+ 'Manual: '+bono
-        
-        log.info 'Actualizando aguinaldo: '+a
-        a=aguinaldoService.calcular(a)
-        flash.message = "Aguinaldo ${a.id} actualizado"
-        redirect action:'show',params:[id:a.id]
+        bonoInstance=bonoInstance.save failOnError: true, flush: true
+        flash.message = "Bono de ${bonoInstance.empleado.nombre} actualizado"
+        redirect action:'index'
     }
 
     def show(Aguinaldo a){
@@ -93,15 +78,15 @@ class BonoController {
         BigDecimal monto = params.double('monto') as BigDecimal
         BigDecimal porcentaje = params.double('porcentaje') as BigDecimal
         bonoService.generarBonos(ptu, monto, porcentaje)
-        bonoService.actualizarImportes(ptu.ejercicio)
+
         flash: 'Bonos generado exsitosamente '
         // println "Generando bono ${ptu.ejercicio} PTU: ${ptu.id} Monto: ${monto} % ${porcentaje}"
         redirect action:'index'
     }
 
     def actualizar(){
-    	def ejercicio=session.ejercicio
-    	aguinaldoService.calcular(ejercicio)
+        Integer ejercicio = session.ejercicio 
+    	bonoService.actualizarImportes(ejercicio)
     	redirect action:'index'
     }
 

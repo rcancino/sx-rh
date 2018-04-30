@@ -20,7 +20,7 @@
 			<th>Bono Par</th>
 			<th>Bono (%)</th>
 			<th>Total</th>
-			
+			<th>M</th>
 
 		</tr>
 	</thead>
@@ -29,7 +29,7 @@
 			<tr>
 				<td>${row.id}</td>
 				<td>
-					<g:link action="show" id="${row.id}">
+					<g:link action="edit" id="${row.id}">
 						${fieldValue(bean:row,field:"empleado.nombre")}
 					</g:link>
 				</td>
@@ -51,6 +51,14 @@
 
 				<td><g:formatNumber number="${row.porcentajeBono}" /></td>
 				<td><g:formatNumber number="${row.bono}" type="currency"/></td>
+				<td>
+					<g:if test ="${row.manual}">
+						<span class="glyphicon glyphicon-ok"></span>
+					</g:if>
+					<g:else>
+						
+					</g:else>
+				</td>
 				
 			</tr>
 		</g:each>
