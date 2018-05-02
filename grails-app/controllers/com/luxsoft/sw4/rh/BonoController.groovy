@@ -47,7 +47,7 @@ class BonoController {
             respond bonoInstance.errors, view:'edit'
             return
         }
-
+        bonoInstance.bonoPreliminar = bonoInstance.ptu * (bonoInstance.porcentajeBono / 100)
         bonoInstance=bonoInstance.save failOnError: true, flush: true
         flash.message = "Bono de ${bonoInstance.empleado.nombre} actualizado"
         redirect action:'index'
@@ -97,6 +97,30 @@ class BonoController {
         params.reportName = 'BonoAnual'
         ByteArrayOutputStream  pdfStream = runReport(params)
         render(file: pdfStream.toByteArray(), contentType: 'application/pdf',fileName:params.reportName)
+    }
+
+     def reporte(){
+        def tipo=params.tipo
+        def re=''
+        switch(tipo) {
+            case 'IMPUESTO':
+                re='BonoImpuesto'
+                break;
+            case 'PAGO':
+                re='BonoPago'
+                break;
+            break
+        }
+        if(re){
+            params.reportName=re
+            params['EJERCICIO']=session.ejercicio
+            ByteArrayOutputStream  pdfStream=runReport(params)
+            render(file: pdfStream.toByteArray(), contentType: 'application/pdf',fileName:params.reportName)
+        }else{
+            flash.message="Reporte incorrecto: "+re
+            redirect action:'index'
+
+        }
     }
 
     private runReport(Map repParams){

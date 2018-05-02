@@ -38,7 +38,11 @@
 	<content tag="reportes">
 		<li>
 			<g:link action="reporteBonoAnual"> Resumen de bono</g:link>
+			<g:link action="reporte" params="[tipo:'IMPUESTO']"> Bono Impuesto</g:link>
+			<g:link action="reporte" params="[tipo:'PAGO']"> Bono Pago</g:link>
 		</li>
+
+		
 	</content>
 
 

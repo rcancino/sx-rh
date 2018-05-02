@@ -41,6 +41,9 @@ class Bono {
 	BigDecimal bonoPreliminar = 0.0
 	BigDecimal porcentajeBono = 0.0
 	BigDecimal bono = 0.0
+
+	BigDecimal ptuGravado=0.0
+	BigDecimal incentivo=0.0
 	
 	
 	BigDecimal totalGravable = 0.0

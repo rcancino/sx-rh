@@ -32,12 +32,14 @@ class BonoService {
 		ptu.partidas.each {
 		    if(it.status != 'BAJA') {
 		    	def ptuEmpleado = (it.ptuExcento + it.ptuGravado) 
+		    	def ptuGravado=it.ptuGravado
 				def part = ptuEmpleado * 100 / ptuTotal
 				def monto = montoTotal * (part/100)
 				log.info "${it.empleado.nombre} Part: ${part} Monto ind: ${monto}"
 				Bono bono = generar(it.empleado, 2018)
 				if(bono) {
 					bono.montoBonoTotal = montoTotal
+					bono.ptuGravado=ptuGravado
 					bono.factorParaBono = factorParaBono
 					bono.ptu = (bono.fechaFinal - it.empleado.alta) >= 365 ? ptuEmpleado : 0.0
 					bono.bonoInicial = monto
@@ -64,10 +66,11 @@ class BonoService {
 	def actualizarImportes(Integer ejercicio) {
 		List bonos = Bono.where { ejercicio == ejercicio}.list()
 		def bpTotal = bonos.sum 0.0, {it.bonoPreliminar }
+
 		
 		bonos.each { b -> 
 			
-			b.bonoPreliminar = b.ptu * (b.porcentajeBono / 100)
+			//b.bonoPreliminar = b.ptu * (b.porcentajeBono / 100)
 
 			def montoTotal = b.montoBonoTotal
 			def part = b.bonoPreliminar * 100 / bpTotal
@@ -109,6 +112,7 @@ class BonoService {
 				bono.salario = bono.empleado.salario.salarioVariable
 			}
 			bono.sueldoMensual = empleado.salario.periodicidad == 'SEMANAL' ? bono.salario * 31 : bono.salario * 32
+			bono.incentivo=bono.sueldoMensual*0.1
 			bono.save failOnError:true, flush:true
 		}
 		return bono
@@ -199,25 +203,25 @@ class BonoService {
 	def prepararBaseMensualParaISR(Bono bono){
 		def diasDelEjercicioReales = bono.fechaFinal - bono.fechaInicial+1
 		bono.promedioGravable = (bono.bono / diasDelEjercicioReales) * 30.4
-		bono.proporcionPromedioMensual = bono.promedioGravable + bono.sueldoMensual
+		bono.proporcionPromedioMensual = bono.promedioGravable + bono.sueldoMensual + bono.ptuGravado + bono.incentivo
 	}
 	
 	def calcularImpuestos(Bono a){
 		prepararBaseMensualParaISR(a)
-		a.isrMensual = calcularImpuesto(a.sueldoMensual)
+		a.isrMensual = calcularImpuesto(a.sueldoMensual + a.ptuGravado + a.incentivo)
 		a.isrPromedio = calcularImpuesto(a.proporcionPromedioMensual)
 		a.difIsrMensualPromedio = a.isrPromedio - a.isrMensual
 		a.tasa = a.difIsrMensualPromedio <=0 ? 0.0 : (a.difIsrMensualPromedio/a.promedioGravable).setScale(4,RoundingMode.HALF_EVEN)
 		a.isrPorRetener = (a.tasa * a.totalGravable).setScale(2,RoundingMode.HALF_EVEN)
 		
-		def subsidio=Subsidio.obtenerTabla(30.4).find(){(a.sueldoMensual > it.desde && a.sueldoMensual <= it.hasta)}
+		def subsidio=Subsidio.obtenerTabla(30.4).find(){((a.sueldoMensual + a.incentivo + a.ptuGravado)> it.desde && (a.sueldoMensual + a.incentivo + a.ptuGravado) <= it.hasta)}
 		a.subsidio = subsidio.subsidio
 		a.isrOSubsidio = a.isrMensual - a.subsidio
 		a.resultadoIsrSubsidio = a.isrPorRetener + a.isrOSubsidio
 		
 		//Tabla normal ISR
 		//def tablaNormalIsrSub=
-		def t1 = a.totalGravable + a.sueldoMensual
+		def t1 = a.totalGravable + a.sueldoMensual + a.ptuGravado + a.incentivo
 		def t1_isr = calcularImpuesto(t1)
 		
 		def t1_sub = Subsidio.obtenerTabla(30.4).find(){(t1 > it.desde && t1 <= it.hasta)}.subsidio

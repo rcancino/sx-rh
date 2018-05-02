@@ -11,17 +11,17 @@ class TarifaIsr {
 	
 	static def valores=[
 		
-		new TarifaIsr(limiteInferior:0.01,limiteSuperior:496.07,cuotaFija:0,porcentaje:1.92),
-		new TarifaIsr(limiteInferior:496.08,limiteSuperior:4210.41,cuotaFija:9.52,porcentaje:6.4),
-		new TarifaIsr(limiteInferior:4210.42,limiteSuperior:7399.42,cuotaFija:247.24,porcentaje:10.88),
-		new TarifaIsr(limiteInferior:7399.43,limiteSuperior:8601.5,cuotaFija:594.21,porcentaje:16),
-		new TarifaIsr(limiteInferior:8601.51,limiteSuperior:10298.35,cuotaFija:786.54,porcentaje:17.92),
-		new TarifaIsr(limiteInferior:10298.36,limiteSuperior:20770.29,cuotaFija:1090.61,porcentaje:21.36),
-		new TarifaIsr(limiteInferior:20770.3,limiteSuperior:32736.83,cuotaFija:3327.42,porcentaje:23.52),
-		new TarifaIsr(limiteInferior:32736.84,limiteSuperior:62500,cuotaFija:6141.95,porcentaje:30),
-		new TarifaIsr(limiteInferior:62500.01,limiteSuperior:83333.33,cuotaFija:15070.9,porcentaje:32),
-		new TarifaIsr(limiteInferior:83333.34,limiteSuperior:250000.00,cuotaFija:21737.57,porcentaje:34),
-		new TarifaIsr(limiteInferior:250000.01,limiteSuperior:250000000.00,cuotaFija:78404.23,porcentaje:35)
+		new TarifaIsr(limiteInferior:0.01,limiteSuperior:578.52,cuotaFija:0,porcentaje:1.92),
+		new TarifaIsr(limiteInferior:578.53,limiteSuperior:4910.18,cuotaFija:11.11,porcentaje:6.4),
+		new TarifaIsr(limiteInferior:4910.19,limiteSuperior:8629.2,cuotaFija:288.33,porcentaje:10.88),
+		new TarifaIsr(limiteInferior:8629.21,limiteSuperior:10031.07,cuotaFija:692.96,porcentaje:16),
+		new TarifaIsr(limiteInferior:10031.08,limiteSuperior:12009.94,cuotaFija:917.264,porcentaje:17.92),
+		new TarifaIsr(limiteInferior:12009.95,limiteSuperior:24222.31,cuotaFija:1271.871,porcentaje:21.36),
+		new TarifaIsr(limiteInferior:24222.32,limiteSuperior:38177.69,cuotaFija:3880.44,porcentaje:23.52),
+		new TarifaIsr(limiteInferior:38177.7,limiteSuperior:72887.5,cuotaFija:7162.74,porcentaje:30),
+		new TarifaIsr(limiteInferior:72887.51,limiteSuperior:97183.33,cuotaFija:17575.69,porcentaje:32),
+		new TarifaIsr(limiteInferior:97183.34,limiteSuperior:291550,cuotaFija:25350.35,porcentaje:34),
+		new TarifaIsr(limiteInferior:291550.01,limiteSuperior:250000000.00,cuotaFija:91435.02,porcentaje:35)
 
 	]
 	

@@ -4,6 +4,7 @@ import grails.transaction.Transactional
 import com.luxsoft.sw4.Periodo
 import com.luxsoft.sw4.rh.tablas.ZonaEconomica
 import com.luxsoft.sw4.rh.imss.*
+// import com.luxsoft.sw4.rh.tablas.TarifaIsr
 import com.luxsoft.sw4.rh.tablas.SubsidioEmpleo
 import org.codehaus.groovy.grails.plugins.jasper.JasperExportFormat
 import org.codehaus.groovy.grails.plugins.jasper.JasperReportDef
@@ -291,7 +292,8 @@ class PtuService {
             it.ptuExcento=it.montoPtu>=ptu.topeSmg?ptu.topeSmg:it.montoPtu
             it.ptuGravado=it.montoPtu-it.ptuExcento
 
-            it.salarioDiario = it.salarioDiario==null ? it.empleado.salario.salarioDiario : it.salarioDiario
+            // it.salarioDiario = it.salarioDiario ? it.empleado.salario.salarioDiario : it.salarioDiario
+            it.salarioDiario = it.empleado.salario.salarioDiario ?:  it.empleado.salario.salarioVariable
             if(it.empleado.salario.periodicidad=='QUINCENAL'){
                 it.salarioMensual=it.salarioDiario*31
                 if(it.noAsignado || (it.empleado.baja && it.empleado.baja.fecha>it.empleado.alta)){
@@ -328,13 +330,15 @@ class PtuService {
     }
 
     def calcularImpuestos(PtuDet it){
-        def zona=ZonaEconomica.findByClaveAndEjercicio('A',it.ptu.ejercicio+1)
+        def zona = ZonaEconomica.findByClaveAndEjercicio('A',it.ptu.ejercicio+1)
         def ptu=it.ptu
         ptu.salarioMinimoGeneral=zona.uma
         ptu.topeSmg=ptu.salarioMinimoGeneral*15
         it.ptuExcento=it.montoPtu>=ptu.topeSmg?ptu.topeSmg:it.montoPtu
         it.ptuGravado=it.montoPtu-it.ptuExcento
-        it.salarioDiario=it.salarioDiario==null ? it.empleado.salario.salarioDiario : it.salarioDiario
+        it.salarioDiario = it.empleado.salario.salarioDiario ?:  it.empleado.salario.salarioVariable
+        // it.salarioDiario=it.salarioDiario==null ? it.empleado.salario.salarioDiario : it.salarioDiario
+        //println "Salario diario: ${it.salarioDiario}  En el empleado: ${it.empleado.salariodiario} en el bean: ${it.salarioDiario}"
         if(it.empleado.salario.periodicidad=='QUINCENAL'){
             it.salarioMensual=it.salarioDiario*31
             if(it.noAsignado || it.empleado.baja){
