@@ -65,8 +65,8 @@ class ProcesadorDeISTP {
 		importeGravado+=tarifa.cuotaFija
 		importeGravado=importeGravado.setScale(2,RoundingMode.HALF_EVEN)
 		
-		def sub=importeGravado-subsidio.subsidio
-		nominaEmpleado.subsidioEmpleoAplicado=subsidio.subsidio
+		def sub = importeGravado-subsidio.subsidio
+		nominaEmpleado.subsidioEmpleoAplicado = subsidio.subsidio
 		
 		if(sub<0){
 			
@@ -103,6 +103,27 @@ class ProcesadorDeISTP {
 			log.info 'ISTP : '+importeGravado+ '- Subsidio: '+subsidio.subsidio
 			nominaPorEmpleadoDet.importeExcento=importeGravado-subsidio.subsidio
 			nominaPorEmpleadoDet.importeGravado=0.0
+
+			// Conidicion especial para registrar el subsidio acreditado en el complemento de nomina
+			if(subsidio.subsidio > 0) {
+				
+				ConceptoDeNomina subc = ConceptoDeNomina.findByClave('P021')
+				def neSubsidio = nominaEmpleado.conceptos.find(){ 
+					it.concepto == subc
+				}
+				if(neSubsidio){
+					neSubsidio.concepto = subc
+					neSubsidio.importeGravado = 0.0
+					neSubsidio.importeExcento = 0.01
+				}else{
+					neSubsidio = new NominaPorEmpleadoDet(concepto:concepto,importeGravado:0.0,importeExcento:0.0,comentario:'PENDIENTE')
+					neSubsidio.concepto = subc
+					neSubsidio.importeGravado = 0.0
+					neSubsidio.importeExcento = 0.01
+					nominaEmpleado.addToConceptos(neSubsidio)
+				}
+
+			}
 			
 		}
 		nominaEmpleado.actualizar()

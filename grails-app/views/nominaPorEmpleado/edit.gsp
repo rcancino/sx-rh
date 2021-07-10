@@ -262,6 +262,14 @@
 							<td>Finiquito</td>
 							<td>${nominaPorEmpleadoInstance.finiquito}</td>
 						</tr>
+						<tr>
+							<td></td>
+							<td></td>
+							<td>Subsidio al empleo aplicado</td>
+							<td>
+								<lx:moneyFormat number="${nominaPorEmpleadoInstance?.subsidioEmpleoAplicado}"/>
+							</td>
+						</tr>
 						
 					</tbody>
 				</table>

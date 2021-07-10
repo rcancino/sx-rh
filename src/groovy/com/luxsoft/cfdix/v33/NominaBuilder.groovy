@@ -275,7 +275,7 @@ class NominaBuilder {
             otroPago.setImporte(it.total)
             if(clave == '002'){
                 Nomina.OtrosPagos.OtroPago.SubsidioAlEmpleo subsidioAlEmpleo = factory.createNominaOtrosPagosOtroPagoSubsidioAlEmpleo()
-                subsidioAlEmpleo.setSubsidioCausado(it.total)
+                subsidioAlEmpleo.setSubsidioCausado(it.parent.subsidioEmpleoAplicado)
                 otroPago.subsidioAlEmpleo = subsidioAlEmpleo
             }
             if(clave == '004') {
